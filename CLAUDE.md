@@ -148,6 +148,13 @@ npx shadcn@latest add [component-name]
 
 This ensures consistency, proper dependencies, and correct configuration according to the project's components.json.
 
+**MANDATORY: shadcn/ui Components Usage**
+- **Use shadcn/ui components for ALL UI elements** whenever possible
+- **Prioritize shadcn/ui over custom components** for buttons, forms, cards, dialogs, etc.
+- **Only create custom components** when shadcn/ui doesn't provide the needed functionality
+- **Always check shadcn/ui library first** before writing custom UI code
+- **Maintain design consistency** by using the shadcn/ui design system throughout the application
+
 ## Working Holiday Visa 417 - Business Context
 
 ### Application Purpose

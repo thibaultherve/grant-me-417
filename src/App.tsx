@@ -1,34 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { AuthProvider } from '@/features/auth/hooks/use-auth'
+import { AuthRouter } from '@/components/ui/auth-router'
+import { LoginForm } from '@/features/auth/components/login-form'
+import { RegisterForm } from '@/features/auth/components/register-form'
+import { Dashboard } from '@/features/dashboard/components/dashboard'
+import { LandingPage } from '@/features/home/components/landing-page'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Router>
+      <AuthProvider>
+        <Routes>
+          {/* Public routes */}
+          <Route 
+            path="/" 
+            element={
+              <AuthRouter>
+                <LandingPage />
+              </AuthRouter>
+            } 
+          />
+          <Route 
+            path="/home" 
+            element={
+              <AuthRouter>
+                <LandingPage />
+              </AuthRouter>
+            } 
+          />
+          
+          {/* Auth routes - redirect to dashboard if already logged in */}
+          <Route 
+            path="/login" 
+            element={
+              <AuthRouter redirectTo="/dashboard">
+                <LoginForm />
+              </AuthRouter>
+            } 
+          />
+          <Route 
+            path="/register" 
+            element={
+              <AuthRouter redirectTo="/dashboard">
+                <RegisterForm />
+              </AuthRouter>
+            } 
+          />
+          
+          {/* Protected routes */}
+          <Route 
+            path="/dashboard" 
+            element={
+              <AuthRouter requireAuth>
+                <Dashboard />
+              </AuthRouter>
+            } 
+          />
+        </Routes>
+      </AuthProvider>
+    </Router>
   )
 }
 

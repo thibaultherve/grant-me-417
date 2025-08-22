@@ -2,9 +2,23 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(winget install:*)",
+      "Bash(pnpm add:*)",
+      "Bash(npx tailwindcss init:*)",
+      "Bash(pnpm dev:*)",
+      "Bash(npx:*)",
+      "mcp__ide__executeCode",
+      "Bash(rm:*)",
+      "Bash(pnpm dlx shadcn@latest add:*)",
+      "Bash(mv:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "supabase"
+  ]
 }
