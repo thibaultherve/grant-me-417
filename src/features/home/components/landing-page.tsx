@@ -1,21 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Separator } from '@/components/ui/separator'
 import { 
   CheckCircle, 
   Globe, 
-  Calendar, 
-  Users, 
   Clock, 
   Shield, 
   FileText, 
   TrendingUp,
   ArrowRight,
-  Star
+  Star,
+  Users2
 } from 'lucide-react'
 import { useAuth } from '@/features/auth/hooks/use-auth'
 
@@ -23,345 +20,282 @@ export function LandingPage() {
   const { user, loading } = useAuth()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      {/* Navigation */}
-      <nav className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <Globe className="w-4 h-4 text-primary-foreground" />
-                </div>
-                <div>
-                  <h1 className="text-lg font-bold text-foreground">Get Granted</h1>
-                  <Badge variant="secondary" className="text-xs">417</Badge>
-                </div>
+    <div className="min-h-screen bg-background">
+      {/* Mobile-First Navigation Header */}
+      <header className="bg-background border-b sticky top-0 z-50">
+        <div className="px-4 py-4">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+                <Globe className="w-5 h-5 text-primary-foreground" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-foreground">Get Granted</h1>
+                <Badge variant="secondary" className="text-xs">417</Badge>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
+            
+            {/* Auth Status - Mobile Optimized */}
+            <div className="flex items-center gap-2">
               {loading ? (
-                <div className="flex items-center space-x-2">
-                  <div className="animate-pulse h-8 w-8 bg-muted rounded-full"></div>
-                  <div className="animate-pulse h-9 w-24 bg-muted rounded-md"></div>
-                </div>
+                <div className="animate-pulse h-10 w-20 bg-muted rounded-lg"></div>
               ) : user ? (
-                <div className="flex items-center space-x-3">
-                  <div className="flex items-center space-x-2">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback className="text-xs">
-                        {user.email?.charAt(0).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="hidden sm:block">
-                      <p className="text-sm font-medium">{user.email}</p>
-                      <p className="text-xs text-muted-foreground">Authenticated</p>
-                    </div>
-                  </div>
-                  <Link to="/dashboard">
-                    <Button className="gap-2">
-                      Dashboard
-                      <ArrowRight className="w-4 h-4" />
-                    </Button>
-                  </Link>
-                </div>
+                <Link to="/dashboard">
+                  <Button size="sm" className="h-10 px-4 gap-2">
+                    <TrendingUp className="w-4 h-4" />
+                    Dashboard
+                  </Button>
+                </Link>
               ) : (
-                <div className="flex items-center space-x-2">
-                  <Link to="/login">
-                    <Button variant="ghost">Sign In</Button>
-                  </Link>
-                  <Link to="/register">
-                    <Button className="gap-2">
-                      Get Started
-                      <ArrowRight className="w-4 h-4" />
-                    </Button>
-                  </Link>
-                </div>
+                <Link to="/register">
+                  <Button size="sm" className="h-10 px-4 gap-2">
+                    <ArrowRight className="w-4 h-4" />
+                    Start Free
+                  </Button>
+                </Link>
               )}
             </div>
           </div>
         </div>
-      </nav>
+      </header>
 
-      {/* Hero Section */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:60px_60px]" />
-        <div className="relative max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="flex justify-center mb-6">
-              <Badge variant="outline" className="px-4 py-1.5 text-sm font-medium">
-                <Star className="w-4 h-4 mr-2 text-yellow-500" />
-                Trusted by 1000+ Backpackers
-              </Badge>
-            </div>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8">
+      {/* Mobile-First Hero Section */}
+      <main className="px-4 py-8 lg:py-16">
+        <div className="max-w-4xl mx-auto">
+          {/* Trust Badge */}
+          <div className="text-center mb-6 lg:mb-10">
+            <Badge variant="outline" className="px-4 py-2 text-base font-medium">
+              <Star className="w-4 h-4 mr-2 text-yellow-500" />
+              Trusted by 1000+ Backpackers
+            </Badge>
+          </div>
+          
+          {/* Hero Title - Mobile First with Desktop Enhancement */}
+          <div className="text-center mb-8 lg:mb-12">
+            <h1 className="text-3xl lg:text-5xl font-bold tracking-tight mb-4 lg:mb-6 leading-tight lg:leading-tight">
               Track Your{' '}
               <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
                 Working Holiday
               </span>
-              <br />
-              <span className="text-muted-foreground">Visa 417 Hours</span>
+              {' '}Visa 417 Hours
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg lg:text-xl text-muted-foreground mb-8 lg:mb-12 leading-relaxed max-w-3xl mx-auto">
               The most comprehensive platform for tracking specified work hours. 
               Built for backpackers, trusted by immigration experts.
             </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              {user ? (
-                <Link to="/dashboard">
-                  <Button size="lg" className="h-12 px-8 text-base gap-2">
-                    <TrendingUp className="w-5 h-5" />
-                    Continue to Dashboard
+          </div>
+          
+          {/* Primary CTA - Mobile First with Desktop Constraint */}
+          <div className="mb-8 lg:mb-16 max-w-md mx-auto">
+            {user ? (
+              <Link to="/dashboard" className="block">
+                <Button size="lg" className="w-full h-14 text-lg gap-3">
+                  <TrendingUp className="w-5 h-5" />
+                  Continue to Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <div className="space-y-3">
+                <Link to="/register" className="block">
+                  <Button size="lg" className="w-full h-14 text-lg gap-3">
+                    <Clock className="w-5 h-5" />
+                    Start Tracking Free
                   </Button>
                 </Link>
-              ) : (
-                <>
-                  <Link to="/register">
-                    <Button size="lg" className="h-12 px-8 text-base gap-2">
-                      <Clock className="w-5 h-5" />
-                      Start Tracking Free
-                    </Button>
-                  </Link>
-                  <Link to="/login">
-                    <Button variant="outline" size="lg" className="h-12 px-8 text-base gap-2">
-                      <Users className="w-5 h-5" />
-                      I Have an Account
-                    </Button>
-                  </Link>
-                </>
-              )}
-            </div>
+                <Link to="/login" className="block">
+                  <Button variant="outline" size="lg" className="w-full h-14 text-lg gap-3">
+                    <Users2 className="w-5 h-5" />
+                    I Have an Account
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </div>
 
-            {/* Stats Cards */}
-            <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              <Card className="border-0 shadow-md bg-card/50 backdrop-blur">
-                <CardContent className="p-6 text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">88+</div>
-                  <div className="text-sm text-muted-foreground">
-                    Days Required for 2nd Visa
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="border-0 shadow-md bg-card/50 backdrop-blur">
-                <CardContent className="p-6 text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">179+</div>
-                  <div className="text-sm text-muted-foreground">
-                    Days Required for 3rd Visa
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="border-0 shadow-md bg-card/50 backdrop-blur">
-                <CardContent className="p-6 text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">19</div>
-                  <div className="text-sm text-muted-foreground">
-                    Eligible Countries Supported
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+          {/* Stats Cards - Responsive Grid */}
+          <div className="space-y-4 lg:grid lg:grid-cols-3 lg:gap-6 lg:space-y-0 mb-8 lg:mb-16">
+            <Card className="border shadow-sm">
+              <CardContent className="p-6 text-center">
+                <div className="text-4xl font-bold text-primary mb-2">88+</div>
+                <div className="text-base text-muted-foreground">
+                  Days Required for 2nd Visa
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border shadow-sm">
+              <CardContent className="p-6 text-center">
+                <div className="text-4xl font-bold text-primary mb-2">179+</div>
+                <div className="text-base text-muted-foreground">
+                  Days Required for 3rd Visa
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border shadow-sm">
+              <CardContent className="p-6 text-center">
+                <div className="text-4xl font-bold text-primary mb-2">19</div>
+                <div className="text-base text-muted-foreground">
+                  Eligible Countries Supported
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
-      </section>
 
-      {/* Features Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
-            <Badge variant="outline" className="mb-4">
-              Features
-            </Badge>
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">
-              Everything You Need to{' '}
-              <span className="text-primary">Get Your Visa</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Purpose-built for Working Holiday Visa 417 holders. Every feature designed 
-              to meet Australian immigration requirements with precision.
-            </p>
-          </div>
+        {/* Features Section - Mobile First with Desktop Enhancement */}
+        <div className="mb-8 lg:mb-16">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-6 lg:mb-12">
+              <Badge variant="outline" className="mb-4 text-base px-4 py-2">
+                Features
+              </Badge>
+              <h2 className="text-2xl lg:text-4xl font-bold mb-4 lg:mb-6">
+                Everything You Need to{' '}
+                <span className="text-primary">Get Your Visa</span>
+              </h2>
+              <p className="text-base lg:text-lg text-muted-foreground max-w-3xl mx-auto">
+                Purpose-built for Working Holiday Visa 417 holders. Every feature designed 
+                to meet Australian immigration requirements.
+              </p>
+            </div>
 
-          <div className="grid lg:grid-cols-3 gap-8 mb-16">
-            {/* Primary Features */}
-            <Card className="relative group hover:shadow-xl transition-all duration-300 border-0 shadow-md">
+            {/* Primary Features - Responsive Grid */}
+            <div className="space-y-6 lg:grid lg:grid-cols-3 lg:gap-8 lg:space-y-0 mb-8 lg:mb-16">
+            <Card className="border shadow-sm">
               <CardHeader className="pb-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
                   <Clock className="w-6 h-6 text-primary" />
                 </div>
                 <CardTitle className="text-xl">Smart Hour Tracking</CardTitle>
-                <CardDescription className="text-base">
+                <p className="text-base text-muted-foreground mt-2">
                   Intelligent daily work logging with automatic visa eligibility calculations. 
                   Never miss a qualifying hour again.
-                </CardDescription>
+                </p>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                  <div className="flex items-center text-base text-muted-foreground">
+                    <CheckCircle className="w-5 h-5 mr-3 text-green-500" />
                     Daily hour logging
                   </div>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                  <div className="flex items-center text-base text-muted-foreground">
+                    <CheckCircle className="w-5 h-5 mr-3 text-green-500" />
                     Progress calculations
                   </div>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                  <div className="flex items-center text-base text-muted-foreground">
+                    <CheckCircle className="w-5 h-5 mr-3 text-green-500" />
                     Visa deadline tracking
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="relative group hover:shadow-xl transition-all duration-300 border-0 shadow-md">
+            <Card className="border shadow-sm">
               <CardHeader className="pb-4">
-                <div className="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center mb-4">
                   <Shield className="w-6 h-6 text-green-600" />
                 </div>
                 <CardTitle className="text-xl">Compliance Monitoring</CardTitle>
-                <CardDescription className="text-base">
+                <p className="text-base text-muted-foreground mt-2">
                   Real-time tracking for 88-day (2nd visa) or 179-day (3rd visa) requirements. 
                   Stay compliant, stay confident.
-                </CardDescription>
+                </p>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                  <div className="flex items-center text-base text-muted-foreground">
+                    <CheckCircle className="w-5 h-5 mr-3 text-green-500" />
                     ANZSIC classification
                   </div>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                  <div className="flex items-center text-base text-muted-foreground">
+                    <CheckCircle className="w-5 h-5 mr-3 text-green-500" />
                     Regional area validation
                   </div>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                  <div className="flex items-center text-base text-muted-foreground">
+                    <CheckCircle className="w-5 h-5 mr-3 text-green-500" />
                     Eligibility verification
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="relative group hover:shadow-xl transition-all duration-300 border-0 shadow-md">
+            <Card className="border shadow-sm">
               <CardHeader className="pb-4">
-                <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-4">
                   <FileText className="w-6 h-6 text-blue-600" />
                 </div>
                 <CardTitle className="text-xl">Export & Documentation</CardTitle>
-                <CardDescription className="text-base">
+                <p className="text-base text-muted-foreground mt-2">
                   Generate immigration-ready reports with all required documentation. 
                   Professional, accurate, accepted.
-                </CardDescription>
+                </p>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                  <div className="flex items-center text-base text-muted-foreground">
+                    <CheckCircle className="w-5 h-5 mr-3 text-green-500" />
                     PDF reports
                   </div>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                  <div className="flex items-center text-base text-muted-foreground">
+                    <CheckCircle className="w-5 h-5 mr-3 text-green-500" />
                     Employer letters
                   </div>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                  <div className="flex items-center text-base text-muted-foreground">
+                    <CheckCircle className="w-5 h-5 mr-3 text-green-500" />
                     Work summaries
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
-
-          {/* Secondary Features Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="border-0 bg-muted/50">
-              <CardHeader className="pb-3">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-orange-500/10 rounded-md flex items-center justify-center">
-                    <Users className="w-4 h-4 text-orange-600" />
-                  </div>
-                  <CardTitle className="text-base">Employer Management</CardTitle>
-                </div>
-                <CardDescription className="text-sm">
-                  Comprehensive employer and location tracking
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="border-0 bg-muted/50">
-              <CardHeader className="pb-3">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-purple-500/10 rounded-md flex items-center justify-center">
-                    <Globe className="w-4 h-4 text-purple-600" />
-                  </div>
-                  <CardTitle className="text-base">Multi-Country Support</CardTitle>
-                </div>
-                <CardDescription className="text-sm">
-                  All 19 eligible countries with specific requirements
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="border-0 bg-muted/50">
-              <CardHeader className="pb-3">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-green-500/10 rounded-md flex items-center justify-center">
-                    <TrendingUp className="w-4 h-4 text-green-600" />
-                  </div>
-                  <CardTitle className="text-base">Progress Analytics</CardTitle>
-                </div>
-                <CardDescription className="text-sm">
-                  Visual progress tracking and milestone alerts
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            </div>
           </div>
         </div>
-      </section>
 
-      {/* Eligible Countries Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-muted/30">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <Badge variant="outline" className="mb-4">
-              Global Support
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Built for International{' '}
-              <span className="text-primary">Backpackers</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Supporting Working Holiday Visa 417 holders from all eligible countries 
-              with country-specific requirements and regulations.
-            </p>
-          </div>
+        {/* Countries Section - Mobile First with Desktop Enhancement */}
+        <div className="bg-muted/30 -mx-4 px-4 py-8 mb-8 lg:py-16 lg:mb-16">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-6 lg:mb-12">
+              <Badge variant="outline" className="mb-4 text-base px-4 py-2">
+                Global Support
+              </Badge>
+              <h2 className="text-2xl lg:text-4xl font-bold mb-4 lg:mb-6">
+                Built for International{' '}
+                <span className="text-primary">Backpackers</span>
+              </h2>
+              <p className="text-base lg:text-lg text-muted-foreground max-w-3xl mx-auto">
+                Supporting Working Holiday Visa 417 holders from all eligible countries 
+                with country-specific requirements.
+              </p>
+            </div>
 
-          <div className="grid lg:grid-cols-4 gap-8 mb-12">
-            <Card className="border-0 shadow-lg">
+            {/* Country Cards - Responsive Grid */}
+            <div className="space-y-4 lg:grid lg:grid-cols-2 xl:grid-cols-4 lg:gap-6 lg:space-y-0 mb-6 lg:mb-12">
+            <Card className="border shadow-sm">
               <CardHeader className="text-center pb-4">
-                <div className="text-2xl mb-2">🇪🇺</div>
-                <CardTitle className="text-lg">Europe</CardTitle>
-                <CardDescription>14 countries</CardDescription>
+                <div className="text-3xl mb-2">🇪🇺</div>
+                <CardTitle className="text-xl">Europe</CardTitle>
+                <p className="text-muted-foreground">14 countries</p>
               </CardHeader>
-              <CardContent className="pt-0">
-                <div className="text-sm space-y-1">
+              <CardContent>
+                <div className="text-base space-y-2">
                   <div>🇧🇪 Belgium • 🇩🇰 Denmark</div>
                   <div>🇫🇷 France • 🇩🇪 Germany</div>
                   <div>🇮🇪 Ireland • 🇮🇹 Italy</div>
                   <div>🇳🇱 Netherlands • 🇳🇴 Norway</div>
                   <div>🇸🇪 Sweden • 🇬🇧 UK</div>
-                  <div className="text-xs text-muted-foreground mt-2">+4 more</div>
+                  <div className="text-sm text-muted-foreground mt-3">+4 more countries</div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg">
+            <Card className="border shadow-sm">
               <CardHeader className="text-center pb-4">
-                <div className="text-2xl mb-2">🌏</div>
-                <CardTitle className="text-lg">Asia-Pacific</CardTitle>
-                <CardDescription>4 territories</CardDescription>
+                <div className="text-3xl mb-2">🌏</div>
+                <CardTitle className="text-xl">Asia-Pacific</CardTitle>
+                <p className="text-muted-foreground">4 territories</p>
               </CardHeader>
-              <CardContent className="pt-0">
-                <div className="text-sm space-y-1">
+              <CardContent>
+                <div className="text-base space-y-2">
                   <div>🇭🇰 Hong Kong SAR</div>
                   <div>🇯🇵 Japan</div>
                   <div>🇰🇷 South Korea</div>
@@ -370,182 +304,187 @@ export function LandingPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg">
+            <Card className="border shadow-sm">
               <CardHeader className="text-center pb-4">
-                <div className="text-2xl mb-2">🍁</div>
-                <CardTitle className="text-lg">North America</CardTitle>
-                <CardDescription>1 country</CardDescription>
+                <div className="text-3xl mb-2">🍁</div>
+                <CardTitle className="text-xl">North America</CardTitle>
+                <p className="text-muted-foreground">1 country</p>
               </CardHeader>
-              <CardContent className="pt-0">
-                <div className="text-sm space-y-1">
+              <CardContent>
+                <div className="text-base space-y-2">
                   <div>🇨🇦 Canada</div>
-                  <div className="text-xs text-muted-foreground mt-2">
+                  <div className="text-sm text-muted-foreground mt-3">
                     Extended age limit (18-35)
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg bg-primary/5">
+            <Card className="border shadow-sm bg-primary/5">
               <CardHeader className="text-center pb-4">
-                <div className="text-2xl mb-2">📊</div>
-                <CardTitle className="text-lg">Age Requirements</CardTitle>
-                <CardDescription>Country-specific</CardDescription>
+                <div className="text-3xl mb-2">📊</div>
+                <CardTitle className="text-xl">Age Requirements</CardTitle>
+                <p className="text-muted-foreground">Country-specific</p>
               </CardHeader>
-              <CardContent className="pt-0">
-                <div className="text-sm space-y-2">
+              <CardContent>
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span>Most countries:</span>
-                    <Badge variant="secondary">18-30</Badge>
+                    <span className="text-base">Most countries:</span>
+                    <Badge variant="secondary" className="text-sm">18-30</Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span>Extended:</span>
-                    <Badge variant="outline">18-35</Badge>
+                    <span className="text-base">Extended:</span>
+                    <Badge variant="outline" className="text-sm">18-35</Badge>
                   </div>
-                  <div className="text-xs text-muted-foreground mt-2">
+                  <div className="text-sm text-muted-foreground">
                     CA, DK, FR, IE, UK
                   </div>
                 </div>
               </CardContent>
             </Card>
+            </div>
+            
+            <div className="text-center">
+              <Badge variant="destructive" className="mb-4 text-base px-4 py-2">
+                Not Eligible for WHV 417
+              </Badge>
+              <p className="text-sm lg:text-base text-muted-foreground leading-relaxed max-w-4xl mx-auto">
+                Citizens from USA, Argentina, Austria, Chile, China, Czech Republic, Hungary, Indonesia, 
+                Israel, Luxembourg, Malaysia, Peru, Poland, Portugal, San Marino, Singapore, Slovakia, 
+                Slovenia, Spain, Thailand, Turkey, Uruguay, and Vietnam must apply for Work and Holiday Visa (subclass 462) instead.
+              </p>
+            </div>
           </div>
+        </div>
 
-          <Separator className="my-12" />
-          
-          <div className="text-center">
-            <Badge variant="destructive" className="mb-4">
-              Not Eligible for WHV 417
+        {/* Final CTA Section - Mobile First with Desktop Enhancement */}
+        <div className="bg-gradient-to-r from-primary to-blue-600 text-primary-foreground -mx-4 px-4 py-8 mb-8 lg:py-16 lg:mb-16">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center">
+            <Badge variant="secondary" className="mb-4 bg-white/20 text-white border-white/30 text-base px-4 py-2">
+              <Star className="w-4 h-4 mr-2" />
+              Trusted Platform
             </Badge>
-            <p className="text-sm text-muted-foreground max-w-4xl mx-auto">
-              Citizens from USA, Argentina, Austria, Chile, China, Czech Republic, Hungary, Indonesia, 
-              Israel, Luxembourg, Malaysia, Peru, Poland, Portugal, San Marino, Singapore, Slovakia, 
-              Slovenia, Spain, Thailand, Turkey, Uruguay, and Vietnam must apply for Work and Holiday Visa (subclass 462) instead.
+            <h2 className="text-2xl font-bold mb-4">
+              Ready to Start Your{' '}
+              <span className="text-yellow-300">Visa Journey?</span>
+            </h2>
+            <p className="text-base opacity-90 mb-8 leading-relaxed">
+              Join thousands of backpackers who successfully extended their Working Holiday Visa. 
+              Professional, reliable, immigration-ready.
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary via-primary to-blue-600 text-primary-foreground overflow-hidden">
-        <div className="absolute inset-0 bg-black/10" />
-        <div className="relative max-w-4xl mx-auto text-center">
-          <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30">
-            <Star className="w-3 h-3 mr-1" />
-            Trusted Platform
-          </Badge>
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">
-            Ready to Start Your{' '}
-            <span className="text-yellow-300">Visa Journey?</span>
-          </h2>
-          <p className="text-xl md:text-2xl opacity-90 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Join thousands of backpackers who successfully extended their Working Holiday Visa. 
-            Professional, reliable, immigration-ready.
-          </p>
-          {user ? (
-            <Link to="/dashboard">
-              <Button size="lg" variant="secondary" className="h-12 px-8 text-base gap-2">
-                <TrendingUp className="w-5 h-5" />
-                Go to Dashboard
-              </Button>
-            </Link>
-          ) : (
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/register">
-                <Button size="lg" variant="secondary" className="h-12 px-8 text-base gap-2">
-                  <ArrowRight className="w-5 h-5" />
-                  Create Free Account
-                </Button>
-              </Link>
-              <Link to="/login">
-                <Button size="lg" variant="outline" className="h-12 px-8 text-base border-white/30 text-white hover:bg-white/10">
-                  Sign In
-                </Button>
-              </Link>
+            
+            <div className="max-w-md mx-auto">
+              {user ? (
+                <Link to="/dashboard" className="block">
+                  <Button size="lg" variant="secondary" className="w-full h-14 text-lg gap-3">
+                    <TrendingUp className="w-5 h-5" />
+                    Go to Dashboard
+                  </Button>
+                </Link>
+              ) : (
+                <div className="space-y-3">
+                  <Link to="/register" className="block">
+                    <Button size="lg" variant="secondary" className="w-full h-14 text-lg gap-3">
+                      <ArrowRight className="w-5 h-5" />
+                      Create Free Account
+                    </Button>
+                  </Link>
+                  <Link to="/login" className="block">
+                    <Button size="lg" variant="outline" className="w-full h-14 text-lg border-white/30 text-white hover:bg-white/10">
+                      Sign In
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </div>
-          )}
-          
-          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm opacity-80">
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4" />
-              No credit card required
+            
+            <div className="mt-6 space-y-3 text-sm opacity-80">
+              <div className="flex items-center justify-center gap-2">
+                <CheckCircle className="w-4 h-4" />
+                No credit card required
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <Shield className="w-4 h-4" />
+                Secure & private
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <Clock className="w-4 h-4" />
+                Setup in 2 minutes
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4" />
-              Secure & private
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4" />
-              Setup in 2 minutes
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="py-16 px-4 sm:px-6 lg:px-8 bg-muted/30 border-t">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <Globe className="w-4 h-4 text-primary-foreground" />
+        {/* Footer - Mobile First with Desktop Enhancement */}
+        <footer className="bg-muted/30 -mx-4 px-4 py-8 border-t lg:py-16">
+          <div className="max-w-6xl mx-auto">
+            <div className="space-y-6 lg:grid lg:grid-cols-3 lg:gap-8 lg:space-y-0">
+              {/* Logo */}
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-3 mb-3">
+                <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+                  <Globe className="w-5 h-5 text-primary-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold">Get Granted</h3>
+                  <h3 className="text-xl font-bold">Get Granted</h3>
                   <Badge variant="secondary" className="text-xs">417</Badge>
                 </div>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-base text-muted-foreground leading-relaxed">
                 Your trusted companion for Working Holiday Visa extensions in Australia. 
                 Built by developers who understand the immigration process.
               </p>
             </div>
             
+            {/* Platform Features */}
             <div>
-              <h4 className="font-semibold mb-4">Platform</h4>
-              <div className="space-y-3 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-3 h-3 text-green-500" />
-                  Immigration compliant
+              <h4 className="font-semibold mb-4 text-lg">Platform</h4>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <span className="text-base">Immigration compliant</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Shield className="w-3 h-3 text-green-500" />
-                  Bank-grade security
+                <div className="flex items-center gap-3">
+                  <Shield className="w-5 h-5 text-green-500" />
+                  <span className="text-base">Bank-grade security</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-3 h-3 text-green-500" />
-                  Real-time tracking
+                <div className="flex items-center gap-3">
+                  <Clock className="w-5 h-5 text-green-500" />
+                  <span className="text-base">Real-time tracking</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <FileText className="w-3 h-3 text-green-500" />
-                  Export ready reports
+                <div className="flex items-center gap-3">
+                  <FileText className="w-5 h-5 text-green-500" />
+                  <span className="text-base">Export ready reports</span>
                 </div>
               </div>
             </div>
             
+            {/* Support */}
             <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <div className="space-y-3 text-sm text-muted-foreground">
+              <h4 className="font-semibold mb-4 text-lg">Support</h4>
+              <div className="space-y-2 text-base text-muted-foreground">
                 <div>All 19 eligible countries</div>
                 <div>Country-specific requirements</div>
                 <div>ANZSIC classification</div>
                 <div>Regional area validation</div>
               </div>
             </div>
-          </div>
-          
-          <Separator className="mb-8" />
-          
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-sm text-muted-foreground">
-              © 2024 Get Granted 417. Platform for tracking purposes only.
+            
+            {/* Legal */}
+            <div className="border-t pt-6 space-y-3 text-center lg:col-span-3">
+              <div className="text-sm text-muted-foreground">
+                © 2024 Get Granted 417. Platform for tracking purposes only.
+              </div>
+              <Badge variant="outline" className="text-sm px-4 py-2">
+                Always consult official immigration sources
+              </Badge>
             </div>
-            <Badge variant="outline" className="text-xs">
-              Always consult official immigration sources
-            </Badge>
+            </div>
           </div>
-        </div>
-      </footer>
+        </footer>
+      </main>
     </div>
   )
 }

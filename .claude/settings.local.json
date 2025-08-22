@@ -12,7 +12,14 @@
       "Bash(rm:*)",
       "Bash(pnpm dlx shadcn@latest add:*)",
       "Bash(mv:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "mcp__supabase__list_tables",
+      "mcp__supabase__list_migrations",
+      "mcp__supabase__execute_sql",
+      "Bash(pnpm tsc:*)",
+      "Bash(pnpm lint:*)"
     ],
     "deny": [],
     "ask": []

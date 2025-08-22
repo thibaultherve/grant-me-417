@@ -1,16 +1,19 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from '@/features/auth/hooks/use-auth'
+import { VisaProvider } from '@/features/visas/hooks/use-visa-context'
 import { AuthRouter } from '@/components/ui/auth-router'
 import { LoginForm } from '@/features/auth/components/login-form'
 import { RegisterForm } from '@/features/auth/components/register-form'
 import { Dashboard } from '@/features/dashboard/components/dashboard'
 import { LandingPage } from '@/features/home/components/landing-page'
+import { Toaster } from 'sonner'
 
 function App() {
   return (
     <Router>
       <AuthProvider>
+        <VisaProvider>
         <Routes>
           {/* Public routes */}
           <Route 
@@ -58,6 +61,8 @@ function App() {
             } 
           />
         </Routes>
+        <Toaster position="top-center" richColors />
+        </VisaProvider>
       </AuthProvider>
     </Router>
   )

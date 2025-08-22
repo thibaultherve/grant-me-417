@@ -1,0 +1,62 @@
+import React from 'react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Building2, MapPin, CheckCircle, XCircle } from 'lucide-react'
+import type { Employer } from '../types'
+
+interface EmployerCardProps {
+  employer: Employer
+  onDelete?: (id: string) => void
+}
+
+const industryLabels: Record<string, string> = {
+  plant_and_animal_cultivation: 'Plant & Animal Cultivation',
+  fishing_and_pearling: 'Fishing & Pearling',
+  tree_farming_and_felling: 'Tree Farming & Felling',
+  mining: 'Mining',
+  construction: 'Construction',
+  hospitality_and_tourism: 'Hospitality & Tourism',
+  bushfire_recovery_work: 'Bushfire Recovery',
+  critical_covid19_work: 'Critical COVID-19 Work',
+  other: 'Other'
+}
+
+export function EmployerCard({ employer }: EmployerCardProps) {
+  return (
+    <Card className="border shadow-sm">
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex items-start gap-3 flex-1">
+            <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <Building2 className="w-5 h-5 text-primary" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-base truncate">{employer.name}</h3>
+              <p className="text-sm text-muted-foreground">
+                {industryLabels[employer.industry] || employer.industry}
+              </p>
+            </div>
+          </div>
+          {employer.is_eligible ? (
+            <Badge variant="default" className="gap-1">
+              <CheckCircle className="w-3 h-3" />
+              Eligible
+            </Badge>
+          ) : (
+            <Badge variant="secondary" className="gap-1">
+              <XCircle className="w-3 h-3" />
+              Not Eligible
+            </Badge>
+          )}
+        </div>
+
+        {employer.postcode && (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <MapPin className="w-4 h-4" />
+            <span>Postcode: {employer.postcode}</span>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )
+}

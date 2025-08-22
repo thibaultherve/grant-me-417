@@ -138,6 +138,88 @@ Uses shadcn/ui:
 - Radix UI primitives for accessibility
 - Tailwind CSS for styling
 
+## Mobile-First Design Strategy
+
+**MANDATORY: This application MUST be designed mobile-first with light responsive adaptations for desktop.**
+
+### Core Design Philosophy
+
+- **Target Devices**: Optimized for smartphones (iPhone/Android standard sizes: 375px, 360px)
+- **Mobile-First Responsive**: Mobile design is primary, with minimal responsive enhancements for desktop
+- **Mobile Native Feel**: App-like experience with mobile-specific UI patterns as foundation
+
+### Design Requirements
+
+**Screen Orientations:**
+- **Primary**: Portrait mode (mobile devices)
+- **Secondary**: Landscape mode (desktop users get the same proportional layout)
+
+**Typography & Touch Targets:**
+- **Minimum font size**: 16px (prevents zoom on mobile browsers)
+- **Minimum button size**: 44px (Apple/Google touch guidelines)
+- **Touch-friendly spacing**: Generous padding between interactive elements
+
+**Navigation Pattern:**
+- **Mobile native navigation**: Bottom tab bar or drawer navigation
+- **NO desktop-style navigation**: No top navigation bars or sidebar menus
+- **Thumb-friendly**: Navigation within easy thumb reach
+
+**Layout Principles:**
+- **Full-width elements**: No max-width constraints, use available screen space
+- **Vertical scrolling**: Stack content vertically, avoid horizontal scrolling
+- **Single-column layouts**: No complex multi-column layouts
+- **Progressive disclosure**: Use modals, sheets, and step-by-step flows
+
+**Forms & Inputs:**
+- **Full-width inputs**: Take advantage of available screen space
+- **Large input fields**: Easy to tap and type on mobile keyboards
+- **Mobile-optimized input types**: Use proper HTML input types (tel, email, date, etc.)
+- **Clear visual feedback**: Focus states, validation messages clearly visible
+
+**Performance Optimizations:**
+- **Lightweight animations**: Smooth but minimal to preserve battery
+- **Touch gestures**: Standard tap/scroll interactions only (no swipe gestures)
+- **Fast loading**: Optimize for mobile network conditions
+
+### Desktop Experience
+
+**Mobile-First Responsive Strategy:**
+- **Foundation**: Mobile design and functionality remain unchanged
+- **Enhancements Only**: Add responsive improvements without breaking mobile experience
+- **Centered Layouts**: Center content with max-width constraints for better readability
+- **Multi-Column Grids**: Use CSS Grid/Flexbox to show multiple cards side-by-side when space allows
+- **Preserve Mobile UX**: Keep mobile navigation, touch targets, and interaction patterns
+- **No Desktop-Specific Features**: Never add features that don't work on mobile
+
+**Responsive Breakpoints Strategy:**
+- **Base (default)**: 0px+ Mobile-first design (375px-768px optimal)
+- **Tablet**: 768px+ Light adaptations (iPad, larger phones landscape)
+- **Desktop**: 1024px+ Enhanced layouts (laptops, desktops)
+- **Large Desktop**: 1440px+ Optimized for large screens
+
+**Desktop Adaptations Guidelines:**
+- **Max-width containers**: Prevent content from stretching too wide (max-w-6xl, max-w-4xl)
+- **Grid improvements**: Transform single-column mobile layouts to 2-3 column grids
+- **Spacing adjustments**: Increase padding and margins for better visual breathing
+- **Typography scaling**: Slightly larger headings and improved line-height
+- **Keep mobile navigation**: Bottom tab bar remains, no desktop-style top navigation
+- **Maintain touch targets**: 44px minimum touch targets even on desktop
+
+### shadcn/ui Component Selection
+
+**Mobile-Optimized Components Priority:**
+- **Sheets/Drawers** over Dialogs for better mobile UX
+- **Bottom sheets** for forms and detailed views
+- **Mobile-friendly date pickers** and selectors
+- **Touch-optimized dropdowns** and menus
+- **Large, clear buttons** with proper touch targets
+
+**Components to Avoid or Modify:**
+- Complex data tables (use cards/lists instead)
+- Hover-dependent interactions
+- Small click targets or nested menus
+- Desktop-style tooltips or popovers
+
 ### IMPORTANT: shadcn/ui Component Installation
 
 **ALWAYS use the shadcn CLI to install UI components. NEVER create them manually.**
