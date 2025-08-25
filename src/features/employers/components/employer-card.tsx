@@ -1,12 +1,24 @@
 import React from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Building2, MapPin, CheckCircle, XCircle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { Building2, MapPin, CheckCircle, XCircle, Trash2 } from 'lucide-react'
 import type { Employer } from '../types'
 
 interface EmployerCardProps {
   employer: Employer
-  onDelete?: (id: string) => void
+  onDelete: (id: string) => void
 }
 
 const industryLabels: Record<string, string> = {
@@ -21,7 +33,7 @@ const industryLabels: Record<string, string> = {
   other: 'Other'
 }
 
-export function EmployerCard({ employer }: EmployerCardProps) {
+export function EmployerCard({ employer, onDelete }: EmployerCardProps) {
   return (
     <Card className="border shadow-sm">
       <CardContent className="p-4">
@@ -37,17 +49,43 @@ export function EmployerCard({ employer }: EmployerCardProps) {
               </p>
             </div>
           </div>
-          {employer.is_eligible ? (
-            <Badge variant="default" className="gap-1">
-              <CheckCircle className="w-3 h-3" />
-              Eligible
-            </Badge>
-          ) : (
-            <Badge variant="secondary" className="gap-1">
-              <XCircle className="w-3 h-3" />
-              Not Eligible
-            </Badge>
-          )}
+          <div className="flex items-center gap-2">
+            {employer.is_eligible ? (
+              <Badge variant="default" className="gap-1">
+                <CheckCircle className="w-3 h-3" />
+                Eligible
+              </Badge>
+            ) : (
+              <Badge variant="secondary" className="gap-1">
+                <XCircle className="w-3 h-3" />
+                Not Eligible
+              </Badge>
+            )}
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10">
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete Employer</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to delete "{employer.name}"? This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => onDelete(employer.id)}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
 
         {employer.postcode && (

@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 import { supabase } from '@/lib/supabase'
-import { useAuth } from '@/features/auth/hooks/use-auth'
+import { useAuth } from '@/lib/auth'
 import type { UserVisa } from '../types'
 
 interface VisaContextValue {

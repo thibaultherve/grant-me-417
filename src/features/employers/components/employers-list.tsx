@@ -10,7 +10,7 @@ import type { CreateEmployerFormData } from '../schemas'
 export function EmployersList() {
   const [isAddingEmployer, setIsAddingEmployer] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { employers, loading, error, addEmployer } = useEmployers()
+  const { employers, loading, error, addEmployer, deleteEmployer } = useEmployers()
 
   const handleAddEmployer = async (data: CreateEmployerFormData) => {
     setIsSubmitting(true)
@@ -20,6 +20,10 @@ export function EmployersList() {
     if (result.success) {
       setIsAddingEmployer(false)
     }
+  }
+
+  const handleDeleteEmployer = async (id: string) => {
+    await deleteEmployer(id)
   }
 
   if (loading) {
@@ -82,7 +86,11 @@ export function EmployersList() {
       ) : (
         <div className="space-y-3">
           {employers.map((employer) => (
-            <EmployerCard key={employer.id} employer={employer} />
+            <EmployerCard 
+              key={employer.id} 
+              employer={employer} 
+              onDelete={handleDeleteEmployer}
+            />
           ))}
         </div>
       )}
