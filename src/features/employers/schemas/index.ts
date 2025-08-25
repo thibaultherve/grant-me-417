@@ -27,4 +27,4 @@ export const createEmployerSchema = z.object({
   is_eligible: z.boolean().default(true)
 })
 
-export type CreateEmployerFormData = z.infer<typeof createEmployerSchema>
+export type CreateEmployerFormData = z.input<typeof createEmployerSchema>

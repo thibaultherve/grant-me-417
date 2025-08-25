@@ -19,7 +19,19 @@
       "mcp__supabase__list_migrations",
       "mcp__supabase__execute_sql",
       "Bash(pnpm tsc:*)",
-      "Bash(pnpm lint:*)"
+      "Bash(pnpm lint:*)",
+      "mcp__ide__getDiagnostics",
+      "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react/**)",
+      "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react/**)",
+      "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react\\docs/**)",
+      "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react\\docs/**)",
+      "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react\\docs/**)",
+      "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react\\src/**)",
+      "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react\\apps\\react-vite\\src\\features/**)",
+      "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react\\apps\\react-vite\\src\\features\\discussions\\components/**)",
+      "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react\\apps\\react-vite\\src\\features\\auth\\components/**)",
+      "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react\\docs/**)",
+      "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react\\apps\\react-vite\\src\\features\\auth\\components\\__tests__/**)"
     ],
     "deny": [],
     "ask": []

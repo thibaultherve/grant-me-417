@@ -1,4 +1,3 @@
-import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
@@ -20,44 +19,47 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { createEmployerSchema, type CreateEmployerFormData } from '../schemas'
+import { INDUSTRY_OPTIONS } from '../constants'
 
 interface AddEmployerFormProps {
   onSubmit: (data: CreateEmployerFormData) => Promise<void>
   onCancel: () => void
   isSubmitting?: boolean
+  onError?: (error: Error) => void
 }
 
-const industryOptions = [
-  { value: 'plant_and_animal_cultivation', label: 'Plant and Animal Cultivation' },
-  { value: 'fishing_and_pearling', label: 'Fishing and Pearling' },
-  { value: 'tree_farming_and_felling', label: 'Tree Farming and Felling' },
-  { value: 'mining', label: 'Mining' },
-  { value: 'construction', label: 'Construction' },
-  { value: 'hospitality_and_tourism', label: 'Hospitality and Tourism' },
-  { value: 'bushfire_recovery_work', label: 'Bushfire Recovery Work' },
-  { value: 'critical_covid19_work', label: 'Critical COVID-19 Work' },
-  { value: 'other', label: 'Other' }
-] as const
-
-export function AddEmployerForm({ onSubmit, onCancel, isSubmitting }: AddEmployerFormProps) {
+export function AddEmployerForm({ onSubmit, onCancel, isSubmitting, onError }: AddEmployerFormProps) {
   const form = useForm<CreateEmployerFormData>({
     resolver: zodResolver(createEmployerSchema),
     defaultValues: {
       name: '',
-      industry: 'plant_and_animal_cultivation',
+      industry: 'plant_and_animal_cultivation' as const,
       postcode: '',
       is_eligible: true
     }
   })
 
   const handleSubmit = async (data: CreateEmployerFormData) => {
-    await onSubmit(data)
-    form.reset()
+    try {
+      await onSubmit(data)
+      form.reset()
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error : new Error('Failed to add employer')
+      onError?.(errorMessage)
+      
+      // Set form-level error if onError is not provided
+      if (!onError) {
+        form.setError('root', {
+          type: 'manual',
+          message: errorMessage.message
+        })
+      }
+    }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 max-w-lg mx-auto">
         <FormField
           control={form.control}
           name="name"
@@ -92,7 +94,7 @@ export function AddEmployerForm({ onSubmit, onCancel, isSubmitting }: AddEmploye
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {industryOptions.map((option) => (
+                  {INDUSTRY_OPTIONS.map((option) => (
                     <SelectItem 
                       key={option.value} 
                       value={option.value}
@@ -133,6 +135,12 @@ export function AddEmployerForm({ onSubmit, onCancel, isSubmitting }: AddEmploye
           )}
         />
 
+        {form.formState.errors.root && (
+          <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md border border-red-200">
+            {form.formState.errors.root.message}
+          </div>
+        )}
+        
         <div className="flex gap-3 pt-4">
           <Button
             type="button"

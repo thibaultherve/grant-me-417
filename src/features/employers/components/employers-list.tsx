@@ -88,7 +88,7 @@ export function EmployersList() {
       )}
 
       <Sheet open={isAddingEmployer} onOpenChange={setIsAddingEmployer}>
-        <SheetContent side="bottom" className="h-[85vh] rounded-t-xl">
+        <SheetContent side="right" className="w-full sm:max-w-xl overflow-y-auto">
           <SheetHeader className="mb-6">
             <SheetTitle>Add New Employer</SheetTitle>
           </SheetHeader>
