@@ -1,6 +1,7 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
+
+import { WorkEntriesTable } from '@/features/work-entries/components/work-entries-table';
 
 export const WorkEntriesRoute = () => {
   return (
@@ -18,17 +19,7 @@ export const WorkEntriesRoute = () => {
         </Button>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Work History</CardTitle>
-          <CardDescription>All your logged work entries</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
-            No work entries yet. Start by adding your first work entry.
-          </p>
-        </CardContent>
-      </Card>
+      <WorkEntriesTable />
     </div>
   );
 };

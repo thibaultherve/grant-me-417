@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { paths } from '@/config/paths';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
@@ -11,15 +12,26 @@ import {
   Clock, 
   FileText, 
   User,
-  LogOut 
+  LogOut,
+  ChevronUp,
+  Menu,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const navigation = [
   { name: 'Dashboard', href: paths.app.dashboard.path, icon: Home },
   { name: 'Employers', href: paths.app.employers.path, icon: Building2 },
   { name: 'Work Entries', href: paths.app.workEntries.path, icon: Clock },
   { name: 'Visas', href: paths.app.visas.path, icon: FileText },
-  { name: 'Profile', href: paths.app.profile.path, icon: User },
 ];
 
 interface DashboardLayoutProps {
@@ -30,6 +42,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const handleSignOut = async () => {
     try {
@@ -66,23 +79,81 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               </Link>
             );
           })}
-          {/* Logout button for mobile */}
-          <button
-            onClick={handleSignOut}
-            className="flex flex-col items-center justify-center gap-1 min-w-[60px] h-16 px-3 py-2 text-xs rounded-lg transition-colors text-muted-foreground hover:text-destructive hover:bg-accent"
-          >
-            <LogOut className="h-5 w-5 flex-shrink-0" />
-            <span className="leading-none">Logout</span>
-          </button>
+          {/* Profile dropdown for mobile */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className={`flex flex-col items-center justify-center gap-1 min-w-[60px] h-16 px-3 py-2 text-xs rounded-lg transition-colors ${
+                  location.pathname === paths.app.profile.path 
+                    ? 'bg-primary text-primary-foreground' 
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                }`}
+              >
+                <User className="h-5 w-5 flex-shrink-0" />
+                <span className="leading-none">Profile</span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="center" side="top" className="mb-2 min-w-48">
+              <DropdownMenuLabel className="px-2 py-1.5">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">Account</p>
+                  <p className="text-xs leading-none text-muted-foreground truncate">
+                    {user?.email}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to={paths.app.profile.path} className="w-full cursor-pointer">
+                  <User className="mr-2 h-4 w-4" />
+                  Profile
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <div className="px-2 py-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Theme</span>
+                  <ThemeToggle size="sm" />
+                </div>
+              </div>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={handleSignOut}
+                className="cursor-pointer text-destructive focus:text-destructive"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </nav>
 
       {/* Desktop sidebar */}
-      <aside className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
+      <aside className={`hidden md:fixed md:inset-y-0 md:flex md:flex-col transition-all duration-300 ease-in-out ${
+        sidebarCollapsed ? 'md:w-16' : 'md:w-64'
+      }`}>
         <div className="flex min-h-0 flex-1 flex-col border-r bg-background">
           <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-            <div className="flex flex-shrink-0 items-center px-4">
-              <h1 className="text-xl font-bold">Get Granted 417</h1>
+            <div className="flex flex-shrink-0 items-center justify-between px-4">
+              {!sidebarCollapsed && (
+                <h1 className="text-xl font-bold transition-opacity duration-300">
+                  Get Granted 417
+                </h1>
+              )}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                className="ml-auto"
+                title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              >
+                {sidebarCollapsed ? (
+                  <ChevronRight className="h-4 w-4" />
+                ) : (
+                  <ChevronLeft className="h-4 w-4" />
+                )}
+              </Button>
             </div>
             <nav className="mt-5 flex-1 space-y-1 px-2">
               {navigation.map((item) => {
@@ -92,39 +163,84 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   <Link
                     key={item.name}
                     to={item.href}
-                    className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
+                    className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-all duration-300 ${
                       isActive
                         ? 'bg-primary text-primary-foreground'
                         : 'text-foreground hover:bg-accent'
-                    }`}
+                    } ${sidebarCollapsed ? 'justify-center' : ''}`}
+                    title={sidebarCollapsed ? item.name : ''}
                   >
-                    <Icon className="mr-3 h-5 w-5 flex-shrink-0" />
-                    {item.name}
+                    <Icon className={`h-5 w-5 flex-shrink-0 ${
+                      sidebarCollapsed ? '' : 'mr-3'
+                    }`} />
+                    {!sidebarCollapsed && (
+                      <span className="transition-opacity duration-300">
+                        {item.name}
+                      </span>
+                    )}
                   </Link>
                 );
               })}
+              {/* Profile link for desktop */}
+              <Link
+                to={paths.app.profile.path}
+                className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-all duration-300 ${
+                  location.pathname === paths.app.profile.path
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-foreground hover:bg-accent'
+                } ${sidebarCollapsed ? 'justify-center' : ''}`}
+                title={sidebarCollapsed ? 'Profile' : ''}
+              >
+                <User className={`h-5 w-5 flex-shrink-0 ${
+                  sidebarCollapsed ? '' : 'mr-3'
+                }`} />
+                {!sidebarCollapsed && (
+                  <span className="transition-opacity duration-300">
+                    Profile
+                  </span>
+                )}
+              </Link>
             </nav>
           </div>
           <div className="flex flex-shrink-0 border-t p-4">
-            <div className="flex w-full items-center justify-between">
-              <div className="flex flex-col">
-                <p className="text-sm font-medium">{user?.email}</p>
+            {sidebarCollapsed ? (
+              <div className="flex flex-col items-center gap-2 w-full">
+                <ThemeToggle />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleSignOut}
+                  title="Sign out"
+                >
+                  <LogOut className="h-4 w-4" />
+                </Button>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleSignOut}
-                title="Sign out"
-              >
-                <LogOut className="h-4 w-4" />
-              </Button>
-            </div>
+            ) : (
+              <div className="flex w-full items-center justify-between">
+                <div className="flex flex-col min-w-0 flex-1">
+                  <p className="text-sm font-medium truncate">{user?.email}</p>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <ThemeToggle />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleSignOut}
+                    title="Sign out"
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </aside>
 
       {/* Main content */}
-      <div className="flex flex-1 flex-col md:pl-64">
+      <div className={`flex flex-1 flex-col transition-all duration-300 ease-in-out ${
+        sidebarCollapsed ? 'md:pl-16' : 'md:pl-64'
+      }`}>
         <main className="flex-1 pb-16 md:pb-0">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
             {children}

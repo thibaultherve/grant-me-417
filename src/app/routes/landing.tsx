@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 import { useState } from 'react';
 import { paths } from '@/config/paths';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
@@ -36,7 +37,8 @@ export const LandingPage = () => {
       <header className="container mx-auto px-4 py-6">
         <nav className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Get Granted 417</h1>
-          <div className="flex gap-4">
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
             {user ? (
               <>
                 <Button asChild>
