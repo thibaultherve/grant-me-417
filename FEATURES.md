@@ -1,8 +1,8 @@
-# Get Granted 417 - Spécifications Fonctionnelles
+# Grant Me 417 - Spécifications Fonctionnelles
 
 ## Vue d'ensemble de l'application
 
-Get Granted 417 est une application de suivi des heures de "specified work" pour les détenteurs de Working Holiday Visa 417 en Australie. L'application aide les backpackers à calculer et suivre leur progression vers l'éligibilité pour leur 2e ou 3e visa.
+Grant Me 417 est une application de suivi des heures de "specified work" pour les détenteurs de Working Holiday Visa 417 en Australie. L'application aide les backpackers à calculer et suivre leur progression vers l'éligibilité pour leur 2e ou 3e visa.
 
 ## Architecture de navigation
 

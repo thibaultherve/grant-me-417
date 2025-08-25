@@ -138,7 +138,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <div className="flex flex-shrink-0 items-center justify-between px-4">
               {!sidebarCollapsed && (
                 <h1 className="text-xl font-bold transition-opacity duration-300">
-                  Get Granted 417
+                  Grant Me 417
                 </h1>
               )}
               <Button

@@ -36,7 +36,7 @@ export const LandingPage = () => {
     <div className="flex min-h-screen flex-col">
       <header className="container mx-auto px-4 py-6">
         <nav className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Get Granted 417</h1>
+          <h1 className="text-2xl font-bold">Grant Me 417</h1>
           <div className="flex items-center gap-4">
             <ThemeToggle />
             {user ? (
@@ -126,7 +126,7 @@ export const LandingPage = () => {
 
       <footer className="border-t py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © 2025 Get Granted 417. All rights reserved.
+          © 2025 Grant Me 417. All rights reserved.
         </div>
       </footer>
     </div>

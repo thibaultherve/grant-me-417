@@ -42,7 +42,7 @@ This is a **learning project** - the developer's first solo React project being 
 
 ## Project Architecture
 
-Get Granted 417 is a React SPA for tracking work hours for Working Holiday Visa 417 Holders (Australia). The application helps backpackers calculate and track their "specified work" hours to qualify for second or third Working Holiday Visas. The application uses:
+Grant Me 417 is a React SPA for tracking work hours for Working Holiday Visa 417 Holders (Australia). The application helps backpackers calculate and track their "specified work" hours to qualify for second or third Working Holiday Visas. The application uses:
 
 ### Frontend Stack
 
@@ -241,7 +241,7 @@ This ensures consistency, proper dependencies, and correct configuration accordi
 
 ### Application Purpose
 
-Get Granted 417 helps Working Holiday Visa (WHV) 417 holders track their "specified work" to qualify for visa extensions. The name represents "Get Granted" - referring to getting your visa granted - with "417" explicitly referencing the Working Holiday Visa subclass 417.
+Grant Me 417 helps Working Holiday Visa (WHV) 417 holders track their "specified work" to qualify for visa extensions. The name represents "Grant Me" - referring to getting your visa granted - with "417" explicitly referencing the Working Holiday Visa subclass 417.
 
 ### Specified Work Requirements
 
@@ -271,7 +271,7 @@ Get Granted 417 helps Working Holiday Visa (WHV) 417 holders track their "specif
 
 ### Target Users - International Backpackers
 
-Get Granted 417 serves **international backpackers** (not Australian citizens) who hold Working Holiday Visas and come to work in Australia.
+Grant Me 417 serves **international backpackers** (not Australian citizens) who hold Working Holiday Visas and come to work in Australia.
 
 ### Eligible Countries for WHV 417 (2025)
 
