@@ -34,7 +34,8 @@
       "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react\\apps\\react-vite\\src\\features\\auth\\components\\__tests__/**)",
       "Bash(pnpm remove:*)",
       "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react\\apps\\react-vite\\src\\lib/**)",
-      "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react\\apps\\react-vite\\src\\components\\layouts/**)"
+      "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react\\apps\\react-vite\\src\\components\\layouts/**)",
+      "mcp__supabase__apply_migration"
     ],
     "deny": [],
     "ask": []

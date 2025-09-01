@@ -45,12 +45,41 @@ export function useEmployers() {
 
       if (error) throw error
 
+      // Update local state immediately (optimistic update)
       setEmployers(prev => [data, ...prev])
       toast.success('Employer added successfully')
       return { success: true, data }
     } catch (err) {
       console.error('Error adding employer:', err)
       const message = err instanceof Error ? err.message : 'Failed to add employer'
+      toast.error(message)
+      return { success: false, error: message }
+    }
+  }
+
+  const updateEmployer = async (id: string, input: CreateEmployerInput) => {
+    try {
+      const { data, error } = await supabase
+        .from('employers')
+        .update({
+          name: input.name,
+          industry: input.industry,
+          postcode: input.postcode || null,
+          is_eligible: input.is_eligible ?? true
+        })
+        .eq('id', id)
+        .select()
+        .single()
+
+      if (error) throw error
+
+      // Update local state immediately (optimistic update)
+      setEmployers(prev => prev.map(emp => emp.id === id ? data : emp))
+      toast.success('Employer updated successfully')
+      return { success: true, data }
+    } catch (err) {
+      console.error('Error updating employer:', err)
+      const message = err instanceof Error ? err.message : 'Failed to update employer'
       toast.error(message)
       return { success: false, error: message }
     }
@@ -65,6 +94,7 @@ export function useEmployers() {
 
       if (error) throw error
 
+      // Update local state immediately (optimistic update)
       setEmployers(prev => prev.filter(emp => emp.id !== id))
       toast.success('Employer deleted successfully')
       return { success: true }
@@ -76,6 +106,7 @@ export function useEmployers() {
     }
   }
 
+  // Simple useEffect - just fetch data on mount
   useEffect(() => {
     fetchEmployers()
   }, [])
@@ -85,6 +116,7 @@ export function useEmployers() {
     loading,
     error,
     addEmployer,
+    updateEmployer,
     deleteEmployer,
     refetch: fetchEmployers
   }

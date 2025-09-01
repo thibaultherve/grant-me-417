@@ -1,16 +1,24 @@
 import React from 'react'
-import { Button } from '@/components/ui/button'
 import { Building2 } from 'lucide-react'
-import { useEmployers } from '../hooks/use-employers'
 import { EmployerCard } from './employer-card'
+import type { Employer } from '../types'
 
-export function EmployersList() {
-  const { employers, loading, error, deleteEmployer } = useEmployers()
+interface EmployersListProps {
+  employers: Employer[]
+  loading: boolean
+  error: string | null
+  onEdit: (employer: Employer) => void
+  onDelete: (id: string) => Promise<void>
+}
 
-  const handleDeleteEmployer = async (id: string) => {
-    await deleteEmployer(id)
-  }
-
+export function EmployersList({ 
+  employers, 
+  loading, 
+  error, 
+  onEdit, 
+  onDelete 
+}: EmployersListProps) {
+  
   if (loading) {
     return (
       <div className="space-y-6">
@@ -47,7 +55,8 @@ export function EmployersList() {
             <EmployerCard 
               key={employer.id} 
               employer={employer} 
-              onDelete={handleDeleteEmployer}
+              onDelete={onDelete}
+              onEdit={onEdit}
             />
           ))}
         </div>

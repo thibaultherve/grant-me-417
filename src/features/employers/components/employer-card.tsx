@@ -13,12 +13,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { Building2, MapPin, CheckCircle, XCircle, Trash2 } from 'lucide-react'
+import { Building2, MapPin, CheckCircle, XCircle, Trash2, Edit } from 'lucide-react'
 import type { Employer } from '../types'
 
 interface EmployerCardProps {
   employer: Employer
   onDelete: (id: string) => void
+  onEdit: (employer: Employer) => void
 }
 
 const industryLabels: Record<string, string> = {
@@ -33,7 +34,7 @@ const industryLabels: Record<string, string> = {
   other: 'Other'
 }
 
-export function EmployerCard({ employer, onDelete }: EmployerCardProps) {
+export function EmployerCard({ employer, onDelete, onEdit }: EmployerCardProps) {
   return (
     <Card className="border shadow-sm">
       <CardContent className="p-4">
@@ -61,6 +62,14 @@ export function EmployerCard({ employer, onDelete }: EmployerCardProps) {
                 Not Eligible
               </Badge>
             )}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-8 w-8 p-0"
+              onClick={() => onEdit(employer)}
+            >
+              <Edit className="w-4 h-4" />
+            </Button>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10">
