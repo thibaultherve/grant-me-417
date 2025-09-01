@@ -1,9 +1,33 @@
 import React from 'react';
 import { AppRouter } from '@/app/router';
 import { AuthProvider } from '@/lib/auth';
-import { ThemeProvider } from '@/lib/theme';
+import { ThemeProvider, useTheme } from '@/lib/theme';
 import { VisaProvider } from '@/features/visas/hooks/use-visa-context';
 import { Toaster } from 'sonner';
+
+const ToasterWithTheme = () => {
+  const { theme } = useTheme();
+  
+  return (
+    <Toaster 
+      position="top-center" 
+      richColors 
+      duration={4000}
+      visibleToasts={5}
+      closeButton
+      expand={false}
+      theme={theme}
+      className="font-medium"
+      toastOptions={{
+        className: 'bg-card border-border text-card-foreground shadow-lg backdrop-blur-md rounded-lg transition-all duration-300 ease-in-out transform hover:scale-[1.02]',
+        style: {
+          fontSize: '14px',
+          fontWeight: '500',
+        }
+      }}
+    />
+  );
+};
 
 export const App = () => {
   return (
@@ -11,23 +35,7 @@ export const App = () => {
       <AuthProvider>
         <VisaProvider>
           <AppRouter />
-          <Toaster 
-            position="top-center" 
-            richColors 
-            duration={4000}
-            visibleToasts={5}
-            closeButton
-            expand={false}
-            theme="system"
-            className="font-medium"
-            toastOptions={{
-              className: 'transition-all duration-300 ease-in-out transform hover:scale-[1.02] shadow-lg backdrop-blur-sm',
-              style: {
-                fontSize: '14px',
-                fontWeight: '500',
-              }
-            }}
-          />
+          <ToasterWithTheme />
         </VisaProvider>
       </AuthProvider>
     </ThemeProvider>

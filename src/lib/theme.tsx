@@ -33,6 +33,10 @@ export const ThemeProvider = ({
     const root = document.documentElement;
     root.setAttribute('data-theme', theme);
     
+    // Also apply class-based theme for external libraries like Sonner
+    root.classList.remove('light', 'dark');
+    root.classList.add(theme);
+    
     // Store theme in localStorage
     localStorage.setItem('theme', theme);
   }, [theme]);
