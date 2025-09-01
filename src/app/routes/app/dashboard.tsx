@@ -1,6 +1,6 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { VisaSelector } from '@/features/visas/components/visa-selector';
-import { useVisaContext } from '@/features/visas/hooks/use-visa-context';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { VisaSelector } from "@/features/visas/components/visa-selector";
+import { useVisaContext } from "@/features/visas/hooks/use-visa-context";
 
 export const DashboardRoute = () => {
   const { currentVisa } = useVisaContext();
@@ -23,7 +23,9 @@ export const DashboardRoute = () => {
             <CardTitle className="text-sm font-medium">Days Worked</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{currentVisa?.days_worked || 0}</div>
+            <div className="text-2xl font-bold">
+              {currentVisa?.days_worked || 0}
+            </div>
             <p className="text-xs text-muted-foreground">
               of {currentVisa?.days_required || 88} days required
             </p>
@@ -35,17 +37,25 @@ export const DashboardRoute = () => {
             <CardTitle className="text-sm font-medium">Eligible Days</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{currentVisa?.eligible_days || 0}</div>
-            <p className="text-xs text-muted-foreground">eligible days completed</p>
+            <div className="text-2xl font-bold">
+              {currentVisa?.eligible_days || 0}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              eligible days completed
+            </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Days Remaining</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Days Remaining
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{currentVisa?.days_remaining || 0}</div>
+            <div className="text-2xl font-bold">
+              {currentVisa?.days_remaining || 0}
+            </div>
             <p className="text-xs text-muted-foreground">days left to work</p>
           </CardContent>
         </Card>
@@ -55,23 +65,20 @@ export const DashboardRoute = () => {
             <CardTitle className="text-sm font-medium">Progress</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{currentVisa?.progress_percentage || 0}%</div>
+            <div className="text-2xl font-bold">
+              {currentVisa?.progress_percentage || 0}%
+            </div>
             <p className="text-xs text-muted-foreground">
-              towards {currentVisa?.visa_type === 'first_whv' ? '2nd WHV' : currentVisa?.visa_type === 'second_whv' ? '3rd WHV' : 'completion'}
+              towards{" "}
+              {currentVisa?.visa_type === "first_whv"
+                ? "2nd WHV"
+                : currentVisa?.visa_type === "second_whv"
+                ? "3rd WHV"
+                : "completion"}
             </p>
           </CardContent>
         </Card>
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Hours</CardTitle>
-          <CardDescription>Your latest work hour entries</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">No hours yet. Start by adding an employer and logging your work hours.</p>
-        </CardContent>
-      </Card>
     </div>
   );
 };

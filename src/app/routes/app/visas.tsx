@@ -1,14 +1,44 @@
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Plus } from 'lucide-react';
+import { AddVisaForm } from '@/features/visas/components/add-visa-form';
+import type { CreateVisaFormData } from '@/features/visas/schemas';
 
 export const VisasRoute = () => {
+  const [isAddingVisa, setIsAddingVisa] = useState(false);
+
+  const handleAddVisaSubmit = async (data: CreateVisaFormData) => {
+    console.log('Adding visa:', data);
+    // TODO: Implement visa creation logic
+    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+  };
+
+  const handleAddVisaSuccess = async () => {
+    setIsAddingVisa(false);
+    // TODO: Refresh visa data
+  };
+
+  const handleAddVisaError = (error: Error) => {
+    console.error('Error adding visa:', error);
+    // TODO: Show toast notification
+  };
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Visas</h1>
-        <p className="text-muted-foreground">
-          Track your visa progress and requirements
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Visas</h1>
+          <p className="text-muted-foreground">
+            Track your visa progress and requirements
+          </p>
+        </div>
+        <Button onClick={() => setIsAddingVisa(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Add Visa
+        </Button>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
@@ -74,6 +104,20 @@ export const VisasRoute = () => {
           </CardContent>
         </Card>
       </div>
+
+      <Sheet open={isAddingVisa} onOpenChange={setIsAddingVisa}>
+        <SheetContent side="right" className="w-full sm:max-w-4xl overflow-y-auto">
+          <SheetHeader className="mb-6">
+            <SheetTitle>Add New Visa</SheetTitle>
+          </SheetHeader>
+          <AddVisaForm
+            onSubmit={handleAddVisaSubmit}
+            onCancel={() => setIsAddingVisa(false)}
+            isSubmitting={false}
+            onError={handleAddVisaError}
+          />
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

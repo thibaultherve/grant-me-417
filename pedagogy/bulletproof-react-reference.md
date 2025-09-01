@@ -25,7 +25,7 @@ src/
 ├── features/           # 🎯 Cœur de l'application
 │   ├── auth/          # Feature authentification
 │   ├── employers/     # Feature employeurs
-│   ├── work-entries/  # Feature entrées de travail
+│   ├── hours/  # Feature entrées de travail
 │   └── dashboard/     # Feature tableau de bord
 ├── components/        # 🧩 Composants réutilisables
 ├── hooks/            # 🪝 Hooks partagés
@@ -71,10 +71,12 @@ app (router, providers)
 ```
 
 **✅ Autorisé :**
+
 - `features/auth` peut importer de `components/`
 - `app/` peut importer de `features/`
 
 **❌ Interdit :**
+
 - `features/auth` ne peut PAS importer de `features/employers`
 - `components/` ne peut PAS importer de `features/`
 
@@ -109,12 +111,12 @@ Toujours utiliser des imports absolus pour la clarté :
 
 ```javascript
 // ✅ BON
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/features/auth/hooks/use-auth';
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/features/auth/hooks/use-auth";
 
 // ❌ MAUVAIS
-import { Button } from '../../../components/ui/button';
-import { useAuth } from '../../auth/hooks/use-auth';
+import { Button } from "../../../components/ui/button";
+import { useAuth } from "../../auth/hooks/use-auth";
 ```
 
 ## Patterns de Composants
@@ -144,11 +146,7 @@ function WorkEntryCardWithEditModalAndDeleteConfirm({ entry }) {
 ```javascript
 // ✅ BON : Composition
 function Card({ children, className }) {
-  return (
-    <div className={`card ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={`card ${className}`}>{children}</div>;
 }
 
 function WorkEntryCard({ entry }) {
@@ -185,7 +183,7 @@ const AuthContext = createContext();
 
 // 4. État Serveur (avec Supabase)
 function useWorkEntries() {
-  const { data, error } = useSWR('work-entries', fetchWorkEntries);
+  const { data, error } = useSWR("work-entries", fetchWorkEntries);
   return { data, error };
 }
 ```
@@ -196,23 +194,21 @@ function useWorkEntries() {
 
 ```javascript
 // 1. Code Splitting
-const Dashboard = lazy(() => import('@/features/dashboard'));
+const Dashboard = lazy(() => import("@/features/dashboard"));
 
 // 2. Memoization appropriée
 const ExpensiveComponent = memo(({ data }) => {
-  const processedData = useMemo(() => 
-    processData(data), [data]
-  );
-  
+  const processedData = useMemo(() => processData(data), [data]);
+
   const handleClick = useCallback(() => {
     // action
   }, [dependency]);
-  
+
   return <div>{/* render */}</div>;
 });
 
 // 3. Virtualisation pour listes longues
-import { VirtualList } from '@tanstack/react-virtual';
+import { VirtualList } from "@tanstack/react-virtual";
 ```
 
 ## Sécurité
@@ -223,13 +219,13 @@ import { VirtualList } from '@tanstack/react-virtual';
 // 1. Validation des entrées
 function validateWorkEntry(data) {
   if (!data.hours || data.hours < 0) {
-    throw new Error('Invalid hours');
+    throw new Error("Invalid hours");
   }
   // ...
 }
 
 // 2. Sanitisation du contenu utilisateur
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 const clean = DOMPurify.sanitize(userInput);
 
 // 3. Variables d'environnement
@@ -247,25 +243,25 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 
 ```javascript
 // Test d'intégration
-describe('Work Entry Flow', () => {
-  it('should create a new work entry', async () => {
+describe("Work Entry Flow", () => {
+  it("should create a new work entry", async () => {
     render(<App />);
-    
+
     // Naviguer vers le formulaire
-    const addButton = screen.getByText('Add Entry');
+    const addButton = screen.getByText("Add Entry");
     fireEvent.click(addButton);
-    
+
     // Remplir le formulaire
-    const hoursInput = screen.getByLabelText('Hours');
-    fireEvent.change(hoursInput, { target: { value: '8' } });
-    
+    const hoursInput = screen.getByLabelText("Hours");
+    fireEvent.change(hoursInput, { target: { value: "8" } });
+
     // Soumettre
-    const submitButton = screen.getByText('Save');
+    const submitButton = screen.getByText("Save");
     fireEvent.click(submitButton);
-    
+
     // Vérifier le résultat
     await waitFor(() => {
-      expect(screen.getByText('8 hours')).toBeInTheDocument();
+      expect(screen.getByText("8 hours")).toBeInTheDocument();
     });
   });
 });
@@ -291,10 +287,10 @@ describe('Work Entry Flow', () => {
 
 ```javascript
 // ✅ PascalCase pour les composants
-export function WorkEntryCard() { }
+export function WorkEntryCard() {}
 
 // ✅ camelCase pour les fonctions
-export function calculateTotalHours() { }
+export function calculateTotalHours() {}
 
 // ✅ UPPER_SNAKE_CASE pour les constantes
 export const MAX_HOURS_PER_DAY = 12;
