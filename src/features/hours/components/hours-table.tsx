@@ -1,9 +1,8 @@
-import { useState } from 'react';
 import { 
   Table, 
   TableBody, 
   TableCell, 
-  TableHead, 
+ 
   TableHeader, 
   TableRow 
 } from '@/components/ui/table';
@@ -11,25 +10,31 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Calendar, Clock, Building2, CheckCircle, XCircle } from 'lucide-react';
 
-import { useWorkEntries } from '../hooks/use-work-entries';
-import { WorkEntriesPagination } from './work-entries-pagination';
+import { HoursPagination } from './hours-pagination';
 import { SortableTableHead } from './sortable-table-head';
-import type { WorkEntryWithEmployer, SortOptions, SortField, SortOrder } from '../types';
+import type { HourEntryWithEmployer, SortOptions, SortField, SortOrder, HoursResponse } from '../types';
 
-export const WorkEntriesTable = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortOptions, setSortOptions] = useState<SortOptions>({
-    field: 'work_date',
-    order: 'desc',
-  });
-  const limit = 10;
+interface HoursTableProps {
+  data: HoursResponse | null;
+  isLoading: boolean;
+  error: Error | null;
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
+  sortOptions: SortOptions;
+  setSortOptions: (options: SortOptions) => void;
+  limit: number;
+}
 
-  const { data, isLoading, error } = useWorkEntries({
-    page: currentPage,
-    limit,
-    sort: sortOptions,
-  });
-
+export const HoursTable = ({
+  data,
+  isLoading,
+  error,
+  currentPage,
+  setCurrentPage,
+  sortOptions,
+  setSortOptions,
+  limit,
+}: HoursTableProps) => {
   const handleSortChange = (field: SortField, order: SortOrder) => {
     setSortOptions({ field, order });
     // Reset to first page when sorting changes
@@ -42,7 +47,7 @@ export const WorkEntriesTable = () => {
         <CardContent className="flex items-center justify-center py-16">
           <div className="text-center space-y-2">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-            <p className="text-sm text-muted-foreground">Loading work entries...</p>
+            <p className="text-sm text-muted-foreground">Loading hours...</p>
           </div>
         </CardContent>
       </Card>
@@ -56,7 +61,7 @@ export const WorkEntriesTable = () => {
           <div className="text-center space-y-2">
             <XCircle className="h-12 w-12 text-destructive mx-auto" />
             <p className="text-sm text-muted-foreground">
-              Error loading work entries: {error.message}
+              Error loading hours: {error.message}
             </p>
           </div>
         </CardContent>
@@ -70,9 +75,9 @@ export const WorkEntriesTable = () => {
         <CardContent className="flex items-center justify-center py-16">
           <div className="text-center space-y-2">
             <Calendar className="h-12 w-12 text-muted-foreground mx-auto" />
-            <p className="text-lg font-medium">No work entries found</p>
+            <p className="text-lg font-medium">No hours found</p>
             <p className="text-sm text-muted-foreground">
-              Start by adding your first work entry to track your progress.
+              Start by adding your first entry to track your progress.
             </p>
           </div>
         </CardContent>
@@ -157,7 +162,7 @@ export const WorkEntriesTable = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.data.map((entry: WorkEntryWithEmployer) => (
+                {data.data.map((entry: HourEntryWithEmployer) => (
                   <TableRow key={entry.id} className="hover:bg-muted/50">
                     <TableCell className="font-mono text-sm">
                       <div className="flex items-center gap-2">
@@ -214,7 +219,7 @@ export const WorkEntriesTable = () => {
             Showing {(currentPage - 1) * limit + 1} to{' '}
             {Math.min(currentPage * limit, data.total)} of {data.total} entries
           </p>
-          <WorkEntriesPagination
+          <HoursPagination
             currentPage={currentPage}
             totalPages={data.totalPages}
             onPageChange={setCurrentPage}

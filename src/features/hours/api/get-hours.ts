@@ -1,17 +1,17 @@
 import { supabase } from '@/lib/supabase';
-import type { WorkEntryWithEmployer, WorkEntriesResponse, SortOptions } from '../types';
+import type { HourEntryWithEmployer, HoursResponse, SortOptions } from '../types';
 
-export type GetWorkEntriesOptions = {
+export type GetHoursOptions = {
   page?: number;
   limit?: number;
   sort?: SortOptions;
 };
 
-export const getWorkEntries = async ({ 
+export const getHours = async ({ 
   page = 1, 
   limit = 10,
   sort = { field: 'work_date', order: 'desc' }
-}: GetWorkEntriesOptions = {}): Promise<WorkEntriesResponse> => {
+}: GetHoursOptions = {}): Promise<HoursResponse> => {
   const offset = (page - 1) * limit;
   
   // Get total count from the view
@@ -20,7 +20,7 @@ export const getWorkEntries = async ({
     .select('*', { count: 'exact', head: true });
     
   if (countError) {
-    throw new Error(`Failed to count work entries: ${countError.message}`);
+    throw new Error(`Failed to count hours: ${countError.message}`);
   }
 
   // Build query with sorting - now we can sort by any column since they're all direct columns in the view
@@ -55,11 +55,11 @@ export const getWorkEntries = async ({
   const { data, error } = await query.range(offset, offset + limit - 1);
 
   if (error) {
-    throw new Error(`Failed to fetch work entries: ${error.message}`);
+    throw new Error(`Failed to fetch hours: ${error.message}`);
   }
 
   // Transform data to match our expected format
-  const transformedData: WorkEntryWithEmployer[] = data?.map((entry: any) => ({
+  const transformedData: HourEntryWithEmployer[] = data?.map((entry: any) => ({
     id: entry.id,
     user_id: entry.user_id,
     employer_id: entry.employer_id,

@@ -24,9 +24,9 @@ export const paths = {
       path: '/app/employers',
       getHref: () => '/app/employers',
     },
-    workEntries: {
-      path: '/app/work-entries',
-      getHref: () => '/app/work-entries',
+    hours: {
+      path: '/app/hours',
+      getHref: () => '/app/hours',
     },
     visas: {
       path: '/app/visas',

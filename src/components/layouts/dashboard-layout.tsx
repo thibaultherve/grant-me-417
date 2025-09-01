@@ -13,8 +13,6 @@ import {
   FileText, 
   User,
   LogOut,
-  ChevronUp,
-  Menu,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
@@ -30,7 +28,7 @@ import {
 const navigation = [
   { name: 'Dashboard', href: paths.app.dashboard.path, icon: Home },
   { name: 'Employers', href: paths.app.employers.path, icon: Building2 },
-  { name: 'Work Entries', href: paths.app.workEntries.path, icon: Clock },
+  { name: 'Hours', href: paths.app.hours.path, icon: Clock },
   { name: 'Visas', href: paths.app.visas.path, icon: FileText },
 ];
 

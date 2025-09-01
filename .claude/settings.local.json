@@ -35,7 +35,12 @@
       "Bash(pnpm remove:*)",
       "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react\\apps\\react-vite\\src\\lib/**)",
       "Read(/C:\\Users\\thiba\\Documents\\bulletproof-react\\apps\\react-vite\\src\\components\\layouts/**)",
-      "mcp__supabase__apply_migration"
+      "mcp__supabase__apply_migration",
+      "Read(C:\\Users\\thiba\\Documents\\bulletproof-react\\docs/**)",
+      "Read(C:\\Users\\thiba\\Documents\\bulletproof-react/**)",
+      "mcp__shadcn__search_items_in_registries",
+      "Read(C:\\c\\Users\\thiba\\Documents\\dev\\get-granted-417/**)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []

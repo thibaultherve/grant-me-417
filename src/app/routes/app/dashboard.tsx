@@ -65,11 +65,11 @@ export const DashboardRoute = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Recent Work Entries</CardTitle>
+          <CardTitle>Recent Hours</CardTitle>
           <CardDescription>Your latest work hour entries</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground">No work entries yet. Start by adding an employer and logging your work hours.</p>
+          <p className="text-sm text-muted-foreground">No hours yet. Start by adding an employer and logging your work hours.</p>
         </CardContent>
       </Card>
     </div>

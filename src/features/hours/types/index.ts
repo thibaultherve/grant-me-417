@@ -1,4 +1,4 @@
-export type WorkEntry = {
+export type HourEntry = {
   id: string;
   user_id: string;
   employer_id: string;
@@ -8,7 +8,7 @@ export type WorkEntry = {
   updated_at: string;
 };
 
-export type WorkEntryWithEmployer = WorkEntry & {
+export type HourEntryWithEmployer = HourEntry & {
   employer_name: string;
   industry: string;
   is_eligible: boolean;
@@ -23,8 +23,8 @@ export type SortOptions = {
   order: SortOrder;
 };
 
-export type WorkEntriesResponse = {
-  data: WorkEntryWithEmployer[];
+export type HoursResponse = {
+  data: HourEntryWithEmployer[];
   total: number;
   page: number;
   limit: number;

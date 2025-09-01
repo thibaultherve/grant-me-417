@@ -1,174 +1,174 @@
-# Grant Me 417 - Spécifications Fonctionnelles
+# Grant Me 417 - Functional Specifications
 
-## Vue d'ensemble de l'application
+## Application Overview
 
-Grant Me 417 est une application de suivi des heures de "specified work" pour les détenteurs de Working Holiday Visa 417 en Australie. L'application aide les backpackers à calculer et suivre leur progression vers l'éligibilité pour leur 2e ou 3e visa.
+Grant Me 417 is a "specified work" hours tracking application for Working Holiday Visa 417 holders in Australia. The application helps backpackers calculate and track their progress towards eligibility for their 2nd or 3rd visa.
 
-## Architecture de navigation
+## Navigation Architecture
 
-**Migration** : `/dashboard` → `/app`
+**Migration**: `/dashboard` → `/app`
 
-**5 onglets principaux** avec navigation mobile-first (bottom tabs) :
-- **Overview** (`/app/overview`) - Vue d'ensemble et progression
-- **Add Hours** (`/app/add-hours`) - Ajout d'heures de travail
-- **Employers** (`/app/employers`) - Gestion des employeurs
-- **Visas** (`/app/visas`) - Gestion des visas multiples
-- **Profile** (`/app/profile`) - Paramètres utilisateur
+**5 main tabs** with mobile-first navigation (bottom tabs):
+- **Overview** (`/app/overview`) - Overview and progress
+- **Add Hours** (`/app/add-hours`) - Work hours entry
+- **Employers** (`/app/employers`) - Employer management
+- **Visas** (`/app/visas`) - Multiple visa management
+- **Profile** (`/app/profile`) - User settings
 
-## Spécifications détaillées par onglet
+## Detailed Specifications by Tab
 
 ### 1. Overview (`/app/overview`)
 
-**Fonctionnalités principales** :
-- **Sélecteur de visa** (dropdown en haut à gauche)
-  - Format : "2nd WHV (Current)" avec icône check
-  - Permet de switcher entre tous les visas de l'utilisateur
-  - Affiché même avec un seul visa
+**Main Features**:
+- **Visa selector** (dropdown in top left)
+  - Format: "2nd WHV (Current)" with check icon
+  - Allows switching between all user visas
+  - Displayed even with single visa
   
-- **Graphiques de progression** (2 graphiques principaux) :
-  1. **Jours spécifiques** : Barre de progression classique
-     - Format : X/88 jours (2e visa) ou X/179 jours (3e visa)
-     - Pourcentage affiché
-  2. **Durée du visa** : Barre de progression classique
-     - Format : X/365 jours depuis l'arrivée
-     - Conversion en jours depuis le début du visa
+- **Progress charts** (2 main charts):
+  1. **Specified days**: Classic progress bar
+     - Format: X/88 days (2nd visa) or X/179 days (3rd visa)
+     - Percentage displayed
+  2. **Visa duration**: Classic progress bar
+     - Format: X/365 days since arrival
+     - Conversion to days since visa start
 
-- **Statut d'éligibilité** :
-  - Indication claire si l'objectif est atteint
-  - Notification de succès quand l'utilisateur atteint son objectif
+- **Eligibility status**:
+  - Clear indication if goal is reached
+  - Success notification when user reaches their goal
 
 ### 2. Add Hours (`/app/add-hours`)
 
-**Modes de saisie** (2 options dans le formulaire) :
+**Entry modes** (2 options in form):
 
-**Mode 1 : Par jour**
-- Sélection de dates via calendrier
-- Ajout de plusieurs dates avant soumission
-- Saisie des heures pour chaque date
-- L'utilisateur peut accumuler plusieurs entrées avant validation
+**Mode 1: By day**
+- Date selection via calendar
+- Multiple dates added before submission
+- Hours entry for each date
+- User can accumulate multiple entries before validation
 
-**Mode 2 : Par semaine**
-- Sélection d'une semaine de l'année
-- Saisie du total d'heures pour la semaine
-- **Traitement** : Création de 7 entrées automatiques (heures/7 par jour)
-- Exemple : 35h/semaine → 7 entrées de 5h chacune
+**Mode 2: By week**
+- Select a week of the year
+- Enter total hours for the week
+- **Processing**: Creates 7 automatic entries (hours/7 per day)
+- Example: 35h/week → 7 entries of 5h each
 
-**Validation en temps réel** :
-- Maximum 24h par jour (Zod)
-- Vérification des données avant envoi
-- Messages d'erreur instantanés
+**Real-time validation**:
+- Maximum 24h per day (Zod)
+- Data verification before sending
+- Instant error messages
 
-**Feedback utilisateur** :
-- Messages de succès via Sonner (shadcn/ui)
-- Confirmation après ajout réussi
+**User feedback**:
+- Success messages via Sonner (shadcn/ui)
+- Confirmation after successful addition
 
-**Interface** :
-- Formulaire en bottom sheet (mobile-first)
+**Interface**:
+- Form in bottom sheet (mobile-first)
 - Actions via modals
 
 ### 3. Employers (`/app/employers`)
 
-**Fonctionnalités actuelles** :
-- **Ajout d'employeurs** via formulaire
-- **Champs requis** :
-  - Nom de l'employeur
-  - Industrie (enum prédéfini)
-  - Code postal (optionnel, validation 4 chiffres)
+**Current features**:
+- **Add employers** via form
+- **Required fields**:
+  - Employer name
+  - Industry (predefined enum)
+  - Postcode (optional, 4-digit validation)
   
-**État d'éligibilité** :
-- **Actuellement** : Tous les employeurs sont éligibles par défaut
-- **Futur** : Validation automatique (industrie + code postal)
-- **Override manuel** : Possibilité de forcer l'éligibilité
+**Eligibility status**:
+- **Currently**: All employers are eligible by default
+- **Future**: Automatic validation (industry + postcode)
+- **Manual override**: Ability to force eligibility
 
-**Interface** :
-- Liste des employeurs
-- Ajout via bottom sheet/modal
-- Pas d'édition/suppression pour le moment
+**Interface**:
+- Employer list
+- Addition via bottom sheet/modal
+- No edit/delete functionality for now
 
-### 4. Visas (`/app/visas`) - Nouvel onglet
+### 4. Visas (`/app/visas`) - New tab
 
-**Gestion des visas multiples** :
-- **Ajout de nouveaux visas** (1er, 2e, 3e WHV)
-- **Modification des visas existants**
-- **Suppression des visas**
-- **Champs** :
-  - Type de visa (first_whv, second_whv, third_whv)
-  - Date d'arrivée
-  - Date de fin (calculée automatiquement : +1 an)
-  - Jours requis (auto-définis selon le type)
+**Multiple visa management**:
+- **Add new visas** (1st, 2nd, 3rd WHV)
+- **Edit existing visas**
+- **Delete visas**
+- **Fields**:
+  - Visa type (first_whv, second_whv, third_whv)
+  - Arrival date
+  - End date (automatically calculated: +1 year)
+  - Required days (auto-defined by type)
 
-**Validation métier** :
-- Pas de chevauchement de visas
-- Progression logique (1er → 2e → 3e)
-- Validation des dates
+**Business validation**:
+- No visa overlap
+- Logical progression (1st → 2nd → 3rd)
+- Date validation
 
 ### 5. Profile (`/app/profile`)
 
-**Paramètres utilisateur** :
-- **Prénom** (éditable)
-- **Nationalité** (ISO 3166-1 alpha-2)
-- **Langue du site** (anglais uniquement pour le moment)
-- **Thème** (clair/sombre)
+**User settings**:
+- **First name** (editable)
+- **Nationality** (ISO 3166-1 alpha-2)
+- **Site language** (English only for now)
+- **Theme** (light/dark)
 
-**Pas d'inclusion pour le moment** :
-- Gestion des visas (onglet dédié)
-- Historique de progression
-- Export de données
+**Not included for now**:
+- Visa management (dedicated tab)
+- Progress history
+- Data export
 
-## Architecture technique
+## Technical Architecture
 
-### Base de données Supabase
+### Supabase Database
 
-**Tables principales** :
-- `user_profiles` - Profils utilisateurs
-- `user_visas` - Gestion multi-visas avec calculs automatiques
-- `employers` - Employeurs avec classification industrielle
-- `work_entries` - Entrées de travail quotidiennes
+**Main tables**:
+- `user_profiles` - User profiles
+- `user_visas` - Multi-visa management with automatic calculations
+- `employers` - Employers with industry classification
+- `work_entries` - Daily work entries
 
-**Fonctionnalités avancées** :
-- **Triggers automatiques** pour mise à jour des progressions
-- **Colonnes générées** (pourcentages, jours restants, éligibilité)
-- **Validation métier** intégrée (âges, nationalités, chevauchements)
-- **Exemption UK** (pas de specified work requis depuis juillet 2024)
+**Advanced features**:
+- **Automatic triggers** for progress updates
+- **Generated columns** (percentages, remaining days, eligibility)
+- **Integrated business validation** (ages, nationalities, overlaps)
+- **UK exemption** (no specified work required since July 2024)
 
-### Validation et sécurité
+### Validation and Security
 
-**Zod pour la validation** :
-- Validation côté client avant envoi Supabase
-- Schémas réutilisables par feature
-- Messages d'erreur cohérents
+**Zod for validation**:
+- Client-side validation before Supabase sending
+- Reusable schemas by feature
+- Consistent error messages
 
-**Row Level Security (RLS)** :
-- Politiques Supabase activées sur toutes les tables
-- Isolation des données par utilisateur
+**Row Level Security (RLS)**:
+- Supabase policies enabled on all tables
+- Data isolation by user
 
-## UX/UI Mobile-First
+## Mobile-First UX/UI
 
-**Patterns d'interface** :
-- **Navigation** : Bottom tabs (onglets en bas)
-- **Formulaires** : Bottom sheets pour les saisies
-- **Actions** : Modals pour confirmations/éditions
-- **Feedback** : Sonner (shadcn/ui) pour notifications
+**Interface patterns**:
+- **Navigation**: Bottom tabs
+- **Forms**: Bottom sheets for input
+- **Actions**: Modals for confirmations/edits
+- **Feedback**: Sonner (shadcn/ui) for notifications
 
-**Composants shadcn/ui** :
+**shadcn/ui Components**:
 - Installation via CLI (`npx shadcn@latest add [component]`)
-- Thème cohérent avec CSS variables
-- Accessibilité intégrée
+- Consistent theme with CSS variables
+- Built-in accessibility
 
-## États futurs (non implémentés)
+## Future States (not implemented)
 
-**Fonctionnalités prévues mais pas prioritaires** :
-- Affichage/édition/suppression des work_entries
-- Historique et calendrier des jours travaillés
-- Statistiques par employeur
-- Validation automatique d'éligibilité (industrie + postcode)
-- Résumés hebdomadaires/mensuels
-- Export de données
-- Langues supplémentaires
+**Planned features but not priority**:
+- Display/edit/delete work_entries
+- History and calendar of worked days
+- Statistics by employer
+- Automatic eligibility validation (industry + postcode)
+- Weekly/monthly summaries
+- Data export
+- Additional languages
 
-## Notes de développement
+## Development Notes
 
-- **Architecture** : Feature-based selon Bulletproof React
-- **État** : Contexts pour auth/visa, useState local, pas de React Query initialement
-- **Forms** : React Hook Form + Zod obligatoire
-- **Mobile-first** : Design mobile prioritaire, responsive desktop en complément
+- **Architecture**: Feature-based according to Bulletproof React
+- **State**: Contexts for auth/visa, local useState, no React Query initially
+- **Forms**: React Hook Form + Zod mandatory
+- **Mobile-first**: Mobile design priority, responsive desktop as complement

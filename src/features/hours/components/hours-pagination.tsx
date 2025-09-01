@@ -1,19 +1,19 @@
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-export type WorkEntriesPaginationProps = {
+export type HoursPaginationProps = {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
   className?: string;
 };
 
-export const WorkEntriesPagination = ({
+export const HoursPagination = ({
   currentPage,
   totalPages,
   onPageChange,
   className = '',
-}: WorkEntriesPaginationProps) => {
+}: HoursPaginationProps) => {
   if (totalPages <= 1) return null;
 
   const hasNextPage = currentPage < totalPages;

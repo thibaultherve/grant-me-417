@@ -3,7 +3,6 @@ import { createBrowserRouter } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 
 import { paths } from '@/config/paths';
-import { ProtectedRoute } from '@/lib/auth';
 
 export const createAppRouter = () =>
   createBrowserRouter([
@@ -50,10 +49,10 @@ export const createAppRouter = () =>
           },
         },
         {
-          path: paths.app.workEntries.path,
+          path: paths.app.hours.path,
           lazy: async () => {
-            const { WorkEntriesRoute } = await import('./routes/app/work-entries');
-            return { Component: WorkEntriesRoute };
+            const { HoursRoute } = await import('./routes/app/hours');
+            return { Component: HoursRoute };
           },
         },
         {
