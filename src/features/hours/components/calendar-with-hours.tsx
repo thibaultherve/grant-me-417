@@ -3,7 +3,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import * as React from "react";
 import type { DayProps } from "react-day-picker";
-import { startOfWeek, isSameDay } from "date-fns";
+import { startOfWeek, isSameDay, format } from "date-fns";
 
 interface CalendarWithHoursProps {
   hoursByDate: { [date: string]: number };
@@ -46,7 +46,8 @@ function CustomDayButton({
   selectedWeekDate: Date | null;
   disableWeekHighlight: boolean;
 }) {
-  const dateKey = day.date.toISOString().split("T")[0];
+  // Use date-fns format to avoid timezone issues with toISOString()
+  const dateKey = format(day.date, 'yyyy-MM-dd');
   const hoursForDate = hoursByDate[dateKey] || 0;
 
   const ref = React.useRef<HTMLButtonElement>(null);

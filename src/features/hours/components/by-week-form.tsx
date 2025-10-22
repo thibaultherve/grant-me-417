@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -66,6 +66,8 @@ export function ByWeekForm({
 
   // Daily entries state
   const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>([])
+  const isPrefillingRef = useRef(false)
+  const lastPrefilledValueRef = useRef<string | null>(null)
 
   // Form validation is handled through the schema in the onSubmit handler
 
@@ -97,23 +99,13 @@ export function ByWeekForm({
 
     // Only pre-fill if there are hours for this week
     if (totalHours > 0) {
-      // Set total weekly hours
-      setTotalWeeklyHours(totalHours.toString())
-      setTotalDecimalHours(totalHours)
+      // Set prefilling flag to prevent handleTotalHoursChange from switching back to week mode
+      isPrefillingRef.current = true
 
-      // Update days_included based on which days have hours
-      const newDaysIncluded: DaysIncluded = {
-        monday: weekHours.monday > 0,
-        tuesday: weekHours.tuesday > 0,
-        wednesday: weekHours.wednesday > 0,
-        thursday: weekHours.thursday > 0,
-        friday: weekHours.friday > 0,
-        saturday: weekHours.saturday > 0,
-        sunday: weekHours.sunday > 0,
-      }
-      setDaysIncluded(newDaysIncluded)
+      // IMPORTANT: Set to day mode FIRST to prevent equal distribution calculation
+      setIsInWeekMode(false)
 
-      // Create daily entries with actual hours
+      // Create daily entries with actual hours BEFORE updating total
       const mondayDate = startOfWeek(selectedWeekDate, { weekStartsOn: 1 })
       const newEntries: DailyEntry[] = Object.keys(dayLabels).map((day, index) => {
         const dayKey = day as keyof DaysIncluded
@@ -130,7 +122,23 @@ export function ByWeekForm({
       })
 
       setDailyEntries(newEntries)
-      setIsInWeekMode(false) // Switch to day mode so daily entries don't get recalculated
+
+      // Update days_included based on which days have hours
+      const newDaysIncluded: DaysIncluded = {
+        monday: weekHours.monday > 0,
+        tuesday: weekHours.tuesday > 0,
+        wednesday: weekHours.wednesday > 0,
+        thursday: weekHours.thursday > 0,
+        friday: weekHours.friday > 0,
+        saturday: weekHours.saturday > 0,
+        sunday: weekHours.sunday > 0,
+      }
+      setDaysIncluded(newDaysIncluded)
+
+      // Set total weekly hours LAST
+      lastPrefilledValueRef.current = totalHours.toString()
+      setTotalWeeklyHours(totalHours.toString())
+      setTotalDecimalHours(totalHours)
     } else {
       // Reset to default values if no data exists
       setTotalWeeklyHours('39')
@@ -150,10 +158,23 @@ export function ByWeekForm({
 
   // Handle total hours change
   const handleTotalHoursChange = (value: string, decimal: number) => {
+    // Check if this is still the prefilled value (multiple calls with same value)
+    const isStillPrefilledValue = lastPrefilledValueRef.current === value
+
+    // Save the current prefilling state before resetting
+    const wasPrefilling = isPrefillingRef.current
+
+    // Only reset the flag if the value actually changed from the prefilled value
+    if (isPrefillingRef.current && !isStillPrefilledValue) {
+      isPrefillingRef.current = false
+      lastPrefilledValueRef.current = null
+    }
+
     setTotalWeeklyHours(value)
     setTotalDecimalHours(decimal)
-    
-    if (!isInWeekMode && value) {
+
+    // Only switch back to week mode if user is manually changing (not during prefill)
+    if (!isInWeekMode && value && !wasPrefilling && !isStillPrefilledValue) {
       setIsInWeekMode(true)
     }
   }
@@ -165,9 +186,18 @@ export function ByWeekForm({
 
   // Calculate daily hours when total or days change
   useEffect(() => {
-    if (!selectedWeekDate || !totalDecimalHours || !isInWeekMode) return
+    // Skip if we're currently prefilling
+    if (isPrefillingRef.current) {
+      return
+    }
 
-    if (totalDecimalHours <= 0) return
+    if (!selectedWeekDate || !totalDecimalHours || !isInWeekMode) {
+      return
+    }
+
+    if (totalDecimalHours <= 0) {
+      return
+    }
 
     const mondayDate = startOfWeek(selectedWeekDate, { weekStartsOn: 1 })
     const selectedDayKeys = Object.keys(daysIncluded).filter(
