@@ -105,6 +105,7 @@ function CustomDayButton({
         "flex items-center justify-center",
         "w-full aspect-square p-0",
         "relative group",
+        "cursor-pointer",
 
         // Disabled state
         modifiers.disabled && "!cursor-not-allowed opacity-50",
@@ -199,6 +200,7 @@ export function CalendarWithHours({
       selected={selected}
       weekStartsOn={1}
       defaultMonth={selectedWeekDate || undefined}
+      className="[&_button]:cursor-pointer" // Add cursor-pointer to all buttons (nav arrows)
       classNames={{
         today: "", // Remove default "today" styling
       }}
