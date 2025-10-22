@@ -6,11 +6,11 @@ import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
-import { 
-  Home, 
-  Building2, 
-  Clock, 
-  FileText, 
+import {
+  Home,
+  Building2,
+  CalendarClock,
+  FileText,
   User,
   LogOut,
   ChevronLeft,
@@ -28,7 +28,7 @@ import {
 const navigation = [
   { name: 'Dashboard', href: paths.app.dashboard.path, icon: Home },
   { name: 'Employers', href: paths.app.employers.path, icon: Building2 },
-  { name: 'Hours', href: paths.app.hours.path, icon: Clock },
+  { name: 'Hours', href: paths.app.hours.path, icon: CalendarClock },
   { name: 'Visas', href: paths.app.visas.path, icon: FileText },
 ];
 

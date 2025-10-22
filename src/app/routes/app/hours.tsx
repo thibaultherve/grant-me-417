@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Plus } from 'lucide-react';
+import { CalendarClock } from 'lucide-react';
 
 import { HoursTable } from '@/features/hours/components/hours-table';
 import { AddHoursForm } from '@/features/hours/components/add-hours-form';
@@ -38,8 +38,8 @@ export const HoursRoute = () => {
           </p>
         </div>
         <Button onClick={() => setIsAddingHours(true)}>
-          <Plus className="mr-2 h-4 w-4" />
-          Add Hours
+          <CalendarClock className="mr-2 h-4 w-4" />
+          Log Hours
         </Button>
       </div>
 
@@ -57,7 +57,7 @@ export const HoursRoute = () => {
       <Sheet open={isAddingHours} onOpenChange={setIsAddingHours}>
         <SheetContent side="right" className="w-full sm:max-w-4xl overflow-y-auto p-6">
           <SheetHeader className="mb-3">
-            <SheetTitle>Add Work Hours</SheetTitle>
+            <SheetTitle>Log Work Hours</SheetTitle>
           </SheetHeader>
           <AddHoursForm
             onSuccess={handleAddHoursSuccess}
