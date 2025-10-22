@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -68,6 +68,85 @@ export function ByWeekForm({
   const [dailyEntries, setDailyEntries] = useState<DailyEntry[]>([])
 
   // Form validation is handled through the schema in the onSubmit handler
+
+  // Helper function to get hours for a specific week from hoursByDate
+  const getWeekHoursData = useCallback((weekDate: Date) => {
+    const mondayDate = startOfWeek(weekDate, { weekStartsOn: 1 })
+    const weekHours: { [day: string]: number } = {}
+    let totalHours = 0
+
+    // Check each day of the week
+    for (let i = 0; i < 7; i++) {
+      const dayDate = addDays(mondayDate, i)
+      const dateKey = format(dayDate, 'yyyy-MM-dd')
+      const hours = hoursByDate[dateKey] || 0
+
+      const dayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+      weekHours[dayNames[i]] = hours
+      totalHours += hours
+    }
+
+    return { weekHours, totalHours }
+  }, [hoursByDate])
+
+  // Pre-fill form when a week with existing data is selected
+  useEffect(() => {
+    if (!selectedWeekDate) return
+
+    const { weekHours, totalHours } = getWeekHoursData(selectedWeekDate)
+
+    // Only pre-fill if there are hours for this week
+    if (totalHours > 0) {
+      // Set total weekly hours
+      setTotalWeeklyHours(totalHours.toString())
+      setTotalDecimalHours(totalHours)
+
+      // Update days_included based on which days have hours
+      const newDaysIncluded: DaysIncluded = {
+        monday: weekHours.monday > 0,
+        tuesday: weekHours.tuesday > 0,
+        wednesday: weekHours.wednesday > 0,
+        thursday: weekHours.thursday > 0,
+        friday: weekHours.friday > 0,
+        saturday: weekHours.saturday > 0,
+        sunday: weekHours.sunday > 0,
+      }
+      setDaysIncluded(newDaysIncluded)
+
+      // Create daily entries with actual hours
+      const mondayDate = startOfWeek(selectedWeekDate, { weekStartsOn: 1 })
+      const newEntries: DailyEntry[] = Object.keys(dayLabels).map((day, index) => {
+        const dayKey = day as keyof DaysIncluded
+        const dayDate = addDays(mondayDate, index)
+        const hours = weekHours[day] || 0
+
+        return {
+          day: dayKey,
+          date: format(dayDate, 'yyyy-MM-dd'),
+          hours: hours.toString(),
+          decimalHours: hours,
+          isCalculated: false // Not calculated, but pre-filled from existing data
+        }
+      })
+
+      setDailyEntries(newEntries)
+      setIsInWeekMode(false) // Switch to day mode so daily entries don't get recalculated
+    } else {
+      // Reset to default values if no data exists
+      setTotalWeeklyHours('39')
+      setTotalDecimalHours(39)
+      setDaysIncluded({
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: false,
+        sunday: false,
+      })
+      setIsInWeekMode(true)
+    }
+  }, [selectedWeekDate, hoursByDate, getWeekHoursData])
 
   // Handle total hours change
   const handleTotalHoursChange = (value: string, decimal: number) => {
