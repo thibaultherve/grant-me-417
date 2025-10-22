@@ -143,6 +143,7 @@ export function ByDayForm({ employerId, hoursByDate, onSubmit, onCancel, isSubmi
                   }}
                   disabled={isDateDisabled}
                   hoursByDate={hoursByDate}
+                  disableWeekHighlight={true}
                   initialFocus
                 />
               </PopoverContent>

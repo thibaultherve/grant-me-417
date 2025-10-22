@@ -13,6 +13,7 @@ interface CalendarWithHoursProps {
   disabled?: (date: Date) => boolean;
   initialFocus?: boolean;
   className?: string;
+  disableWeekHighlight?: boolean;
 }
 
 /**
@@ -36,23 +37,25 @@ function CustomDayButton({
   hoveredWeekDate,
   setHoveredWeekDate,
   selectedWeekDate,
+  disableWeekHighlight,
   ...props
 }: DayProps & {
   hoursByDate: { [date: string]: number };
   hoveredWeekDate: Date | null;
   setHoveredWeekDate: (date: Date | null) => void;
   selectedWeekDate: Date | null;
+  disableWeekHighlight: boolean;
 }) {
   const dateKey = day.date.toISOString().split("T")[0];
   const hoursForDate = hoursByDate[dateKey] || 0;
 
   const ref = React.useRef<HTMLButtonElement>(null);
 
-  // Check if current day is in the hovered week
-  const isInHoveredWeek = hoveredWeekDate ? isSameWeek(day.date, hoveredWeekDate) : false;
+  // Check if current day is in the hovered week (only if week highlight is enabled)
+  const isInHoveredWeek = !disableWeekHighlight && hoveredWeekDate ? isSameWeek(day.date, hoveredWeekDate) : false;
 
-  // Check if current day is in the selected week
-  const isInSelectedWeek = selectedWeekDate ? isSameWeek(day.date, selectedWeekDate) : false;
+  // Check if current day is in the selected week (only if week highlight is enabled)
+  const isInSelectedWeek = !disableWeekHighlight && selectedWeekDate ? isSameWeek(day.date, selectedWeekDate) : false;
 
   // Auto-focus when focused modifier is active (shadcn pattern)
   React.useEffect(() => {
@@ -62,16 +65,20 @@ function CustomDayButton({
   // Extract handlers from props to combine them
   const { onMouseEnter: propsOnMouseEnter, onMouseLeave: propsOnMouseLeave, ...restProps } = props;
 
-  // Handle mouse events - combine with original handlers
+  // Handle mouse events - combine with original handlers (only if week highlight is enabled)
   const handleMouseEnter = (e: React.MouseEvent) => {
-    setHoveredWeekDate(day.date);
+    if (!disableWeekHighlight) {
+      setHoveredWeekDate(day.date);
+    }
     if (propsOnMouseEnter) {
       propsOnMouseEnter(e);
     }
   };
 
   const handleMouseLeave = (e: React.MouseEvent) => {
-    setHoveredWeekDate(null);
+    if (!disableWeekHighlight) {
+      setHoveredWeekDate(null);
+    }
     if (propsOnMouseLeave) {
       propsOnMouseLeave(e);
     }
@@ -145,9 +152,10 @@ function CustomDayButton({
 export function CalendarWithHours({
   hoursByDate,
   selected,
+  disableWeekHighlight = false,
   ...props
 }: CalendarWithHoursProps) {
-  // State to track which week is being hovered
+  // State to track which week is being hovered (only if week highlight is enabled)
   const [hoveredWeekDate, setHoveredWeekDate] = React.useState<Date | null>(null);
 
   // Extract selected date (works with single, multiple, and range modes)
@@ -168,9 +176,10 @@ export function CalendarWithHours({
         hoveredWeekDate={hoveredWeekDate}
         setHoveredWeekDate={setHoveredWeekDate}
         selectedWeekDate={selectedWeekDate}
+        disableWeekHighlight={disableWeekHighlight}
       />
     ),
-    [hoursByDate, hoveredWeekDate, selectedWeekDate]
+    [hoursByDate, hoveredWeekDate, selectedWeekDate, disableWeekHighlight]
   );
 
   return (
