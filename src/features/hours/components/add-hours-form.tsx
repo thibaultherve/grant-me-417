@@ -1,9 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
-import { CalendarDays, Calendar, ArrowLeft } from 'lucide-react'
+import { CalendarDays, Calendar, Building2, ChevronLeft } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 import { Stepper } from './stepper'
@@ -54,11 +53,11 @@ export function AddHoursForm({ onSuccess, onCancel, className }: AddHoursFormPro
   } = useAddHours()
 
   // Load ALL hours for the selected employer (for calendar badges)
-  const { 
-    hoursByDate, 
+  const {
+    hoursByDate,
     isLoading: hoursLoading,
     totalHours,
-    totalEntries 
+    totalEntries
   } = useEmployerHours({
     employerId: selectedEmployer?.id || '',
     enabled: !!selectedEmployer
@@ -140,8 +139,20 @@ export function AddHoursForm({ onSuccess, onCancel, className }: AddHoursFormPro
     setPendingData(null)
   }
 
+  const industryLabels: Record<string, string> = {
+    plant_and_animal_cultivation: "Plant & Animal Cultivation",
+    fishing_and_pearling: "Fishing & Pearling",
+    tree_farming_and_felling: "Tree Farming & Felling",
+    mining: "Mining",
+    construction: "Construction",
+    hospitality_and_tourism: "Hospitality & Tourism",
+    bushfire_recovery_work: "Bushfire Recovery",
+    critical_covid19_work: "Critical COVID-19 Work",
+    other: "Other",
+  }
+
   return (
-    <div className={cn('space-y-6', className)}>
+    <div className={cn('space-y-4', className)}>
       <Stepper currentStep={currentStep} />
 
       {/* Step 1: Employer Selection */}
@@ -156,7 +167,7 @@ export function AddHoursForm({ onSuccess, onCancel, className }: AddHoursFormPro
           />
 
           {/* Action Buttons */}
-          <div className="flex justify-between pt-4">
+          <div className="flex justify-between pt-2 border-t">
             <Button variant="outline" onClick={onCancel}>
               Cancel
             </Button>
@@ -166,54 +177,50 @@ export function AddHoursForm({ onSuccess, onCancel, className }: AddHoursFormPro
 
       {/* Step 2: Hours Entry */}
       {currentStep === 2 && selectedEmployer && (
-        <div className="space-y-6">
-          {/* Selected Employer Summary */}
-          <Card className="border-primary/20 bg-primary/5">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <CalendarDays className="w-4 h-4 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">{selectedEmployer.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {hoursLoading ? (
-                        'Loading hours data...'
-                      ) : (
-                        `${totalEntries} entries • ${totalHours.toFixed(1)}h total`
-                      )}
-                    </p>
-                  </div>
-                </div>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={handleBackToEmployerSelection}
-                >
-                  <ArrowLeft className="w-4 h-4 mr-1" />
-                  Change
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="space-y-4">
+          {/* Selected Employer - Simple text with Change link */}
+          <div className="flex items-center justify-between pb-3 border-b">
+            <div className="flex items-center gap-2 text-sm">
+              <Building2 className="w-4 h-4 text-muted-foreground" />
+              <span className="font-medium">{selectedEmployer.name}</span>
+              <span className="text-muted-foreground">·</span>
+              <span className="text-muted-foreground">
+                {industryLabels[selectedEmployer.industry] || selectedEmployer.industry}
+              </span>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleBackToEmployerSelection}
+              className="h-8 text-xs"
+            >
+              <ChevronLeft className="w-3 h-3 mr-1" />
+              Change
+            </Button>
+          </div>
 
           {/* Mode Selection and Forms */}
           <Tabs value={mode} onValueChange={(value) => setMode(value as 'by-day' | 'by-week')}>
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="by-day" className="flex items-center gap-2">
+            <TabsList className="grid w-full grid-cols-2 p-0 h-auto bg-transparent">
+              <TabsTrigger
+                value="by-day"
+                className="flex items-center gap-2 rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted/50"
+              >
                 <CalendarDays className="w-4 h-4" />
                 <span className="hidden sm:inline">By Day</span>
                 <span className="sm:hidden">Day</span>
               </TabsTrigger>
-              <TabsTrigger value="by-week" className="flex items-center gap-2">
+              <TabsTrigger
+                value="by-week"
+                className="flex items-center gap-2 rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-muted/50"
+              >
                 <Calendar className="w-4 h-4" />
                 <span className="hidden sm:inline">By Week</span>
                 <span className="sm:hidden">Week</span>
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="by-day" className="mt-6">
+            <TabsContent value="by-day" className="mt-4">
               <ByDayForm
                 employerId={selectedEmployer.id}
                 hoursByDate={hoursByDate}
@@ -223,7 +230,7 @@ export function AddHoursForm({ onSuccess, onCancel, className }: AddHoursFormPro
               />
             </TabsContent>
 
-            <TabsContent value="by-week" className="mt-6">
+            <TabsContent value="by-week" className="mt-4">
               <ByWeekForm
                 employerId={selectedEmployer.id}
                 hoursByDate={hoursByDate}
@@ -243,72 +250,74 @@ export function AddHoursForm({ onSuccess, onCancel, className }: AddHoursFormPro
             <AlertDialogTitle>
               {pendingData?.type === 'week' ? 'Update Work Week?' : 'Update Hours?'}
             </AlertDialogTitle>
-            <AlertDialogDescription className="space-y-2">
-              <p>
-                {pendingData?.type === 'week' 
-                  ? 'Work hours already exist for some dates in this week:' 
-                  : 'Work hours already exist for the following dates:'}
-              </p>
-              <div className="bg-muted p-3 rounded-md">
-                <ul className="text-sm space-y-2">
-                  {pendingData?.existingEntries ? (
-                    pendingData.existingEntries.map(entry => {
-                      const isDelete = entry.action === 'delete' || entry.newHours === 0
-                      return (
-                        <li key={entry.work_date} className="flex items-center gap-2">
-                          <span className={cn(
-                            "font-mono",
-                            isDelete && "line-through text-muted-foreground"
-                          )}>
-                            • {new Date(entry.work_date).toLocaleDateString('en-AU', { 
-                              weekday: 'short', 
-                              day: 'numeric', 
-                              month: 'short', 
-                              year: 'numeric' 
-                            })}
-                          </span>
-                          <span className="flex items-center gap-1">
+            <AlertDialogDescription asChild>
+              <div className="space-y-2">
+                <p>
+                  {pendingData?.type === 'week'
+                    ? 'Work hours already exist for some dates in this week:'
+                    : 'Work hours already exist for the following dates:'}
+                </p>
+                <div className="bg-muted p-3 rounded-md">
+                  <ul className="text-sm space-y-2">
+                    {pendingData?.existingEntries ? (
+                      pendingData.existingEntries.map(entry => {
+                        const isDelete = entry.action === 'delete' || entry.newHours === 0
+                        return (
+                          <li key={entry.work_date} className="flex items-center gap-2">
                             <span className={cn(
-                              "line-through",
-                              isDelete ? "text-muted-foreground" : "text-destructive"
+                              "font-mono",
+                              isDelete && "line-through text-muted-foreground"
                             )}>
-                              {entry.oldHours}h
+                              • {new Date(entry.work_date).toLocaleDateString('en-AU', {
+                                weekday: 'short',
+                                day: 'numeric',
+                                month: 'short',
+                                year: 'numeric'
+                              })}
                             </span>
-                            {isDelete ? (
-                              <span className="text-red-600 font-bold text-xs bg-red-100 px-2 py-1 rounded">
-                                DELETED
+                            <span className="flex items-center gap-1">
+                              <span className={cn(
+                                "line-through",
+                                isDelete ? "text-muted-foreground" : "text-destructive"
+                              )}>
+                                {entry.oldHours}h
                               </span>
-                            ) : (
-                              <>
-                                <span className="text-muted-foreground">→</span>
-                                <span className="text-green-600 font-bold">
-                                  {entry.newHours}h
+                              {isDelete ? (
+                                <span className="text-red-600 font-bold text-xs bg-red-100 px-2 py-1 rounded">
+                                  DELETED
                                 </span>
-                              </>
-                            )}
-                          </span>
+                              ) : (
+                                <>
+                                  <span className="text-muted-foreground">→</span>
+                                  <span className="text-green-600 font-bold">
+                                    {entry.newHours}h
+                                  </span>
+                                </>
+                              )}
+                            </span>
+                          </li>
+                        )
+                      })
+                    ) : (
+                      pendingData?.existingDates.map(date => (
+                        <li key={date} className="font-mono">
+                          • {new Date(date).toLocaleDateString('en-AU', {
+                            weekday: 'short',
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric'
+                          })}
                         </li>
-                      )
-                    })
-                  ) : (
-                    pendingData?.existingDates.map(date => (
-                      <li key={date} className="font-mono">
-                        • {new Date(date).toLocaleDateString('en-AU', { 
-                          weekday: 'short', 
-                          day: 'numeric', 
-                          month: 'short', 
-                          year: 'numeric' 
-                        })}
-                      </li>
-                    ))
-                  )}
-                </ul>
+                      ))
+                    )}
+                  </ul>
+                </div>
+                <p>
+                  {pendingData?.type === 'week'
+                    ? 'Do you want to proceed with these changes?'
+                    : 'Do you want to overwrite the existing hours?'}
+                </p>
               </div>
-              <p>
-                {pendingData?.type === 'week'
-                  ? 'Do you want to proceed with these changes?'
-                  : 'Do you want to overwrite the existing hours?'}
-              </p>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

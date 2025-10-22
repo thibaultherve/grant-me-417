@@ -1,9 +1,16 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { Employer } from "@/features/employers/types";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Building2, CheckCircle } from "lucide-react";
+import { ArrowRight, Building2, MapPin } from "lucide-react";
 
 interface EmployerSelectorProps {
   employers: Employer[];
@@ -69,81 +76,64 @@ export function EmployerSelector({
 
   return (
     <div className={cn("space-y-4", className)}>
-      <div>
-        <h3 className="text-lg font-medium mb-2">Select Employer</h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          Choose the employer for whom you want to add work hours.
-        </p>
-      </div>
-
-      <div className="grid gap-3 sm:grid-cols-2">
-        {employers.map((employer) => {
-          const isSelected = selectedEmployer?.id === employer.id;
-
-          return (
-            <Card
-              key={employer.id}
-              className={cn(
-                "cursor-pointer transition-all duration-200 hover:shadow-md",
-                isSelected
-                  ? "ring-2 ring-primary border-primary shadow-md"
-                  : "border hover:border-primary/50"
-              )}
-              onClick={() => onSelectEmployer(employer)}
-            >
-              <CardContent className="p-2">
-                <div className="flex items-center gap-2">
-                  <div
-                    className={cn(
-                      "w-6 h-6 rounded flex items-center justify-center flex-shrink-0 transition-colors",
-                      isSelected
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-primary/10 text-primary"
-                    )}
-                  >
-                    {isSelected ? (
-                      <CheckCircle className="w-3 h-3" />
-                    ) : (
-                      <Building2 className="w-3 h-3" />
-                    )}
-                  </div>
-
+      <div className="space-y-2">
+        <Label htmlFor="employer-select">Select Employer</Label>
+        <Select
+          value={selectedEmployer?.id || ""}
+          onValueChange={(value) => {
+            const employer = employers.find((e) => e.id === value);
+            if (employer) {
+              onSelectEmployer(employer);
+            }
+          }}
+        >
+          <SelectTrigger id="employer-select" className="w-full h-auto py-3">
+            <SelectValue placeholder="Choose an employer">
+              {selectedEmployer && (
+                <div className="flex items-start gap-3 text-left">
+                  <Building2 className="w-5 h-5 mt-0.5 text-muted-foreground flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="font-medium text-sm truncate">
-                          {employer.name}
-                        </h4>
-                        <p className="text-xs text-muted-foreground truncate">
-                          {industryLabels[employer.industry] ||
-                            employer.industry}
-                        </p>
-                      </div>
-
-                      <div className="flex items-center gap-1 flex-shrink-0">
-                        {employer.is_eligible ? (
-                          <Badge variant="default" className="text-xs h-5 px-2">
-                            ✓
-                          </Badge>
-                        ) : (
-                          <Badge
-                            variant="secondary"
-                            className="text-xs h-5 px-2"
-                          >
-                            ✗
-                          </Badge>
-                        )}
-                        {isSelected && (
-                          <ArrowRight className="w-3 h-3 text-primary" />
-                        )}
-                      </div>
+                    <div className="font-medium truncate">
+                      {selectedEmployer.name}
+                    </div>
+                    <div className="text-sm text-muted-foreground truncate">
+                      {industryLabels[selectedEmployer.industry] ||
+                        selectedEmployer.industry}
+                      {selectedEmployer.postcode && (
+                        <span> · {selectedEmployer.postcode}</span>
+                      )}
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+              )}
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {employers.map((employer) => (
+              <SelectItem
+                key={employer.id}
+                value={employer.id}
+                className="h-auto py-3"
+              >
+                <div className="flex items-start gap-3">
+                  <Building2 className="w-5 h-5 mt-0.5 text-muted-foreground flex-shrink-0" />
+                  <div className="flex-1 min-w-0 space-y-1">
+                    <div className="font-medium">{employer.name}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {industryLabels[employer.industry] || employer.industry}
+                    </div>
+                    <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                      <MapPin className="w-3.5 h-3.5" />
+                      <span>
+                        {employer.postcode || "No postcode"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {onContinue && (

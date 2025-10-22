@@ -55,8 +55,8 @@ export const HoursRoute = () => {
       />
 
       <Sheet open={isAddingHours} onOpenChange={setIsAddingHours}>
-        <SheetContent side="right" className="w-full sm:max-w-4xl overflow-y-auto">
-          <SheetHeader className="mb-6">
+        <SheetContent side="right" className="w-full sm:max-w-4xl overflow-y-auto p-6">
+          <SheetHeader className="mb-3">
             <SheetTitle>Add Work Hours</SheetTitle>
           </SheetHeader>
           <AddHoursForm

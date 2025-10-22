@@ -47,16 +47,16 @@ export const HoursInput = forwardRef<HTMLInputElement, HoursInputProps>(
 
       // Notify parent about validation state
       onValidationChange?.(result.isValid, result.errorMessage);
-
-      // If valid, provide decimal value to parent
-      if (result.isValid && result.decimalValue !== null) {
-        onChange(value, result.decimalValue);
-      }
-    }, [value, maxHours, onChange, onValidationChange]);
+    }, [value, maxHours, onValidationChange]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;
-      onChange(newValue, validation.decimalValue || 0);
+
+      // Validate the new value immediately
+      const result = validateHours(newValue, maxHours);
+
+      // Call onChange with the new value and its decimal representation
+      onChange(newValue, result.decimalValue || 0);
     };
 
     const showError = !validation.isValid && value.trim() !== "";

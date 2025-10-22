@@ -39,19 +39,19 @@ const dayLabels = {
   sunday: 'Sunday'
 } as const
 
-export function ByWeekForm({ 
-  employerId, 
+export function ByWeekForm({
+  employerId,
   hoursByDate,
-  onSubmit, 
-  onCancel, 
+  onSubmit,
+  onCancel,
   isSubmitting = false
 }: ByWeekFormProps) {
   const [selectedWeekDate, setSelectedWeekDate] = useState<Date>()
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
-  const [totalWeeklyHours, setTotalWeeklyHours] = useState('39')
-  const [totalDecimalHours, setTotalDecimalHours] = useState(39)
+  const [totalWeeklyHours, setTotalWeeklyHours] = useState('')
+  const [totalDecimalHours, setTotalDecimalHours] = useState(0)
   const [isInWeekMode, setIsInWeekMode] = useState(true)
-  const [isTotalHoursValid, setIsTotalHoursValid] = useState(true)
+  const [isTotalHoursValid, setIsTotalHoursValid] = useState(false)
   
   // Days selection state
   const [daysIncluded, setDaysIncluded] = useState<DaysIncluded>({
@@ -141,8 +141,8 @@ export function ByWeekForm({
       setTotalDecimalHours(totalHours)
     } else {
       // Reset to default values if no data exists
-      setTotalWeeklyHours('39')
-      setTotalDecimalHours(39)
+      setTotalWeeklyHours('')
+      setTotalDecimalHours(0)
       setDaysIncluded({
         monday: true,
         tuesday: true,
@@ -298,168 +298,161 @@ export function ByWeekForm({
     .reduce((sum, entry) => sum + entry.decimalHours, 0)
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Week Selection and Total Hours */}
-      <Card>
-        <CardContent className="p-6 space-y-4">
-          <div>
-            <h3 className="text-lg font-medium mb-4">Weekly Hours Entry</h3>
-          </div>
+      <div className="space-y-3">
+        {/* Week Date Selection */}
+        <div className="space-y-2">
+          <Label htmlFor="week-picker" className="text-xs">Select Week</Label>
+          <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className={cn(
+                  'w-full justify-start text-left font-normal h-9',
+                  !selectedWeekDate && 'text-muted-foreground'
+                )}
+              >
+                <CalendarDays className="mr-2 h-4 w-4" />
+                {selectedWeekDate
+                  ? `Week of ${getWeekRange(selectedWeekDate)}`
+                  : 'Select week'
+                }
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <CalendarWithHours
+                mode="single"
+                selected={selectedWeekDate}
+                onSelect={(date: Date | undefined) => {
+                  setSelectedWeekDate(date)
+                  setIsCalendarOpen(false)
+                }}
+                disabled={isDateDisabled}
+                hoursByDate={hoursByDate}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+          {selectedWeekDate && !isWeekComplete(selectedWeekDate) && (
+            <p className="text-xs text-destructive flex items-center gap-1">
+              <AlertCircle className="w-3 h-3" />
+              This week is not yet complete
+            </p>
+          )}
+        </div>
 
-          {/* Week Date Selection */}
+        {/* Total Weekly Hours - Only show if week is selected */}
+        {selectedWeekDate && (
           <div className="space-y-2">
-            <Label htmlFor="week-picker">Select Week</Label>
-            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    'w-full justify-start text-left font-normal',
-                    !selectedWeekDate && 'text-muted-foreground'
-                  )}
-                >
-                  <CalendarDays className="mr-2 h-4 w-4" />
-                  {selectedWeekDate 
-                    ? `Week of ${getWeekRange(selectedWeekDate)}` 
-                    : 'Select week'
-                  }
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <CalendarWithHours
-                  mode="single"
-                  selected={selectedWeekDate}
-                  onSelect={(date: Date | undefined) => {
-                    setSelectedWeekDate(date)
-                    setIsCalendarOpen(false)
-                  }}
-                  disabled={isDateDisabled}
-                  hoursByDate={hoursByDate}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-            {selectedWeekDate && !isWeekComplete(selectedWeekDate) && (
-              <p className="text-xs text-destructive flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" />
-                This week is not yet complete
-              </p>
-            )}
-          </div>
-
-          {/* Total Weekly Hours */}
-          <div className="space-y-2">
-            <Label htmlFor="total-hours">Total Weekly Hours</Label>
+            <Label htmlFor="total-hours" className="text-xs">Total Weekly Hours</Label>
             <div className="relative">
               <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
               <HoursInput
                 value={totalWeeklyHours}
                 onChange={handleTotalHoursChange}
                 onValidationChange={handleTotalHoursValidation}
-                className="pl-10"
-                placeholder="40:00 or 40.0"
+                className="pl-10 h-9"
+                placeholder="8:30 or 8.5"
                 maxHours={168}
                 data-testid="total-hours-input"
               />
             </div>
           </div>
-        </CardContent>
-      </Card>
+        )}
+      </div>
 
       {/* Daily Breakdown */}
       {selectedWeekDate && totalWeeklyHours && (
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium">Daily Breakdown</h3>
-            </div>
+        <div className="space-y-3 pt-2">
+          <h3 className="text-sm font-medium">Daily Breakdown</h3>
 
-            <div className="space-y-3">
-              {dailyEntries.map((entry) => {
-                const isIncluded = daysIncluded[entry.day]
-                const displayDate = new Date(entry.date)
-                
-                // Vérifier si on peut décocher ce jour sans dépasser 24h/jour
-                const currentSelectedDays = Object.values(daysIncluded).filter(Boolean).length
-                const canUncheck = !isIncluded || currentSelectedDays <= 1 || !totalDecimalHours || 
-                  (totalDecimalHours / (currentSelectedDays - 1)) <= 24
+          <div className="space-y-2">
+            {dailyEntries.map((entry) => {
+              const isIncluded = daysIncluded[entry.day]
+              const displayDate = new Date(entry.date)
 
-                return (
-                  <div 
-                    key={entry.day} 
-                    className={cn(
-                      'flex items-center gap-4 p-3 rounded-lg border',
-                      isIncluded ? 'bg-background' : 'bg-muted/30'
-                    )}
-                  >
-                    <Checkbox
-                      checked={isIncluded}
-                      onCheckedChange={(checked) => handleDayChange(entry.day, checked as boolean)}
-                      disabled={isIncluded && !canUncheck}
-                      className="flex-shrink-0"
-                    />
-                    
-                    <div className="flex-1 min-w-0">
-                      <p className={cn(
-                        'font-medium text-sm',
-                        !isIncluded && 'text-muted-foreground'
-                      )}>
-                        {dayLabels[entry.day]}
-                      </p>
-                      <p className={cn(
-                        'text-xs',
-                        !isIncluded && 'text-muted-foreground'
-                      )}>
-                        {format(displayDate, 'MMM d')}
-                      </p>
-                    </div>
+              // Vérifier si on peut décocher ce jour sans dépasser 24h/jour
+              const currentSelectedDays = Object.values(daysIncluded).filter(Boolean).length
+              const canUncheck = !isIncluded || currentSelectedDays <= 1 || !totalDecimalHours ||
+                (totalDecimalHours / (currentSelectedDays - 1)) <= 24
 
-                    <div className="w-24">
-                      <HoursInput
-                        value={isIncluded ? entry.hours : '0'}
-                        onChange={() => {}}
-                        disabled={true}
-                        placeholder="0"
-                        className={cn(
-                          'text-center text-sm',
-                          entry.isCalculated && isIncluded && 'bg-primary/5 border-primary/20'
-                        )}
-                      />
-                    </div>
+              return (
+                <div
+                  key={entry.day}
+                  className={cn(
+                    'flex items-center gap-3 p-2.5 rounded-md border',
+                    isIncluded ? 'bg-background' : 'bg-muted/30'
+                  )}
+                >
+                  <Checkbox
+                    checked={isIncluded}
+                    onCheckedChange={(checked) => handleDayChange(entry.day, checked as boolean)}
+                    disabled={isIncluded && !canUncheck}
+                    className="flex-shrink-0"
+                  />
 
-                    <div className="w-10 text-xs text-muted-foreground text-right">
-                      {isIncluded ? 'hrs' : '—'}
-                    </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={cn(
+                      'font-medium text-xs',
+                      !isIncluded && 'text-muted-foreground'
+                    )}>
+                      {dayLabels[entry.day]}
+                    </p>
+                    <p className={cn(
+                      'text-xs',
+                      !isIncluded && 'text-muted-foreground'
+                    )}>
+                      {format(displayDate, 'MMM d')}
+                    </p>
                   </div>
-                )
-              })}
-            </div>
 
-            <div className="mt-4 p-3 bg-muted/50 rounded-lg">
-              <div className="flex justify-between text-sm">
-                <span>Selected days: {selectedDaysCount}</span>
-                <span>Total calculated: {totalCalculatedHours.toFixed(2)}h</span>
-              </div>
-              {selectedDaysCount > 1 && totalDecimalHours && totalDecimalHours / (selectedDaysCount - 1) > 24 && (
-                <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  Some days can't be unchecked (would exceed 24h/day)
-                </p>
-              )}
+                  <div className="w-20">
+                    <HoursInput
+                      value={isIncluded ? entry.hours : '0'}
+                      onChange={() => {}}
+                      disabled={true}
+                      placeholder="0"
+                      className={cn(
+                        'text-center text-xs h-8',
+                        entry.isCalculated && isIncluded && 'bg-primary/5 border-primary/20'
+                      )}
+                    />
+                  </div>
+
+                  <div className="w-8 text-xs text-muted-foreground text-right">
+                    {isIncluded ? 'hrs' : '—'}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          <div className="p-2.5 bg-muted/50 rounded-md border">
+            <div className="flex justify-between text-xs">
+              <span>Selected days: {selectedDaysCount}</span>
+              <span>Total: {totalCalculatedHours.toFixed(2)}h</span>
             </div>
-          </CardContent>
-        </Card>
+            {selectedDaysCount > 1 && totalDecimalHours && totalDecimalHours / (selectedDaysCount - 1) > 24 && (
+              <p className="text-xs text-muted-foreground mt-1.5 flex items-center gap-1">
+                <AlertCircle className="w-3 h-3" />
+                Some days can't be unchecked (would exceed 24h/day)
+              </p>
+            )}
+          </div>
+        </div>
       )}
 
       {/* Action Buttons */}
-      <div className="flex justify-between pt-4">
-        <Button variant="outline" onClick={onCancel} disabled={isSubmitting}>
+      <div className="flex justify-between pt-3 border-t">
+        <Button variant="outline" onClick={onCancel} disabled={isSubmitting} size="sm">
           Cancel
         </Button>
-        
-        <Button 
+
+        <Button
           onClick={handleFormSubmit}
           disabled={!selectedWeekDate || selectedDaysCount === 0 || isSubmitting || !isTotalHoursValid}
+          size="sm"
         >
           {isSubmitting ? 'Saving...' : `Save Week Hours`}
         </Button>
