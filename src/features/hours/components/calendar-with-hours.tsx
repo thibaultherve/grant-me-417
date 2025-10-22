@@ -101,43 +101,54 @@ function CustomDayButton({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        // Base button styles using shadcn buttonVariants
-        buttonVariants({ variant: "ghost", size: "icon" }),
-        // Calendar day specific styles (from shadcn calendar.tsx)
-        "data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground",
-        "data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground",
-        "data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground",
-        "data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground",
-        "flex aspect-square size-auto w-full min-w-8 flex-col gap-0.5 leading-none font-normal",
-        "hover:bg-accent hover:text-accent-foreground",
-        "data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md",
-        "data-[range-middle=true]:rounded-none",
-        "data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md",
+        // Base button - full size cell without background
+        "flex items-center justify-center",
+        "w-full aspect-square p-0",
+        "relative group",
 
-        // Disabled state overrides cursor
+        // Disabled state
         modifiers.disabled && "!cursor-not-allowed opacity-50",
         // Outside month
-        modifiers.outside && "text-muted-foreground",
-
-        // Week highlighting - Selected week (same color as selected date)
-        // Only apply if there's actually a selected date (not just today)
-        isInSelectedWeek && !modifiers.selected && selectedWeekDate && "bg-primary text-primary-foreground",
-        // Week highlighting - Hovered week (same color as hovered date)
-        isInHoveredWeek && !isInSelectedWeek && !modifiers.selected && "bg-accent text-accent-foreground"
+        modifiers.outside && "text-muted-foreground"
       )}
     >
-      {/* Date number */}
-      <span className="text-sm">{day.date.getDate()}</span>
+      {/* Circle background wrapping content */}
+      <div
+        className={cn(
+          "flex flex-col items-center justify-center gap-0.5",
+          "w-9 h-9 rounded-full", // Fixed circular size wrapping content
+          "transition-colors duration-150",
 
-      {/* Hours display */}
-      {hoursForDate > 0 && (
-        <span className="text-[9px] font-bold text-blue-600 leading-none">
-          {hoursForDate >= 10
-            ? Math.floor(hoursForDate)
-            : hoursForDate.toFixed(1).replace(".0", "")}
-          h
-        </span>
-      )}
+          // Hover state
+          "group-hover:bg-accent group-hover:text-accent-foreground",
+
+          // Selected state
+          modifiers.selected && "bg-primary text-primary-foreground",
+
+          // Range states
+          modifiers.range_middle && "bg-accent text-accent-foreground",
+          modifiers.range_start && "bg-primary text-primary-foreground",
+          modifiers.range_end && "bg-primary text-primary-foreground",
+
+          // Week highlighting - Selected week
+          isInSelectedWeek && !modifiers.selected && selectedWeekDate && "bg-primary text-primary-foreground",
+          // Week highlighting - Hovered week
+          isInHoveredWeek && !isInSelectedWeek && !modifiers.selected && "bg-accent text-accent-foreground"
+        )}
+      >
+        {/* Date number */}
+        <span className="text-sm font-medium">{day.date.getDate()}</span>
+
+        {/* Hours display */}
+        {hoursForDate > 0 && (
+          <span className="text-[8px] font-semibold text-blue-600 leading-none">
+            {hoursForDate >= 10
+              ? Math.floor(hoursForDate)
+              : hoursForDate.toFixed(1).replace(".0", "")}
+            h
+          </span>
+        )}
+      </div>
     </button>
   );
 }
@@ -187,6 +198,7 @@ export function CalendarWithHours({
       {...props}
       selected={selected}
       weekStartsOn={1}
+      defaultMonth={selectedWeekDate || undefined}
       classNames={{
         today: "", // Remove default "today" styling
       }}
