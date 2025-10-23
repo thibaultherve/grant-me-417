@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart3 } from "lucide-react";
+import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -13,6 +14,11 @@ import { useVisaWeeklyProgress } from "../hooks/use-visa-weekly-progress";
 
 export const WeeklyProgressChart = () => {
   const { weeklyProgress, loading } = useVisaWeeklyProgress();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (loading) {
     return (
@@ -67,13 +73,13 @@ export const WeeklyProgressChart = () => {
     };
   });
 
-  // Color based on eligible_days thresholds
+  // Color gradient from yellow to green based on eligible_days
   const getBarColor = (eligibleDays: number) => {
-    if (eligibleDays === 7) return "#22c55e"; // green-500
-    if (eligibleDays === 4) return "#3b82f6"; // blue-500
-    if (eligibleDays === 3) return "#8b5cf6"; // violet-500
-    if (eligibleDays === 2) return "#f59e0b"; // amber-500
-    if (eligibleDays === 1) return "#ef4444"; // red-500
+    if (eligibleDays === 7) return "#22c55e"; // green-500 (full week)
+    if (eligibleDays === 4) return "#84cc16"; // lime-500
+    if (eligibleDays === 3) return "#a3e635"; // lime-400
+    if (eligibleDays === 2) return "#eab308"; // yellow-500
+    if (eligibleDays === 1) return "#fbbf24"; // amber-400
     return "#94a3b8"; // slate-400 (0 days)
   };
 
@@ -89,14 +95,15 @@ export const WeeklyProgressChart = () => {
         </p>
       </CardHeader>
       <CardContent>
-        <div className="h-[300px]">
-          <style>{`
-            .recharts-bar-rectangle:hover {
-              filter: brightness(1.2);
-              transition: filter 0.2s ease;
-            }
-          `}</style>
-          <ResponsiveContainer width="100%" height="100%">
+        <style>{`
+          .recharts-bar-rectangle:hover {
+            filter: brightness(1.2);
+            transition: filter 0.2s ease;
+          }
+        `}</style>
+        {mounted && (
+          <div className="w-full">
+            <ResponsiveContainer width="100%" height={300}>
             <BarChart
               data={chartData}
               margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
@@ -170,29 +177,26 @@ export const WeeklyProgressChart = () => {
                 }}
               />
             </BarChart>
-          </ResponsiveContainer>
-        </div>
+            </ResponsiveContainer>
+          </div>
+        )}
 
         {/* Legend */}
         <div className="mt-4 flex flex-wrap gap-3 justify-center text-xs">
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-slate-400" />
-            <span>0 days (&lt;6h)</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-red-500" />
+            <div className="w-3 h-3 rounded bg-amber-400" />
             <span>1 day (6-11h)</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-amber-500" />
+            <div className="w-3 h-3 rounded bg-yellow-500" />
             <span>2 days (12-17h)</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-violet-500" />
+            <div className="w-3 h-3 rounded bg-lime-400" />
             <span>3 days (18-23h)</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-blue-500" />
+            <div className="w-3 h-3 rounded bg-lime-500" />
             <span>4 days (24-29h)</span>
           </div>
           <div className="flex items-center gap-1.5">
