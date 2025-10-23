@@ -1,17 +1,30 @@
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
- 
-  TableHeader, 
-  TableRow 
+import { useState } from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+
+  TableHeader,
+  TableRow
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, Clock, Building2, CheckCircle, XCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { Calendar, Clock, Building2, CheckCircle, XCircle, Trash2 } from 'lucide-react';
 
 import { HoursPagination } from './hours-pagination';
 import { SortableTableHead } from './sortable-table-head';
+import { useDeleteHours } from '../hooks/use-delete-hours';
 import type { HourEntryWithEmployer, SortOptions, SortField, SortOrder, HoursResponse } from '../types';
 
 interface HoursTableProps {
@@ -23,6 +36,7 @@ interface HoursTableProps {
   sortOptions: SortOptions;
   setSortOptions: (options: SortOptions) => void;
   limit: number;
+  onRefetch?: () => void;
 }
 
 export const HoursTable = ({
@@ -34,11 +48,41 @@ export const HoursTable = ({
   sortOptions,
   setSortOptions,
   limit,
+  onRefetch,
 }: HoursTableProps) => {
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [entryToDelete, setEntryToDelete] = useState<HourEntryWithEmployer | null>(null);
+  const { isDeleting, deleteWorkEntry } = useDeleteHours();
+
   const handleSortChange = (field: SortField, order: SortOrder) => {
     setSortOptions({ field, order });
     // Reset to first page when sorting changes
     setCurrentPage(1);
+  };
+
+  const handleDeleteClick = (entry: HourEntryWithEmployer) => {
+    setEntryToDelete(entry);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!entryToDelete) return;
+
+    const result = await deleteWorkEntry(entryToDelete.id);
+
+    if (result.success) {
+      setDeleteDialogOpen(false);
+      setEntryToDelete(null);
+      // Refresh the table data
+      if (onRefetch) {
+        onRefetch();
+      }
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setEntryToDelete(null);
   };
 
   if (isLoading) {
@@ -159,12 +203,15 @@ export const HoursTable = ({
                   >
                     Eligible
                   </SortableTableHead>
+                  <TableCell className="w-[80px]">
+                    Actions
+                  </TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {data.data.map((entry: HourEntryWithEmployer) => (
                   <TableRow key={entry.id} className="hover:bg-muted/50">
-                    <TableCell className="font-mono text-sm">
+                    <TableCell className="text-sm">
                       <div className="flex items-center gap-2">
                         <Calendar className="h-4 w-4 text-muted-foreground" />
                         {formatDate(entry.work_date)}
@@ -186,7 +233,7 @@ export const HoursTable = ({
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Clock className="h-4 w-4 text-muted-foreground" />
-                        <span className="font-mono font-medium">
+                        <span className="font-medium">
                           {formatHours(entry.hours)}
                         </span>
                       </div>
@@ -203,6 +250,17 @@ export const HoursTable = ({
                           No
                         </Badge>
                       )}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeleteClick(entry)}
+                        disabled={isDeleting}
+                        className="h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -226,6 +284,50 @@ export const HoursTable = ({
           />
         </div>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Work Entry</AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div>
+                <p className="text-sm text-muted-foreground">
+                  Are you sure you want to delete this work entry?
+                </p>
+                {entryToDelete && (
+                  <div className="mt-3 p-3 bg-muted rounded-md space-y-1">
+                    <p className="text-sm">
+                      <strong>Date:</strong> {formatDate(entryToDelete.work_date)}
+                    </p>
+                    <p className="text-sm">
+                      <strong>Employer:</strong> {entryToDelete.employer_name}
+                    </p>
+                    <p className="text-sm">
+                      <strong>Hours:</strong> {formatHours(entryToDelete.hours)}
+                    </p>
+                  </div>
+                )}
+                <p className="mt-3 text-destructive text-sm">
+                  This action cannot be undone.
+                </p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleDeleteCancel} disabled={isDeleting}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              disabled={isDeleting}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              {isDeleting ? 'Deleting...' : 'Delete'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

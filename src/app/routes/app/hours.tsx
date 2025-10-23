@@ -43,7 +43,7 @@ export const HoursRoute = () => {
         </Button>
       </div>
 
-      <HoursTable 
+      <HoursTable
         data={data}
         isLoading={isLoading}
         error={error}
@@ -52,6 +52,7 @@ export const HoursRoute = () => {
         sortOptions={sortOptions}
         setSortOptions={setSortOptions}
         limit={limit}
+        onRefetch={refetch}
       />
 
       <Sheet open={isAddingHours} onOpenChange={setIsAddingHours}>
