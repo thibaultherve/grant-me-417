@@ -2,7 +2,6 @@ import React from 'react';
 import { AppRouter } from '@/app/router';
 import { AuthProvider } from '@/lib/auth';
 import { ThemeProvider, useTheme } from '@/lib/theme';
-import { VisaProvider } from '@/features/visas/hooks/use-visa-context';
 import { Toaster } from 'sonner';
 
 const ToasterWithTheme = () => {
@@ -33,10 +32,8 @@ export const App = () => {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <VisaProvider>
-          <AppRouter />
-          <ToasterWithTheme />
-        </VisaProvider>
+        <AppRouter />
+        <ToasterWithTheme />
       </AuthProvider>
     </ThemeProvider>
   );
