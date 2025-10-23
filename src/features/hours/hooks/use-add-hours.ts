@@ -309,25 +309,31 @@ export function useAddHours() {
 
       if (deleteError) throw deleteError
 
-      // Insert only the selected days (unchecked days stay deleted)
-      if (dailyData.entries.length > 0) {
-        const entries = dailyData.entries.map(entry => ({
+      // Insert only the selected days with hours > 0 (unchecked days stay deleted)
+      // Filter out entries with 0 hours to avoid creating empty entries
+      const entriesToInsert = dailyData.entries
+        .filter(entry => parseFloat(entry.hours_worked) > 0)
+        .map(entry => ({
           user_id: user.id,
           employer_id: weekData.employer_id,
           work_date: entry.work_date,
           hours: parseFloat(entry.hours_worked)
         }))
 
+      if (entriesToInsert.length > 0) {
         const { data, error } = await supabase
           .from('work_entries')
-          .insert(entries)
+          .insert(entriesToInsert)
           .select()
 
         if (error) throw error
       }
 
-      const totalChanges = selectedDates.length + datesToDelete.length
-      toast.success(`Successfully updated week entries (${selectedDates.length} added/updated, ${datesToDelete.length} deleted)`)
+      // Calculate the number of entries actually modified
+      const entriesInserted = entriesToInsert.length
+      const entriesDeleted = allDatesInWeek.length - entriesInserted
+
+      toast.success(`Successfully updated week entries (${entriesInserted} added/updated, ${entriesDeleted} deleted)`)
       return { success: true, data: null }
 
     } catch (err) {
