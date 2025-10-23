@@ -406,4 +406,16 @@ You should see:
 
 ---
 
+## ⚠️ IMPORTANT - Git Commit Policy
+
+**NEVER create commits or push to repository without explicit user authorization.**
+
+Claude Code must ALWAYS ask for permission before:
+- Running `git add`
+- Running `git commit`
+- Running `git push`
+- Making any git operations that modify history
+
+---
+
 **Remember**: This is a learning project. Always consult documentation via MCP servers, follow bulletproof-react architecture, use React 19+ features, and maintain mobile-first responsive design.

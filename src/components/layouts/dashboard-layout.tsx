@@ -41,6 +41,14 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const handleToggleSidebar = () => {
+    setIsAnimating(true);
+    setSidebarCollapsed(!sidebarCollapsed);
+    // Remove blur after animation completes (300ms)
+    setTimeout(() => setIsAnimating(false), 300);
+  };
 
   const handleSignOut = async () => {
     try {
@@ -132,18 +140,25 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         sidebarCollapsed ? 'md:w-16' : 'md:w-64'
       }`}>
         <div className="flex min-h-0 flex-1 flex-col border-r bg-background">
-          <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-            <div className="flex flex-shrink-0 items-center justify-between px-4">
-              {!sidebarCollapsed && (
-                <h1 className="text-xl font-bold transition-opacity duration-300">
+          <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4 scrollbar-hide">
+            <div className="flex flex-shrink-0 items-center justify-between px-4 overflow-hidden">
+              <div className="relative overflow-hidden flex-1 mr-2">
+                <h1
+                  className="text-xl font-bold whitespace-nowrap"
+                  style={{
+                    maskImage: isAnimating ? 'linear-gradient(to right, black 70%, transparent 100%)' : 'none',
+                    WebkitMaskImage: isAnimating ? 'linear-gradient(to right, black 70%, transparent 100%)' : 'none',
+                    transition: 'mask-image 0.3s ease-in-out, -webkit-mask-image 0.3s ease-in-out'
+                  }}
+                >
                   Grant Me 417
                 </h1>
-              )}
+              </div>
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="ml-auto"
+                onClick={handleToggleSidebar}
+                className="flex-shrink-0"
                 title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
               >
                 {sidebarCollapsed ? (
@@ -216,7 +231,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             ) : (
               <div className="flex w-full items-center justify-between">
                 <div className="flex flex-col min-w-0 flex-1">
-                  <p className="text-sm font-medium truncate">{user?.email}</p>
+                  <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <ThemeToggle />

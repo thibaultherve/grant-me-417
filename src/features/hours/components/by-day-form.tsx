@@ -1,16 +1,24 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent } from '@/components/ui/card'
 import { CalendarWithHours } from './calendar-with-hours'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { CalendarDays, Plus, X, Clock } from 'lucide-react'
-import { format, isAfter } from 'date-fns'
+import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
 
 import { HoursInput } from './hours-input'
 import type { MultipleWorkEntriesFormData } from '../schemas'
+
+// Import utility functions
+import {
+  calculateTotalHours,
+  mergeOrAddEntry,
+  createWorkEntry,
+  removeEntryById,
+  type WorkEntry
+} from '../utils/day-calculations'
+import { isDateDisabled } from '../utils/date-validation'
 
 interface ByDayFormProps {
   employerId: string
@@ -20,13 +28,6 @@ interface ByDayFormProps {
   isSubmitting?: boolean
 }
 
-interface WorkEntry {
-  id: string
-  work_date: string
-  hours_worked: string
-  decimal_hours: number
-}
-
 export function ByDayForm({ employerId, hoursByDate, onSubmit, onCancel, isSubmitting = false }: ByDayFormProps) {
   const [entries, setEntries] = useState<WorkEntry[]>([])
   const [selectedDate, setSelectedDate] = useState<Date>()
@@ -34,9 +35,6 @@ export function ByDayForm({ employerId, hoursByDate, onSubmit, onCancel, isSubmi
   const [decimalHours, setDecimalHours] = useState(0)
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   const [isHoursValid, setIsHoursValid] = useState(true)
-  const [hoursErrorMessage, setHoursErrorMessage] = useState<string | null>(null)
-
-  // Form validation is handled manually for better UX in this case
 
   // Auto-fill hours when a date with existing data is selected
   useEffect(() => {
@@ -59,45 +57,25 @@ export function ByDayForm({ employerId, hoursByDate, onSubmit, onCancel, isSubmi
   }, [selectedDate, hoursByDate])
 
   // Handle hours input change
-  const handleHoursChange = useCallback((value: string, decimal: number) => {
+  const handleHoursChange = (value: string, decimal: number) => {
     setHoursInput(value)
     setDecimalHours(decimal)
-  }, [])
+  }
 
   // Handle hours validation change
-  const handleHoursValidation = useCallback((isValid: boolean, errorMessage: string | null) => {
+  const handleHoursValidation = (isValid: boolean) => {
     setIsHoursValid(isValid)
-    setHoursErrorMessage(errorMessage)
-  }, [])
+  }
 
   // Add a new work entry
   const handleAddEntry = () => {
     if (!selectedDate || !isHoursValid) return
 
-    const dateString = format(selectedDate, 'yyyy-MM-dd')
+    // Create new entry using utility function
+    const newEntry = createWorkEntry(selectedDate, decimalHours)
 
-    // Check if this date already has hours in the database (not just in the current entries list)
-    const existingDbHours = hoursByDate[dateString]
-    const isUpdatingExisting = existingDbHours && existingDbHours > 0
-
-    const newEntry: WorkEntry = {
-      id: `entry-${Date.now()}`,
-      work_date: dateString,
-      hours_worked: decimalHours.toString(), // Store as decimal string for consistency
-      decimal_hours: decimalHours
-    }
-
-    // Check if date already exists in current entries list
-    const existingIndex = entries.findIndex(entry => entry.work_date === dateString)
-    if (existingIndex >= 0) {
-      // Replace existing entry in the list
-      setEntries(prev => prev.map((entry, index) =>
-        index === existingIndex ? newEntry : entry
-      ))
-    } else {
-      // Add new entry
-      setEntries(prev => [...prev, newEntry].sort((a, b) => a.work_date.localeCompare(b.work_date)))
-    }
+    // Merge or add entry using utility function
+    setEntries(prev => mergeOrAddEntry(prev, newEntry))
 
     // Reset inputs
     setSelectedDate(undefined)
@@ -108,7 +86,7 @@ export function ByDayForm({ employerId, hoursByDate, onSubmit, onCancel, isSubmi
 
   // Remove an entry
   const handleRemoveEntry = (entryId: string) => {
-    setEntries(prev => prev.filter(entry => entry.id !== entryId))
+    setEntries(prev => removeEntryById(prev, entryId))
   }
 
   // Submit the form
@@ -126,57 +104,59 @@ export function ByDayForm({ employerId, hoursByDate, onSubmit, onCancel, isSubmi
     onSubmit(formData)
   }
 
-  // Disable future dates
-  const isDateDisabled = (date: Date) => {
-    const today = new Date()
-    today.setHours(23, 59, 59, 999)
-    return isAfter(date, today)
-  }
+  // Calculate total hours using utility function
+  const totalHours = calculateTotalHours(entries)
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
+      {/* Mode Description */}
+      <p className="text-xs text-muted-foreground italic mb-2">
+        Manual: Enter hours for each day individually
+      </p>
+
       {/* Date and Hours Input */}
       <div className="space-y-3">
-        {/* Date Selection */}
-        <div className="space-y-2">
-          <Label htmlFor="date-picker" className="text-xs">Work Date</Label>
-          <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  'w-full justify-start text-left font-normal h-9',
-                  !selectedDate && 'text-muted-foreground'
-                )}
-              >
-                <CalendarDays className="mr-2 h-4 w-4" />
-                {selectedDate ? format(selectedDate, 'PPP') : 'Select date'}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <CalendarWithHours
-                mode="single"
-                selected={selectedDate}
-                onSelect={(date) => {
-                  setSelectedDate(date as Date | undefined)
-                  setIsCalendarOpen(false)
-                }}
-                disabled={isDateDisabled}
-                hoursByDate={hoursByDate}
-                disableWeekHighlight={true}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
+        {/* Date Selection and Hours Input on same line */}
+        <div className="grid gap-3 sm:grid-cols-2">
+          {/* Date Selection */}
+          <div className="space-y-2">
+            <Label htmlFor="date-picker" className="text-xs">Work Date</Label>
+            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    'w-full justify-start text-left font-normal h-9',
+                    !selectedDate && 'text-muted-foreground'
+                  )}
+                >
+                  <CalendarDays className="mr-2 h-4 w-4" />
+                  {selectedDate ? format(selectedDate, 'PPP') : 'Select date'}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <CalendarWithHours
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={(date) => {
+                    setSelectedDate(date as Date | undefined)
+                    setIsCalendarOpen(false)
+                  }}
+                  disabled={isDateDisabled}
+                  hoursByDate={hoursByDate}
+                  disableWeekHighlight={true}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
 
-        {/* Hours Input - Only show if date is selected */}
-        {selectedDate && (
-          <>
+          {/* Hours Input - Only show if date is selected */}
+          {selectedDate && (
             <div className="space-y-2">
               <Label htmlFor="hours" className="text-xs">Hours Worked</Label>
-              <div className="relative">
-                <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
+              <div className="relative [&>div]:relative">
+                <Clock className="absolute left-3 top-[18px] -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none z-10" />
                 <HoursInput
                   value={hoursInput}
                   onChange={handleHoursChange}
@@ -187,19 +167,21 @@ export function ByDayForm({ employerId, hoursByDate, onSubmit, onCancel, isSubmi
                 />
               </div>
             </div>
+          )}
+        </div>
 
-            {/* Add Button */}
-            <Button
-              type="button"
-              onClick={handleAddEntry}
-              disabled={!selectedDate || !isHoursValid}
-              className="w-full"
-              size="sm"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Entry
-            </Button>
-          </>
+        {/* Add Button - Only show if date is selected */}
+        {selectedDate && (
+          <Button
+            type="button"
+            onClick={handleAddEntry}
+            disabled={!selectedDate || !isHoursValid}
+            className="w-full"
+            size="sm"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Entry
+          </Button>
         )}
       </div>
 
@@ -209,10 +191,7 @@ export function ByDayForm({ employerId, hoursByDate, onSubmit, onCancel, isSubmi
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-medium">Work Entries ({entries.length})</h3>
             <p className="text-xs text-muted-foreground">
-              Total: {entries.reduce((sum, entry) => {
-                const hours = parseFloat(entry.hours_worked) || 0
-                return sum + hours
-              }, 0).toFixed(2)}h
+              Total: {totalHours.toFixed(2)}h
             </p>
           </div>
 

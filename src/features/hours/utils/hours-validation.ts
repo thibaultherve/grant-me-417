@@ -89,22 +89,21 @@ export const validateHours = (input: string, maxHours: number = 24): HoursValida
   if (timeMatch) {
     const hours = parseInt(timeMatch[1], 10)
     const minutes = parseInt(timeMatch[2], 10)
-    
-    // Validate hours (0-max allowed, but for time format, max 167 hours to keep valid minutes)
-    const maxHoursForTimeFormat = Math.min(maxHours, 167) // 167:59 max for time format
-    if (hours > maxHoursForTimeFormat) {
+
+    // Minutes are already validated by regex (0-59)
+    const decimalValue = timeToDecimal(hours, minutes)
+
+    // Validate that the total decimal value doesn't exceed maxHours
+    if (decimalValue > maxHours) {
       return {
         isValid: false,
         decimalValue: null,
-        errorMessage: `Hours must be between 0-${maxHoursForTimeFormat} in time format`,
+        errorMessage: `Maximum ${maxHours} hours allowed`,
         displayConversion: null,
         format: 'invalid'
       }
     }
-    
-    // Minutes are already validated by regex (0-59)
-    const decimalValue = timeToDecimal(hours, minutes)
-    
+
     return {
       isValid: true,
       decimalValue,

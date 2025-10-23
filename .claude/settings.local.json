@@ -40,7 +40,9 @@
       "Read(C:\\Users\\thiba\\Documents\\bulletproof-react/**)",
       "mcp__shadcn__search_items_in_registries",
       "Read(C:\\c\\Users\\thiba\\Documents\\dev\\get-granted-417/**)",
-      "WebSearch"
+      "WebSearch",
+      "mcp__docs-mcp-server__search_docs",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

@@ -178,7 +178,7 @@ export function useAddHours() {
   const convertWeekToDaily = (weekData: WeekWorkEntryFormData): MultipleWorkEntriesFormData => {
     const { week_date, total_weekly_hours, days_included } = weekData
     const weekDates = getWeekDates(week_date)
-    
+
     const selectedDays = weekDates.filter(({ day }) => days_included[day])
     const hoursPerDay = Math.round((total_weekly_hours / selectedDays.length) * 100) / 100
 
@@ -187,9 +187,10 @@ export function useAddHours() {
       hours_worked: hoursPerDay.toString()
     }))
 
+    // Don't filter out zero entries - we need them to mark days for deletion
     return {
       employer_id: weekData.employer_id,
-      entries: entries.filter(entry => entry.hours_worked !== '0')
+      entries: entries
     }
   }
 

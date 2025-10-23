@@ -220,7 +220,7 @@ export function AddHoursForm({ onSuccess, onCancel, className }: AddHoursFormPro
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="by-day" className="mt-4">
+            <TabsContent value="by-day" className="mt-1">
               <ByDayForm
                 employerId={selectedEmployer.id}
                 hoursByDate={hoursByDate}
@@ -230,7 +230,7 @@ export function AddHoursForm({ onSuccess, onCancel, className }: AddHoursFormPro
               />
             </TabsContent>
 
-            <TabsContent value="by-week" className="mt-4">
+            <TabsContent value="by-week" className="mt-1">
               <ByWeekForm
                 employerId={selectedEmployer.id}
                 hoursByDate={hoursByDate}
