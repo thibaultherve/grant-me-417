@@ -7,18 +7,18 @@ export type GetHoursOptions = {
   sort?: SortOptions;
 };
 
-export const getHours = async ({ 
-  page = 1, 
+export const getHours = async ({
+  page = 1,
   limit = 10,
   sort = { field: 'work_date', order: 'desc' }
 }: GetHoursOptions = {}): Promise<HoursResponse> => {
   const offset = (page - 1) * limit;
-  
+
   // Get total count from the view
   const { count, error: countError } = await supabase
     .from('work_entries_with_employers')
     .select('*', { count: 'exact', head: true });
-    
+
   if (countError) {
     throw new Error(`Failed to count hours: ${countError.message}`);
   }
