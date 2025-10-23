@@ -10,7 +10,7 @@ import {
   Home,
   Building2,
   CalendarClock,
-  FileText,
+  Plane,
   User,
   LogOut,
   ChevronLeft,
@@ -27,9 +27,9 @@ import {
 
 const navigation = [
   { name: 'Dashboard', href: paths.app.dashboard.path, icon: Home },
-  { name: 'Employers', href: paths.app.employers.path, icon: Building2 },
   { name: 'Hours', href: paths.app.hours.path, icon: CalendarClock },
-  { name: 'Visas', href: paths.app.visas.path, icon: FileText },
+  { name: 'Employers', href: paths.app.employers.path, icon: Building2 },
+  { name: 'Visas', href: paths.app.visas.path, icon: Plane },
 ];
 
 interface DashboardLayoutProps {
