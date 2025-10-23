@@ -40,10 +40,17 @@ export function useVisas() {
   }
 
   const addVisa = async (input: CreateVisaInput) => {
+    if (!user) {
+      const message = 'User must be authenticated to add a visa'
+      toast.error(message)
+      return { success: false, error: message }
+    }
+
     try {
       const { data, error } = await supabase
         .from('user_visas')
         .insert([{
+          user_id: user.id,
           visa_type: input.visa_type,
           arrival_date: input.arrival_date,
           days_required: input.days_required

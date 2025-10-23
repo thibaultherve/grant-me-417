@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
+import { useLocation } from 'react-router'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
 import type { UserVisa } from '../types'
@@ -16,6 +17,7 @@ const VisaContext = createContext<VisaContextValue | undefined>(undefined)
 
 export function VisaProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth()
+  const location = useLocation()
   const [visas, setVisas] = useState<UserVisa[]>([])
   const [currentVisa, setCurrentVisaState] = useState<UserVisa | null>(null)
   const [loading, setLoading] = useState(true)
@@ -64,8 +66,33 @@ export function VisaProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('currentVisaId', visa.id)
   }
 
+  // Refresh on mount and when user changes
   useEffect(() => {
     fetchVisas()
+  }, [user])
+
+  // Refresh when navigating to /app routes
+  useEffect(() => {
+    if (user && location.pathname.startsWith('/app')) {
+      fetchVisas()
+    }
+  }, [location.pathname, user])
+
+  // Refresh when tab becomes visible
+  useEffect(() => {
+    if (!user) return
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        fetchVisas()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
   }, [user])
 
   return (
