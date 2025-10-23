@@ -23,18 +23,37 @@ For ALL React questions and solutions, you MUST use the configured MCP servers B
 
 #### 1. docs-mcp-server (React Official Documentation)
 
+- **MCP Server Name**: `docs-mcp-server`
 - **Type**: SSE server on http://localhost:6280/sse
 - **Purpose**: Access official React documentation from react.dev
+- **Library Parameter**: `library: "react"` (ALWAYS use "react" as library name)
+- **Tool Function**: `mcp__docs-mcp-server__search_docs`
 - **Usage**: React APIs, hooks, components, official patterns, React 19+ features
 - **Status**: Requires local server running
+- **Example Call**:
+  ```
+  mcp__docs-mcp-server__search_docs({
+    library: "react",
+    query: "useEffect hook patterns",
+    limit: 3
+  })
+  ```
 
 #### 2. bulletproof-react Docs (Project Architecture)
 
+- **MCP Server Name**: `bulletproof-react Docs` (note the space in the name)
 - **Type**: Remote GitMCP server
 - **Source**: https://github.com/alan2207/bulletproof-react
 - **Purpose**: Architecture patterns, project structure, best practices
 - **Usage**: Feature-based architecture, folder conventions, state management, API layers
 - **Status**: Remote server (always available)
+- **Access Method**: Use ReadMcpResourceTool or ListMcpResourcesTool with server name "bulletproof-react Docs"
+- **Example Call**:
+  ```
+  ListMcpResourcesTool({
+    server: "bulletproof-react Docs"
+  })
+  ```
 
 ### Mandatory Workflow
 
@@ -74,10 +93,12 @@ For EVERY React request, you MUST follow this format:
 I will first consult the documentation via the configured MCP servers...
 
 Step 1: Checking bulletproof-react for architectural best practices...
-[use bulletproof-react Docs MCP server - show search query and results]
+[Use ListMcpResourcesTool or ReadMcpResourceTool with server: "bulletproof-react Docs"]
+[Show search query and results]
 
 Step 2: Checking React official documentation for API details...
-[use docs-mcp-server MCP server - show search query and results]
+[Use mcp__docs-mcp-server__search_docs with library: "react"]
+[Show search query and results]
 
 Step 3: Synthesizing findings...
 [combine insights from both sources]
@@ -102,11 +123,13 @@ Sources:
 - ❌ Use deprecated React patterns
 - ❌ Ignore bulletproof-react architecture patterns
 - ❌ Respond without citing sources from both MCP servers
+- ❌ Use `library: "bulletproof-react"` with docs-mcp-server (wrong!)
+- ❌ Confuse the two MCP servers
 
 **ALWAYS:**
 
-- ✅ Use "bulletproof-react Docs" MCP FIRST for architecture
-- ✅ Use "docs-mcp-server" MCP SECOND for React APIs
+- ✅ Use ListMcpResourcesTool/ReadMcpResourceTool with `server: "bulletproof-react Docs"` FIRST for architecture
+- ✅ Use mcp__docs-mcp-server__search_docs with `library: "react"` SECOND for React APIs
 - ✅ Verify APIs exist in React 19+
 - ✅ Follow bulletproof-react folder structure
 - ✅ Cite sources from both MCP servers
@@ -130,6 +153,30 @@ Before finalizing ANY response:
 - [ ] APIs verified in React 19+ via docs-mcp-server
 - [ ] Both sources cited with specific references
 - [ ] Response started with documentation consultation
+
+### Quick Reference: MCP Tool Usage
+
+**For bulletproof-react architecture:**
+```javascript
+// List available resources
+ListMcpResourcesTool({ server: "bulletproof-react Docs" })
+
+// Read specific resource
+ReadMcpResourceTool({
+  server: "bulletproof-react Docs",
+  uri: "resource-uri-from-list"
+})
+```
+
+**For React official documentation:**
+```javascript
+// Search React docs
+mcp__docs-mcp-server__search_docs({
+  library: "react",  // ALWAYS "react", never "bulletproof-react"
+  query: "your search query",
+  limit: 3
+})
+```
 
 ---
 

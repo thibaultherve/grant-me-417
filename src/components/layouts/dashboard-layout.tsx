@@ -42,6 +42,12 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const { user } = useAuth();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [enableTransitions, setEnableTransitions] = useState(false);
+
+  // Enable transitions after initial mount to prevent transition on page load
+  React.useEffect(() => {
+    setEnableTransitions(true);
+  }, []);
 
   const handleToggleSidebar = () => {
     setIsAnimating(true);
@@ -136,9 +142,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       </nav>
 
       {/* Desktop sidebar */}
-      <aside className={`hidden md:fixed md:inset-y-0 md:flex md:flex-col transition-all duration-300 ease-in-out ${
-        sidebarCollapsed ? 'md:w-16' : 'md:w-64'
-      }`}>
+      <aside className={`hidden md:fixed md:inset-y-0 md:flex md:flex-col ${
+        enableTransitions ? 'transition-all duration-300 ease-in-out' : ''
+      } ${sidebarCollapsed ? 'md:w-16' : 'md:w-64'}`}>
         <div className="flex min-h-0 flex-1 flex-col border-r bg-background">
           <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4 scrollbar-hide">
             <div className="flex flex-shrink-0 items-center justify-between px-4 overflow-hidden">
@@ -251,9 +257,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       </aside>
 
       {/* Main content */}
-      <div className={`flex flex-1 flex-col transition-all duration-300 ease-in-out ${
-        sidebarCollapsed ? 'md:pl-16' : 'md:pl-64'
-      }`}>
+      <div className={`flex flex-1 flex-col ${
+        enableTransitions ? 'transition-all duration-300 ease-in-out' : ''
+      } ${sidebarCollapsed ? 'md:pl-16' : 'md:pl-64'}`}>
         <main className="flex-1 pb-16 md:pb-0">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
             {children}
