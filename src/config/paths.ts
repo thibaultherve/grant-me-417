@@ -6,12 +6,12 @@ export const paths = {
   auth: {
     login: {
       path: '/auth/login',
-      getHref: (redirectTo) =>
+      getHref: (redirectTo?: string) =>
         `/auth/login${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
     },
     register: {
       path: '/auth/register',
-      getHref: (redirectTo) =>
+      getHref: (redirectTo?: string) =>
         `/auth/register${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
     },
   },

@@ -5,25 +5,29 @@ export const ROLES = {
   USER: 'USER',
 };
 
+type User = { id: string; role?: string };
+type Employer = { user_id: string };
+type WorkEntry = { user_id: string };
+
 export const POLICIES = {
-  'employer:create': (user) => !!user,
-  'employer:update': (user, employer) => user?.id === employer?.user_id,
-  'employer:delete': (user, employer) => user?.id === employer?.user_id,
-  'workEntry:create': (user) => !!user,
-  'workEntry:update': (user, workEntry) => user?.id === workEntry?.user_id,
-  'workEntry:delete': (user, workEntry) => user?.id === workEntry?.user_id,
+  'employer:create': (user: User) => !!user,
+  'employer:update': (user: User, employer: Employer) => user?.id === employer?.user_id,
+  'employer:delete': (user: User, employer: Employer) => user?.id === employer?.user_id,
+  'workEntry:create': (user: User) => !!user,
+  'workEntry:update': (user: User, workEntry: WorkEntry) => user?.id === workEntry?.user_id,
+  'workEntry:delete': (user: User, workEntry: WorkEntry) => user?.id === workEntry?.user_id,
 };
 
 export const useAuthorization = () => {
   const { user } = useAuth();
 
-  const checkAccess = ({ allowedRoles, policyCheck }) => {
+  const checkAccess = ({ allowedRoles, policyCheck }: { allowedRoles?: string[]; policyCheck?: (user: User) => boolean }) => {
     if (allowedRoles) {
-      return allowedRoles.includes(user?.role);
+      return allowedRoles.includes(user?.role || '');
     }
 
     if (policyCheck) {
-      return policyCheck(user);
+      return policyCheck(user as User);
     }
 
     return true;

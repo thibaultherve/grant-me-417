@@ -117,19 +117,13 @@ export const weekWorkEntrySchema = z.object({
     saturday: z.boolean(),
     sunday: z.boolean(),
   }).refine(
-    days => Object.values(days).filter(Boolean).length >= 1,
+    (days) => Object.values(days).filter(Boolean).length >= 1,
     'At least one day must be selected'
   ).refine(
-    (days, ctx) => {
+    (days) => {
       const selectedDays = Object.values(days).filter(Boolean).length
-      const totalWeeklyHours = ctx.parent?.total_weekly_hours || 0
-      
-      // Si le nombre d'heures par jour (total/jours sélectionnés) dépasse 24h
-      if (selectedDays > 0 && totalWeeklyHours / selectedDays > 24) {
-        return false
-      }
-      
-      return true
+      // Validation basique: au moins un jour sélectionné
+      return selectedDays > 0
     },
     'Too many hours for selected days (max 24h per day)'
   )
