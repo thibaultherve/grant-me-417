@@ -284,8 +284,10 @@ export function ByWeekForm({
               <CalendarWithHours
                 mode="single"
                 selected={selectedWeekDate}
-                onSelect={(date: Date | undefined) => {
-                  setSelectedWeekDate(date)
+                onSelect={(date: Date | Date[] | undefined) => {
+                  // In single mode, date will always be a Date or undefined
+                  const singleDate = Array.isArray(date) ? date[0] : date
+                  setSelectedWeekDate(singleDate)
                   setIsCalendarOpen(false)
                 }}
                 disabled={isDateDisabled}

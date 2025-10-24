@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
@@ -55,9 +55,9 @@ export function AddHoursForm({ onSuccess, onCancel, className }: AddHoursFormPro
   // Load ALL hours for the selected employer (for calendar badges)
   const {
     hoursByDate,
-    isLoading: hoursLoading,
-    totalHours,
-    totalEntries
+    isLoading: _hoursLoading,
+    totalHours: _totalHours,
+    totalEntries: _totalEntries
   } = useEmployerHours({
     employerId: selectedEmployer?.id || '',
     enabled: !!selectedEmployer

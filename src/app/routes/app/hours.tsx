@@ -6,13 +6,14 @@ import { CalendarClock } from 'lucide-react';
 import { HoursTable } from '@/features/hours/components/hours-table';
 import { AddHoursForm } from '@/features/hours/components/add-hours-form';
 import { useHours } from '@/features/hours/hooks/use-hours';
+import type { SortOptions } from '@/features/hours/types';
 
 export const HoursRoute = () => {
   const [isAddingHours, setIsAddingHours] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortOptions, setSortOptions] = useState({
-    field: 'work_date' as const,
-    order: 'desc' as const,
+  const [sortOptions, setSortOptions] = useState<SortOptions>({
+    field: 'work_date',
+    order: 'desc',
   });
   const limit = 10;
 

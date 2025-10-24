@@ -1,8 +1,7 @@
-import { buttonVariants } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import * as React from "react";
-import type { DayProps } from "react-day-picker";
+import { DayButton } from "react-day-picker";
 import { startOfWeek, isSameDay, format } from "date-fns";
 
 interface CalendarWithHoursProps {
@@ -39,7 +38,7 @@ function CustomDayButton({
   selectedWeekDate,
   disableWeekHighlight,
   ...props
-}: DayProps & {
+}: React.ComponentProps<typeof DayButton> & {
   hoursByDate: { [date: string]: number };
   hoveredWeekDate: Date | null;
   setHoveredWeekDate: (date: Date | null) => void;
@@ -67,7 +66,7 @@ function CustomDayButton({
   const { onMouseEnter: propsOnMouseEnter, onMouseLeave: propsOnMouseLeave, ...restProps } = props;
 
   // Handle mouse events - combine with original handlers (only if week highlight is enabled)
-  const handleMouseEnter = (e: React.MouseEvent) => {
+  const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!disableWeekHighlight) {
       setHoveredWeekDate(day.date);
     }
@@ -76,7 +75,7 @@ function CustomDayButton({
     }
   };
 
-  const handleMouseLeave = (e: React.MouseEvent) => {
+  const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!disableWeekHighlight) {
       setHoveredWeekDate(null);
     }
@@ -182,7 +181,7 @@ export function CalendarWithHours({
 
   // Create the custom DayButton with hours display and week highlighting
   const DayButtonWithHours = React.useCallback(
-    (dayProps: DayProps) => (
+    (dayProps: React.ComponentProps<typeof DayButton>) => (
       <CustomDayButton
         {...dayProps}
         hoursByDate={hoursByDate}
@@ -195,10 +194,11 @@ export function CalendarWithHours({
     [hoursByDate, hoveredWeekDate, selectedWeekDate, disableWeekHighlight]
   );
 
+  // Type assertion needed for react-day-picker's complex union types
+  const CalendarComponent = Calendar as any;
+
   return (
-    <Calendar
-      {...props}
-      selected={selected}
+    <CalendarComponent
       weekStartsOn={1}
       defaultMonth={selectedWeekDate || undefined}
       className="[&_button]:cursor-pointer" // Add cursor-pointer to all buttons (nav arrows)
@@ -208,6 +208,8 @@ export function CalendarWithHours({
       components={{
         DayButton: DayButtonWithHours,
       }}
+      {...props}
+      selected={selected}
     />
   );
 }
