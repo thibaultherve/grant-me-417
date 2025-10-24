@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useVisaContext } from '../hooks/use-visa-context';
-import type { UserVisa, VisaType } from '../types';
+import type { VisaType } from '../types';
 
 const visaTypeLabels: Record<VisaType, string> = {
   first_whv: '1st WHV',

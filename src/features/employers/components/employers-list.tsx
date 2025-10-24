@@ -1,4 +1,3 @@
-import React from 'react'
 import { Building2 } from 'lucide-react'
 import { EmployerCard } from './employer-card'
 import type { Employer } from '../types'
