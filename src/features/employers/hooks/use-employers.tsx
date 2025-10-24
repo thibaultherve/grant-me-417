@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { handleError, getErrorMessage } from '@/lib/error-handler'
 import type { Employer, CreateEmployerInput } from '../types'
 import { toast } from 'sonner'
 
@@ -22,9 +23,12 @@ export function useEmployers() {
 
       setEmployers(data || [])
     } catch (err) {
-      console.error('Error fetching employers:', err)
-      setError(err instanceof Error ? err.message : 'Failed to fetch employers')
-      toast.error('Failed to load employers')
+      const message = getErrorMessage(err, 'Failed to fetch employers')
+      setError(message)
+      handleError(err, {
+        consolePrefix: 'Error fetching employers',
+        fallbackMessage: 'Failed to load employers'
+      })
     } finally {
       setLoading(false)
     }
@@ -50,10 +54,10 @@ export function useEmployers() {
       toast.success('Employer added successfully')
       return { success: true, data }
     } catch (err) {
-      console.error('Error adding employer:', err)
-      const message = err instanceof Error ? err.message : 'Failed to add employer'
-      toast.error(message)
-      return { success: false, error: message }
+      return handleError(err, {
+        consolePrefix: 'Error adding employer',
+        fallbackMessage: 'Failed to add employer'
+      })
     }
   }
 
@@ -78,10 +82,10 @@ export function useEmployers() {
       toast.success('Employer updated successfully')
       return { success: true, data }
     } catch (err) {
-      console.error('Error updating employer:', err)
-      const message = err instanceof Error ? err.message : 'Failed to update employer'
-      toast.error(message)
-      return { success: false, error: message }
+      return handleError(err, {
+        consolePrefix: 'Error updating employer',
+        fallbackMessage: 'Failed to update employer'
+      })
     }
   }
 
@@ -99,10 +103,10 @@ export function useEmployers() {
       toast.success('Employer deleted successfully')
       return { success: true }
     } catch (err) {
-      console.error('Error deleting employer:', err)
-      const message = err instanceof Error ? err.message : 'Failed to delete employer'
-      toast.error(message)
-      return { success: false, error: message }
+      return handleError(err, {
+        consolePrefix: 'Error deleting employer',
+        fallbackMessage: 'Failed to delete employer'
+      })
     }
   }
 

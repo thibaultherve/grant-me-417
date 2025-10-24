@@ -6,24 +6,20 @@ import { Plus, LayoutDashboard } from 'lucide-react';
 import { AddVisaForm } from '@/features/visas/components/add-visa-form';
 import { VisasList } from '@/features/visas/components/visas-list';
 import type { CreateVisaFormData } from '@/features/visas/schemas';
-import { useVisas } from '@/features/visas/hooks/use-visas';
 import { useVisaContext } from '@/features/visas/hooks/use-visa-context';
 
 export const VisasRoute = () => {
   const [isAddingVisa, setIsAddingVisa] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Single source of truth for visas data
+  // Single source of truth - VisaContext only
   const {
     visas,
     loading,
     error,
     addVisa,
     deleteVisa,
-  } = useVisas();
-
-  // Get refreshVisas function from context to update available visas list
-  const { refreshVisas } = useVisaContext();
+  } = useVisaContext();
 
   const handleAddVisa = async (data: CreateVisaFormData) => {
     setIsSubmitting(true);
@@ -32,18 +28,13 @@ export const VisasRoute = () => {
 
     if (result.success) {
       setIsAddingVisa(false);
-      // Refresh context to update available visas list
-      await refreshVisas();
+      // No need to manually refresh - optimistic update handles it
     }
   };
 
   const handleDeleteVisa = async (id: string) => {
-    const result = await deleteVisa(id);
-
-    if (result.success) {
-      // Refresh context to update available visas list
-      await refreshVisas();
-    }
+    await deleteVisa(id);
+    // No need to manually refresh - optimistic update handles it
   };
 
   return (

@@ -20,18 +20,35 @@ import {
 } from '@/components/ui/select'
 import { createEmployerSchema, type CreateEmployerFormData } from '../schemas'
 import { INDUSTRY_OPTIONS } from '../constants'
+import type { Employer } from '../types'
 
-interface AddEmployerFormProps {
+interface EmployerFormProps {
+  mode: 'add' | 'edit'
+  employer?: Employer
   onSubmit: (data: CreateEmployerFormData) => Promise<void>
   onCancel: () => void
   isSubmitting?: boolean
   onError?: (error: Error) => void
 }
 
-export function AddEmployerForm({ onSubmit, onCancel, isSubmitting, onError }: AddEmployerFormProps) {
+export function EmployerForm({
+  mode,
+  employer,
+  onSubmit,
+  onCancel,
+  isSubmitting,
+  onError
+}: EmployerFormProps) {
+  const isEdit = mode === 'edit'
+
   const form = useForm<CreateEmployerFormData>({
     resolver: zodResolver(createEmployerSchema),
-    defaultValues: {
+    defaultValues: isEdit && employer ? {
+      name: employer.name,
+      industry: employer.industry,
+      postcode: employer.postcode || '',
+      is_eligible: employer.is_eligible
+    } : {
       name: '',
       industry: 'plant_and_animal_cultivation' as const,
       postcode: '',
@@ -42,11 +59,16 @@ export function AddEmployerForm({ onSubmit, onCancel, isSubmitting, onError }: A
   const handleSubmit = async (data: CreateEmployerFormData) => {
     try {
       await onSubmit(data)
-      form.reset()
+      // Reset form only in add mode after successful submission
+      if (!isEdit) {
+        form.reset()
+      }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error : new Error('Failed to add employer')
+      const errorMessage = error instanceof Error
+        ? error
+        : new Error(`Failed to ${isEdit ? 'update' : 'add'} employer`)
       onError?.(errorMessage)
-      
+
       // Set form-level error if onError is not provided
       if (!onError) {
         form.setError('root', {
@@ -67,9 +89,9 @@ export function AddEmployerForm({ onSubmit, onCancel, isSubmitting, onError }: A
             <FormItem>
               <FormLabel>Employer Name</FormLabel>
               <FormControl>
-                <Input 
-                  placeholder="e.g., Sunshine Farm" 
-                  {...field} 
+                <Input
+                  placeholder="e.g., Sunshine Farm"
+                  {...field}
                   className="h-12 text-base"
                 />
               </FormControl>
@@ -87,7 +109,11 @@ export function AddEmployerForm({ onSubmit, onCancel, isSubmitting, onError }: A
           render={({ field }) => (
             <FormItem>
               <FormLabel>Industry Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={field.onChange}
+                value={field.value}
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger className="h-12 text-base">
                     <SelectValue placeholder="Select an industry" />
@@ -95,8 +121,8 @@ export function AddEmployerForm({ onSubmit, onCancel, isSubmitting, onError }: A
                 </FormControl>
                 <SelectContent>
                   {INDUSTRY_OPTIONS.map((option) => (
-                    <SelectItem 
-                      key={option.value} 
+                    <SelectItem
+                      key={option.value}
                       value={option.value}
                       className="text-base py-3"
                     >
@@ -120,9 +146,9 @@ export function AddEmployerForm({ onSubmit, onCancel, isSubmitting, onError }: A
             <FormItem>
               <FormLabel>Postcode (Optional)</FormLabel>
               <FormControl>
-                <Input 
-                  placeholder="e.g., 4000" 
-                  {...field} 
+                <Input
+                  placeholder="e.g., 4000"
+                  {...field}
                   className="h-12 text-base"
                   maxLength={4}
                 />
@@ -140,7 +166,7 @@ export function AddEmployerForm({ onSubmit, onCancel, isSubmitting, onError }: A
             {form.formState.errors.root.message}
           </div>
         )}
-        
+
         <div className="flex gap-3 pt-4">
           <Button
             type="button"
@@ -156,7 +182,10 @@ export function AddEmployerForm({ onSubmit, onCancel, isSubmitting, onError }: A
             className="flex-1 h-12 text-base"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Adding...' : 'Add Employer'}
+            {isSubmitting
+              ? (isEdit ? 'Updating...' : 'Adding...')
+              : (isEdit ? 'Update Employer' : 'Add Employer')
+            }
           </Button>
         </div>
       </form>

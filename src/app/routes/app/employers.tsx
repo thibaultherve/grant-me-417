@@ -4,8 +4,7 @@ import { Plus } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
 import { EmployersList } from '@/features/employers/components/employers-list';
-import { AddEmployerForm } from '@/features/employers/components/add-employer-form';
-import { EditEmployerForm } from '@/features/employers/components/edit-employer-form';
+import { EmployerForm } from '@/features/employers/components/employer-form';
 import type { CreateEmployerFormData } from '@/features/employers/schemas';
 import type { Employer } from '@/features/employers/types';
 import { useEmployers } from '@/features/employers/hooks/use-employers';
@@ -84,7 +83,8 @@ export const EmployersRoute = () => {
           <SheetHeader className="mb-6">
             <SheetTitle>Add New Employer</SheetTitle>
           </SheetHeader>
-          <AddEmployerForm
+          <EmployerForm
+            mode="add"
             onSubmit={handleAddEmployer}
             onCancel={() => setIsAddingEmployer(false)}
             isSubmitting={isSubmitting}
@@ -98,7 +98,8 @@ export const EmployersRoute = () => {
             <SheetTitle>Edit Employer</SheetTitle>
           </SheetHeader>
           {editingEmployer && (
-            <EditEmployerForm
+            <EmployerForm
+              mode="edit"
               employer={editingEmployer}
               onSubmit={handleEditEmployer}
               onCancel={() => setEditingEmployer(null)}

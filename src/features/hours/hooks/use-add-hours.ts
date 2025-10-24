@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { toast } from 'sonner'
 import { useAuth } from '@/lib/auth'
+import { getWeekDates, formatDateKey } from '../utils/date-helpers'
 import type { MultipleWorkEntriesFormData, WeekWorkEntryFormData } from '../schemas'
 
 export function useAddHours() {
@@ -152,35 +153,24 @@ export function useAddHours() {
     }
   }
 
-  // Helper to get all dates in a week (Monday to Sunday)
-  const getWeekDates = (week_date: string) => {
-    const weekStartDate = new Date(week_date)
-    
-    // Get Monday of the week
-    const dayOfWeek = weekStartDate.getDay()
-    const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
-    const mondayDate = new Date(weekStartDate)
-    mondayDate.setDate(weekStartDate.getDate() + daysToMonday)
-
-    const dayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const
-    
-    return dayNames.map((day, index) => {
-      const entryDate = new Date(mondayDate)
-      entryDate.setDate(mondayDate.getDate() + index)
-      return {
-        day,
-        date: entryDate.toISOString().split('T')[0]
-      }
-    })
-  }
-
   // Convert week data to daily entries
+  // Uses centralized date utilities from date-helpers.ts
   const convertWeekToDaily = (weekData: WeekWorkEntryFormData): MultipleWorkEntriesFormData => {
     const { week_date, total_weekly_hours, days_included } = weekData
-    const weekDates = getWeekDates(week_date)
+
+    // Get all dates in the week using centralized utility
+    const weekDateObjects = getWeekDates(new Date(week_date))
+    const dayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const
+
+    // Map dates to {day, date} format for filtering
+    const weekDates = weekDateObjects.map((dateObj, index) => ({
+      day: dayNames[index],
+      date: formatDateKey(dateObj)
+    }))
 
     const selectedDays = weekDates.filter(({ day }) => days_included[day])
-    const hoursPerDay = Math.round((total_weekly_hours / selectedDays.length) * 100) / 100
+    const totalHours = typeof total_weekly_hours === 'number' ? total_weekly_hours : parseFloat(total_weekly_hours || '0')
+    const hoursPerDay = Math.round((totalHours / selectedDays.length) * 100) / 100
 
     const entries = selectedDays.map(({ date }) => ({
       work_date: date,
@@ -203,9 +193,9 @@ export function useAddHours() {
         throw new Error('User not authenticated')
       }
 
-      // Get all dates in the week
-      const allWeekDates = getWeekDates(weekData.week_date)
-      const allDatesInWeek = allWeekDates.map(({ date }) => date)
+      // Get all dates in the week using centralized utilities
+      const allWeekDates = getWeekDates(new Date(weekData.week_date))
+      const allDatesInWeek = allWeekDates.map(dateObj => formatDateKey(dateObj))
       
       // Get selected dates (days to add/update)
       const dailyData = convertWeekToDaily(weekData)
@@ -213,10 +203,10 @@ export function useAddHours() {
       
       // Get dates to delete (unchecked days)
       const datesToDelete = allDatesInWeek.filter(date => !selectedDates.includes(date))
-      
+
       // Check existing entries for all dates in the week
       const existingEntries = await checkExistingEntries(weekData.employer_id, allDatesInWeek)
-      
+
       // Separate existing entries into those to update vs those to delete
       const existingToUpdate = existingEntries.filter(entry => selectedDates.includes(entry.work_date))
       const existingToDelete = existingEntries.filter(entry => datesToDelete.includes(entry.work_date))
@@ -289,16 +279,15 @@ export function useAddHours() {
         throw new Error('User not authenticated')
       }
 
-      // Get all dates in the week
-      const allWeekDates = getWeekDates(weekData.week_date)
-      const allDatesInWeek = allWeekDates.map(({ date }) => date)
-      
-      // Get selected dates (days to add/update)
+      // Get all dates in the week using centralized utilities
+      const allWeekDates = getWeekDates(new Date(weekData.week_date))
+      const allDatesInWeek = allWeekDates.map(dateObj => formatDateKey(dateObj))
+
+      // Get daily data for selected dates
       const dailyData = convertWeekToDaily(weekData)
-      const selectedDates = dailyData.entries.map(entry => entry.work_date)
       
       // Get dates to delete (unchecked days)
-      const datesToDelete = allDatesInWeek.filter(date => !selectedDates.includes(date))
+      // Dates to delete are handled by full week deletion above
       
       // Delete ALL existing entries for this week and employer (both selected and unselected dates)
       const { error: deleteError } = await supabase
@@ -321,7 +310,7 @@ export function useAddHours() {
         }))
 
       if (entriesToInsert.length > 0) {
-        const { data, error } = await supabase
+        const { data: _data, error } = await supabase
           .from('work_entries')
           .insert(entriesToInsert)
           .select()

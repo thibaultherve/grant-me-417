@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
-import { useLocation } from 'react-router'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
-import type { UserVisa } from '../types'
+import { toast } from 'sonner'
+import type { UserVisa, CreateVisaInput } from '../types'
 
 interface VisaContextValue {
   visas: UserVisa[]
@@ -11,13 +11,15 @@ interface VisaContextValue {
   error: string | null
   setCurrentVisa: (visa: UserVisa) => void
   refreshVisas: () => Promise<void>
+  addVisa: (input: CreateVisaInput) => Promise<{ success: boolean; data?: UserVisa; error?: string }>
+  updateVisa: (id: string, input: Partial<CreateVisaInput>) => Promise<{ success: boolean; data?: UserVisa; error?: string }>
+  deleteVisa: (id: string) => Promise<{ success: boolean; error?: string }>
 }
 
 const VisaContext = createContext<VisaContextValue | undefined>(undefined)
 
 export function VisaProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth()
-  const location = useLocation()
   const [visas, setVisas] = useState<UserVisa[]>([])
   const [currentVisa, setCurrentVisaState] = useState<UserVisa | null>(null)
   const [loading, setLoading] = useState(true)
@@ -66,34 +68,94 @@ export function VisaProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('currentVisaId', visa.id)
   }
 
-  // Refresh on mount and when user changes
+  const addVisa = async (input: CreateVisaInput) => {
+    if (!user) {
+      const message = 'User must be authenticated to add a visa'
+      toast.error(message)
+      return { success: false, error: message }
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('user_visas')
+        .insert([{
+          user_id: user.id,
+          visa_type: input.visa_type,
+          arrival_date: input.arrival_date,
+          days_required: input.days_required
+        }])
+        .select()
+        .single()
+
+      if (error) throw error
+
+      // Update local state immediately (optimistic update)
+      setVisas(prev => [...prev, data])
+      toast.success('Visa added successfully')
+      return { success: true, data }
+    } catch (err) {
+      console.error('Error adding visa:', err)
+      const message = err instanceof Error ? err.message : 'Failed to add visa'
+      toast.error(message)
+      return { success: false, error: message }
+    }
+  }
+
+  const updateVisa = async (id: string, input: Partial<CreateVisaInput>) => {
+    try {
+      const { data, error } = await supabase
+        .from('user_visas')
+        .update({
+          visa_type: input.visa_type,
+          arrival_date: input.arrival_date,
+          days_required: input.days_required
+        })
+        .eq('id', id)
+        .select()
+        .single()
+
+      if (error) throw error
+
+      // Update local state immediately (optimistic update)
+      setVisas(prev => prev.map(visa => visa.id === id ? data : visa))
+      toast.success('Visa updated successfully')
+      return { success: true, data }
+    } catch (err) {
+      console.error('Error updating visa:', err)
+      const message = err instanceof Error ? err.message : 'Failed to update visa'
+      toast.error(message)
+      return { success: false, error: message }
+    }
+  }
+
+  const deleteVisa = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('user_visas')
+        .delete()
+        .eq('id', id)
+
+      if (error) throw error
+
+      // Update local state immediately (optimistic update)
+      setVisas(prev => prev.filter(visa => visa.id !== id))
+      toast.success('Visa deleted successfully')
+      return { success: true }
+    } catch (err) {
+      console.error('Error deleting visa:', err)
+      const message = err instanceof Error ? err.message : 'Failed to delete visa'
+      toast.error(message)
+      return { success: false, error: message }
+    }
+  }
+
+  // Single useEffect - only refresh when user ID changes
+  // Using user?.id instead of user to avoid re-fetching when user object reference changes
+  // but the actual user (by ID) remains the same (e.g., on tab visibility change)
   useEffect(() => {
     fetchVisas()
-  }, [user])
-
-  // Refresh when navigating to /app routes
-  useEffect(() => {
-    if (user && location.pathname.startsWith('/app')) {
-      fetchVisas()
-    }
-  }, [location.pathname, user])
-
-  // Refresh when tab becomes visible
-  useEffect(() => {
-    if (!user) return
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
-        fetchVisas()
-      }
-    }
-
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-    }
-  }, [user])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id])
 
   return (
     <VisaContext.Provider
@@ -103,7 +165,10 @@ export function VisaProvider({ children }: { children: ReactNode }) {
         loading,
         error,
         setCurrentVisa,
-        refreshVisas: fetchVisas
+        refreshVisas: fetchVisas,
+        addVisa,
+        updateVisa,
+        deleteVisa
       }}
     >
       {children}
