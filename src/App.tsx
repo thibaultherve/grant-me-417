@@ -1,6 +1,9 @@
 import { AppRouter } from '@/app/router';
 import { AuthProvider } from '@/lib/auth';
 import { ThemeProvider, useTheme } from '@/lib/theme';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { queryClient } from '@/lib/react-query';
 import { Toaster } from 'sonner';
 
 const ToasterWithTheme = () => {
@@ -29,11 +32,14 @@ const ToasterWithTheme = () => {
 
 export const App = () => {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <AppRouter />
-        <ToasterWithTheme />
-      </AuthProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProvider>
+          <AppRouter />
+          <ToasterWithTheme />
+        </AuthProvider>
+      </ThemeProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 };
