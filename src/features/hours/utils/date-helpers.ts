@@ -158,3 +158,65 @@ export function getDayName(date: Date): keyof typeof DAY_LABELS {
 export function getDayLabel(dayKey: keyof typeof DAY_LABELS): string {
   return DAY_LABELS[dayKey]
 }
+
+/**
+ * Gets the dates for selected days in a week as YYYY-MM-DD strings.
+ * Used for API calls to ensure proper date formatting without timezone issues.
+ *
+ * @param weekDateString - Any date within the target week (YYYY-MM-DD format)
+ * @param daysIncluded - Object specifying which days to include
+ * @returns Array of date strings in YYYY-MM-DD format
+ *
+ * @example
+ * ```ts
+ * const dates = getSelectedWeekDates('2025-01-08', {
+ *   monday: true,
+ *   tuesday: true,
+ *   wednesday: false,
+ *   // ...
+ * })
+ * // Returns ["2025-01-06", "2025-01-07"]
+ * ```
+ */
+export function getSelectedWeekDates(
+  weekDateString: string,
+  daysIncluded: {
+    monday: boolean
+    tuesday: boolean
+    wednesday: boolean
+    thursday: boolean
+    friday: boolean
+    saturday: boolean
+    sunday: boolean
+  }
+): string[] {
+  // Parse the date ensuring no timezone issues
+  const weekDate = new Date(weekDateString.split('T')[0])
+
+  // Get Monday of this week
+  const monday = startOfWeek(weekDate, { weekStartsOn: 1 })
+
+  // Create array of selected dates
+  const dates: string[] = []
+  const dayIndexMap = {
+    monday: 0,
+    tuesday: 1,
+    wednesday: 2,
+    thursday: 3,
+    friday: 4,
+    saturday: 5,
+    sunday: 6
+  }
+
+  // Add only selected days
+  Object.entries(daysIncluded).forEach(([day, included]) => {
+    if (included) {
+      const dayIndex = dayIndexMap[day as keyof typeof dayIndexMap]
+      const date = addDays(monday, dayIndex)
+      // Format as YYYY-MM-DD without timezone
+      dates.push(format(date, 'yyyy-MM-dd'))
+    }
+  })
+
+  return dates
+}

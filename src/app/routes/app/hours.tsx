@@ -5,7 +5,7 @@ import { CalendarClock } from 'lucide-react';
 
 import { HoursTable } from '@/features/hours/components/hours-table';
 import { AddHoursForm } from '@/features/hours/components/add-hours-form';
-import { useHours } from '@/features/hours/hooks/use-hours';
+import { useHours } from '@/features/hours/api/use-hours';
 import type { SortOptions } from '@/features/hours/types';
 
 export const HoursRoute = () => {
@@ -23,10 +23,10 @@ export const HoursRoute = () => {
     sort: sortOptions,
   });
 
-  const handleAddHoursSuccess = async () => {
+  const handleAddHoursSuccess = () => {
     setIsAddingHours(false);
-    // Refresh the hours data to show the new entries
-    await refetch();
+    // React Query invalidateQueries automatiquement dans le hook
+    // Pas besoin de refetch manuel
   };
 
   return (

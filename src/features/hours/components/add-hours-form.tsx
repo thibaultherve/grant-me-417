@@ -10,9 +10,14 @@ import { EmployerSelector } from './employer-selector'
 import { ByDayForm } from './by-day-form'
 import { ByWeekForm } from './by-week-form'
 
-import { useEmployers } from '@/features/employers/hooks/use-employers'
-import { useAddHours } from '../hooks/use-add-hours'
-import { useEmployerHours } from '../hooks/use-employer-hours'
+import { useEmployers } from '@/features/employers/api/use-employers'
+import {
+  useAddWorkEntries,
+  useAddWorkEntriesWithOverwrite,
+  useAddWeekWorkEntries,
+  useAddWeekWorkEntriesWithOverwrite,
+  useEmployerHours
+} from '../api/use-hours'
 import type { Employer } from '@/features/employers/types'
 import type { MultipleWorkEntriesFormData, WeekWorkEntryFormData } from '../schemas'
 
@@ -43,24 +48,28 @@ export function AddHoursForm({ onSuccess, onCancel, className }: AddHoursFormPro
   } | null>(null)
 
   // Hooks
-  const { employers, loading: employersLoading } = useEmployers()
-  const { 
-    isSubmitting, 
-    addWorkEntries, 
-    addWorkEntriesWithOverwrite,
-    addWeekWorkEntries,
-    addWeekWorkEntriesWithOverwrite 
-  } = useAddHours()
+  const { data: employers = [], isLoading: employersLoading } = useEmployers()
+
+  // Mutations pour ajouter des heures
+  const addEntriesMutation = useAddWorkEntries()
+  const addEntriesOverwriteMutation = useAddWorkEntriesWithOverwrite()
+  const addWeekMutation = useAddWeekWorkEntries()
+  const addWeekOverwriteMutation = useAddWeekWorkEntriesWithOverwrite()
+
+  // État de soumission combiné
+  const isSubmitting =
+    addEntriesMutation.isPending ||
+    addEntriesOverwriteMutation.isPending ||
+    addWeekMutation.isPending ||
+    addWeekOverwriteMutation.isPending
 
   // Load ALL hours for the selected employer (for calendar badges)
-  const {
-    hoursByDate,
-    isLoading: _hoursLoading,
-    totalHours: _totalHours,
-    totalEntries: _totalEntries
-  } = useEmployerHours({
-    employerId: selectedEmployer?.id || '',
-    enabled: !!selectedEmployer
+  const { data: employerHours = [] } = useEmployerHours(selectedEmployer?.id || '')
+
+  // Convertir en format hoursByDate pour le calendrier
+  const hoursByDate: Record<string, number> = {}
+  employerHours.forEach(entry => {
+    hoursByDate[entry.work_date] = entry.hours
   })
 
   // Handlers
@@ -79,38 +88,38 @@ export function AddHoursForm({ onSuccess, onCancel, className }: AddHoursFormPro
   }
 
   const handleByDaySubmit = async (data: MultipleWorkEntriesFormData) => {
-    const result = await addWorkEntries(data)
-    
+    const result = await addEntriesMutation.mutateAsync(data)
+
     if (result.requiresConfirmation && result.existingDates) {
-      setPendingData({ 
-        type: 'day', 
-        data, 
+      setPendingData({
+        type: 'day',
+        data,
         existingDates: result.existingDates,
         existingEntries: result.existingEntries
       })
       setShowConfirmDialog(true)
       return
     }
-    
+
     if (result.success) {
       onSuccess?.()
     }
   }
 
   const handleByWeekSubmit = async (data: WeekWorkEntryFormData) => {
-    const result = await addWeekWorkEntries(data)
-    
+    const result = await addWeekMutation.mutateAsync(data)
+
     if (result.requiresConfirmation && result.existingDates) {
-      setPendingData({ 
-        type: 'week', 
-        data, 
+      setPendingData({
+        type: 'week',
+        data,
         existingDates: result.existingDates,
         existingEntries: result.existingEntries
       })
       setShowConfirmDialog(true)
       return
     }
-    
+
     if (result.success) {
       onSuccess?.()
     }
@@ -121,9 +130,9 @@ export function AddHoursForm({ onSuccess, onCancel, className }: AddHoursFormPro
 
     let result
     if (pendingData.type === 'day') {
-      result = await addWorkEntriesWithOverwrite(pendingData.data as MultipleWorkEntriesFormData)
+      result = await addEntriesOverwriteMutation.mutateAsync(pendingData.data as MultipleWorkEntriesFormData)
     } else {
-      result = await addWeekWorkEntriesWithOverwrite(pendingData.data as WeekWorkEntryFormData)
+      result = await addWeekOverwriteMutation.mutateAsync(pendingData.data as WeekWorkEntryFormData)
     }
 
     setShowConfirmDialog(false)

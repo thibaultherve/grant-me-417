@@ -30,3 +30,22 @@ export type HoursResponse = {
   limit: number;
   totalPages: number;
 };
+
+export type WorkEntryInput = {
+  work_date: string;
+  hours: number;
+};
+
+export type WeekWorkEntryInput = {
+  week_date: string;
+  total_weekly_hours: number;
+  days_included: {
+    monday: boolean;
+    tuesday: boolean;
+    wednesday: boolean;
+    thursday: boolean;
+    friday: boolean;
+    saturday: boolean;
+    sunday: boolean;
+  };
+};

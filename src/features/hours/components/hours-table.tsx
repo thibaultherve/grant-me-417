@@ -24,7 +24,7 @@ import { Calendar, Clock, Building2, CheckCircle, XCircle, Trash2 } from 'lucide
 
 import { HoursPagination } from './hours-pagination';
 import { SortableTableHead } from './sortable-table-head';
-import { useDeleteHours } from '../hooks/use-delete-hours';
+import { useDeleteWorkEntry } from '../api/use-hours';
 import type { HourEntryWithEmployer, SortOptions, SortField, SortOrder, HoursResponse } from '../types';
 
 interface HoursTableProps {
@@ -52,7 +52,7 @@ export const HoursTable = ({
 }: HoursTableProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [entryToDelete, setEntryToDelete] = useState<HourEntryWithEmployer | null>(null);
-  const { isDeleting, deleteWorkEntry } = useDeleteHours();
+  const deleteMutation = useDeleteWorkEntry();
 
   const handleSortChange = (field: SortField, order: SortOrder) => {
     setSortOptions({ field, order });
@@ -65,19 +65,17 @@ export const HoursTable = ({
     setDeleteDialogOpen(true);
   };
 
-  const handleDeleteConfirm = async () => {
+  const handleDeleteConfirm = () => {
     if (!entryToDelete) return;
 
-    const result = await deleteWorkEntry(entryToDelete.id);
-
-    if (result.success) {
-      setDeleteDialogOpen(false);
-      setEntryToDelete(null);
-      // Refresh the table data
-      if (onRefetch) {
-        onRefetch();
+    deleteMutation.mutate(entryToDelete.id, {
+      onSuccess: () => {
+        setDeleteDialogOpen(false);
+        setEntryToDelete(null);
+        // React Query invalidateQueries automatiquement
+        // Pas besoin de refetch manuel
       }
-    }
+    });
   };
 
   const handleDeleteCancel = () => {
@@ -256,7 +254,7 @@ export const HoursTable = ({
                         variant="ghost"
                         size="sm"
                         onClick={() => handleDeleteClick(entry)}
-                        disabled={isDeleting}
+                        disabled={deleteMutation.isPending}
                         className="h-8 w-8 p-0 hover:bg-destructive/10 hover:text-destructive"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -315,15 +313,15 @@ export const HoursTable = ({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleDeleteCancel} disabled={isDeleting}>
+            <AlertDialogCancel onClick={handleDeleteCancel} disabled={deleteMutation.isPending}>
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteConfirm}
-              disabled={isDeleting}
+              disabled={deleteMutation.isPending}
               className="bg-destructive hover:bg-destructive/90"
             >
-              {isDeleting ? 'Deleting...' : 'Delete'}
+              {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
