@@ -42,7 +42,19 @@
       "Read(C:\\c\\Users\\thiba\\Documents\\dev\\get-granted-417/**)",
       "WebSearch",
       "mcp__docs-mcp-server__search_docs",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "mcp__shadcn__get_add_command_for_items",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(cat:*)",
+      "Bash(tree:*)",
+      "mcp__bulletproof-react_Docs__fetch_bulletproof_react_docs",
+      "mcp__bulletproof-react_Docs__search_bulletproof_react_docs",
+      "Bash(dir:*)",
+      "Read(//c/Users/thiba/Desktop/ui design idea/**)",
+      "Bash(cp:*)",
+      "Bash(timeout:*)",
+      "Bash(git reset:*)"
     ],
     "deny": [],
     "ask": []
