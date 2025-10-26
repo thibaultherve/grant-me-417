@@ -7,34 +7,26 @@ import { AddVisaForm } from '@/features/visas/components/add-visa-form';
 import { VisasList } from '@/features/visas/components/visas-list';
 import type { CreateVisaFormData } from '@/features/visas/schemas';
 import { useVisaContext } from '@/features/visas/hooks/use-visa-context';
+import { useAddVisa, useDeleteVisa } from '@/features/visas/api/use-visas';
 
 export const VisasRoute = () => {
   const [isAddingVisa, setIsAddingVisa] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Single source of truth - VisaContext only
-  const {
-    visas,
-    loading,
-    error,
-    addVisa,
-    deleteVisa,
-  } = useVisaContext();
+  // React Query hooks
+  const { visas, isLoading, error } = useVisaContext();
+  const addMutation = useAddVisa();
+  const deleteMutation = useDeleteVisa();
 
-  const handleAddVisa = async (data: CreateVisaFormData) => {
-    setIsSubmitting(true);
-    const result = await addVisa(data);
-    setIsSubmitting(false);
-
-    if (result.success) {
-      setIsAddingVisa(false);
-      // No need to manually refresh - optimistic update handles it
-    }
+  const handleAddVisa = (data: CreateVisaFormData) => {
+    addMutation.mutate(data, {
+      onSuccess: () => {
+        setIsAddingVisa(false);
+      }
+    });
   };
 
-  const handleDeleteVisa = async (id: string) => {
-    await deleteVisa(id);
-    // No need to manually refresh - optimistic update handles it
+  const handleDeleteVisa = (id: string) => {
+    deleteMutation.mutate(id);
   };
 
   return (
@@ -55,7 +47,7 @@ export const VisasRoute = () => {
       {/* Pass all state and handlers as props - Lift State Up pattern */}
       <VisasList
         visas={visas}
-        loading={loading}
+        loading={isLoading}
         error={error}
         onDelete={handleDeleteVisa}
       />
@@ -77,7 +69,7 @@ export const VisasRoute = () => {
           <AddVisaForm
             onSubmit={handleAddVisa}
             onCancel={() => setIsAddingVisa(false)}
-            isSubmitting={isSubmitting}
+            isSubmitting={addMutation.isPending}
           />
         </SheetContent>
       </Sheet>

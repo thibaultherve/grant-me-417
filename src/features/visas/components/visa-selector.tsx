@@ -16,7 +16,7 @@ const visaTypeLabels: Record<VisaType, string> = {
 };
 
 export function VisaSelector() {
-  const { visas, currentVisa, setCurrentVisa, loading } = useVisaContext();
+  const { visas, currentVisa, setCurrentVisa, isLoading: loading } = useVisaContext();
 
   if (loading) {
     return (
