@@ -7,51 +7,45 @@ import { EmployersList } from '@/features/employers/components/employers-list';
 import { EmployerForm } from '@/features/employers/components/employer-form';
 import type { CreateEmployerFormData } from '@/features/employers/schemas';
 import type { Employer } from '@/features/employers/types';
-import { useEmployers } from '@/features/employers/hooks/use-employers';
+import { useEmployers, useAddEmployer, useUpdateEmployer, useDeleteEmployer } from '@/features/employers/api/use-employers';
 
 export const EmployersRoute = () => {
   const [isAddingEmployer, setIsAddingEmployer] = useState(false);
   const [editingEmployer, setEditingEmployer] = useState<Employer | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  // Single source of truth for employers data
-  const { 
-    employers, 
-    loading, 
-    error, 
-    addEmployer, 
-    updateEmployer, 
-    deleteEmployer 
-  } = useEmployers();
 
-  const handleAddEmployer = async (data: CreateEmployerFormData) => {
-    setIsSubmitting(true);
-    const result = await addEmployer(data);
-    setIsSubmitting(false);
-    
-    if (result.success) {
-      setIsAddingEmployer(false);
-    }
+  // React Query hooks - cache, loading, error handling automatique
+  const { data: employers = [], isLoading: loading, error } = useEmployers();
+  const addMutation = useAddEmployer();
+  const updateMutation = useUpdateEmployer();
+  const deleteMutation = useDeleteEmployer();
+
+  const handleAddEmployer = (data: CreateEmployerFormData) => {
+    addMutation.mutate(data, {
+      onSuccess: () => {
+        setIsAddingEmployer(false);
+      },
+    });
   };
 
-  const handleEditEmployer = async (data: CreateEmployerFormData) => {
+  const handleEditEmployer = (data: CreateEmployerFormData) => {
     if (!editingEmployer) return;
-    
-    setIsSubmitting(true);
-    const result = await updateEmployer(editingEmployer.id, data);
-    setIsSubmitting(false);
-    
-    if (result.success) {
-      setEditingEmployer(null);
-    }
+
+    updateMutation.mutate(
+      { id: editingEmployer.id, input: data },
+      {
+        onSuccess: () => {
+          setEditingEmployer(null);
+        },
+      }
+    );
   };
 
   const handleStartEdit = (employer: Employer) => {
     setEditingEmployer(employer);
   };
 
-  const handleDeleteEmployer = async (id: string) => {
-    await deleteEmployer(id);
+  const handleDeleteEmployer = (id: string) => {
+    deleteMutation.mutate(id);
   };
 
   return (
@@ -87,7 +81,7 @@ export const EmployersRoute = () => {
             mode="add"
             onSubmit={handleAddEmployer}
             onCancel={() => setIsAddingEmployer(false)}
-            isSubmitting={isSubmitting}
+            isSubmitting={addMutation.isPending}
           />
         </SheetContent>
       </Sheet>
@@ -103,7 +97,7 @@ export const EmployersRoute = () => {
               employer={editingEmployer}
               onSubmit={handleEditEmployer}
               onCancel={() => setEditingEmployer(null)}
-              isSubmitting={isSubmitting}
+              isSubmitting={updateMutation.isPending}
             />
           )}
         </SheetContent>
