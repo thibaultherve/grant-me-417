@@ -5,7 +5,6 @@ import { paths } from '@/config/paths';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 
 export const LoginRoute = () => {
@@ -42,54 +41,88 @@ export const LoginRoute = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
-          <CardDescription>
-            Enter your credentials to access your account
-          </CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+    <div className="min-h-screen bg-gradient-to-br from-warm via-beige to-cream flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-serif font-light text-foreground mb-3 tracking-tight">
+            Welcome back
+          </h1>
+          <p className="text-base text-muted-foreground">
+            Sign in to continue tracking your work hours
+          </p>
+        </div>
+
+        {/* Login Form Card */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl shadow-black/5 border border-black/5 overflow-hidden">
+          <form onSubmit={handleSubmit} className="p-8 space-y-6">
+            {/* Email Field */}
+            <div className="space-y-3">
+              <Label
+                htmlFor="email"
+                className="text-sm font-medium text-foreground"
+              >
+                Email
+              </Label>
               <Input
                 id="email"
                 name="email"
                 type="email"
-                placeholder="you@example.com"
+                placeholder="your@email.com"
                 required
                 disabled={loading}
+                className="h-12 bg-white/50 border-black/10 text-foreground placeholder:text-muted-foreground/50 rounded-xl focus:border-black/20 focus:ring-2 focus:ring-black/5 transition-all"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+
+            {/* Password Field */}
+            <div className="space-y-3">
+              <Label
+                htmlFor="password"
+                className="text-sm font-medium text-foreground"
+              >
+                Password
+              </Label>
               <Input
                 id="password"
                 name="password"
                 type="password"
+                placeholder="••••••••"
                 required
                 disabled={loading}
+                className="h-12 bg-white/50 border-black/10 text-foreground placeholder:text-muted-foreground/50 rounded-xl focus:border-black/20 focus:ring-2 focus:ring-black/5 transition-all"
               />
             </div>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={loading}>
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full h-12 bg-black hover:bg-black/90 text-white font-medium rounded-xl shadow-lg shadow-black/10 transition-all duration-200 mt-8"
+            >
               {loading ? 'Signing in...' : 'Sign in'}
             </Button>
+          </form>
+
+          {/* Footer */}
+          <div className="px-8 pb-8 pt-4">
             <p className="text-center text-sm text-muted-foreground">
               Don't have an account?{' '}
               <Link
                 to={paths.auth.register.getHref(redirectTo)}
-                className="font-medium text-primary hover:underline"
+                className="font-medium text-foreground hover:underline underline-offset-4 transition-all"
               >
                 Sign up
               </Link>
             </p>
-          </CardFooter>
-        </form>
-      </Card>
+          </div>
+        </div>
+
+        {/* Bottom Text */}
+        <p className="text-center text-xs text-muted-foreground/70 mt-8">
+          Track your Working Holiday Visa work hours with ease
+        </p>
+      </div>
     </div>
   );
 };
