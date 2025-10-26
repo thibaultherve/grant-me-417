@@ -38,6 +38,10 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-cream: var(--cream);
+  --color-cream-dark: var(--cream-dark);
+  --color-beige: var(--beige);
+  --color-warm: var(--warm);
 }
 
 :root[data-theme="light"] {
@@ -47,7 +51,13 @@
   --primary: oklch(53.32% 0.128 272.93);
   --secondary: oklch(70.85% 0.081 276.16);
   --accent: oklch(64.22% 0.109 274.55);
-  
+
+  /* Custom beige/cream colors for Flow-inspired design */
+  --cream: oklch(94% 0.018 85);
+  --cream-dark: oklch(90% 0.022 80);
+  --beige: oklch(96% 0.015 75);
+  --warm: oklch(97% 0.012 70);
+
   /* Map to shadcn variables */
   --foreground: var(--text);
   --card: oklch(99% 0.005 274.97);
@@ -84,7 +94,13 @@
   --primary: oklch(49.54% 0.130 271.96);
   --secondary: oklch(35.27% 0.097 273.54);
   --accent: oklch(39.75% 0.121 271.57);
-  
+
+  /* Custom beige/cream colors for Flow-inspired design (darker versions) */
+  --cream: oklch(25% 0.018 85);
+  --cream-dark: oklch(20% 0.022 80);
+  --beige: oklch(30% 0.015 75);
+  --warm: oklch(28% 0.012 70);
+
   /* Map to shadcn variables */
   --foreground: var(--text);
   --card: oklch(18% 0.018 273.35);
@@ -123,7 +139,13 @@
   --primary: oklch(53.32% 0.128 272.93);
   --secondary: oklch(70.85% 0.081 276.16);
   --accent: oklch(64.22% 0.109 274.55);
-  
+
+  /* Custom beige/cream colors for Flow-inspired design */
+  --cream: oklch(94% 0.018 85);
+  --cream-dark: oklch(90% 0.022 80);
+  --beige: oklch(96% 0.015 75);
+  --warm: oklch(97% 0.012 70);
+
   --foreground: var(--text);
   --card: oklch(99% 0.005 274.97);
   --card-foreground: var(--text);
