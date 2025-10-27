@@ -1,12 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { InfoCard } from "@/components/ui/info-card";
-import { StatCard } from "@/components/ui/stat-card";
-import { StatusBadge } from "@/components/ui/status-badge";
 import { Button } from "@/components/ui/button";
 import { VisaSelector } from "@/features/visas/components/visa-selector";
 import { WeeklyProgressChart } from "@/features/visas/components/weekly-progress-chart";
 import { useVisaContext } from "@/features/visas/hooks/use-visa-context";
-import { Briefcase, Calendar, CheckCircle2, Clock, TrendingUp, ArrowRight } from "lucide-react";
+import { Briefcase, Calendar, ArrowRight } from "lucide-react";
 import { Link } from "react-router";
 import { paths } from "@/config/paths";
 
@@ -19,19 +17,6 @@ export const DashboardRoute = () => {
       month: "2-digit",
       year: "2-digit",
     });
-  };
-
-  const getVisaTypeLabel = (visaType: string) => {
-    switch (visaType) {
-      case "first_whv":
-        return "1st Working Holiday Visa";
-      case "second_whv":
-        return "2nd Working Holiday Visa";
-      case "third_whv":
-        return "3rd Working Holiday Visa";
-      default:
-        return "Working Holiday Visa";
-    }
   };
 
   const calculateVisaPeriodProgress = (
@@ -97,72 +82,6 @@ export const DashboardRoute = () => {
         </InfoCard>
       ) : (
         <>
-          {/* Visa Status Overview */}
-          <div className="flex flex-wrap items-center gap-3">
-            <StatusBadge
-              label={getVisaTypeLabel(currentVisa.visa_type)}
-              variant="info"
-            />
-            {currentVisa.is_eligible ? (
-              <StatusBadge
-                label="Eligible for Next Visa"
-                variant="success"
-                icon={CheckCircle2}
-              />
-            ) : (
-              <StatusBadge
-                label="In Progress"
-                variant="warning"
-                icon={Clock}
-              />
-            )}
-          </div>
-
-          {/* Stats Grid */}
-          {(() => {
-            const visaPeriod = calculateVisaPeriodProgress(
-              currentVisa.arrival_date,
-              currentVisa.end_date
-            );
-
-            return (
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                <StatCard
-                  title="Work Days Completed"
-                  value={currentVisa.eligible_days}
-                  description={`of ${currentVisa.days_required} required`}
-                  icon={Briefcase}
-                  trend={
-                    currentVisa.eligible_days > 0
-                      ? {
-                          value: Number(currentVisa.progress_percentage),
-                          label: "progress"
-                        }
-                      : undefined
-                  }
-                />
-                <StatCard
-                  title="Days Remaining"
-                  value={currentVisa.days_remaining}
-                  description="to complete requirement"
-                  icon={Calendar}
-                />
-                <StatCard
-                  title="Visa Period"
-                  value={formatDaysLeft(visaPeriod.daysLeft)}
-                  description={`${visaPeriod.progress.toFixed(0)}% used`}
-                  icon={Clock}
-                />
-                <StatCard
-                  title="Overall Progress"
-                  value={`${currentVisa.progress_percentage}%`}
-                  description={currentVisa.is_eligible ? "Completed!" : "In progress"}
-                  icon={TrendingUp}
-                />
-              </div>
-            );
-          })()}
-
           {/* Progress Overview Card */}
           {(() => {
             const visaPeriod = calculateVisaPeriodProgress(

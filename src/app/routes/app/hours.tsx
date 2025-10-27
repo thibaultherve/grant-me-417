@@ -1,10 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { InfoCard } from '@/components/ui/info-card';
 import { CalendarClock, Plus } from 'lucide-react';
 
-import { HoursStatistics } from '@/features/hours/components/hours-statistics';
 import { ModernHoursTable } from '@/features/hours/components/modern-hours-table';
 import { AddHoursForm } from '@/features/hours/components/add-hours-form';
 import { useHours } from '@/features/hours/api/use-hours';
@@ -19,24 +18,11 @@ export const HoursRoute = () => {
   });
   const limit = 10;
 
-  const { data, isLoading, error, refetch } = useHours({
+  const { data, isLoading, error } = useHours({
     page: currentPage,
     limit,
     sort: sortOptions,
   });
-
-  // Calculate statistics
-  const statistics = useMemo(() => {
-    if (!data?.entries) {
-      return { totalHours: 0, daysWorked: 0, eligibleDays: 0 };
-    }
-
-    const totalHours = data.entries.reduce((sum, entry) => sum + entry.hours, 0);
-    const daysWorked = new Set(data.entries.map(entry => entry.work_date)).size;
-    const eligibleDays = data.entries.filter(entry => entry.is_eligible).length;
-
-    return { totalHours, daysWorked, eligibleDays };
-  }, [data?.entries]);
 
   const handleAddHoursSuccess = () => {
     setIsAddingHours(false);
@@ -52,15 +38,11 @@ export const HoursRoute = () => {
             Track your specified work hours for visa eligibility
           </p>
         </div>
+        <Button onClick={() => setIsAddingHours(true)} size="lg">
+          <Plus className="mr-2 h-4 w-4" />
+          Log Hours
+        </Button>
       </div>
-
-      {/* Statistics Cards */}
-      <HoursStatistics
-        totalHours={statistics.totalHours}
-        daysWorked={statistics.daysWorked}
-        eligibleDays={statistics.eligibleDays}
-        isLoading={isLoading}
-      />
 
       {/* Info tip */}
       {data && data.entries && data.entries.length === 0 && !isLoading && (
@@ -89,16 +71,6 @@ export const HoursRoute = () => {
         setSortOptions={setSortOptions}
         limit={limit}
       />
-
-      {/* Floating Action Button + Sheet */}
-      <Button
-        size="lg"
-        onClick={() => setIsAddingHours(true)}
-        className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg md:h-auto md:w-auto md:rounded-md md:px-6 z-50"
-      >
-        <Plus className="h-6 w-6 md:mr-2" />
-        <span className="hidden md:inline">Log Hours</span>
-      </Button>
 
       <Sheet open={isAddingHours} onOpenChange={setIsAddingHours}>
         <SheetContent side="right" className="w-full sm:max-w-4xl overflow-y-auto p-6">

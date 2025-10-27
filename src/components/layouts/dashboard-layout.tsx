@@ -43,12 +43,27 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   const handleSignOut = async () => {
     try {
+      // Manual fallback: clear all Supabase auth data from localStorage
+      const keys = Object.keys(localStorage);
+      keys.forEach(key => {
+        if (key.startsWith('sb-') || key.includes('supabase')) {
+          localStorage.removeItem(key);
+        }
+      });
+
       // Clear all React Query cache to prevent data leakage between users
       queryClient.clear();
 
-      // Navigate first with replace to avoid ProtectedRoute redirect
-      navigate(paths.home.path, { replace: true });
-      await supabase.auth.signOut();
+      // Try to sign out normally, but ignore errors since we already cleared localStorage
+      try {
+        await supabase.auth.signOut({ scope: 'local' });
+      } catch (signOutError) {
+        // Ignore errors - we already cleared the session manually
+      }
+
+      // Force a page reload to ensure all state is cleared
+      window.location.href = '/';
+
       toast.success('Signed out successfully');
     } catch (error) {
       toast.error('Failed to sign out');

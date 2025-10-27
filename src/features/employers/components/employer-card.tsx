@@ -1,5 +1,4 @@
 import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   AlertDialog,
@@ -10,9 +9,15 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { Building2, MapPin, CheckCircle, XCircle, Trash2, Edit } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Building2, MapPin, CheckCircle, XCircle, Trash2, Edit, MoreVertical } from 'lucide-react'
+import { useState } from 'react'
 import type { Employer } from '../types'
 
 interface EmployerCardProps {
@@ -34,75 +39,85 @@ const industryLabels: Record<string, string> = {
 }
 
 export function EmployerCard({ employer, onDelete, onEdit }: EmployerCardProps) {
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+
   return (
-    <Card className="border shadow-sm">
-      <CardContent className="p-4">
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex items-start gap-3 flex-1">
-            <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-              <Building2 className="w-5 h-5 text-primary" />
+    <Card className="border-border/40 shadow-none">
+      <CardContent className="p-2.5">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <div className="w-7 h-7 bg-primary/10 rounded flex items-center justify-center flex-shrink-0">
+              <Building2 className="w-3.5 h-3.5 text-primary" />
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-base truncate">{employer.name}</h3>
-              <p className="text-sm text-muted-foreground">
-                {industryLabels[employer.industry] || employer.industry}
-              </p>
+              <div className="flex items-center gap-2">
+                <h3 className="font-medium text-sm truncate">{employer.name}</h3>
+                {employer.is_eligible ? (
+                  <CheckCircle className="w-3.5 h-3.5 text-green-600 flex-shrink-0" />
+                ) : (
+                  <XCircle className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+                )}
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span className="truncate">{industryLabels[employer.industry] || employer.industry}</span>
+                {employer.postcode && (
+                  <>
+                    <span>•</span>
+                    <span className="flex items-center gap-0.5">
+                      <MapPin className="w-3 h-3" />
+                      {employer.postcode}
+                    </span>
+                  </>
+                )}
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            {employer.is_eligible ? (
-              <Badge variant="default" className="gap-1">
-                <CheckCircle className="w-3 h-3" />
-                Eligible
-              </Badge>
-            ) : (
-              <Badge variant="secondary" className="gap-1">
-                <XCircle className="w-3 h-3" />
-                Not Eligible
-              </Badge>
-            )}
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="h-8 w-8 p-0"
-              onClick={() => onEdit(employer)}
-            >
-              <Edit className="w-4 h-4" />
-            </Button>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10">
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Delete Employer</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Are you sure you want to delete "{employer.name}"? This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => onDelete(employer.id)}
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  >
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
-        </div>
 
-        {employer.postcode && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <MapPin className="w-4 h-4" />
-            <span>Postcode: {employer.postcode}</span>
-          </div>
-        )}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="h-7 w-7 p-0 flex-shrink-0">
+                <MoreVertical className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => onEdit(employer)}>
+                <Edit className="w-4 h-4 mr-2" />
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setIsDeleteDialogOpen(true)}
+                className="text-destructive focus:text-destructive"
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </CardContent>
+
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Employer</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete "{employer.name}"? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                onDelete(employer.id)
+                setIsDeleteDialogOpen(false)
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   )
 }
