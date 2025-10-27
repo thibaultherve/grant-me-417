@@ -109,9 +109,9 @@ export const WeeklyProgressChart = () => {
           Track your eligible days week by week
         </p>
       </CardHeader>
-      <CardContent>
+      <CardContent className="overflow-hidden">
         {/* Custom Bar Chart */}
-        <div className="relative" style={{ height: chartHeight + 40 }}>
+        <div className="relative w-full" style={{ height: chartHeight + 40 }}>
           {/* Y-axis labels */}
           <div className="absolute left-0 top-0 bottom-10 flex flex-col justify-between text-xs text-muted-foreground w-8">
             {[7, 4, 3, 2, 1, 0].map((tick) => (
@@ -122,7 +122,7 @@ export const WeeklyProgressChart = () => {
           </div>
 
           {/* Chart area */}
-          <div className="ml-10 relative" style={{ height: chartHeight }}>
+          <div className="ml-10 relative overflow-hidden" style={{ height: chartHeight }}>
             {/* Grid lines */}
             <div className="absolute inset-0 flex flex-col justify-between">
               {[7, 4, 3, 2, 1, 0].map((tick) => (
@@ -135,7 +135,7 @@ export const WeeklyProgressChart = () => {
             </div>
 
             {/* Bars */}
-            <div className="absolute inset-0 flex items-end justify-around px-2">
+            <div className="absolute inset-0 flex items-end justify-around px-2 overflow-x-auto">
               {chartData.map((data, index) => {
                 const barHeight = (data.eligible_days / maxDays) * (chartHeight - 20);
                 const isHovered = hoveredBar === index;

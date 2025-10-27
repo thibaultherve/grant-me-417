@@ -34,14 +34,7 @@ export function VisaSelector() {
     );
   }
 
-  if (visas.length === 1) {
-    return (
-      <Button variant="outline" disabled className="w-[180px] justify-between">
-        {visaTypeLabels[visas[0].visa_type]}
-      </Button>
-    );
-  }
-
+  // Always show dropdown, even with single visa (allows viewing/modifying visa)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
