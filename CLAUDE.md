@@ -21,25 +21,7 @@ For ALL React questions and solutions, you MUST use the configured MCP servers B
 
 ### Configured MCP Servers
 
-#### 1. docs-mcp-server (React Official Documentation)
-
-- **MCP Server Name**: `docs-mcp-server`
-- **Type**: SSE server on http://localhost:6280/sse
-- **Purpose**: Access official React documentation from react.dev
-- **Library Parameter**: `library: "react"` (ALWAYS use "react" as library name)
-- **Tool Function**: `mcp__docs-mcp-server__search_docs`
-- **Usage**: React APIs, hooks, components, official patterns, React 19+ features
-- **Status**: Requires local server running
-- **Example Call**:
-  ```
-  mcp__docs-mcp-server__search_docs({
-    library: "react",
-    query: "useEffect hook patterns",
-    limit: 3
-  })
-  ```
-
-#### 2. bulletproof-react Docs (Project Architecture)
+#### 1. bulletproof-react Docs (Project Architecture)
 
 - **MCP Server Name**: `bulletproof-react Docs` (note the space in the name)
 - **Type**: Remote GitMCP server
@@ -59,31 +41,15 @@ For ALL React questions and solutions, you MUST use the configured MCP servers B
 
 **BEFORE proposing ANY solution or code:**
 
-1. **Step 1**: Use **"bulletproof-react Docs"** MCP to search for:
+Use **"bulletproof-react Docs"** MCP to search for:
 
-   - Project structure patterns
-   - Code organization best practices
-   - Feature-based architecture
-   - Folder structure conventions
-   - Testing patterns
-   - State management approaches
-   - API layer patterns
-
-2. **Step 2**: Use **"docs-mcp-server"** MCP to search for:
-
-   - React API verification (ensure APIs exist in React 19+)
-   - Official examples from react.dev
-   - Hook usage patterns
-   - Component patterns
-   - Performance best practices
-
-3. **Step 3**: Synthesize both sources to create a solution that:
-
-   - Follows bulletproof-react architecture
-   - Uses current React 19+ APIs correctly
-   - Implements official React best practices
-
-4. **Step 4**: Propose your solution with citations
+- Project structure patterns
+- Code organization best practices
+- Feature-based architecture
+- Folder structure conventions
+- Testing patterns
+- State management approaches
+- API layer patterns
 
 ### Response Format Template
 
@@ -355,7 +321,7 @@ Argentina, Austria, Chile, China, Czech Republic, Hungary, Indonesia, Israel, Lu
 - Work Type: "Specified work" in eligible industries/regional areas
 - Important: Cannot be completed in less than 6 calendar months total period
 
-### Eligible Industries (ANZSIC Classification)
+### Eligible Industries
 
 1. **Plant and Animal Cultivation** - Agriculture, farming, fruit picking, livestock
 2. **Fishing and Pearling** - Commercial fishing, aquaculture, pearl diving
@@ -365,95 +331,6 @@ Argentina, Austria, Chile, China, Czech Republic, Hungary, Indonesia, Israel, Lu
 6. **Hospitality & Tourism** - Chef, guest services, dive instructor, tour guide (Northern Australia & Remote areas only, from June 2021)
 7. **Bushfire Recovery Work** - Land/property restoration, wildlife care, support services
 8. **Critical COVID-19 Work** - Medical, aged care, disability care, childcare, food processing
-
-### Key Statistics
-
-- **19 eligible countries/territories** for WHV 417
-- **~150,000+ annual applicants** across all nationalities
-- **Demographics**: Europeans (60%), Canadians (20%), Asians (20%)
-- **Highest volume**: UK, Germany, France, Ireland, Canada, Japan
-
----
-
-## Future Implementations
-
-### Internationalization (i18n)
-
-**Priority Languages:**
-
-- **Tier 1**: German, French, Italian
-- **Tier 2**: Dutch, Swedish, Danish, Norwegian
-
-**Implementation Plan:**
-
-- React i18next
-- Subdirectory URLs (/de/, /fr/)
-- Browser detection with English fallback
-
-### Progressive Enhancement
-
-- **Initial**: Simple useState/useContext
-- **Future**: React Query/SWR for server state
-- **Future**: Advanced state management as needed
-
----
-
-## Troubleshooting MCP Servers
-
-### docs-mcp-server not connecting
-
-Ensure the server is running locally:
-
-```bash
-npx @arabold/docs-mcp-server@latest --protocol http --host 0.0.0.0 --port 6280
-```
-
-Verify connection: http://localhost:6280
-
-### bulletproof-react Docs not available
-
-This uses GitMCP remote server and should work automatically. If issues persist, check network connectivity.
-
-### Verify MCP Status
-
-In Claude Code:
-
-```bash
-/mcp
-```
-
-You should see:
-
-- ✅ docs-mcp-server: connected
-- ✅ bulletproof-react Docs: connected
-
----
-
-## Common Development Patterns
-
-### Feature Creation
-
-1. Search bulletproof-react Docs: "features folder structure"
-2. Search docs-mcp-server: relevant React APIs
-3. Implement following both patterns
-
-### Component Creation
-
-1. Search bulletproof-react Docs: "components organization"
-2. Search docs-mcp-server: "component patterns" or relevant hooks
-3. Create component following both sources
-
-### State Management
-
-1. Search bulletproof-react Docs: "state management patterns"
-2. Search docs-mcp-server: "context api" or "useReducer"
-3. Implement following both guidelines
-
-### API Integration
-
-1. Search bulletproof-react Docs: "api layer patterns"
-2. Search docs-mcp-server: "data fetching" or "useEffect"
-3. Create API layer following both patterns
 
 ---
 
@@ -477,27 +354,51 @@ Claude Code must ALWAYS ask for permission before:
 - Comprehensive design checklist in `/context/design-principles.md`
 - When making visual (front-end, UI/UX) changes, always refer to these files for guidance
 
-### Quick Visual Check
+### ⚠️ MANDATORY Visual Verification with BrowserMCP
 
-IMMEDIATELY after implementing any front-end change:
+**ALWAYS verify UI/UX changes in the browser using browsermcp tools.**
 
-1. **Identify what changed** - Review the modified components/pages
-2. **Navigate to affected pages** - Use `mcp__playwright__browser_navigate` to visit each changed view
-3. **Verify design compliance** - Compare against `/context/design-principles.md` and `/context/style-guide.md`
-4. **Validate feature implementation** - Ensure the change fulfills the user's specific request
-5. **Check acceptance criteria** - Review any provided context files or requirements
-6. **Capture evidence** - Take full page screenshot at desktop viewport (1440px) of each changed view
-7. **Check for errors** - Run `mcp__playwright__browser_console_messages`
+**After ANY frontend modification, you MUST:**
 
-This verification ensures changes meet design standards and user requirements.
+1. **Navigate to the page**: Use `mcp__browsermcp__browser_navigate` to load the affected page
+2. **Take screenshot**: Use `mcp__browsermcp__browser_screenshot` to capture the current state
+3. **Verify changes**: Visually confirm that modifications are correctly applied
+4. **Test interactions**: Use browser tools to click, hover, type and verify component behavior
+5. **Check responsive design**: Test at different viewport sizes if relevant
 
-### Comprehensive Design Review
+**Verification Workflow:**
 
-Invoke the `@agent-design-review` subagent for thorough design validation when:
+```
+1. Make code changes
+2. Navigate to http://localhost:5173/[relevant-path]
+3. Take screenshot and analyze
+4. Test interactive elements (buttons, forms, etc.)
+5. Confirm changes match expectations
+6. Report findings to user
+```
 
-- Completing significant UI/UX features
-- Before finalizing PRs with visual changes
-- Needing comprehensive accessibility and responsiveness testing
+**Why This Is Critical:**
+
+- ✅ Catches visual regressions immediately
+- ✅ Validates responsive behavior
+- ✅ Confirms interactive elements work correctly
+- ✅ Prevents "looks good in code, broken in browser" issues
+- ✅ Ensures mobile-first design is properly implemented
+
+**NEVER:**
+
+- ❌ Make frontend changes without browser verification
+- ❌ Assume code changes work without visual confirmation
+- ❌ Skip screenshot capture after modifications
+- ❌ Mark UI tasks complete without browser testing
+
+**ALWAYS:**
+
+- ✅ Use browsermcp after every frontend modification
+- ✅ Take screenshots to document visual state
+- ✅ Test interactive elements in the browser
+- ✅ Verify responsive breakpoints visually
+- ✅ Include screenshot analysis in your response to user
 
 ---
 

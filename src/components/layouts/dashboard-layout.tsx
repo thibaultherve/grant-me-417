@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import { paths } from '@/config/paths';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
@@ -38,9 +39,13 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   const handleSignOut = async () => {
     try {
+      // Clear all React Query cache to prevent data leakage between users
+      queryClient.clear();
+
       // Navigate first with replace to avoid ProtectedRoute redirect
       navigate(paths.home.path, { replace: true });
       await supabase.auth.signOut();
