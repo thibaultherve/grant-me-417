@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { InfoCard } from '@/components/ui/info-card';
+import { Plus, Building2 } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
 import { EmployersList } from '@/features/employers/components/employers-list';
@@ -13,7 +14,7 @@ export const EmployersRoute = () => {
   const [isAddingEmployer, setIsAddingEmployer] = useState(false);
   const [editingEmployer, setEditingEmployer] = useState<Employer | null>(null);
 
-  // React Query hooks - cache, loading, error handling automatique
+  // React Query hooks
   const { data: employers = [], isLoading: loading, error } = useEmployers();
   const addMutation = useAddEmployer();
   const updateMutation = useUpdateEmployer();
@@ -49,19 +50,35 @@ export const EmployersRoute = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Employers</h1>
-          <p className="text-muted-foreground">
-            Manage your employers and their information
+          <p className="mt-1 text-muted-foreground">
+            Manage your employers and work locations
           </p>
         </div>
-        <Button onClick={() => setIsAddingEmployer(true)}>
+        <Button onClick={() => setIsAddingEmployer(true)} size="lg">
           <Plus className="mr-2 h-4 w-4" />
           Add Employer
         </Button>
       </div>
+
+      {/* Info tip */}
+      {employers.length === 0 && !loading && (
+        <InfoCard variant="accent">
+          <div className="flex items-start gap-4">
+            <Building2 className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-semibold mb-1">Add your first employer</h3>
+              <p className="text-sm text-muted-foreground">
+                Track where you've worked during your Working Holiday Visa. Add employer details to organize your work hours.
+              </p>
+            </div>
+          </div>
+        </InfoCard>
+      )}
 
       {/* Pass all state and handlers as props - Lift State Up pattern */}
       <EmployersList 

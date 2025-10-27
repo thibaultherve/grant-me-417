@@ -1,10 +1,14 @@
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { InfoCard } from "@/components/ui/info-card";
+import { StatCard } from "@/components/ui/stat-card";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { Button } from "@/components/ui/button";
 import { VisaSelector } from "@/features/visas/components/visa-selector";
 import { WeeklyProgressChart } from "@/features/visas/components/weekly-progress-chart";
 import { useVisaContext } from "@/features/visas/hooks/use-visa-context";
-import { Briefcase, Calendar, CheckCircle2, Clock } from "lucide-react";
+import { Briefcase, Calendar, CheckCircle2, Clock, TrendingUp, ArrowRight } from "lucide-react";
+import { Link } from "react-router";
+import { paths } from "@/config/paths";
 
 export const DashboardRoute = () => {
   const { currentVisa } = useVisaContext();
@@ -61,175 +65,196 @@ export const DashboardRoute = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground">
-            Welcome back! Track your WHV work progress here.
+          <h1 className="text-3xl font-bold tracking-tight">Welcome back,</h1>
+          <p className="mt-1 text-muted-foreground">
+            Track your Working Holiday Visa progress and manage your work hours.
           </p>
         </div>
         <VisaSelector />
       </div>
 
-      {currentVisa &&
-        (() => {
-          const visaPeriod = calculateVisaPeriodProgress(
-            currentVisa.arrival_date,
-            currentVisa.end_date
-          );
-          const isWorkComplete = currentVisa.is_eligible;
-          const workProgressColor = isWorkComplete
-            ? "bg-green-500"
-            : "bg-primary";
-          const workProgressBgColor = isWorkComplete
-            ? "bg-green-100"
-            : "bg-primary/20";
+      {!currentVisa ? (
+        <InfoCard variant="accent">
+          <div className="flex flex-col gap-4">
+            <div>
+              <h2 className="text-xl font-semibold mb-2">Get started with Grant Me 417</h2>
+              <p className="text-sm text-muted-foreground">
+                Start tracking your specified work hours to qualify for your next Working Holiday Visa.
+                Create your first visa to begin.
+              </p>
+            </div>
+            <Button asChild className="w-fit">
+              <Link to={paths.app.visas.path}>
+                Create Your First Visa
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </InfoCard>
+      ) : (
+        <>
+          {/* Visa Status Overview */}
+          <div className="flex flex-wrap items-center gap-3">
+            <StatusBadge
+              label={getVisaTypeLabel(currentVisa.visa_type)}
+              variant="info"
+            />
+            {currentVisa.is_eligible ? (
+              <StatusBadge
+                label="Eligible for Next Visa"
+                variant="success"
+                icon={CheckCircle2}
+              />
+            ) : (
+              <StatusBadge
+                label="In Progress"
+                variant="warning"
+                icon={Clock}
+              />
+            )}
+          </div>
 
-          return (
-            <Card className="border-2">
-              <CardContent className="p-6">
-                {/* Header with Visa Type Badge and Status */}
-                <div className="flex items-center justify-between mb-6">
-                  <Badge variant="outline" className="text-sm font-medium">
-                    {getVisaTypeLabel(currentVisa.visa_type)}
-                  </Badge>
-                  {isWorkComplete ? (
-                    <Badge className="bg-green-600">
-                      <CheckCircle2 className="h-3 w-3 mr-1" />
-                      Eligible
-                    </Badge>
-                  ) : (
-                    <Badge variant="secondary">
-                      <Clock className="h-3 w-3 mr-1" />
-                      In Progress
-                    </Badge>
-                  )}
-                </div>
+          {/* Stats Grid */}
+          {(() => {
+            const visaPeriod = calculateVisaPeriodProgress(
+              currentVisa.arrival_date,
+              currentVisa.end_date
+            );
 
-                <div className="space-y-6">
-                  {/* Visa Period Progress Bar - Amber */}
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-5 w-5 text-amber-600" />
-                      <h3 className="text-lg font-semibold">Visa Period</h3>
+            return (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <StatCard
+                  title="Work Days Completed"
+                  value={currentVisa.eligible_days}
+                  description={`of ${currentVisa.days_required} required`}
+                  icon={Briefcase}
+                  trend={
+                    currentVisa.eligible_days > 0
+                      ? {
+                          value: Number(currentVisa.progress_percentage),
+                          label: "progress"
+                        }
+                      : undefined
+                  }
+                />
+                <StatCard
+                  title="Days Remaining"
+                  value={currentVisa.days_remaining}
+                  description="to complete requirement"
+                  icon={Calendar}
+                />
+                <StatCard
+                  title="Visa Period"
+                  value={formatDaysLeft(visaPeriod.daysLeft)}
+                  description={`${visaPeriod.progress.toFixed(0)}% used`}
+                  icon={Clock}
+                />
+                <StatCard
+                  title="Overall Progress"
+                  value={`${currentVisa.progress_percentage}%`}
+                  description={currentVisa.is_eligible ? "Completed!" : "In progress"}
+                  icon={TrendingUp}
+                />
+              </div>
+            );
+          })()}
+
+          {/* Progress Overview Card */}
+          {(() => {
+            const visaPeriod = calculateVisaPeriodProgress(
+              currentVisa.arrival_date,
+              currentVisa.end_date
+            );
+            const isWorkComplete = currentVisa.is_eligible;
+
+            return (
+              <Card>
+                <CardContent className="p-6">
+                  <h2 className="text-lg font-semibold mb-6">Progress Details</h2>
+
+                  <div className="space-y-8">
+                    {/* Work Progress */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Briefcase className="h-5 w-5 text-muted-foreground" />
+                          <span className="font-medium">Work Requirement</span>
+                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          {currentVisa.eligible_days} / {currentVisa.days_required} days
+                        </span>
+                      </div>
+                      <div className="relative h-2 w-full overflow-hidden rounded-full bg-muted">
+                        <div
+                          className={`h-full transition-all ${
+                            isWorkComplete ? 'bg-success' : 'bg-primary'
+                          }`}
+                          style={{
+                            width: `${Math.min(100, Number(currentVisa.progress_percentage))}%`,
+                          }}
+                        />
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        {isWorkComplete
+                          ? "✓ Work requirement completed!"
+                          : `${currentVisa.days_remaining} days remaining`
+                        }
+                      </p>
                     </div>
 
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="font-medium text-muted-foreground">
-                        Start
-                      </span>
-                      <span className="font-medium text-muted-foreground">
-                        End
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="font-semibold">
-                        {formatDate(currentVisa.arrival_date)}
-                      </span>
-                      <span className="font-semibold">
-                        {formatDate(currentVisa.end_date)}
-                      </span>
-                    </div>
-
-                    <div className="relative h-3 w-full overflow-hidden rounded-full bg-amber-100">
-                      <div
-                        className="h-full bg-amber-500 transition-all"
-                        style={{ width: `${visaPeriod.progress}%` }}
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">
-                        {visaPeriod.daysPassed} days elapsed
-                      </span>
-                      <span className="font-medium text-amber-700">
-                        {formatDaysLeft(visaPeriod.daysLeft)}
-                      </span>
-                    </div>
-
-                    <div className="text-center">
-                      <span className="text-xs text-muted-foreground">
-                        {visaPeriod.progress.toFixed(1)}% of visa period used
-                      </span>
+                    {/* Visa Period */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-5 w-5 text-muted-foreground" />
+                          <span className="font-medium">Visa Period</span>
+                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          {formatDate(currentVisa.arrival_date)} - {formatDate(currentVisa.end_date)}
+                        </span>
+                      </div>
+                      <div className="relative h-2 w-full overflow-hidden rounded-full bg-muted">
+                        <div
+                          className="h-full bg-amber-500 transition-all"
+                          style={{ width: `${visaPeriod.progress}%` }}
+                        />
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        {formatDaysLeft(visaPeriod.daysLeft)} ({visaPeriod.progress.toFixed(0)}% used)
+                      </p>
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+            );
+          })()}
 
-                  <Separator />
+          {/* Quick Actions Card */}
+          <InfoCard variant="accent">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h3 className="font-semibold mb-1">Track your work hours</h3>
+                <p className="text-sm text-muted-foreground">
+                  Log your specified work hours to track progress toward your next visa.
+                </p>
+              </div>
+              <Button asChild>
+                <Link to={paths.app.hours.path}>
+                  Add Hours
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </InfoCard>
 
-                  {/* Work Requirement Progress Bar - Blue/Green */}
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <Briefcase className="h-5 w-5 text-primary" />
-                      <h3 className="text-lg font-semibold">Work Progress</h3>
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="font-medium text-muted-foreground">
-                        Start
-                      </span>
-                      <span className="font-medium text-muted-foreground">
-                        Goal
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="font-semibold">0 days</span>
-                      <span className="font-semibold">
-                        {currentVisa.days_required} days
-                      </span>
-                    </div>
-
-                    <div
-                      className={`relative h-3 w-full overflow-hidden rounded-full ${workProgressBgColor}`}
-                    >
-                      <div
-                        className={`h-full ${workProgressColor} transition-all`}
-                        style={{
-                          width: `${Math.min(
-                            100,
-                            Number(currentVisa.progress_percentage)
-                          )}%`,
-                        }}
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">
-                        {currentVisa.eligible_days} of{" "}
-                        {currentVisa.days_required} days
-                      </span>
-                      <span
-                        className={`font-medium ${
-                          isWorkComplete ? "text-green-700" : "text-primary"
-                        }`}
-                      >
-                        {currentVisa.progress_percentage}%
-                      </span>
-                    </div>
-
-                    <div className="text-center">
-                      {isWorkComplete ? (
-                        <span className="text-xs font-medium text-green-700">
-                          ✓ Work requirement completed!
-                        </span>
-                      ) : (
-                        <span className="text-xs text-muted-foreground">
-                          {currentVisa.days_remaining} days remaining to
-                          complete
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })()}
-
-      {/* Weekly Progress Chart */}
-      {currentVisa && <WeeklyProgressChart />}
+          {/* Weekly Progress Chart */}
+          <WeeklyProgressChart />
+        </>
+      )}
     </div>
   );
 };

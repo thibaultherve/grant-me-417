@@ -54,7 +54,12 @@
       "Read(//c/Users/thiba/Desktop/ui design idea/**)",
       "Bash(cp:*)",
       "Bash(timeout:*)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(git checkout:*)",
+      "Bash(pnpm list:*)",
+      "Read(//c/c/Users/thiba/Documents/dev/get-granted-417/**)",
+      "Bash(git symbolic-ref:*)",
+      "Bash(git branch:*)"
     ],
     "deny": [],
     "ask": []

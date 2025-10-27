@@ -129,7 +129,7 @@ Sources:
 **ALWAYS:**
 
 - ✅ Use ListMcpResourcesTool/ReadMcpResourceTool with `server: "bulletproof-react Docs"` FIRST for architecture
-- ✅ Use mcp__docs-mcp-server__search_docs with `library: "react"` SECOND for React APIs
+- ✅ Use mcp**docs-mcp-server**search_docs with `library: "react"` SECOND for React APIs
 - ✅ Verify APIs exist in React 19+
 - ✅ Follow bulletproof-react folder structure
 - ✅ Cite sources from both MCP servers
@@ -157,25 +157,29 @@ Before finalizing ANY response:
 ### Quick Reference: MCP Tool Usage
 
 **For bulletproof-react architecture:**
+
 ```javascript
 // List available resources
-ListMcpResourcesTool({ server: "bulletproof-react Docs" })
+ListMcpResourcesTool({ server: "bulletproof-react Docs" });
 
 // Read specific resource
 ReadMcpResourceTool({
   server: "bulletproof-react Docs",
-  uri: "resource-uri-from-list"
-})
+  uri: "resource-uri-from-list",
+});
 ```
 
 **For React official documentation:**
+
 ```javascript
 // Search React docs
-mcp__docs-mcp-server__search_docs({
-  library: "react",  // ALWAYS "react", never "bulletproof-react"
-  query: "your search query",
-  limit: 3
-})
+mcp__docs -
+  mcp -
+  server__search_docs({
+    library: "react", // ALWAYS "react", never "bulletproof-react"
+    query: "your search query",
+    limit: 3,
+  });
 ```
 
 ---
@@ -458,10 +462,42 @@ You should see:
 **NEVER create commits or push to repository without explicit user authorization.**
 
 Claude Code must ALWAYS ask for permission before:
+
 - Running `git add`
 - Running `git commit`
 - Running `git push`
 - Making any git operations that modify history
+
+---
+
+## Visual Development
+
+### Design Principles
+
+- Comprehensive design checklist in `/context/design-principles.md`
+- When making visual (front-end, UI/UX) changes, always refer to these files for guidance
+
+### Quick Visual Check
+
+IMMEDIATELY after implementing any front-end change:
+
+1. **Identify what changed** - Review the modified components/pages
+2. **Navigate to affected pages** - Use `mcp__playwright__browser_navigate` to visit each changed view
+3. **Verify design compliance** - Compare against `/context/design-principles.md` and `/context/style-guide.md`
+4. **Validate feature implementation** - Ensure the change fulfills the user's specific request
+5. **Check acceptance criteria** - Review any provided context files or requirements
+6. **Capture evidence** - Take full page screenshot at desktop viewport (1440px) of each changed view
+7. **Check for errors** - Run `mcp__playwright__browser_console_messages`
+
+This verification ensures changes meet design standards and user requirements.
+
+### Comprehensive Design Review
+
+Invoke the `@agent-design-review` subagent for thorough design validation when:
+
+- Completing significant UI/UX features
+- Before finalizing PRs with visual changes
+- Needing comprehensive accessibility and responsiveness testing
 
 ---
 

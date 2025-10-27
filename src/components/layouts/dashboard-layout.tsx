@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { paths } from '@/config/paths';
 import { Button } from '@/components/ui/button';
@@ -13,8 +13,6 @@ import {
   Plane,
   User,
   LogOut,
-  ChevronLeft,
-  ChevronRight
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -40,21 +38,6 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [enableTransitions, setEnableTransitions] = useState(false);
-
-  // Enable transitions after initial mount to prevent transition on page load
-  React.useEffect(() => {
-    setEnableTransitions(true);
-  }, []);
-
-  const handleToggleSidebar = () => {
-    setIsAnimating(true);
-    setSidebarCollapsed(!sidebarCollapsed);
-    // Remove blur after animation completes (300ms)
-    setTimeout(() => setIsAnimating(false), 300);
-  };
 
   const handleSignOut = async () => {
     try {
@@ -142,124 +125,83 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       </nav>
 
       {/* Desktop sidebar */}
-      <aside className={`hidden md:fixed md:inset-y-0 md:flex md:flex-col ${
-        enableTransitions ? 'transition-all duration-300 ease-in-out' : ''
-      } ${sidebarCollapsed ? 'md:w-16' : 'md:w-64'}`}>
-        <div className="flex min-h-0 flex-1 flex-col border-r bg-background">
-          <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4 scrollbar-hide">
-            <div className="flex flex-shrink-0 items-center justify-between px-4 overflow-hidden">
-              <div className="relative overflow-hidden flex-1 mr-2">
-                <h1
-                  className="text-xl font-bold whitespace-nowrap"
-                  style={{
-                    maskImage: isAnimating ? 'linear-gradient(to right, black 70%, transparent 100%)' : 'none',
-                    WebkitMaskImage: isAnimating ? 'linear-gradient(to right, black 70%, transparent 100%)' : 'none',
-                    transition: 'mask-image 0.3s ease-in-out, -webkit-mask-image 0.3s ease-in-out'
-                  }}
-                >
-                  Grant Me 417
-                </h1>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleToggleSidebar}
-                className="flex-shrink-0"
-                title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-              >
-                {sidebarCollapsed ? (
-                  <ChevronRight className="h-4 w-4" />
-                ) : (
-                  <ChevronLeft className="h-4 w-4" />
-                )}
-              </Button>
-            </div>
-            <nav className="mt-5 flex-1 space-y-1 px-2">
-              {navigation.map((item) => {
-                const Icon = item.icon;
-                const isActive = location.pathname === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-all duration-300 ${
-                      isActive
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-foreground hover:bg-accent'
-                    } ${sidebarCollapsed ? 'justify-center' : ''}`}
-                    title={sidebarCollapsed ? item.name : ''}
-                  >
-                    <Icon className={`h-5 w-5 flex-shrink-0 ${
-                      sidebarCollapsed ? '' : 'mr-3'
-                    }`} />
-                    {!sidebarCollapsed && (
-                      <span className="transition-opacity duration-300">
-                        {item.name}
-                      </span>
-                    )}
-                  </Link>
-                );
-              })}
-              {/* Profile link for desktop */}
-              <Link
-                to={paths.app.profile.path}
-                className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-all duration-300 ${
-                  location.pathname === paths.app.profile.path
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-foreground hover:bg-accent'
-                } ${sidebarCollapsed ? 'justify-center' : ''}`}
-                title={sidebarCollapsed ? 'Profile' : ''}
-              >
-                <User className={`h-5 w-5 flex-shrink-0 ${
-                  sidebarCollapsed ? '' : 'mr-3'
-                }`} />
-                {!sidebarCollapsed && (
-                  <span className="transition-opacity duration-300">
-                    Profile
-                  </span>
-                )}
-              </Link>
-            </nav>
+      <aside className="hidden md:fixed md:inset-y-0 md:flex md:w-56 md:flex-col">
+        <div className="flex min-h-0 flex-1 flex-col border-r border-sidebar-border bg-sidebar">
+          {/* Logo */}
+          <div className="flex h-16 flex-shrink-0 items-center px-6">
+            <h1 className="text-xl font-bold text-sidebar-foreground">
+              Grant Me 417
+            </h1>
           </div>
-          <div className="flex flex-shrink-0 border-t p-4">
-            {sidebarCollapsed ? (
-              <div className="flex flex-col items-center gap-2 w-full">
-                <ThemeToggle />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleSignOut}
-                  title="Sign out"
+
+          {/* Navigation */}
+          <nav className="flex-1 space-y-0.5 px-3 py-4">
+            {navigation.map((item) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-normal transition-all duration-200 ${
+                    isActive
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'text-sidebar-foreground hover:bg-sidebar-accent'
+                  }`}
                 >
-                  <LogOut className="h-4 w-4" />
-                </Button>
-              </div>
-            ) : (
-              <div className="flex w-full items-center justify-between">
-                <div className="flex flex-col min-w-0 flex-1">
-                  <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                  <Icon className={`h-5 w-5 flex-shrink-0 ${isActive ? '' : 'text-muted-foreground'}`} />
+                  <span>{item.name}</span>
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Bottom section */}
+          <div className="flex-shrink-0 border-t border-sidebar-border">
+            {/* User info */}
+            <div className="px-3 py-4">
+              <div className="flex flex-col gap-3">
+                {/* Profile link */}
+                <Link
+                  to={paths.app.profile.path}
+                  className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-normal transition-all duration-200 ${
+                    location.pathname === paths.app.profile.path
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'text-sidebar-foreground hover:bg-sidebar-accent'
+                  }`}
+                >
+                  <User className={`h-5 w-5 flex-shrink-0 ${location.pathname === paths.app.profile.path ? '' : 'text-muted-foreground'}`} />
+                  <span>Profile</span>
+                </Link>
+
+                {/* User email */}
+                <div className="px-3">
+                  <p className="text-xs text-muted-foreground truncate">
+                    {user?.email}
+                  </p>
                 </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <ThemeToggle />
+
+                {/* Actions */}
+                <div className="flex items-center justify-between px-3">
+                  <ThemeToggle size="sm" />
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={handleSignOut}
                     title="Sign out"
+                    className="h-8 w-8"
                   >
                     <LogOut className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </aside>
 
       {/* Main content */}
-      <div className={`flex flex-1 flex-col ${
-        enableTransitions ? 'transition-all duration-300 ease-in-out' : ''
-      } ${sidebarCollapsed ? 'md:pl-16' : 'md:pl-64'}`}>
+      <div className="flex flex-1 flex-col md:pl-56">
         <main className="flex-1 pb-16 md:pb-0">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
             {children}

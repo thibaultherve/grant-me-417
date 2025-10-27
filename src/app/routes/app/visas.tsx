@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
+import { InfoCard } from '@/components/ui/info-card';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Plus, LayoutDashboard } from 'lucide-react';
+import { Plus, LayoutDashboard, Plane } from 'lucide-react';
 import { AddVisaForm } from '@/features/visas/components/add-visa-form';
 import { VisasList } from '@/features/visas/components/visas-list';
 import type { CreateVisaFormData } from '@/features/visas/schemas';
@@ -30,19 +31,35 @@ export const VisasRoute = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Visas</h1>
-          <p className="text-muted-foreground">
-            Manage your WHV here. Add up to 3 visas.
+          <p className="mt-1 text-muted-foreground">
+            Manage your Working Holiday Visas (up to 3 visas)
           </p>
         </div>
-        <Button onClick={() => setIsAddingVisa(true)}>
+        <Button onClick={() => setIsAddingVisa(true)} size="lg" disabled={visas.length >= 3}>
           <Plus className="mr-2 h-4 w-4" />
           Add Visa
         </Button>
       </div>
+
+      {/* Info tip */}
+      {visas.length === 0 && !isLoading && (
+        <InfoCard variant="accent">
+          <div className="flex items-start gap-4">
+            <Plane className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-semibold mb-1">Create your first visa</h3>
+              <p className="text-sm text-muted-foreground">
+                Start by adding your current Working Holiday Visa (subclass 417). You can track work progress for up to 3 visas.
+              </p>
+            </div>
+          </div>
+        </InfoCard>
+      )}
 
       {/* Pass all state and handlers as props - Lift State Up pattern */}
       <VisasList

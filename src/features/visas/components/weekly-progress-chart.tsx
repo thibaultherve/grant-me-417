@@ -1,24 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart3 } from "lucide-react";
-import { useEffect, useState } from "react";
-import {
-  Bar,
-  BarChart,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { useState } from "react";
 import { useVisaWeeklyProgress } from "../hooks/use-visa-weekly-progress";
+
+interface ChartData {
+  week: string;
+  eligible_days: number;
+  hours: number;
+  eligible_hours: number;
+  days_worked: number;
+  full_date: string;
+}
 
 export const WeeklyProgressChart = () => {
   const { weeklyProgress, loading } = useVisaWeeklyProgress();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [hoveredBar, setHoveredBar] = useState<number | null>(null);
 
   if (loading) {
     return (
@@ -59,7 +55,7 @@ export const WeeklyProgressChart = () => {
   }
 
   // Transform data for the chart
-  const chartData = weeklyProgress.map((week) => {
+  const chartData: ChartData[] = weeklyProgress.map((week) => {
     const startDate = new Date(week.week_start_date);
     const weekLabel = `${startDate.getDate()}/${startDate.getMonth() + 1}`;
 
@@ -73,14 +69,33 @@ export const WeeklyProgressChart = () => {
     };
   });
 
-  // Color gradient from yellow to green based on eligible_days
-  const getBarColor = (eligibleDays: number) => {
-    if (eligibleDays === 7) return "#22c55e"; // green-500 (full week)
-    if (eligibleDays === 4) return "#84cc16"; // lime-500
-    if (eligibleDays === 3) return "#a3e635"; // lime-400
-    if (eligibleDays === 2) return "#eab308"; // yellow-500
-    if (eligibleDays === 1) return "#fbbf24"; // amber-400
-    return "#94a3b8"; // slate-400 (0 days)
+  // Modern neutral color scheme - NO yellow, only grays and greens
+  const getBarColor = (eligibleDays: number, isHovered: boolean) => {
+    const opacity = isHovered ? "1" : "0.9";
+    if (eligibleDays === 7) return `rgba(34, 197, 94, ${opacity})`; // green-500 (full week)
+    if (eligibleDays >= 5) return `rgba(74, 222, 128, ${opacity})`; // green-400 (5-6 days)
+    if (eligibleDays >= 3) return `rgba(134, 239, 172, ${opacity})`; // green-300 (3-4 days)
+    if (eligibleDays >= 1) return `rgba(156, 163, 175, ${opacity})`; // gray-400 (1-2 days)
+    return "transparent"; // 0 days
+  };
+
+  const maxDays = 7;
+  const chartHeight = 300;
+  const barWidth = Math.min(40, Math.floor((100 / chartData.length) * 8));
+
+  const formatTooltipDate = (dateString: string) => {
+    const weekStart = new Date(dateString);
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+
+    const formatDate = (date: Date) => {
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = String(date.getFullYear()).slice(-2);
+      return `${day}/${month}/${year}`;
+    };
+
+    return `${formatDate(weekStart)} - ${formatDate(weekEnd)}`;
   };
 
   return (
@@ -95,113 +110,104 @@ export const WeeklyProgressChart = () => {
         </p>
       </CardHeader>
       <CardContent>
-        <style>{`
-          .recharts-bar-rectangle:hover {
-            filter: brightness(1.2);
-            transition: filter 0.2s ease;
-          }
-        `}</style>
-        {mounted && (
-          <div className="w-full">
-            <ResponsiveContainer width="100%" height={300}>
-            <BarChart
-              data={chartData}
-              margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-            >
-              <XAxis
-                dataKey="week"
-                tick={{ fontSize: 12 }}
-                className="text-muted-foreground"
-              />
-              <YAxis
-                tick={{ fontSize: 12 }}
-                className="text-muted-foreground"
-                domain={[0, 7]}
-                ticks={[0, 1, 2, 3, 4, 7]}
-              />
-              <Bar dataKey="eligible_days" radius={[4, 4, 0, 0]}>
-                {chartData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={
-                      entry.eligible_days === 0
-                        ? "transparent"
-                        : getBarColor(entry.eligible_days)
-                    }
-                  />
-                ))}
-              </Bar>
-              <Tooltip
-                cursor={false}
-                wrapperStyle={{ outline: 'none' }}
-                content={({ active, payload }) => {
-                  if (active && payload && payload.length) {
-                    const data = payload[0].payload;
+        {/* Custom Bar Chart */}
+        <div className="relative" style={{ height: chartHeight + 40 }}>
+          {/* Y-axis labels */}
+          <div className="absolute left-0 top-0 bottom-10 flex flex-col justify-between text-xs text-muted-foreground w-8">
+            {[7, 4, 3, 2, 1, 0].map((tick) => (
+              <div key={tick} className="text-right pr-2">
+                {tick}
+              </div>
+            ))}
+          </div>
 
-                    // Don't show tooltip if eligible_days is 0
-                    if (data.eligible_days === 0) {
-                      return null;
-                    }
+          {/* Chart area */}
+          <div className="ml-10 relative" style={{ height: chartHeight }}>
+            {/* Grid lines */}
+            <div className="absolute inset-0 flex flex-col justify-between">
+              {[7, 4, 3, 2, 1, 0].map((tick) => (
+                <div
+                  key={tick}
+                  className="border-t border-border/40"
+                  style={{ width: '100%' }}
+                />
+              ))}
+            </div>
 
-                    const weekStart = new Date(data.full_date);
-                    const weekEnd = new Date(weekStart);
-                    weekEnd.setDate(weekStart.getDate() + 6);
+            {/* Bars */}
+            <div className="absolute inset-0 flex items-end justify-around px-2">
+              {chartData.map((data, index) => {
+                const barHeight = (data.eligible_days / maxDays) * (chartHeight - 20);
+                const isHovered = hoveredBar === index;
 
-                    const formatDate = (date: Date) => {
-                      const day = String(date.getDate()).padStart(2, "0");
-                      const month = String(date.getMonth() + 1).padStart(
-                        2,
-                        "0"
-                      );
-                      const year = String(date.getFullYear()).slice(-2);
-                      return `${day}/${month}/${year}`;
-                    };
+                return (
+                  <div
+                    key={index}
+                    className="relative flex flex-col items-center justify-end"
+                    style={{ width: `${barWidth}px` }}
+                    onMouseEnter={() => setHoveredBar(index)}
+                    onMouseLeave={() => setHoveredBar(null)}
+                  >
+                    {/* Bar */}
+                    <div
+                      style={{
+                        height: barHeight,
+                        backgroundColor: getBarColor(data.eligible_days, isHovered),
+                        width: '100%',
+                        borderRadius: '4px 4px 0 0',
+                        cursor: data.eligible_days > 0 ? 'pointer' : 'default',
+                        transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+                      }}
+                      className="transition-all duration-200"
+                    />
 
-                    return (
-                      <div className="bg-background border rounded-lg shadow-lg p-3 space-y-1">
-                        <p className="font-semibold text-sm">
-                          {formatDate(weekStart)} - {formatDate(weekEnd)}
+                    {/* Tooltip */}
+                    {isHovered && data.eligible_days > 0 && (
+                      <div
+                        className="absolute bottom-full mb-2 bg-background border border-border rounded-lg shadow-lg p-3 space-y-1 z-10 min-w-[180px] transition-all duration-200"
+                      >
+                        <p className="font-semibold text-xs">
+                          {formatTooltipDate(data.full_date)}
                         </p>
-                        <p className="text-sm">
+                        <p className="text-xs">
                           <span className="font-medium">Eligible Days:</span>{" "}
                           {data.eligible_days}
                         </p>
-                        <p className="text-sm">
+                        <p className="text-xs">
                           <span className="font-medium">Eligible Hours:</span>{" "}
                           {data.eligible_hours}h
                         </p>
                       </div>
-                    );
-                  }
-                  return null;
-                }}
-              />
-            </BarChart>
-            </ResponsiveContainer>
-          </div>
-        )}
+                    )}
 
-        {/* Legend */}
-        <div className="mt-4 flex flex-wrap gap-3 justify-center text-xs">
+                    {/* X-axis label */}
+                    <div className="mt-2 text-xs text-muted-foreground whitespace-nowrap">
+                      {data.week}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Legend with neutral colors */}
+        <div className="mt-6 flex flex-wrap gap-3 justify-center text-xs">
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-amber-400" />
-            <span>1 day (6-11h)</span>
+            <div className="w-3 h-3 rounded bg-gray-400" />
+            <span className="text-muted-foreground">1-2 days</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-yellow-500" />
-            <span>2 days (12-17h)</span>
+            <div className="w-3 h-3 rounded bg-green-300" />
+            <span className="text-muted-foreground">3-4 days</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-lime-400" />
-            <span>3 days (18-23h)</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-lime-500" />
-            <span>4 days (24-29h)</span>
+            <div className="w-3 h-3 rounded bg-green-400" />
+            <span className="text-muted-foreground">5-6 days</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded bg-green-500" />
-            <span>7 days (30h+)</span>
+            <span className="text-muted-foreground">7 days (full)</span>
           </div>
         </div>
       </CardContent>
