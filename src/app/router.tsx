@@ -54,7 +54,7 @@ const createAppRouter = () =>
             {
               index: true,
               lazy: async () => {
-                const { HoursRoute } = await import('./routes/app/hours');
+                const { HoursRoute } = await import('./routes/app/hours/hours');
                 return { Component: HoursRoute };
               },
             },

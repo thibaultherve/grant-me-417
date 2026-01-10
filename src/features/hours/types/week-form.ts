@@ -100,4 +100,6 @@ export type WeekFormReturn = {
   goNextWeek: () => void;
   /** Submit form and save hours */
   submit: () => Promise<boolean>;
+  /** Dates that have work hours logged (for calendar highlighting) */
+  datesWithHours: Date[];
 };

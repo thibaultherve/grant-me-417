@@ -31,7 +31,10 @@
       "Bash(gh pr view:*)",
       "Bash(git pull:*)",
       "Bash(git stash:*)",
-      "Bash(git mv:*)"
+      "Bash(git mv:*)",
+      "Bash(pnpm exec tsc:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs"
     ]
   },
   "enableAllProjectMcpServers": true,

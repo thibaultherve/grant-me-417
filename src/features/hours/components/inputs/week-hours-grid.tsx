@@ -62,6 +62,8 @@ interface WeekHoursGridProps {
   isDirty: boolean;
   /** Whether all inputs are disabled */
   disabled?: boolean;
+  /** Whether to show day selection checkboxes (for auto-distribute) */
+  showDaySelection?: boolean;
   /** Additional CSS classes for the container */
   className?: string;
 }
@@ -78,6 +80,7 @@ export const WeekHoursGrid = memo(function WeekHoursGrid({
   onReset,
   isDirty,
   disabled = false,
+  showDaySelection = false,
   className,
 }: WeekHoursGridProps) {
   return (
@@ -91,13 +94,10 @@ export const WeekHoursGrid = memo(function WeekHoursGrid({
         <div className="min-w-fit p-4">
           {/* Grid container */}
           <div className="flex items-end gap-3">
-            {/* Employer column */}
+            {/* Hours column */}
             <div className="flex min-w-24 flex-col items-start justify-end gap-1 pb-1">
-              <span className="text-xs font-medium text-muted-foreground">
-                Employer
-              </span>
               <span className="text-sm font-medium leading-9 truncate max-w-32">
-                {employerName}
+                Hours
               </span>
             </div>
 
@@ -107,17 +107,19 @@ export const WeekHoursGrid = memo(function WeekHoursGrid({
                 key={column.dateKey}
                 className="flex flex-col items-center gap-1"
               >
-                {/* Day selection checkbox */}
-                <div className="flex items-center justify-center h-5">
-                  <Checkbox
-                    checked={selectedDays[column.dateKey] ?? false}
-                    onCheckedChange={(checked) =>
-                      onDaySelectedChange(column.dateKey, checked === true)
-                    }
-                    disabled={disabled}
-                    aria-label={`Select ${column.dayName} for auto-distribute`}
-                  />
-                </div>
+                {/* Day selection checkbox - only visible when auto-distribute is enabled */}
+                {showDaySelection && (
+                  <div className="flex items-center justify-center h-5">
+                    <Checkbox
+                      checked={selectedDays[column.dateKey] ?? false}
+                      onCheckedChange={(checked) =>
+                        onDaySelectedChange(column.dateKey, checked === true)
+                      }
+                      disabled={disabled}
+                      aria-label={`Select ${column.dayName} for auto-distribute`}
+                    />
+                  </div>
+                )}
 
                 {/* Day hours cell */}
                 <DayHoursCell
