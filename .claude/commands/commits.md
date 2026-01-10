@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(git add:*), Bash(git diff:*), Bash(git commit:*), Bash(git push:*)
+allowed-tools: Bash(git *)
 description: Quick commit and push following Conventional Commits
 model: haiku
 ---

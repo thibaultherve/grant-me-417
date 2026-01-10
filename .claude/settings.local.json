@@ -20,13 +20,15 @@
       "Bash(npm run build:*)",
       "Bash(npx prettier:*)",
       "Bash(npx shadcn@latest add:*)",
-      "Bash(pnpm run build:*)"
+      "Bash(pnpm run build:*)",
+      "Bash(pnpm dev)",
+      "Bash(timeout:*)"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "supabase",
     "shadcn",
     "context7"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }

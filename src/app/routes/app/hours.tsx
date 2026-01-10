@@ -1,21 +1,21 @@
 import { CalendarClock, Plus } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router';
 
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+} from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { InfoCard } from '@/components/ui/info-card';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from '@/components/ui/sheet';
+import { paths } from '@/config/paths';
 import { useHours } from '@/features/hours/api/use-hours';
-import { AddHoursForm } from '@/features/hours/components/add-hours-form';
 import { ModernHoursTable } from '@/features/hours/components/modern-hours-table';
 import type { SortOptions } from '@/features/hours/types';
 
 export const HoursRoute = () => {
-  const [isAddingHours, setIsAddingHours] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOptions, setSortOptions] = useState<SortOptions>({
     field: 'work_date',
@@ -29,12 +29,17 @@ export const HoursRoute = () => {
     sort: sortOptions,
   });
 
-  const handleAddHoursSuccess = () => {
-    setIsAddingHours(false);
-  };
-
   return (
     <div className="space-y-6">
+      {/* Breadcrumb */}
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbPage>Work Hours</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       {/* Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
@@ -43,9 +48,11 @@ export const HoursRoute = () => {
             Track your specified work hours for visa eligibility
           </p>
         </div>
-        <Button onClick={() => setIsAddingHours(true)} size="lg">
-          <Plus className="mr-2 h-4 w-4" />
-          Log Hours
+        <Button asChild size="lg">
+          <Link to={paths.app.hours.edit.getHref()}>
+            <Plus className="mr-2 h-4 w-4" />
+            Edit Hours
+          </Link>
         </Button>
       </div>
 
@@ -79,21 +86,6 @@ export const HoursRoute = () => {
         setSortOptions={setSortOptions}
         limit={limit}
       />
-
-      <Sheet open={isAddingHours} onOpenChange={setIsAddingHours}>
-        <SheetContent
-          side="right"
-          className="w-full sm:max-w-4xl overflow-y-auto p-6"
-        >
-          <SheetHeader className="mb-3">
-            <SheetTitle>Log Work Hours</SheetTitle>
-          </SheetHeader>
-          <AddHoursForm
-            onSuccess={handleAddHoursSuccess}
-            onCancel={() => setIsAddingHours(false)}
-          />
-        </SheetContent>
-      </Sheet>
     </div>
   );
 };
