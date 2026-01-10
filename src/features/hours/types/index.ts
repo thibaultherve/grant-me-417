@@ -16,7 +16,12 @@ export type HourEntryWithEmployer = HourEntry & {
 
 export type SortOrder = 'asc' | 'desc';
 
-export type SortField = 'work_date' | 'employer_name' | 'industry' | 'hours' | 'is_eligible';
+export type SortField =
+  | 'work_date'
+  | 'employer_name'
+  | 'industry'
+  | 'hours'
+  | 'is_eligible';
 
 export type SortOptions = {
   field: SortField;
@@ -49,3 +54,11 @@ export type WeekWorkEntryInput = {
     sunday: boolean;
   };
 };
+
+// Week form types
+export type {
+  WeekFormState,
+  WeekFormActions,
+  DayColumn,
+  UseWeekFormStateReturn,
+} from './week-form';

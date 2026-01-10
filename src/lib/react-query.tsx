@@ -32,7 +32,7 @@ const queryConfig = {
     retry: 1,
 
     // Durée avant retry (exponentielle)
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 30000),
   },
   mutations: {
     // Pas de retry automatique pour les mutations (POST, PUT, DELETE)
@@ -67,13 +67,16 @@ export const queryKeys = {
   },
   hours: {
     all: ['hours'] as const,
-    list: (filters: Record<string, unknown>) => ['hours', 'list', filters] as const,
+    list: (filters: Record<string, unknown>) =>
+      ['hours', 'list', filters] as const,
     detail: (id: string) => ['hours', id] as const,
-    byEmployer: (employerId: string) => ['hours', 'employer', employerId] as const,
+    byEmployer: (employerId: string) =>
+      ['hours', 'employer', employerId] as const,
   },
   visas: {
     all: ['visas'] as const,
     detail: (id: string) => ['visas', id] as const,
-    weeklyProgress: (visaId: string) => ['visas', visaId, 'weekly-progress'] as const,
+    weeklyProgress: (visaId: string) =>
+      ['visas', visaId, 'weekly-progress'] as const,
   },
 } as const;

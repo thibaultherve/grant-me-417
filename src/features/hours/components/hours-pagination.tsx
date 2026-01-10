@@ -1,5 +1,6 @@
-import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 
 export type HoursPaginationProps = {
   currentPage: number;
@@ -23,7 +24,7 @@ export const HoursPagination = ({
   const getVisiblePages = () => {
     const pages = [];
     const maxVisible = 5;
-    
+
     if (totalPages <= maxVisible) {
       // Show all pages if total is small
       for (let i = 1; i <= totalPages; i++) {
@@ -32,7 +33,7 @@ export const HoursPagination = ({
     } else {
       // Complex logic for showing pages with ellipsis
       const halfVisible = Math.floor(maxVisible / 2);
-      
+
       if (currentPage <= halfVisible + 1) {
         // Show first pages
         for (let i = 1; i <= maxVisible - 1; i++) {
@@ -48,13 +49,17 @@ export const HoursPagination = ({
       } else {
         // Show middle pages
         pages.push(1, '...');
-        for (let i = currentPage - halfVisible + 1; i <= currentPage + halfVisible - 1; i++) {
+        for (
+          let i = currentPage - halfVisible + 1;
+          i <= currentPage + halfVisible - 1;
+          i++
+        ) {
           pages.push(i);
         }
         pages.push('...', totalPages);
       }
     }
-    
+
     return pages;
   };
 

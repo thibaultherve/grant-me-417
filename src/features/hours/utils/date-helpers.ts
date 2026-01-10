@@ -7,7 +7,7 @@
  * @module date-helpers
  */
 
-import { format, startOfWeek, addDays } from 'date-fns'
+import { format, startOfWeek, addDays } from 'date-fns';
 
 /**
  * Day labels for display purposes
@@ -19,8 +19,8 @@ export const DAY_LABELS = {
   thursday: 'Thursday',
   friday: 'Friday',
   saturday: 'Saturday',
-  sunday: 'Sunday'
-} as const
+  sunday: 'Sunday',
+} as const;
 
 /**
  * Gets the Monday date for any date within a week.
@@ -36,7 +36,7 @@ export const DAY_LABELS = {
  * ```
  */
 export function getMondayOfWeek(date: Date): Date {
-  return startOfWeek(date, { weekStartsOn: 1 })
+  return startOfWeek(date, { weekStartsOn: 1 });
 }
 
 /**
@@ -56,19 +56,19 @@ export function getMondayOfWeek(date: Date): Date {
  * ```
  */
 export function getWeekRange(date: Date): string {
-  const monday = getMondayOfWeek(date)
-  const sunday = addDays(monday, 6)
+  const monday = getMondayOfWeek(date);
+  const sunday = addDays(monday, 6);
 
-  const startYear = monday.getFullYear()
-  const endYear = sunday.getFullYear()
+  const startYear = monday.getFullYear();
+  const endYear = sunday.getFullYear();
 
   // Same year: "Mon 19 Sep - Fri 5 Oct 2025"
   if (startYear === endYear) {
-    return `${format(monday, 'EEE d MMM')} - ${format(sunday, 'EEE d MMM yyyy')}`
+    return `${format(monday, 'EEE d MMM')} - ${format(sunday, 'EEE d MMM yyyy')}`;
   }
 
   // Different years: "Mon 30 Dec 2024 - Fri 5 Jan 2025"
-  return `${format(monday, 'EEE d MMM yyyy')} - ${format(sunday, 'EEE d MMM yyyy')}`
+  return `${format(monday, 'EEE d MMM yyyy')} - ${format(sunday, 'EEE d MMM yyyy')}`;
 }
 
 /**
@@ -85,8 +85,8 @@ export function getWeekRange(date: Date): string {
  * ```
  */
 export function getWeekDates(date: Date): Date[] {
-  const monday = getMondayOfWeek(date)
-  return Array.from({ length: 7 }, (_, i) => addDays(monday, i))
+  const monday = getMondayOfWeek(date);
+  return Array.from({ length: 7 }, (_, i) => addDays(monday, i));
 }
 
 /**
@@ -103,7 +103,7 @@ export function getWeekDates(date: Date): Date[] {
  * ```
  */
 export function formatDateKey(date: Date): string {
-  return format(date, 'yyyy-MM-dd')
+  return format(date, 'yyyy-MM-dd');
 }
 
 /**
@@ -120,8 +120,8 @@ export function formatDateKey(date: Date): string {
  * ```
  */
 export function getWeekDateKeys(date: Date): string[] {
-  const weekDates = getWeekDates(date)
-  return weekDates.map(formatDateKey)
+  const weekDates = getWeekDates(date);
+  return weekDates.map(formatDateKey);
 }
 
 /**
@@ -138,9 +138,17 @@ export function getWeekDateKeys(date: Date): string[] {
  * ```
  */
 export function getDayName(date: Date): keyof typeof DAY_LABELS {
-  const dayIndex = date.getDay()
-  const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-  return dayNames[dayIndex] as keyof typeof DAY_LABELS
+  const dayIndex = date.getDay();
+  const dayNames = [
+    'sunday',
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+  ];
+  return dayNames[dayIndex] as keyof typeof DAY_LABELS;
 }
 
 /**
@@ -156,7 +164,7 @@ export function getDayName(date: Date): keyof typeof DAY_LABELS {
  * ```
  */
 export function getDayLabel(dayKey: keyof typeof DAY_LABELS): string {
-  return DAY_LABELS[dayKey]
+  return DAY_LABELS[dayKey];
 }
 
 /**
@@ -181,23 +189,23 @@ export function getDayLabel(dayKey: keyof typeof DAY_LABELS): string {
 export function getSelectedWeekDates(
   weekDateString: string,
   daysIncluded: {
-    monday: boolean
-    tuesday: boolean
-    wednesday: boolean
-    thursday: boolean
-    friday: boolean
-    saturday: boolean
-    sunday: boolean
-  }
+    monday: boolean;
+    tuesday: boolean;
+    wednesday: boolean;
+    thursday: boolean;
+    friday: boolean;
+    saturday: boolean;
+    sunday: boolean;
+  },
 ): string[] {
   // Parse the date ensuring no timezone issues
-  const weekDate = new Date(weekDateString.split('T')[0])
+  const weekDate = new Date(weekDateString.split('T')[0]);
 
   // Get Monday of this week
-  const monday = startOfWeek(weekDate, { weekStartsOn: 1 })
+  const monday = startOfWeek(weekDate, { weekStartsOn: 1 });
 
   // Create array of selected dates
-  const dates: string[] = []
+  const dates: string[] = [];
   const dayIndexMap = {
     monday: 0,
     tuesday: 1,
@@ -205,18 +213,18 @@ export function getSelectedWeekDates(
     thursday: 3,
     friday: 4,
     saturday: 5,
-    sunday: 6
-  }
+    sunday: 6,
+  };
 
   // Add only selected days
   Object.entries(daysIncluded).forEach(([day, included]) => {
     if (included) {
-      const dayIndex = dayIndexMap[day as keyof typeof dayIndexMap]
-      const date = addDays(monday, dayIndex)
+      const dayIndex = dayIndexMap[day as keyof typeof dayIndexMap];
+      const date = addDays(monday, dayIndex);
       // Format as YYYY-MM-DD without timezone
-      dates.push(format(date, 'yyyy-MM-dd'))
+      dates.push(format(date, 'yyyy-MM-dd'));
     }
-  })
+  });
 
-  return dates
+  return dates;
 }

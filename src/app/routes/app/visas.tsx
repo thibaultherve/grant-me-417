@@ -1,14 +1,20 @@
+import { Plus, LayoutDashboard, Plane } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
+
 import { Button } from '@/components/ui/button';
 import { InfoCard } from '@/components/ui/info-card';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Plus, LayoutDashboard, Plane } from 'lucide-react';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
+import { useAddVisa, useDeleteVisa } from '@/features/visas/api/use-visas';
 import { AddVisaForm } from '@/features/visas/components/add-visa-form';
 import { VisasList } from '@/features/visas/components/visas-list';
-import type { CreateVisaFormData } from '@/features/visas/schemas';
 import { useVisaContext } from '@/features/visas/hooks/use-visa-context';
-import { useAddVisa, useDeleteVisa } from '@/features/visas/api/use-visas';
+import type { CreateVisaFormData } from '@/features/visas/schemas';
 
 export const VisasRoute = () => {
   const [isAddingVisa, setIsAddingVisa] = useState(false);
@@ -22,7 +28,7 @@ export const VisasRoute = () => {
     addMutation.mutate(data, {
       onSuccess: () => {
         setIsAddingVisa(false);
-      }
+      },
     });
   };
 
@@ -40,7 +46,11 @@ export const VisasRoute = () => {
             Manage your Working Holiday Visas (up to 3 visas)
           </p>
         </div>
-        <Button onClick={() => setIsAddingVisa(true)} size="lg" disabled={visas.length >= 3}>
+        <Button
+          onClick={() => setIsAddingVisa(true)}
+          size="lg"
+          disabled={visas.length >= 3}
+        >
           <Plus className="mr-2 h-4 w-4" />
           Add Visa
         </Button>
@@ -54,7 +64,8 @@ export const VisasRoute = () => {
             <div>
               <h3 className="font-semibold mb-1">Create your first visa</h3>
               <p className="text-sm text-muted-foreground">
-                Start by adding your current Working Holiday Visa (subclass 417). You can track work progress for up to 3 visas.
+                Start by adding your current Working Holiday Visa (subclass
+                417). You can track work progress for up to 3 visas.
               </p>
             </div>
           </div>
@@ -79,7 +90,10 @@ export const VisasRoute = () => {
       </div>
 
       <Sheet open={isAddingVisa} onOpenChange={setIsAddingVisa}>
-        <SheetContent side="right" className="w-full sm:max-w-4xl overflow-y-auto">
+        <SheetContent
+          side="right"
+          className="w-full sm:max-w-4xl overflow-y-auto"
+        >
           <SheetHeader className="mb-6">
             <SheetTitle>Add New Visa</SheetTitle>
           </SheetHeader>

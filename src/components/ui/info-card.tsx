@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { cn } from '@/lib/utils';
 
 interface InfoCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -9,7 +10,10 @@ interface InfoCardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const InfoCard = React.forwardRef<HTMLDivElement, InfoCardProps>(
-  ({ className, title, description, children, variant = 'accent', ...props }, ref) => {
+  (
+    { className, title, description, children, variant = 'accent', ...props },
+    ref,
+  ) => {
     return (
       <div
         ref={ref}
@@ -17,7 +21,7 @@ export const InfoCard = React.forwardRef<HTMLDivElement, InfoCardProps>(
           'rounded-lg p-6',
           variant === 'accent' && 'bg-cream border border-border',
           variant === 'default' && 'bg-card border border-border',
-          className
+          className,
         )}
         {...props}
       >
@@ -27,14 +31,12 @@ export const InfoCard = React.forwardRef<HTMLDivElement, InfoCardProps>(
           </h3>
         )}
         {description && (
-          <p className="text-sm text-muted-foreground mb-4">
-            {description}
-          </p>
+          <p className="text-sm text-muted-foreground mb-4">{description}</p>
         )}
         {children}
       </div>
     );
-  }
+  },
 );
 
 InfoCard.displayName = 'InfoCard';

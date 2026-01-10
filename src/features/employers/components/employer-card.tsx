@@ -1,5 +1,14 @@
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import {
+  Building2,
+  MapPin,
+  CheckCircle,
+  XCircle,
+  Trash2,
+  Edit,
+  MoreVertical,
+} from 'lucide-react';
+import { useState } from 'react';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,21 +18,25 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Building2, MapPin, CheckCircle, XCircle, Trash2, Edit, MoreVertical } from 'lucide-react'
-import { useState } from 'react'
-import type { Employer } from '../types'
+} from '@/components/ui/dropdown-menu';
+
+import { useGetPostcode } from '../api/use-postcodes';
+import type { Employer } from '../types';
+
+import { PostcodeBadges } from './postcode-badges';
 
 interface EmployerCardProps {
-  employer: Employer
-  onDelete: (id: string) => void
-  onEdit: (employer: Employer) => void
+  employer: Employer;
+  onDelete: (id: string) => void;
+  onEdit: (employer: Employer) => void;
 }
 
 const industryLabels: Record<string, string> = {
@@ -35,11 +48,16 @@ const industryLabels: Record<string, string> = {
   hospitality_and_tourism: 'Hospitality & Tourism',
   bushfire_recovery_work: 'Bushfire Recovery',
   critical_covid19_work: 'Critical COVID-19 Work',
-  other: 'Other'
-}
+  other: 'Other',
+};
 
-export function EmployerCard({ employer, onDelete, onEdit }: EmployerCardProps) {
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+export function EmployerCard({
+  employer,
+  onDelete,
+  onEdit,
+}: EmployerCardProps) {
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const { data: postcodeData } = useGetPostcode(employer.postcode || '');
 
   return (
     <Card className="border-border/40 shadow-none">
@@ -51,7 +69,9 @@ export function EmployerCard({ employer, onDelete, onEdit }: EmployerCardProps) 
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="font-medium text-sm truncate">{employer.name}</h3>
+                <h3 className="font-medium text-sm truncate">
+                  {employer.name}
+                </h3>
                 {employer.is_eligible ? (
                   <CheckCircle className="w-3.5 h-3.5 text-green-600 flex-shrink-0" />
                 ) : (
@@ -59,13 +79,22 @@ export function EmployerCard({ employer, onDelete, onEdit }: EmployerCardProps) 
                 )}
               </div>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span className="truncate">{industryLabels[employer.industry] || employer.industry}</span>
+                <span className="truncate">
+                  {industryLabels[employer.industry] || employer.industry}
+                </span>
                 {employer.postcode && (
                   <>
                     <span>•</span>
-                    <span className="flex items-center gap-0.5">
+                    <span className="flex items-center gap-1">
                       <MapPin className="w-3 h-3" />
                       {employer.postcode}
+                      {postcodeData && (
+                        <PostcodeBadges
+                          postcode={postcodeData}
+                          size="sm"
+                          className="ml-0.5 gap-1"
+                        />
+                      )}
                     </span>
                   </>
                 )}
@@ -75,7 +104,11 @@ export function EmployerCard({ employer, onDelete, onEdit }: EmployerCardProps) 
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-7 w-7 p-0 flex-shrink-0">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7 p-0 flex-shrink-0"
+              >
                 <MoreVertical className="w-4 h-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -96,20 +129,24 @@ export function EmployerCard({ employer, onDelete, onEdit }: EmployerCardProps) 
         </div>
       </CardContent>
 
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Employer</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{employer.name}"? This action cannot be undone.
+              Are you sure you want to delete "{employer.name}"? This action
+              cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                onDelete(employer.id)
-                setIsDeleteDialogOpen(false)
+                onDelete(employer.id);
+                setIsDeleteDialogOpen(false);
               }}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
@@ -119,5 +156,5 @@ export function EmployerCard({ employer, onDelete, onEdit }: EmployerCardProps) 
         </AlertDialogContent>
       </AlertDialog>
     </Card>
-  )
+  );
 }

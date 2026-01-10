@@ -1,12 +1,17 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { InfoCard } from '@/components/ui/info-card';
 import { CalendarClock, Plus } from 'lucide-react';
+import { useState } from 'react';
 
-import { ModernHoursTable } from '@/features/hours/components/modern-hours-table';
-import { AddHoursForm } from '@/features/hours/components/add-hours-form';
+import { Button } from '@/components/ui/button';
+import { InfoCard } from '@/components/ui/info-card';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
 import { useHours } from '@/features/hours/api/use-hours';
+import { AddHoursForm } from '@/features/hours/components/add-hours-form';
+import { ModernHoursTable } from '@/features/hours/components/modern-hours-table';
 import type { SortOptions } from '@/features/hours/types';
 
 export const HoursRoute = () => {
@@ -45,15 +50,18 @@ export const HoursRoute = () => {
       </div>
 
       {/* Info tip */}
-      {data && data.entries && data.entries.length === 0 && !isLoading && (
+      {data && data.data && data.data.length === 0 && !isLoading && (
         <InfoCard variant="accent">
           <div className="flex items-start gap-4">
             <CalendarClock className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
             <div>
-              <h3 className="font-semibold mb-1">Start tracking your work hours</h3>
+              <h3 className="font-semibold mb-1">
+                Start tracking your work hours
+              </h3>
               <p className="text-sm text-muted-foreground">
-                Log your daily specified work hours to track progress toward your visa requirements.
-                Each entry counts toward your 88 or 179 day goal.
+                Log your daily specified work hours to track progress toward
+                your visa requirements. Each entry counts toward your 88 or 179
+                day goal.
               </p>
             </div>
           </div>
@@ -73,7 +81,10 @@ export const HoursRoute = () => {
       />
 
       <Sheet open={isAddingHours} onOpenChange={setIsAddingHours}>
-        <SheetContent side="right" className="w-full sm:max-w-4xl overflow-y-auto p-6">
+        <SheetContent
+          side="right"
+          className="w-full sm:max-w-4xl overflow-y-auto p-6"
+        >
           <SheetHeader className="mb-3">
             <SheetTitle>Log Work Hours</SheetTitle>
           </SheetHeader>

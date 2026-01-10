@@ -1,28 +1,28 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
 // Helper function to parse hour formats (7.25 or 7:15)
 const parseHoursString = (value: string): number => {
   // Handle decimal format (7.25)
   if (value.includes('.')) {
-    return parseFloat(value)
+    return parseFloat(value);
   }
-  
+
   // Handle time format (7:15)
   if (value.includes(':')) {
-    const [hours, minutes] = value.split(':')
-    const h = parseInt(hours, 10)
-    const m = parseInt(minutes, 10)
-    
+    const [hours, minutes] = value.split(':');
+    const h = parseInt(hours, 10);
+    const m = parseInt(minutes, 10);
+
     if (isNaN(h) || isNaN(m) || m >= 60 || m < 0) {
-      throw new Error('Invalid time format')
+      throw new Error('Invalid time format');
     }
-    
-    return h + (m / 60)
+
+    return h + m / 60;
   }
-  
+
   // Handle plain number
-  return parseFloat(value)
-}
+  return parseFloat(value);
+};
 
 // Custom Zod transform for hours input
 export const hoursInputSchema = z
@@ -30,57 +30,57 @@ export const hoursInputSchema = z
   .min(1, 'Hours is required')
   .transform((value, ctx) => {
     try {
-      const hours = parseHoursString(value)
-      
+      const hours = parseHoursString(value);
+
       if (isNaN(hours) || hours <= 0 || hours > 24) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'Hours must be between 0.1 and 24',
-        })
-        return z.NEVER
+        });
+        return z.NEVER;
       }
-      
+
       // Round to 2 decimal places
-      return Math.round(hours * 100) / 100
+      return Math.round(hours * 100) / 100;
     } catch {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'Invalid hours format. Use 7.25 or 7:15',
-      })
-      return z.NEVER
+      });
+      return z.NEVER;
     }
-  })
+  });
 
 // Date validation helpers
 const isFutureDate = (date: string): boolean => {
-  const inputDate = new Date(date)
-  const today = new Date()
-  today.setHours(23, 59, 59, 999) // End of today
-  return inputDate > today
-}
+  const inputDate = new Date(date);
+  const today = new Date();
+  today.setHours(23, 59, 59, 999); // End of today
+  return inputDate > today;
+};
 
 const isWeekComplete = (date: string): boolean => {
-  const inputDate = new Date(date)
-  const today = new Date()
-  
+  const inputDate = new Date(date);
+  const today = new Date();
+
   // Get the Friday of the input date's week
-  const dayOfWeek = inputDate.getDay()
-  const daysToFriday = dayOfWeek === 0 ? 6 - 7 : 5 - dayOfWeek // Sunday = 0, Friday = 5
-  const fridayOfWeek = new Date(inputDate)
-  fridayOfWeek.setDate(inputDate.getDate() + daysToFriday)
-  
+  const dayOfWeek = inputDate.getDay();
+  const daysToFriday = dayOfWeek === 0 ? 6 - 7 : 5 - dayOfWeek; // Sunday = 0, Friday = 5
+  const fridayOfWeek = new Date(inputDate);
+  fridayOfWeek.setDate(inputDate.getDate() + daysToFriday);
+
   // Check if today is at least the Friday of that week
-  return today >= fridayOfWeek
-}
+  return today >= fridayOfWeek;
+};
 
 // Schema for single work entry
 export const workEntrySchema = z.object({
   work_date: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format')
-    .refine(date => !isFutureDate(date), 'Cannot add hours for future dates'),
-  hours_worked: hoursInputSchema
-})
+    .refine((date) => !isFutureDate(date), 'Cannot add hours for future dates'),
+  hours_worked: hoursInputSchema,
+});
 
 // Schema for multiple work entries (By Day mode)
 export const multipleWorkEntriesSchema = z.object({
@@ -88,8 +88,8 @@ export const multipleWorkEntriesSchema = z.object({
   entries: z
     .array(workEntrySchema)
     .min(1, 'At least one work entry is required')
-    .max(31, 'Cannot add more than 31 entries at once')
-})
+    .max(31, 'Cannot add more than 31 entries at once'),
+});
 
 // Schema for By Week mode
 export const weekWorkEntrySchema = z.object({
@@ -97,50 +97,59 @@ export const weekWorkEntrySchema = z.object({
   week_date: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format')
-    .refine(date => !isFutureDate(date), 'Cannot add hours for future dates')
-    .refine(date => isWeekComplete(date), 'Cannot add hours for incomplete weeks'),
+    .refine((date) => !isFutureDate(date), 'Cannot add hours for future dates')
+    .refine(
+      (date) => isWeekComplete(date),
+      'Cannot add hours for incomplete weeks',
+    ),
   total_weekly_hours: z
     .string()
     .min(1, 'Total weekly hours is required')
-    .transform(val => parseFloat(val))
+    .transform((val) => parseFloat(val))
     .pipe(
-      z.number()
+      z
+        .number()
         .positive('Total hours must be positive')
-        .max(168, 'Maximum 168 hours per week (7 × 24)')
+        .max(168, 'Maximum 168 hours per week (7 × 24)'),
     ),
-  days_included: z.object({
-    monday: z.boolean(),
-    tuesday: z.boolean(),
-    wednesday: z.boolean(),
-    thursday: z.boolean(),
-    friday: z.boolean(),
-    saturday: z.boolean(),
-    sunday: z.boolean(),
-  }).refine(
-    (days) => Object.values(days).filter(Boolean).length >= 1,
-    'At least one day must be selected'
-  ).refine(
-    (days) => {
-      const selectedDays = Object.values(days).filter(Boolean).length
+  days_included: z
+    .object({
+      monday: z.boolean(),
+      tuesday: z.boolean(),
+      wednesday: z.boolean(),
+      thursday: z.boolean(),
+      friday: z.boolean(),
+      saturday: z.boolean(),
+      sunday: z.boolean(),
+    })
+    .refine(
+      (days) => Object.values(days).filter(Boolean).length >= 1,
+      'At least one day must be selected',
+    )
+    .refine((days) => {
+      const selectedDays = Object.values(days).filter(Boolean).length;
       // Validation basique: au moins un jour sélectionné
-      return selectedDays > 0
-    },
-    'Too many hours for selected days (max 24h per day)'
-  )
-})
+      return selectedDays > 0;
+    }, 'Too many hours for selected days (max 24h per day)'),
+});
 
 // Types for TypeScript
-export type WorkEntryFormData = z.input<typeof workEntrySchema>
-export type MultipleWorkEntriesFormData = z.input<typeof multipleWorkEntriesSchema>
-export type WeekWorkEntryFormData = z.input<typeof weekWorkEntrySchema>
+export type WorkEntryFormData = z.input<typeof workEntrySchema>;
+export type MultipleWorkEntriesFormData = z.input<
+  typeof multipleWorkEntriesSchema
+>;
+export type WeekWorkEntryFormData = z.input<typeof weekWorkEntrySchema>;
 
 // Helper type for the days object
 export type DaysIncluded = {
-  monday: boolean
-  tuesday: boolean
-  wednesday: boolean
-  thursday: boolean
-  friday: boolean
-  saturday: boolean
-  sunday: boolean
-}
+  monday: boolean;
+  tuesday: boolean;
+  wednesday: boolean;
+  thursday: boolean;
+  friday: boolean;
+  saturday: boolean;
+  sunday: boolean;
+};
+
+// Re-export types from types/index.ts for backwards compatibility
+export type { WorkEntryInput, WeekWorkEntryInput } from '../types';

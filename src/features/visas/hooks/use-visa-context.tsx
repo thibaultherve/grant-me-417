@@ -8,7 +8,14 @@
  * Les données sont gérées par React Query (useVisas hook)
  */
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from 'react';
+
 import { useVisas } from '../api/use-visas';
 import type { UserVisa } from '../types';
 
@@ -34,7 +41,7 @@ export function VisaProvider({ children }: { children: ReactNode }) {
     if (!isLoading && visas.length > 0) {
       const savedVisaId = localStorage.getItem('currentVisaId');
       if (savedVisaId) {
-        const savedVisa = visas.find(v => v.id === savedVisaId);
+        const savedVisa = visas.find((v) => v.id === savedVisaId);
         setCurrentVisaState(savedVisa || visas[0]);
       } else {
         setCurrentVisaState(visas[0]);

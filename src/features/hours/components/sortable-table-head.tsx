@@ -1,6 +1,8 @@
-import { TableHead } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
 import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { TableHead } from '@/components/ui/table';
+
 import type { SortField, SortOrder, SortOptions } from '../types';
 
 export type SortableTableHeadProps = {
@@ -36,11 +38,11 @@ export const SortableTableHead = ({
     if (!isCurrentField) {
       return <ArrowUpDown className="h-4 w-4 text-muted-foreground" />;
     }
-    
+
     if (currentOrder === 'asc') {
       return <ArrowUp className="h-4 w-4 text-foreground" />;
     }
-    
+
     return <ArrowDown className="h-4 w-4 text-foreground" />;
   };
 

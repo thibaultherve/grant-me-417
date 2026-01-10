@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { cn } from '@/lib/utils';
 
 interface StatCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -13,24 +14,23 @@ interface StatCardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
-  ({ className, title, value, description, icon: Icon, trend, ...props }, ref) => {
+  (
+    { className, title, value, description, icon: Icon, trend, ...props },
+    ref,
+  ) => {
     return (
       <div
         ref={ref}
         className={cn(
           'rounded-lg border border-border bg-card p-6 transition-shadow hover:shadow-md',
-          className
+          className,
         )}
         {...props}
       >
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <p className="text-sm font-medium text-muted-foreground">
-              {title}
-            </p>
-            <p className="mt-2 text-3xl font-bold text-foreground">
-              {value}
-            </p>
+            <p className="text-sm font-medium text-muted-foreground">{title}</p>
+            <p className="mt-2 text-3xl font-bold text-foreground">{value}</p>
             {description && (
               <p className="mt-1 text-sm text-muted-foreground">
                 {description}
@@ -41,7 +41,7 @@ export const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
                 <span
                   className={cn(
                     'text-sm font-medium',
-                    trend.value >= 0 ? 'text-success' : 'text-destructive'
+                    trend.value >= 0 ? 'text-success' : 'text-destructive',
                   )}
                 >
                   {trend.value >= 0 ? '+' : ''}
@@ -61,7 +61,7 @@ export const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 
 StatCard.displayName = 'StatCard';

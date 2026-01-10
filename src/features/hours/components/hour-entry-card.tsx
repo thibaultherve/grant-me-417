@@ -1,13 +1,24 @@
-import { Card, CardContent } from '@/components/ui/card';
+import {
+  Calendar,
+  Building2,
+  Clock,
+  CheckCircle,
+  XCircle,
+  MoreHorizontal,
+  Edit,
+  Trash2,
+} from 'lucide-react';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Calendar, Building2, Clock, CheckCircle, XCircle, MoreHorizontal, Edit, Trash2 } from 'lucide-react';
+
 import type { HourEntryWithEmployer } from '../types';
 
 interface HourEntryCardProps {
@@ -49,7 +60,9 @@ export const HourEntryCard = ({ entry, onDelete }: HourEntryCardProps) => {
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-muted-foreground" />
-            <span className="font-medium text-sm">{formatDate(entry.work_date)}</span>
+            <span className="font-medium text-sm">
+              {formatDate(entry.work_date)}
+            </span>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -84,12 +97,18 @@ export const HourEntryCard = ({ entry, onDelete }: HourEntryCardProps) => {
               {getIndustryLabel(entry.industry)}
             </Badge>
             {entry.is_eligible ? (
-              <Badge variant="default" className="bg-success/10 text-success border border-success/20">
+              <Badge
+                variant="default"
+                className="bg-success/10 text-success border border-success/20"
+              >
                 <CheckCircle className="h-3 w-3 mr-1" />
                 Eligible
               </Badge>
             ) : (
-              <Badge variant="destructive" className="bg-destructive/10 text-destructive border border-destructive/20">
+              <Badge
+                variant="destructive"
+                className="bg-destructive/10 text-destructive border border-destructive/20"
+              >
                 <XCircle className="h-3 w-3 mr-1" />
                 Not Eligible
               </Badge>
@@ -98,7 +117,9 @@ export const HourEntryCard = ({ entry, onDelete }: HourEntryCardProps) => {
 
           <div className="flex items-center gap-2 pt-2 border-t border-border">
             <Clock className="h-4 w-4 text-muted-foreground" />
-            <span className="text-lg font-bold">{formatHours(entry.hours)}</span>
+            <span className="text-lg font-bold">
+              {formatHours(entry.hours)}
+            </span>
           </div>
         </div>
       </CardContent>

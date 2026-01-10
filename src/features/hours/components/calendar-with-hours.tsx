@@ -1,12 +1,13 @@
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
-import * as React from "react";
-import { DayButton } from "react-day-picker";
-import { startOfWeek, isSameDay, format } from "date-fns";
+import { startOfWeek, isSameDay, format } from 'date-fns';
+import * as React from 'react';
+import { DayButton } from 'react-day-picker';
+
+import { Calendar } from '@/components/ui/calendar';
+import { cn } from '@/lib/utils';
 
 interface CalendarWithHoursProps {
   hoursByDate: { [date: string]: number };
-  mode?: "single" | "multiple" | "range";
+  mode?: 'single' | 'multiple' | 'range';
   selected?: Date | Date[];
   onSelect?: (date: Date | Date[] | undefined) => void;
   disabled?: (date: Date) => boolean;
@@ -52,10 +53,16 @@ function CustomDayButton({
   const ref = React.useRef<HTMLButtonElement>(null);
 
   // Check if current day is in the hovered week (only if week highlight is enabled)
-  const isInHoveredWeek = !disableWeekHighlight && hoveredWeekDate ? isSameWeek(day.date, hoveredWeekDate) : false;
+  const isInHoveredWeek =
+    !disableWeekHighlight && hoveredWeekDate
+      ? isSameWeek(day.date, hoveredWeekDate)
+      : false;
 
   // Check if current day is in the selected week (only if week highlight is enabled)
-  const isInSelectedWeek = !disableWeekHighlight && selectedWeekDate ? isSameWeek(day.date, selectedWeekDate) : false;
+  const isInSelectedWeek =
+    !disableWeekHighlight && selectedWeekDate
+      ? isSameWeek(day.date, selectedWeekDate)
+      : false;
 
   // Auto-focus when focused modifier is active (shadcn pattern)
   React.useEffect(() => {
@@ -63,7 +70,11 @@ function CustomDayButton({
   }, [modifiers.focused]);
 
   // Extract handlers from props to combine them
-  const { onMouseEnter: propsOnMouseEnter, onMouseLeave: propsOnMouseLeave, ...restProps } = props;
+  const {
+    onMouseEnter: propsOnMouseEnter,
+    onMouseLeave: propsOnMouseLeave,
+    ...restProps
+  } = props;
 
   // Handle mouse events - combine with original handlers (only if week highlight is enabled)
   const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -102,39 +113,45 @@ function CustomDayButton({
       onMouseLeave={handleMouseLeave}
       className={cn(
         // Base button - full size cell without background
-        "flex items-center justify-center",
-        "w-full aspect-square p-0",
-        "relative group",
-        "cursor-pointer",
+        'flex items-center justify-center',
+        'w-full aspect-square p-0',
+        'relative group',
+        'cursor-pointer',
 
         // Disabled state
-        modifiers.disabled && "!cursor-not-allowed opacity-50",
+        modifiers.disabled && '!cursor-not-allowed opacity-50',
         // Outside month
-        modifiers.outside && "text-muted-foreground"
+        modifiers.outside && 'text-muted-foreground',
       )}
     >
       {/* Circle background wrapping content */}
       <div
         className={cn(
-          "flex flex-col items-center justify-center gap-0.5",
-          "w-9 h-9 rounded-full", // Fixed circular size wrapping content
-          "transition-colors duration-150",
+          'flex flex-col items-center justify-center gap-0.5',
+          'w-9 h-9 rounded-full', // Fixed circular size wrapping content
+          'transition-colors duration-150',
 
           // Hover state
-          "group-hover:bg-accent group-hover:text-accent-foreground",
+          'group-hover:bg-accent group-hover:text-accent-foreground',
 
           // Selected state
-          modifiers.selected && "bg-primary text-primary-foreground",
+          modifiers.selected && 'bg-primary text-primary-foreground',
 
           // Range states
-          modifiers.range_middle && "bg-accent text-accent-foreground",
-          modifiers.range_start && "bg-primary text-primary-foreground",
-          modifiers.range_end && "bg-primary text-primary-foreground",
+          modifiers.range_middle && 'bg-accent text-accent-foreground',
+          modifiers.range_start && 'bg-primary text-primary-foreground',
+          modifiers.range_end && 'bg-primary text-primary-foreground',
 
           // Week highlighting - Selected week
-          isInSelectedWeek && !modifiers.selected && selectedWeekDate && "bg-primary text-primary-foreground",
+          isInSelectedWeek &&
+            !modifiers.selected &&
+            selectedWeekDate &&
+            'bg-primary text-primary-foreground',
           // Week highlighting - Hovered week
-          isInHoveredWeek && !isInSelectedWeek && !modifiers.selected && "bg-accent text-accent-foreground"
+          isInHoveredWeek &&
+            !isInSelectedWeek &&
+            !modifiers.selected &&
+            'bg-accent text-accent-foreground',
         )}
       >
         {/* Date number */}
@@ -145,7 +162,7 @@ function CustomDayButton({
           <span className="text-[8px] font-semibold text-blue-600 leading-none">
             {hoursForDate >= 10
               ? Math.floor(hoursForDate)
-              : hoursForDate.toFixed(1).replace(".0", "")}
+              : hoursForDate.toFixed(1).replace('.0', '')}
             h
           </span>
         )}
@@ -168,7 +185,9 @@ export function CalendarWithHours({
   ...props
 }: CalendarWithHoursProps) {
   // State to track which week is being hovered (only if week highlight is enabled)
-  const [hoveredWeekDate, setHoveredWeekDate] = React.useState<Date | null>(null);
+  const [hoveredWeekDate, setHoveredWeekDate] = React.useState<Date | null>(
+    null,
+  );
 
   // Extract selected date (works with single, multiple, and range modes)
   const selectedWeekDate = React.useMemo(() => {
@@ -177,7 +196,6 @@ export function CalendarWithHours({
     if (Array.isArray(selected) && selected.length > 0) return selected[0];
     return null;
   }, [selected]);
-
 
   // Create the custom DayButton with hours display and week highlighting
   const DayButtonWithHours = React.useCallback(
@@ -191,7 +209,7 @@ export function CalendarWithHours({
         disableWeekHighlight={disableWeekHighlight}
       />
     ),
-    [hoursByDate, hoveredWeekDate, selectedWeekDate, disableWeekHighlight]
+    [hoursByDate, hoveredWeekDate, selectedWeekDate, disableWeekHighlight],
   );
 
   // Type assertion needed for react-day-picker's complex union types
@@ -203,7 +221,7 @@ export function CalendarWithHours({
       defaultMonth={selectedWeekDate || undefined}
       className="[&_button]:cursor-pointer" // Add cursor-pointer to all buttons (nav arrows)
       classNames={{
-        today: "", // Remove default "today" styling
+        today: '', // Remove default "today" styling
       }}
       components={{
         DayButton: DayButtonWithHours,

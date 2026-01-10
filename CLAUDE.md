@@ -1,405 +1,196 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code when working with code in this repository.
+# GET GRANTED 417 Developer Guidelines
 
 ## Project Overview
 
-**Grant Me 417** is a React SPA for tracking work hours for Working Holiday Visa 417 holders in Australia. The application helps backpackers calculate and track their "specified work" hours to qualify for second or third Working Holiday Visas.
+**GET GRANTED 417** Claude Code stack (React 19.1.1 + Supabase).
 
-### Learning Context
+- **Frontend**: React 19.1.1 (react-router 7.9.4), TypeScript, TailwindCSS 4.1.12, @tanstack/react-query 5.90.5, Shadcn UI
+- **Backend**: Supabase
+- **Database**: Supabase (PostgreSQL), Redis
 
-This is a **learning project** - the developer's first solo React project being built for educational purposes and portfolio development.
+### Supabase Project IDs
 
-- **Code Language**: ALL code, comments, variable names, function names, and documentation files MUST be in English only
-- **Communication Language**: The developer communicates primarily in French. Claude should respond in French for terminal/CLI interactions and explanations, but all code and documentation must remain in English
-
----
-
-## ⚠️ MANDATORY Documentation Usage
-
-For ALL React questions and solutions, you MUST use the configured MCP servers BEFORE proposing any code or solution.
-
-### Configured MCP Servers
-
-#### 1. bulletproof-react Docs (Project Architecture)
-
-- **MCP Server Name**: `bulletproof-react Docs` (note the space in the name)
-- **Type**: Remote GitMCP server
-- **Source**: https://github.com/alan2207/bulletproof-react
-- **Purpose**: Architecture patterns, project structure, best practices
-- **Usage**: Feature-based architecture, folder conventions, state management, API layers
-- **Status**: Remote server (always available)
-- **Access Method**: Use ReadMcpResourceTool or ListMcpResourcesTool with server name "bulletproof-react Docs"
-- **Example Call**:
-  ```
-  ListMcpResourcesTool({
-    server: "bulletproof-react Docs"
-  })
-  ```
-
-### Mandatory Workflow
-
-**BEFORE proposing ANY solution or code:**
-
-Use **"bulletproof-react Docs"** MCP to search for:
-
-- Project structure patterns
-- Code organization best practices
-- Feature-based architecture
-- Folder structure conventions
-- Testing patterns
-- State management approaches
-- API layer patterns
-
-### Response Format Template
-
-For EVERY React request, you MUST follow this format:
-
-```
-I will first consult the documentation via the configured MCP servers...
-
-Step 1: Checking bulletproof-react for architectural best practices...
-[Use ListMcpResourcesTool or ReadMcpResourceTool with server: "bulletproof-react Docs"]
-[Show search query and results]
-
-Step 2: Checking React official documentation for API details...
-[Use mcp__docs-mcp-server__search_docs with library: "react"]
-[Show search query and results]
-
-Step 3: Synthesizing findings...
-[combine insights from both sources]
-
-Based on the documentation:
-- From bulletproof-react: [specific architecture/pattern used]
-- From React docs: [specific API/pattern used]
-
-[provide solution with code]
-
-Sources:
-- bulletproof-react: [specific file/section referenced]
-- React docs: [specific page/API referenced]
-```
-
-### ⚠️ CRITICAL RULES
-
-**NEVER:**
-
-- ❌ Propose code based solely on training data
-- ❌ Skip MCP server consultation
-- ❌ Use deprecated React patterns
-- ❌ Ignore bulletproof-react architecture patterns
-- ❌ Respond without citing sources from both MCP servers
-- ❌ Use `library: "bulletproof-react"` with docs-mcp-server (wrong!)
-- ❌ Confuse the two MCP servers
-
-**ALWAYS:**
-
-- ✅ Use ListMcpResourcesTool/ReadMcpResourceTool with `server: "bulletproof-react Docs"` FIRST for architecture
-- ✅ Use mcp**docs-mcp-server**search_docs with `library: "react"` SECOND for React APIs
-- ✅ Verify APIs exist in React 19+
-- ✅ Follow bulletproof-react folder structure
-- ✅ Cite sources from both MCP servers
-- ✅ Start responses with documentation consultation
-
-### MCP Server Priorities
-
-When information conflicts:
-
-1. **Architecture/Structure**: Prefer bulletproof-react Docs
-2. **React APIs/Syntax**: Prefer docs-mcp-server (official docs)
-3. **Best Practices**: Combine both sources intelligently
-
-### Verification Checklist
-
-Before finalizing ANY response:
-
-- [ ] Consulted bulletproof-react Docs MCP for architecture
-- [ ] Consulted docs-mcp-server MCP for React APIs
-- [ ] Code follows bulletproof-react structure
-- [ ] APIs verified in React 19+ via docs-mcp-server
-- [ ] Both sources cited with specific references
-- [ ] Response started with documentation consultation
-
-### Quick Reference: MCP Tool Usage
-
-**For bulletproof-react architecture:**
-
-```javascript
-// List available resources
-ListMcpResourcesTool({ server: "bulletproof-react Docs" });
-
-// Read specific resource
-ReadMcpResourceTool({
-  server: "bulletproof-react Docs",
-  uri: "resource-uri-from-list",
-});
-```
-
-**For React official documentation:**
-
-```javascript
-// Search React docs
-mcp__docs -
-  mcp -
-  server__search_docs({
-    library: "react", // ALWAYS "react", never "bulletproof-react"
-    query: "your search query",
-    limit: 3,
-  });
-```
+- **Dev**: `dev_project_id`
+- **Prod**: `prod_project_id`
 
 ---
 
-## Technology Stack
+## Fundamental Development Principles
 
-### Frontend
+### 1. Database Interaction via MCP Supabase (PRIORITY)
 
-- **React 19.1.0** - Latest React with modern hooks and features
-- **Vite 7.0.0** - Build tooling with ESM and fast HMR
-- **React Router 7.6.3** - Client-side routing with nested routes
-- **Tailwind CSS 4.1.11** - Utility-first styling with CSS variables
-- **shadcn/ui** - Modern component design system (see `components.json`)
-- **Lucide React 0.525.0** - 1000+ customizable icons
-- **Recharts 3.0.2** - Professional charts and data visualization
+**All database interactions MUST use MCP Supabase servers:**
 
-### Backend & Database
+- **Read/Write**: Use `mcp__supabase-dev__execute_sql` or `mcp__supabase-prod__execute_sql`
+- **Migrations**: Use `mcp__supabase-dev__apply_migration` or `mcp__supabase-prod__apply_migration`
+- **Inspection**: Use MCP commands `list_tables`, `list_extensions`, `list_migrations`
+- **NEVER**: Direct connections, psql, or other SQL clients
 
-- **Supabase** - Authentication, PostgreSQL database, real-time subscriptions
-- **PostgreSQL** - 47 migrations with comprehensive schema
-- **Row Level Security (RLS)** - Secure multi-user data access
-- **PostgreSQL Functions** - Complex business logic and calculations
-- **Auto-triggers** - Data consistency and progress updates
+### 2. Maximum Reuse of Existing Code
 
-### Development Tools
+**GOLDEN RULE**: Before creating anything new, ALWAYS:
 
-- **Package Manager**: pnpm
-- **Language**: JavaScript (JSX, not TypeScript initially)
-- **Validation**: Zod for runtime validation
-- **Environment Variables**:
-  - `VITE_SUPABASE_URL`
-  - `VITE_SUPABASE_ANON_KEY`
+1. Search for existing functionality in the project
+2. Review components/functions in the same directory
+3. Follow patterns established in similar files
+4. Reuse and adapt instead of recreating
+
+**Practical examples**:
+
+- Creating a UI component → check `./src/components/`
+- Adding a hook → check `./src/hooks/`
+
+### 3. Dynamic & Modular Code
+
+- All code must be fully dynamic and modular
+- **NO hardcoded** parameters, thresholds, URLs, paths, or credentials
+- Load all values from configuration files (`.env` for secrets)
+- Business logic must adapt automatically to configuration changes
+
+### 4. Clean Code & Maintenance
+
+- **NEVER** leave unused code - ask for user approval before deletion
+- **DRY Principle** - duplication is a liability
+
+### 5. API & Error Handling
+
+- **ALWAYS** handle all error cases in API responses
+- Never return 500 unless it's a genuine internal server error
+- **NEVER** simplify external API calls without understanding their constraints (Stripe, Google, etc.)
+- Never expose internal errors in API responses
+
+### 6. Up-to-Date Information & Documentation
+
+**ALWAYS use current information for libraries, APIs, and best practices.**
+
+#### Priority Order for Documentation:
+
+1. **MCP Context7** (`mcp__plugin_context7_context7__resolve-library-id` + `mcp__plugin_context7_context7__query-docs`)
+   - Use FIRST for any library documentation (React, Supabase, etc.)
+   - Provides indexed, structured documentation
+   - Example: Before using a React Query pattern, query Context7 for latest API
+
+2. **WebSearch** (`WebSearch` tool)
+   - Use when Context7 doesn't have the library
+   - Use for latest best practices and patterns (add "2024 2025" to queries)
+   - Use for error messages and troubleshooting
+   - Use for external API documentation
+
+3. **WebFetch** (`WebFetch` tool)
+   - Use to fetch specific documentation pages found via WebSearch
+   - Use for official API documentation URLs
+
+#### When to Search for Documentation:
+
+- **Before using any library feature** you're not 100% certain about
+- **When implementing a new pattern** (auth, caching, state management, etc.)
+- **When encountering an error** from an external library
+- **When integrating external APIs** (always check current API version)
+- **When the codebase pattern seems outdated** compared to current best practices
+
+#### Examples:
+
+```
+# Check React Query v5 patterns
+mcp__plugin_context7_context7__resolve-library-id(libraryName="tanstack-query")
+mcp__plugin_context7_context7__query-docs(libraryId="/tanstack/query", query="useMutation optimistic updates")
+
+# Check latest Supabase RLS patterns
+WebSearch(query="Supabase RLS policies best practices 2025 2026")
+
+```
+
+**NEVER assume library APIs haven't changed. Always verify.**
+
+### 7. Internationalization
+
+- **ALWAYS** use `react-i18next` for all user-facing text
+- Define messages in `frontend/messages/{language}.json`
+- **NEVER** hardcode user-facing strings
+- Write code in English first, then translate
+
+### 8. Context Propagation (Go)
+
+- **ALWAYS** use `context.Context` as first parameter for I/O operations
+- Applies to: repository methods, use case Execute methods, service methods
+- **NEVER** use `context.Background()` except at application entry point
+
+### 9. UI Design Quality (Frontend)
+
+Pour toute création de composant UI significatif (pages, modals, forms, dashboards, cards), utilise le skill `frontend-design:frontend-design` pour garantir un design distinctif et production-ready.
 
 ---
 
-## Project Architecture
+## Core Architecture
 
-### Architectural Patterns
+### Frontend (React 19.1.1)
 
-**Multi-Context State Management:**
+- **Pattern**: Hybrid Server/Client Components
+  - **Server Components** (default): Layouts, initial data fetching, static UI
+  - **Client Components** (`'use client'`): Interactivity, state, hooks, providers
+- **I18n**: MUST use `react-i18next`
+- **Styling**: Tailwind CSS + Shadcn UI
 
-- `AuthContext` + `AuthContextProvider` for authentication state
-- `VisaContext` + `VisaProvider` for visa selection and switching
-- Protected routes with `ProtectedRoute` components
+### Database & Environment
 
-**Database Schema (4 main tables):**
+- **Parameterized Queries**: All database operations MUST use parameterized queries
+- **Supabase Remote ONLY**: Never use local Supabase
+- **Configuration**: `.env` for secrets
 
-- `user_profiles` - User account information
-- `user_visas` - Visa records for each user
-- `employers` - Employer information
-- `work_entries` - Individual work hour entries
+### Logging Strategy
 
-**Database Features:**
+- **Dev**: Verbose (Info level) with full data structures
+- **Prod**: Clean (Info/Warn/Error)
+- **Retries**: NEVER log `ERROR` on retryable failures - use `Warn`
 
-- Foreign key relationships maintaining referential integrity
-- Generated columns for calculated fields
-- Check constraints for business rule enforcement
-- RLS policies for secure data access
+### Security
 
-### File Structure (Bulletproof React Pattern)
-
-Follow feature-based architecture:
-
-```
-src/
-├── features/           # Feature modules
-│   ├── auth/          # Authentication feature
-│   ├── work-entries/  # Work tracking feature
-│   └── visas/         # Visa management feature
-├── components/        # Shared components
-├── lib/              # Utilities and configurations
-├── hooks/            # Custom hooks
-└── contexts/         # Context providers
-```
-
-### Import Aliasing
-
-- `@/` points to `src/` directory via Vite config
-- Example: `import { Button } from '@/components/ui/button'`
+- **Secrets**: NEVER commit `.env`
 
 ---
 
-## Development Guidelines
+## Development Process
 
-### shadcn/ui Components - MANDATORY
+### Before Implementation
 
-**ALWAYS use shadcn CLI to install components. NEVER create them manually.**
+1. Understand the full context of the request
+2. Identify affected components and services
+3. Evaluate dependencies and side effects
+4. Plan all steps using TodoWrite
+
+### Ask Clarifying Questions
+
+If not clearly defined, clarify:
+
+- Where should the new code be placed?
+- What level of input validation is expected?
+- What error scenarios should be handled?
+- Are there performance or scalability constraints?
+
+### Validation with User
+
+**Approval required at key checkpoints**:
+
+1. Before starting major work
+2. After preparing implementation plan
+3. If architectural decisions are needed
+
+---
+
+## Naming Conventions
+
+- **JS/TS**: camelCase for variables
+- **Files**: kebab-case for frontend
+
+---
+
+## Common Commands
 
 ```bash
-npx shadcn@latest add [component-name]
-```
+# Setup
+pnpm install
 
-**Component Usage Rules:**
-
-- ✅ Use shadcn/ui components for ALL UI elements whenever possible
-- ✅ Prioritize shadcn/ui over custom components
-- ✅ Only create custom components when shadcn/ui doesn't provide functionality
-- ✅ Always check shadcn/ui library FIRST before writing custom UI code
-- ✅ Maintain design consistency using shadcn/ui design system
-
-### Data Validation Strategy
-
-**Use Zod for ALL validation:**
-
-- Create reusable schemas that mirror database structure
-- Validate data BEFORE sending to Supabase
-- Use Zod for type inference
-- Validate all form inputs and API data
-
-### Mobile-First Design - MANDATORY
-
-**This application MUST be designed mobile-first.**
-
-**Core Principles:**
-
-- **Target Devices**: Smartphones (375px, 360px widths)
-- **Mobile-First Responsive**: Mobile design is primary, desktop is enhancement
-- **Mobile Native Feel**: App-like experience with mobile UI patterns
-
-**Responsive Strategy:**
-
-- Design for mobile first (375px viewport)
-- Add responsive enhancements for tablet (768px+)
-- Minimal adaptations for desktop (1024px+)
-
-### Development Commands
-
-```bash
-pnpm dev       # Start development server
-pnpm build     # Build production bundle
-pnpm lint      # Run ESLint
-pnpm preview   # Preview production build
-```
-
-### Form Handling
-
-- Use FormData with custom validation utilities
-- Validate with Zod before submission
-- Consistent error handling with user-friendly messages
-
----
-
-## Working Holiday Visa 417 - Business Context
-
-### Application Purpose
-
-Grant Me 417 helps Working Holiday Visa (WHV) 417 holders track "specified work" to qualify for visa extensions. The name represents "Grant Me" (getting your visa granted) with "417" referencing the Working Holiday Visa subclass 417.
-
-### Target Users
-
-**International backpackers** (not Australian citizens) who hold Working Holiday Visas and work in Australia.
-
-**Eligible Countries/Territories (19 total):**
-
-- European: Belgium, Cyprus, Denmark, Estonia, Finland, France, Germany, Ireland, Italy, Malta, Netherlands, Norway, Sweden, UK
-- Asian: Hong Kong, Japan, South Korea, Taiwan
-- Other: Canada
-
-**NOT Eligible for WHV 417** (must use subclass 462):
-Argentina, Austria, Chile, China, Czech Republic, Hungary, Indonesia, Israel, Luxembourg, Malaysia, Peru, Poland, Portugal, San Marino, Singapore, Slovakia, Slovenia, Spain, Thailand, Turkey, USA, Uruguay, Vietnam
-
-### Specified Work Requirements
-
-**Second WHV (2nd year):**
-
-- Duration: 88 calendar days (3 months minimum)
-- Work Type: "Specified work" in eligible industries/regional areas
-- Can be continuous or accumulated
-
-**Third WHV (3rd year):**
-
-- Duration: 179 calendar days (6 months minimum)
-- Work Type: "Specified work" in eligible industries/regional areas
-- Important: Cannot be completed in less than 6 calendar months total period
-
-### Eligible Industries
-
-1. **Plant and Animal Cultivation** - Agriculture, farming, fruit picking, livestock
-2. **Fishing and Pearling** - Commercial fishing, aquaculture, pearl diving
-3. **Tree Farming and Felling** - Forestry, logging, tree cultivation
-4. **Mining** - All mining sector activities
-5. **Construction** - All construction sector activities
-6. **Hospitality & Tourism** - Chef, guest services, dive instructor, tour guide (Northern Australia & Remote areas only, from June 2021)
-7. **Bushfire Recovery Work** - Land/property restoration, wildlife care, support services
-8. **Critical COVID-19 Work** - Medical, aged care, disability care, childcare, food processing
-
----
-
-## ⚠️ IMPORTANT - Git Commit Policy
-
-**NEVER create commits or push to repository without explicit user authorization.**
-
-Claude Code must ALWAYS ask for permission before:
-
-- Running `git add`
-- Running `git commit`
-- Running `git push`
-- Making any git operations that modify history
-
----
-
-## Visual Development
-
-### Design Principles
-
-- Comprehensive design checklist in `/context/design-principles.md`
-- When making visual (front-end, UI/UX) changes, always refer to these files for guidance
-
-### ⚠️ MANDATORY Visual Verification with BrowserMCP
-
-**ALWAYS verify UI/UX changes in the browser using browsermcp tools.**
-
-**After ANY frontend modification, you MUST:**
-
-1. **Navigate to the page**: Use `mcp__browsermcp__browser_navigate` to load the affected page
-2. **Take screenshot**: Use `mcp__browsermcp__browser_screenshot` to capture the current state
-3. **Verify changes**: Visually confirm that modifications are correctly applied
-4. **Test interactions**: Use browser tools to click, hover, type and verify component behavior
-5. **Check responsive design**: Test at different viewport sizes if relevant
-
-**Verification Workflow:**
+# Start Dev (React frontend)
+pnpm dev
 
 ```
-1. Make code changes
-2. Navigate to http://localhost:5173/[relevant-path]
-3. Take screenshot and analyze
-4. Test interactive elements (buttons, forms, etc.)
-5. Confirm changes match expectations
-6. Report findings to user
-```
-
-**Why This Is Critical:**
-
-- ✅ Catches visual regressions immediately
-- ✅ Validates responsive behavior
-- ✅ Confirms interactive elements work correctly
-- ✅ Prevents "looks good in code, broken in browser" issues
-- ✅ Ensures mobile-first design is properly implemented
-
-**NEVER:**
-
-- ❌ Make frontend changes without browser verification
-- ❌ Assume code changes work without visual confirmation
-- ❌ Skip screenshot capture after modifications
-- ❌ Mark UI tasks complete without browser testing
-
-**ALWAYS:**
-
-- ✅ Use browsermcp after every frontend modification
-- ✅ Take screenshots to document visual state
-- ✅ Test interactive elements in the browser
-- ✅ Verify responsive breakpoints visually
-- ✅ Include screenshot analysis in your response to user
-
----
-
-**Remember**: This is a learning project. Always consult documentation via MCP servers, follow bulletproof-react architecture, use React 19+ features, and maintain mobile-first responsive design.

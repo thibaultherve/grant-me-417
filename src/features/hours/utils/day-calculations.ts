@@ -8,16 +8,16 @@
  * @module day-calculations
  */
 
-import { format } from 'date-fns'
+import { format } from 'date-fns';
 
 /**
  * Work entry representation for a single day
  */
 export interface WorkEntry {
-  id: string
-  work_date: string
-  hours_worked: string
-  decimal_hours: number
+  id: string;
+  work_date: string;
+  hours_worked: string;
+  decimal_hours: number;
 }
 
 /**
@@ -38,9 +38,9 @@ export interface WorkEntry {
  */
 export function calculateTotalHours(entries: WorkEntry[]): number {
   return entries.reduce((sum, entry) => {
-    const hours = parseFloat(entry.hours_worked) || 0
-    return sum + hours
-  }, 0)
+    const hours = parseFloat(entry.hours_worked) || 0;
+    return sum + hours;
+  }, 0);
 }
 
 /**
@@ -61,7 +61,7 @@ export function calculateTotalHours(entries: WorkEntry[]): number {
  * ```
  */
 export function sortEntriesByDate(entries: WorkEntry[]): WorkEntry[] {
-  return [...entries].sort((a, b) => a.work_date.localeCompare(b.work_date))
+  return [...entries].sort((a, b) => a.work_date.localeCompare(b.work_date));
 }
 
 /**
@@ -83,17 +83,22 @@ export function sortEntriesByDate(entries: WorkEntry[]): WorkEntry[] {
  * // Returns array with newEntry replacing the old entry for Jan 6
  * ```
  */
-export function mergeOrAddEntry(entries: WorkEntry[], newEntry: WorkEntry): WorkEntry[] {
-  const existingIndex = entries.findIndex(entry => entry.work_date === newEntry.work_date)
+export function mergeOrAddEntry(
+  entries: WorkEntry[],
+  newEntry: WorkEntry,
+): WorkEntry[] {
+  const existingIndex = entries.findIndex(
+    (entry) => entry.work_date === newEntry.work_date,
+  );
 
   if (existingIndex >= 0) {
     // Replace existing entry
     return entries.map((entry, index) =>
-      index === existingIndex ? newEntry : entry
-    )
+      index === existingIndex ? newEntry : entry,
+    );
   } else {
     // Add new entry and sort by date
-    return sortEntriesByDate([...entries, newEntry])
+    return sortEntriesByDate([...entries, newEntry]);
   }
 }
 
@@ -120,8 +125,8 @@ export function createWorkEntry(date: Date, decimalHours: number): WorkEntry {
     id: `entry-${Date.now()}`,
     work_date: format(date, 'yyyy-MM-dd'),
     hours_worked: decimalHours.toString(),
-    decimal_hours: decimalHours
-  }
+    decimal_hours: decimalHours,
+  };
 }
 
 /**
@@ -141,8 +146,11 @@ export function createWorkEntry(date: Date, decimalHours: number): WorkEntry {
  * // Returns array with only the Jan 7 entry
  * ```
  */
-export function removeEntryById(entries: WorkEntry[], entryId: string): WorkEntry[] {
-  return entries.filter(entry => entry.id !== entryId)
+export function removeEntryById(
+  entries: WorkEntry[],
+  entryId: string,
+): WorkEntry[] {
+  return entries.filter((entry) => entry.id !== entryId);
 }
 
 /**
@@ -161,7 +169,11 @@ export function removeEntryById(entries: WorkEntry[], entryId: string): WorkEntr
  * hasEntryForDate(entries, new Date('2025-01-07')) // false
  * ```
  */
-export function hasEntryForDate(entries: WorkEntry[], date: Date | string): boolean {
-  const dateString = typeof date === 'string' ? date : format(date, 'yyyy-MM-dd')
-  return entries.some(entry => entry.work_date === dateString)
+export function hasEntryForDate(
+  entries: WorkEntry[],
+  date: Date | string,
+): boolean {
+  const dateString =
+    typeof date === 'string' ? date : format(date, 'yyyy-MM-dd');
+  return entries.some((entry) => entry.work_date === dateString);
 }

@@ -7,26 +7,27 @@
  * @module week-calculations
  */
 
-import { startOfWeek, addDays, format } from 'date-fns'
-import type { DaysIncluded } from '../schemas'
+import { startOfWeek, addDays, format } from 'date-fns';
+
+import type { DaysIncluded } from '../schemas';
 
 /**
  * Daily entry representation for a single day of the week
  */
 export interface DailyEntry {
-  day: keyof DaysIncluded
-  date: string
-  hours: string
-  decimalHours: number
-  isCalculated: boolean
+  day: keyof DaysIncluded;
+  date: string;
+  hours: string;
+  decimalHours: number;
+  isCalculated: boolean;
 }
 
 /**
  * Week hours data structure containing hours per day and total
  */
 export interface WeekHoursData {
-  weekHours: Record<string, number>
-  totalHours: number
+  weekHours: Record<string, number>;
+  totalHours: number;
 }
 
 /**
@@ -39,18 +40,18 @@ const DAY_NAMES: (keyof DaysIncluded)[] = [
   'thursday',
   'friday',
   'saturday',
-  'sunday'
-]
+  'sunday',
+];
 
 /**
  * Maximum hours allowed per day
  */
-export const MAX_HOURS_PER_DAY = 24
+export const MAX_HOURS_PER_DAY = 24;
 
 /**
  * Maximum hours allowed per week (7 days * 24 hours)
  */
-export const MAX_HOURS_PER_WEEK = 168
+export const MAX_HOURS_PER_WEEK = 168;
 
 /**
  * Retrieves work hours data for a specific week from a hours-by-date mapping.
@@ -77,23 +78,23 @@ export const MAX_HOURS_PER_WEEK = 168
  */
 export function getWeekHoursData(
   weekDate: Date,
-  hoursByDate: Record<string, number>
+  hoursByDate: Record<string, number>,
 ): WeekHoursData {
-  const mondayDate = startOfWeek(weekDate, { weekStartsOn: 1 })
-  const weekHours: Record<string, number> = {}
-  let totalHours = 0
+  const mondayDate = startOfWeek(weekDate, { weekStartsOn: 1 });
+  const weekHours: Record<string, number> = {};
+  let totalHours = 0;
 
   // Check each day of the week (Monday = 0, Sunday = 6)
   for (let i = 0; i < 7; i++) {
-    const dayDate = addDays(mondayDate, i)
-    const dateKey = format(dayDate, 'yyyy-MM-dd')
-    const hours = hoursByDate[dateKey] || 0
+    const dayDate = addDays(mondayDate, i);
+    const dateKey = format(dayDate, 'yyyy-MM-dd');
+    const hours = hoursByDate[dateKey] || 0;
 
-    weekHours[DAY_NAMES[i]] = hours
-    totalHours += hours
+    weekHours[DAY_NAMES[i]] = hours;
+    totalHours += hours;
   }
 
-  return { weekHours, totalHours }
+  return { weekHours, totalHours };
 }
 
 /**
@@ -122,17 +123,17 @@ export function getWeekHoursData(
  */
 export function calculateHoursPerDay(
   totalHours: number,
-  daysIncluded: DaysIncluded
+  daysIncluded: DaysIncluded,
 ): number {
   const selectedDayKeys = Object.keys(daysIncluded).filter(
-    (day) => daysIncluded[day as keyof DaysIncluded]
-  ) as (keyof DaysIncluded)[]
+    (day) => daysIncluded[day as keyof DaysIncluded],
+  ) as (keyof DaysIncluded)[];
 
-  if (selectedDayKeys.length === 0) return 0
-  if (totalHours <= 0) return 0
+  if (selectedDayKeys.length === 0) return 0;
+  if (totalHours <= 0) return 0;
 
   // Round to 2 decimal places to avoid floating point issues
-  return Math.round((totalHours / selectedDayKeys.length) * 100) / 100
+  return Math.round((totalHours / selectedDayKeys.length) * 100) / 100;
 }
 
 /**
@@ -160,23 +161,23 @@ export function createDailyEntriesFromTotal(
   weekDate: Date,
   totalHours: number,
   daysIncluded: DaysIncluded,
-  isCalculated: boolean = true
+  isCalculated: boolean = true,
 ): DailyEntry[] {
-  const mondayDate = startOfWeek(weekDate, { weekStartsOn: 1 })
-  const hoursPerDay = calculateHoursPerDay(totalHours, daysIncluded)
+  const mondayDate = startOfWeek(weekDate, { weekStartsOn: 1 });
+  const hoursPerDay = calculateHoursPerDay(totalHours, daysIncluded);
 
   return DAY_NAMES.map((day, index) => {
-    const dayDate = addDays(mondayDate, index)
-    const isSelected = daysIncluded[day]
+    const dayDate = addDays(mondayDate, index);
+    const isSelected = daysIncluded[day];
 
     return {
       day,
       date: format(dayDate, 'yyyy-MM-dd'),
       hours: isSelected ? hoursPerDay.toString() : '0',
       decimalHours: isSelected ? hoursPerDay : 0,
-      isCalculated: isSelected && isCalculated
-    }
-  })
+      isCalculated: isSelected && isCalculated,
+    };
+  });
 }
 
 /**
@@ -206,22 +207,22 @@ export function createDailyEntriesFromTotal(
  */
 export function createDailyEntriesFromWeekHours(
   weekDate: Date,
-  weekHours: Record<string, number>
+  weekHours: Record<string, number>,
 ): DailyEntry[] {
-  const mondayDate = startOfWeek(weekDate, { weekStartsOn: 1 })
+  const mondayDate = startOfWeek(weekDate, { weekStartsOn: 1 });
 
   return DAY_NAMES.map((day, index) => {
-    const dayDate = addDays(mondayDate, index)
-    const hours = weekHours[day] || 0
+    const dayDate = addDays(mondayDate, index);
+    const hours = weekHours[day] || 0;
 
     return {
       day,
       date: format(dayDate, 'yyyy-MM-dd'),
       hours: hours.toString(),
       decimalHours: hours,
-      isCalculated: false // Pre-filled from existing data, not calculated
-    }
-  })
+      isCalculated: false, // Pre-filled from existing data, not calculated
+    };
+  });
 }
 
 /**
@@ -239,7 +240,7 @@ export function createDailyEntriesFromWeekHours(
  * ```
  */
 export function createDaysIncludedFromWeekHours(
-  weekHours: Record<string, number>
+  weekHours: Record<string, number>,
 ): DaysIncluded {
   return {
     monday: (weekHours.monday || 0) > 0,
@@ -249,7 +250,7 @@ export function createDaysIncludedFromWeekHours(
     friday: (weekHours.friday || 0) > 0,
     saturday: (weekHours.saturday || 0) > 0,
     sunday: (weekHours.sunday || 0) > 0,
-  }
+  };
 }
 
 /**
@@ -270,7 +271,7 @@ export function createDaysIncludedFromWeekHours(
  * ```
  */
 export function countSelectedDays(daysIncluded: DaysIncluded): number {
-  return Object.values(daysIncluded).filter(Boolean).length
+  return Object.values(daysIncluded).filter(Boolean).length;
 }
 
 /**
@@ -288,9 +289,9 @@ export function countSelectedDays(daysIncluded: DaysIncluded): number {
  */
 export function calculateTotalFromEntries(
   entries: DailyEntry[],
-  daysIncluded: DaysIncluded
+  daysIncluded: DaysIncluded,
 ): number {
   return entries
     .filter((entry) => daysIncluded[entry.day])
-    .reduce((sum, entry) => sum + entry.decimalHours, 0)
+    .reduce((sum, entry) => sum + entry.decimalHours, 0);
 }

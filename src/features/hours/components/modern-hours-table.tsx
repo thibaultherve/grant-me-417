@@ -1,14 +1,14 @@
-import { useState } from 'react';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+  Calendar,
+  CheckCircle,
+  XCircle,
+  MoreHorizontal,
+  Trash2,
+  ChevronUp,
+  ChevronDown,
+} from 'lucide-react';
+import { useState } from 'react';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,6 +19,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,24 +28,29 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
-  Calendar,
-  CheckCircle,
-  XCircle,
-  MoreHorizontal,
-  Trash2,
-  ChevronUp,
-  ChevronDown
-} from 'lucide-react';
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 import { useDeleteWorkEntry } from '../api/use-hours';
-import type { HourEntryWithEmployer, SortOptions, SortField, SortOrder, HoursResponse } from '../types';
+import type {
+  HourEntryWithEmployer,
+  SortOptions,
+  SortField,
+  SortOrder,
+  HoursResponse,
+} from '../types';
 
 interface ModernHoursTableProps {
-  data: HoursResponse | null;
+  data: HoursResponse | null | undefined;
   isLoading: boolean;
   error: Error | null;
   currentPage: number;
-  setCurrentPage: (page: number) => void;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   sortOptions: SortOptions;
   setSortOptions: (options: SortOptions) => void;
   limit: number;
@@ -60,12 +67,15 @@ export const ModernHoursTable = ({
   limit,
 }: ModernHoursTableProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [entryToDelete, setEntryToDelete] = useState<HourEntryWithEmployer | null>(null);
+  const [entryToDelete, setEntryToDelete] =
+    useState<HourEntryWithEmployer | null>(null);
   const deleteMutation = useDeleteWorkEntry();
 
   const handleSortChange = (field: SortField) => {
     const newOrder: SortOrder =
-      sortOptions.field === field && sortOptions.order === 'asc' ? 'desc' : 'asc';
+      sortOptions.field === field && sortOptions.order === 'asc'
+        ? 'desc'
+        : 'asc';
     setSortOptions({ field, order: newOrder });
     setCurrentPage(1);
   };
@@ -82,7 +92,7 @@ export const ModernHoursTable = ({
       onSuccess: () => {
         setDeleteDialogOpen(false);
         setEntryToDelete(null);
-      }
+      },
     });
   };
 
@@ -113,7 +123,13 @@ export const ModernHoursTable = ({
     return labels[industry] || industry;
   };
 
-  const SortButton = ({ field, children }: { field: SortField; children: React.ReactNode }) => {
+  const SortButton = ({
+    field,
+    children,
+  }: {
+    field: SortField;
+    children: React.ReactNode;
+  }) => {
     const isActive = sortOptions.field === field;
     return (
       <Button
@@ -123,11 +139,12 @@ export const ModernHoursTable = ({
         className="h-8 px-2 -mx-2 hover:bg-muted"
       >
         {children}
-        {isActive && (
-          sortOptions.order === 'asc'
-            ? <ChevronUp className="ml-1 h-3 w-3" />
-            : <ChevronDown className="ml-1 h-3 w-3" />
-        )}
+        {isActive &&
+          (sortOptions.order === 'asc' ? (
+            <ChevronUp className="ml-1 h-3 w-3" />
+          ) : (
+            <ChevronDown className="ml-1 h-3 w-3" />
+          ))}
       </Button>
     );
   };
@@ -251,13 +268,14 @@ export const ModernHoursTable = ({
       {data.totalPages > 1 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-2 px-2">
           <p className="text-xs text-muted-foreground">
-            {((currentPage - 1) * limit) + 1}-{Math.min(currentPage * limit, data.total)} of {data.total}
+            {(currentPage - 1) * limit + 1}-
+            {Math.min(currentPage * limit, data.total)} of {data.total}
           </p>
           <div className="flex gap-2">
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
             >
               Prev
@@ -265,7 +283,9 @@ export const ModernHoursTable = ({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage(p => Math.min(data.totalPages, p + 1))}
+              onClick={() =>
+                setCurrentPage((p) => Math.min(data.totalPages, p + 1))
+              }
               disabled={currentPage === data.totalPages}
             >
               Next
@@ -280,11 +300,15 @@ export const ModernHoursTable = ({
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Entry?</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this work entry? This action cannot be undone.
+              Are you sure you want to delete this work entry? This action
+              cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleDeleteCancel} disabled={deleteMutation.isPending}>
+            <AlertDialogCancel
+              onClick={handleDeleteCancel}
+              disabled={deleteMutation.isPending}
+            >
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction

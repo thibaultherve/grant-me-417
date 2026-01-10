@@ -1,37 +1,38 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { InfoCard } from "@/components/ui/info-card";
-import { Button } from "@/components/ui/button";
-import { VisaSelector } from "@/features/visas/components/visa-selector";
-import { WeeklyProgressChart } from "@/features/visas/components/weekly-progress-chart";
-import { useVisaContext } from "@/features/visas/hooks/use-visa-context";
-import { Briefcase, Calendar, ArrowRight } from "lucide-react";
-import { Link } from "react-router";
-import { paths } from "@/config/paths";
+import { Briefcase, Calendar, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { InfoCard } from '@/components/ui/info-card';
+import { paths } from '@/config/paths';
+import { VisaSelector } from '@/features/visas/components/visa-selector';
+import { WeeklyProgressChart } from '@/features/visas/components/weekly-progress-chart';
+import { useVisaContext } from '@/features/visas/hooks/use-visa-context';
 
 export const DashboardRoute = () => {
   const { currentVisa } = useVisaContext();
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-AU", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "2-digit",
+    return new Date(dateString).toLocaleDateString('en-AU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: '2-digit',
     });
   };
 
   const calculateVisaPeriodProgress = (
     arrivalDate: string,
-    endDate: string
+    endDate: string,
   ) => {
     const today = new Date();
     const start = new Date(arrivalDate);
     const end = new Date(endDate);
 
     const totalDays = Math.ceil(
-      (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
+      (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24),
     );
     const daysPassed = Math.ceil(
-      (today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
+      (today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24),
     );
     const daysLeft = Math.max(0, totalDays - daysPassed);
 
@@ -66,10 +67,12 @@ export const DashboardRoute = () => {
         <InfoCard variant="accent">
           <div className="flex flex-col gap-4">
             <div>
-              <h2 className="text-xl font-semibold mb-2">Get started with Grant Me 417</h2>
+              <h2 className="text-xl font-semibold mb-2">
+                Get started with Grant Me 417
+              </h2>
               <p className="text-sm text-muted-foreground">
-                Start tracking your specified work hours to qualify for your next Working Holiday Visa.
-                Create your first visa to begin.
+                Start tracking your specified work hours to qualify for your
+                next Working Holiday Visa. Create your first visa to begin.
               </p>
             </div>
             <Button asChild className="w-fit">
@@ -86,14 +89,16 @@ export const DashboardRoute = () => {
           {(() => {
             const visaPeriod = calculateVisaPeriodProgress(
               currentVisa.arrival_date,
-              currentVisa.end_date
+              currentVisa.end_date,
             );
             const isWorkComplete = currentVisa.is_eligible;
 
             return (
               <Card>
                 <CardContent className="p-6">
-                  <h2 className="text-lg font-semibold mb-6">Progress Details</h2>
+                  <h2 className="text-lg font-semibold mb-6">
+                    Progress Details
+                  </h2>
 
                   <div className="space-y-8">
                     {/* Work Progress */}
@@ -104,7 +109,8 @@ export const DashboardRoute = () => {
                           <span className="font-medium">Work Requirement</span>
                         </div>
                         <span className="text-sm text-muted-foreground">
-                          {currentVisa.eligible_days} / {currentVisa.days_required} days
+                          {currentVisa.eligible_days} /{' '}
+                          {currentVisa.days_required} days
                         </span>
                       </div>
                       <div className="relative h-2 w-full overflow-hidden rounded-full bg-muted">
@@ -119,9 +125,8 @@ export const DashboardRoute = () => {
                       </div>
                       <p className="text-sm text-muted-foreground">
                         {isWorkComplete
-                          ? "✓ Work requirement completed!"
-                          : `${currentVisa.days_remaining} days remaining`
-                        }
+                          ? '✓ Work requirement completed!'
+                          : `${currentVisa.days_remaining} days remaining`}
                       </p>
                     </div>
 
@@ -133,7 +138,8 @@ export const DashboardRoute = () => {
                           <span className="font-medium">Visa Period</span>
                         </div>
                         <span className="text-sm text-muted-foreground">
-                          {formatDate(currentVisa.arrival_date)} - {formatDate(currentVisa.end_date)}
+                          {formatDate(currentVisa.arrival_date)} -{' '}
+                          {formatDate(currentVisa.end_date)}
                         </span>
                       </div>
                       <div className="relative h-2 w-full overflow-hidden rounded-full bg-muted">
@@ -143,7 +149,8 @@ export const DashboardRoute = () => {
                         />
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        {formatDaysLeft(visaPeriod.daysLeft)} ({visaPeriod.progress.toFixed(0)}% used)
+                        {formatDaysLeft(visaPeriod.daysLeft)} (
+                        {visaPeriod.progress.toFixed(0)}% used)
                       </p>
                     </div>
                   </div>
@@ -158,7 +165,8 @@ export const DashboardRoute = () => {
               <div>
                 <h3 className="font-semibold mb-1">Track your work hours</h3>
                 <p className="text-sm text-muted-foreground">
-                  Log your specified work hours to track progress toward your next visa.
+                  Log your specified work hours to track progress toward your
+                  next visa.
                 </p>
               </div>
               <Button asChild>

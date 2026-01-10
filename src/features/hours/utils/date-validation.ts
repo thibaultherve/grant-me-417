@@ -7,7 +7,7 @@
  * @module date-validation
  */
 
-import { isAfter } from 'date-fns'
+import { isAfter } from 'date-fns';
 
 /**
  * Checks if a date should be disabled for work entry selection.
@@ -28,9 +28,9 @@ import { isAfter } from 'date-fns'
  * ```
  */
 export function isDateDisabled(date: Date): boolean {
-  const today = new Date()
-  today.setHours(23, 59, 59, 999)
+  const today = new Date();
+  today.setHours(23, 59, 59, 999);
 
   // Disable future dates
-  return isAfter(date, today)
+  return isAfter(date, today);
 }

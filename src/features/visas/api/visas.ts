@@ -6,6 +6,7 @@
  */
 
 import { supabase } from '@/lib/supabase';
+
 import type { UserVisa, CreateVisaInput } from '../types';
 
 /**
@@ -40,7 +41,7 @@ export const getVisa = async (id: string): Promise<UserVisa> => {
  */
 export const addVisa = async (
   userId: string,
-  input: CreateVisaInput
+  input: CreateVisaInput,
 ): Promise<UserVisa> => {
   const { data, error } = await supabase
     .from('user_visas')
@@ -64,7 +65,7 @@ export const addVisa = async (
  */
 export const updateVisa = async (
   id: string,
-  input: Partial<CreateVisaInput>
+  input: Partial<CreateVisaInput>,
 ): Promise<UserVisa> => {
   const { data, error } = await supabase
     .from('user_visas')
@@ -85,10 +86,7 @@ export const updateVisa = async (
  * Supprime un visa
  */
 export const deleteVisa = async (id: string): Promise<void> => {
-  const { error } = await supabase
-    .from('user_visas')
-    .delete()
-    .eq('id', id);
+  const { error } = await supabase.from('user_visas').delete().eq('id', id);
 
   if (error) throw error;
 };

@@ -1,25 +1,25 @@
-import { toast } from 'sonner'
+import { toast } from 'sonner';
 
 /**
  * Error handling configuration options
  */
 export interface ErrorHandlerOptions {
   /** Whether to show toast notification (default: true) */
-  showToast?: boolean
+  showToast?: boolean;
   /** Whether to log to console (default: true) */
-  logToConsole?: boolean
+  logToConsole?: boolean;
   /** Custom prefix for console logs (optional) */
-  consolePrefix?: string
+  consolePrefix?: string;
   /** Custom fallback message if error doesn't have one */
-  fallbackMessage?: string
+  fallbackMessage?: string;
 }
 
 /**
  * Standard error response format
  */
 export interface ErrorResponse {
-  success: false
-  error: string
+  success: false;
+  error: string;
 }
 
 /**
@@ -49,34 +49,34 @@ export interface ErrorResponse {
  */
 export function handleError(
   error: unknown,
-  options: ErrorHandlerOptions = {}
+  options: ErrorHandlerOptions = {},
 ): ErrorResponse {
   const {
     showToast = true,
     logToConsole = true,
     consolePrefix,
-    fallbackMessage = 'An error occurred'
-  } = options
+    fallbackMessage = 'An error occurred',
+  } = options;
 
   // Extract error message
-  const message = error instanceof Error ? error.message : fallbackMessage
+  const message = error instanceof Error ? error.message : fallbackMessage;
 
   // Log to console for debugging
   if (logToConsole) {
-    const logMessage = consolePrefix ? `${consolePrefix}:` : 'Error:'
-    console.error(logMessage, error)
+    const logMessage = consolePrefix ? `${consolePrefix}:` : 'Error:';
+    console.error(logMessage, error);
   }
 
   // Show user-friendly toast notification
   if (showToast) {
-    toast.error(message)
+    toast.error(message);
   }
 
   // Return standardized error response
   return {
     success: false,
-    error: message
-  }
+    error: message,
+  };
 }
 
 /**
@@ -97,13 +97,13 @@ export function handleError(
  */
 export function handleSilentError(
   error: unknown,
-  consolePrefix?: string
+  consolePrefix?: string,
 ): void {
   handleError(error, {
     showToast: false,
     logToConsole: true,
-    consolePrefix
-  })
+    consolePrefix,
+  });
 }
 
 /**
@@ -122,7 +122,7 @@ export function handleSilentError(
  */
 export function getErrorMessage(
   error: unknown,
-  fallback: string = 'An error occurred'
+  fallback: string = 'An error occurred',
 ): string {
-  return error instanceof Error ? error.message : fallback
+  return error instanceof Error ? error.message : fallback;
 }

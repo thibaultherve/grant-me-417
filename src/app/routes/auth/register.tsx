@@ -1,12 +1,20 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
-import { supabase } from '@/lib/supabase';
-import { paths } from '@/config/paths';
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { toast } from 'sonner';
+import { paths } from '@/config/paths';
+import { supabase } from '@/lib/supabase';
 
 export const RegisterRoute = () => {
   const navigate = useNavigate();
@@ -57,7 +65,9 @@ export const RegisterRoute = () => {
     <div className="flex min-h-screen items-center justify-center px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
+          <CardTitle className="text-2xl font-bold">
+            Create an account
+          </CardTitle>
           <CardDescription>
             Start tracking your WHV work hours today
           </CardDescription>

@@ -7,16 +7,22 @@
  * @module week-validation
  */
 
-import { addDays, startOfWeek, isAfter } from 'date-fns'
-import type { DaysIncluded } from '../schemas'
-import { countSelectedDays, MAX_HOURS_PER_DAY, MAX_HOURS_PER_WEEK } from './week-calculations'
+import { addDays, startOfWeek, isAfter } from 'date-fns';
+
+import type { DaysIncluded } from '../schemas';
+
+import {
+  countSelectedDays,
+  MAX_HOURS_PER_DAY,
+  MAX_HOURS_PER_WEEK,
+} from './week-calculations';
 
 /**
  * Validation result structure
  */
 export interface ValidationResult {
-  isValid: boolean
-  errorMessage: string | null
+  isValid: boolean;
+  errorMessage: string | null;
 }
 
 /**
@@ -37,11 +43,11 @@ export interface ValidationResult {
  * ```
  */
 export function isWeekComplete(date: Date): boolean {
-  const today = new Date()
-  const mondayOfWeek = startOfWeek(date, { weekStartsOn: 1 })
-  const fridayOfWeek = addDays(mondayOfWeek, 4) // Friday is 4 days after Monday
+  const today = new Date();
+  const mondayOfWeek = startOfWeek(date, { weekStartsOn: 1 });
+  const fridayOfWeek = addDays(mondayOfWeek, 4); // Friday is 4 days after Monday
 
-  return today >= fridayOfWeek
+  return today >= fridayOfWeek;
 }
 
 /**
@@ -63,14 +69,14 @@ export function isWeekComplete(date: Date): boolean {
  * ```
  */
 export function isDateDisabled(date: Date): boolean {
-  const today = new Date()
-  today.setHours(23, 59, 59, 999)
+  const today = new Date();
+  today.setHours(23, 59, 59, 999);
 
   // Disable future dates
-  if (isAfter(date, today)) return true
+  if (isAfter(date, today)) return true;
 
   // Disable incomplete weeks
-  return !isWeekComplete(date)
+  return !isWeekComplete(date);
 }
 
 /**
@@ -92,42 +98,42 @@ export function isDateDisabled(date: Date): boolean {
  */
 export function validateTotalHours(
   totalHours: number,
-  selectedDaysCount: number
+  selectedDaysCount: number,
 ): ValidationResult {
   if (totalHours <= 0) {
     return {
       isValid: false,
-      errorMessage: 'Total hours must be greater than 0'
-    }
+      errorMessage: 'Total hours must be greater than 0',
+    };
   }
 
   if (totalHours > MAX_HOURS_PER_WEEK) {
     return {
       isValid: false,
-      errorMessage: `Cannot exceed ${MAX_HOURS_PER_WEEK} hours per week`
-    }
+      errorMessage: `Cannot exceed ${MAX_HOURS_PER_WEEK} hours per week`,
+    };
   }
 
   if (selectedDaysCount === 0) {
     return {
       isValid: false,
-      errorMessage: 'At least one day must be selected'
-    }
+      errorMessage: 'At least one day must be selected',
+    };
   }
 
-  const hoursPerDay = totalHours / selectedDaysCount
+  const hoursPerDay = totalHours / selectedDaysCount;
 
   if (hoursPerDay > MAX_HOURS_PER_DAY) {
     return {
       isValid: false,
-      errorMessage: `Cannot exceed ${MAX_HOURS_PER_DAY} hours per day. With ${selectedDaysCount} day(s) selected, maximum total is ${MAX_HOURS_PER_DAY * selectedDaysCount}h`
-    }
+      errorMessage: `Cannot exceed ${MAX_HOURS_PER_DAY} hours per day. With ${selectedDaysCount} day(s) selected, maximum total is ${MAX_HOURS_PER_DAY * selectedDaysCount}h`,
+    };
   }
 
   return {
     isValid: true,
-    errorMessage: null
-  }
+    errorMessage: null,
+  };
 }
 
 /**
@@ -156,32 +162,32 @@ export function validateTotalHours(
 export function canToggleDay(
   daysIncluded: DaysIncluded,
   dayToToggle: keyof DaysIncluded,
-  totalDecimalHours: number
+  totalDecimalHours: number,
 ): boolean {
-  const currentSelectedDays = countSelectedDays(daysIncluded)
-  const isCurrentlyIncluded = daysIncluded[dayToToggle]
+  const currentSelectedDays = countSelectedDays(daysIncluded);
+  const isCurrentlyIncluded = daysIncluded[dayToToggle];
 
   // Always allow checking a day (adding more days)
   if (!isCurrentlyIncluded) {
-    return true
+    return true;
   }
 
   // Unchecking: check if we'd have at least 1 day left
   if (currentSelectedDays <= 1) {
-    return false // Can't uncheck the last day
+    return false; // Can't uncheck the last day
   }
 
   // Check if remaining days would exceed 24h per day
   if (totalDecimalHours) {
-    const newSelectedDays = currentSelectedDays - 1
-    const hoursPerDay = totalDecimalHours / newSelectedDays
+    const newSelectedDays = currentSelectedDays - 1;
+    const hoursPerDay = totalDecimalHours / newSelectedDays;
 
     if (hoursPerDay > MAX_HOURS_PER_DAY) {
-      return false // Would exceed 24h per day
+      return false; // Would exceed 24h per day
     }
   }
 
-  return true
+  return true;
 }
 
 /**
@@ -208,16 +214,16 @@ export function canSubmitForm(
   selectedWeekDate: Date | undefined,
   daysIncluded: DaysIncluded,
   isTotalHoursValid: boolean,
-  totalDecimalHours: number
+  totalDecimalHours: number,
 ): boolean {
-  if (!selectedWeekDate) return false
-  if (!isTotalHoursValid) return false
-  if (totalDecimalHours <= 0) return false
+  if (!selectedWeekDate) return false;
+  if (!isTotalHoursValid) return false;
+  if (totalDecimalHours <= 0) return false;
 
-  const selectedDaysCount = countSelectedDays(daysIncluded)
-  if (selectedDaysCount === 0) return false
+  const selectedDaysCount = countSelectedDays(daysIncluded);
+  if (selectedDaysCount === 0) return false;
 
-  return true
+  return true;
 }
 
 /**
@@ -241,18 +247,18 @@ export function canSubmitForm(
  */
 export function shouldShowDayToggleWarning(
   daysIncluded: DaysIncluded,
-  totalDecimalHours: number
+  totalDecimalHours: number,
 ): boolean {
-  const selectedDaysCount = countSelectedDays(daysIncluded)
+  const selectedDaysCount = countSelectedDays(daysIncluded);
 
   // Warning only makes sense if there are multiple days selected
-  if (selectedDaysCount <= 1) return false
+  if (selectedDaysCount <= 1) return false;
 
   // No warning if no hours set
-  if (!totalDecimalHours) return false
+  if (!totalDecimalHours) return false;
 
   // Check if removing one day would exceed limit
-  const hoursIfOneDayRemoved = totalDecimalHours / (selectedDaysCount - 1)
+  const hoursIfOneDayRemoved = totalDecimalHours / (selectedDaysCount - 1);
 
-  return hoursIfOneDayRemoved > MAX_HOURS_PER_DAY
+  return hoursIfOneDayRemoved > MAX_HOURS_PER_DAY;
 }

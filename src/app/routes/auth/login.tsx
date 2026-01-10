@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
-import { supabase } from '@/lib/supabase';
-import { paths } from '@/config/paths';
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
   Card,
   CardContent,
@@ -13,7 +11,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { toast } from 'sonner';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { paths } from '@/config/paths';
+import { supabase } from '@/lib/supabase';
 
 export const LoginRoute = () => {
   const navigate = useNavigate();

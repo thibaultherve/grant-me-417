@@ -1,4 +1,5 @@
 import { Clock, Calendar, TrendingUp } from 'lucide-react';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface HoursStatisticsProps {
@@ -68,9 +69,7 @@ export function HoursStatistics({
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{eligibleDays}</div>
-          <p className="text-xs text-muted-foreground mt-1">
-            Approved entries
-          </p>
+          <p className="text-xs text-muted-foreground mt-1">Approved entries</p>
         </CardContent>
       </Card>
     </div>

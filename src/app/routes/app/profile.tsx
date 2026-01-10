@@ -1,9 +1,15 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/lib/auth';
 import { Separator } from '@/components/ui/separator';
+import { useAuth } from '@/lib/auth';
 
 export const ProfileRoute = () => {
   const { user } = useAuth();
@@ -74,25 +80,37 @@ export const ProfileRoute = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">Email Notifications</p>
-              <p className="text-sm text-muted-foreground">Receive updates about your progress</p>
+              <p className="text-sm text-muted-foreground">
+                Receive updates about your progress
+              </p>
             </div>
-            <Button variant="outline" size="sm">Configure</Button>
+            <Button variant="outline" size="sm">
+              Configure
+            </Button>
           </div>
           <Separator />
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">Export Data</p>
-              <p className="text-sm text-muted-foreground">Download all your work records</p>
+              <p className="text-sm text-muted-foreground">
+                Download all your work records
+              </p>
             </div>
-            <Button variant="outline" size="sm">Export</Button>
+            <Button variant="outline" size="sm">
+              Export
+            </Button>
           </div>
           <Separator />
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-destructive">Delete Account</p>
-              <p className="text-sm text-muted-foreground">Permanently delete your account and data</p>
+              <p className="text-sm text-muted-foreground">
+                Permanently delete your account and data
+              </p>
             </div>
-            <Button variant="destructive" size="sm">Delete</Button>
+            <Button variant="destructive" size="sm">
+              Delete
+            </Button>
           </div>
         </CardContent>
       </Card>

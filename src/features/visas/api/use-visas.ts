@@ -7,9 +7,13 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+
 import { useAuth } from '@/lib/auth';
-import { queryKeys } from '@/lib/react-query';
 import { handleError } from '@/lib/error-handler';
+import { queryKeys } from '@/lib/react-query';
+
+import type { UserVisa, CreateVisaInput } from '../types';
+
 import {
   getVisas,
   getVisa,
@@ -18,7 +22,6 @@ import {
   deleteVisa,
   getVisaWeeklyProgress,
 } from './visas';
-import type { UserVisa, CreateVisaInput } from '../types';
 
 /**
  * Hook pour récupérer tous les visas
@@ -58,7 +61,9 @@ export const useAddVisa = () => {
     onMutate: async (newVisa) => {
       await queryClient.cancelQueries({ queryKey: queryKeys.visas.all });
 
-      const previousVisas = queryClient.getQueryData<UserVisa[]>(queryKeys.visas.all);
+      const previousVisas = queryClient.getQueryData<UserVisa[]>(
+        queryKeys.visas.all,
+      );
 
       // Optimistic update
       queryClient.setQueryData<UserVisa[]>(queryKeys.visas.all, (old = []) => [
@@ -71,11 +76,14 @@ export const useAddVisa = () => {
           updated_at: new Date().toISOString(),
           // Les champs calculés seront mis à jour par le serveur
           eligible_days: 0,
+          days_worked: 0,
+          days_required: newVisa.days_required || 88,
           days_remaining: newVisa.days_required || 88,
-          progress_percentage: '0',
+          progress_percentage: 0,
           is_eligible: false,
           end_date: new Date(
-            new Date(newVisa.arrival_date).getTime() + 365 * 24 * 60 * 60 * 1000
+            new Date(newVisa.arrival_date).getTime() +
+              365 * 24 * 60 * 60 * 1000,
           ).toISOString(),
         } as UserVisa,
       ]);
@@ -85,7 +93,7 @@ export const useAddVisa = () => {
 
     onSuccess: (data) => {
       queryClient.setQueryData<UserVisa[]>(queryKeys.visas.all, (old = []) =>
-        old.map((visa) => (visa.id === 'temp-id' ? data : visa))
+        old.map((visa) => (visa.id === 'temp-id' ? data : visa)),
       );
       toast.success('Visa added successfully');
     },
@@ -113,21 +121,28 @@ export const useUpdateVisa = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, input }: { id: string; input: Partial<CreateVisaInput> }) =>
-      updateVisa(id, input),
+    mutationFn: ({
+      id,
+      input,
+    }: {
+      id: string;
+      input: Partial<CreateVisaInput>;
+    }) => updateVisa(id, input),
 
     onMutate: async ({ id, input }) => {
       await queryClient.cancelQueries({ queryKey: queryKeys.visas.all });
 
-      const previousVisas = queryClient.getQueryData<UserVisa[]>(queryKeys.visas.all);
+      const previousVisas = queryClient.getQueryData<UserVisa[]>(
+        queryKeys.visas.all,
+      );
 
       // Optimistic update
       queryClient.setQueryData<UserVisa[]>(queryKeys.visas.all, (old = []) =>
         old.map((visa) =>
           visa.id === id
             ? { ...visa, ...input, updated_at: new Date().toISOString() }
-            : visa
-        )
+            : visa,
+        ),
       );
 
       return { previousVisas };
@@ -135,7 +150,7 @@ export const useUpdateVisa = () => {
 
     onSuccess: (data) => {
       queryClient.setQueryData<UserVisa[]>(queryKeys.visas.all, (old = []) =>
-        old.map((visa) => (visa.id === data.id ? data : visa))
+        old.map((visa) => (visa.id === data.id ? data : visa)),
       );
       toast.success('Visa updated successfully');
     },
@@ -168,11 +183,13 @@ export const useDeleteVisa = () => {
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: queryKeys.visas.all });
 
-      const previousVisas = queryClient.getQueryData<UserVisa[]>(queryKeys.visas.all);
+      const previousVisas = queryClient.getQueryData<UserVisa[]>(
+        queryKeys.visas.all,
+      );
 
       // Optimistic delete
       queryClient.setQueryData<UserVisa[]>(queryKeys.visas.all, (old = []) =>
-        old.filter((visa) => visa.id !== id)
+        old.filter((visa) => visa.id !== id),
       );
 
       return { previousVisas };

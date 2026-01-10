@@ -7,6 +7,7 @@
  */
 
 import { supabase } from '@/lib/supabase';
+
 import type { Employer, CreateEmployerInput } from '../types';
 
 /**
@@ -40,14 +41,16 @@ export const getEmployer = async (id: string): Promise<Employer> => {
 /**
  * Ajoute un nouvel employeur
  */
-export const addEmployer = async (input: CreateEmployerInput): Promise<Employer> => {
+export const addEmployer = async (
+  input: CreateEmployerInput,
+): Promise<Employer> => {
   const { data, error } = await supabase
     .from('employers')
     .insert([
       {
         name: input.name,
         industry: input.industry,
-        postcode: input.postcode || null,
+        postcode: input.postcode,
         is_eligible: input.is_eligible ?? true,
       },
     ])
@@ -63,14 +66,14 @@ export const addEmployer = async (input: CreateEmployerInput): Promise<Employer>
  */
 export const updateEmployer = async (
   id: string,
-  input: CreateEmployerInput
+  input: CreateEmployerInput,
 ): Promise<Employer> => {
   const { data, error } = await supabase
     .from('employers')
     .update({
       name: input.name,
       industry: input.industry,
-      postcode: input.postcode || null,
+      postcode: input.postcode,
       is_eligible: input.is_eligible ?? true,
     })
     .eq('id', id)

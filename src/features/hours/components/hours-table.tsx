@@ -1,15 +1,13 @@
-import { useState } from 'react';
 import {
-  Table,
-  TableBody,
-  TableCell,
+  Calendar,
+  Clock,
+  Building2,
+  CheckCircle,
+  XCircle,
+  Trash2,
+} from 'lucide-react';
+import { useState } from 'react';
 
-  TableHeader,
-  TableRow
-} from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,12 +18,28 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Calendar, Clock, Building2, CheckCircle, XCircle, Trash2 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+
+import { useDeleteWorkEntry } from '../api/use-hours';
+import type {
+  HourEntryWithEmployer,
+  SortOptions,
+  SortField,
+  SortOrder,
+  HoursResponse,
+} from '../types';
 
 import { HoursPagination } from './hours-pagination';
 import { SortableTableHead } from './sortable-table-head';
-import { useDeleteWorkEntry } from '../api/use-hours';
-import type { HourEntryWithEmployer, SortOptions, SortField, SortOrder, HoursResponse } from '../types';
 
 interface HoursTableProps {
   data: HoursResponse | null;
@@ -36,7 +50,6 @@ interface HoursTableProps {
   sortOptions: SortOptions;
   setSortOptions: (options: SortOptions) => void;
   limit: number;
-  onRefetch?: () => void;
 }
 
 export const HoursTable = ({
@@ -48,10 +61,10 @@ export const HoursTable = ({
   sortOptions,
   setSortOptions,
   limit,
-  onRefetch,
 }: HoursTableProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [entryToDelete, setEntryToDelete] = useState<HourEntryWithEmployer | null>(null);
+  const [entryToDelete, setEntryToDelete] =
+    useState<HourEntryWithEmployer | null>(null);
   const deleteMutation = useDeleteWorkEntry();
 
   const handleSortChange = (field: SortField, order: SortOrder) => {
@@ -74,7 +87,7 @@ export const HoursTable = ({
         setEntryToDelete(null);
         // React Query invalidateQueries automatiquement
         // Pas besoin de refetch manuel
-      }
+      },
     });
   };
 
@@ -201,9 +214,7 @@ export const HoursTable = ({
                   >
                     Eligible
                   </SortableTableHead>
-                  <TableCell className="w-[80px]">
-                    Actions
-                  </TableCell>
+                  <TableCell className="w-[80px]">Actions</TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -238,12 +249,18 @@ export const HoursTable = ({
                     </TableCell>
                     <TableCell className="text-center">
                       {entry.is_eligible ? (
-                        <Badge variant="default" className="bg-green-100 text-green-800 hover:bg-green-100">
+                        <Badge
+                          variant="default"
+                          className="bg-green-100 text-green-800 hover:bg-green-100"
+                        >
                           <CheckCircle className="h-3 w-3 mr-1" />
                           Yes
                         </Badge>
                       ) : (
-                        <Badge variant="destructive" className="bg-red-100 text-red-800 hover:bg-red-100">
+                        <Badge
+                          variant="destructive"
+                          className="bg-red-100 text-red-800 hover:bg-red-100"
+                        >
                           <XCircle className="h-3 w-3 mr-1" />
                           No
                         </Badge>
@@ -296,7 +313,8 @@ export const HoursTable = ({
                 {entryToDelete && (
                   <div className="mt-3 p-3 bg-muted rounded-md space-y-1">
                     <p className="text-sm">
-                      <strong>Date:</strong> {formatDate(entryToDelete.work_date)}
+                      <strong>Date:</strong>{' '}
+                      {formatDate(entryToDelete.work_date)}
                     </p>
                     <p className="text-sm">
                       <strong>Employer:</strong> {entryToDelete.employer_name}
@@ -313,7 +331,10 @@ export const HoursTable = ({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleDeleteCancel} disabled={deleteMutation.isPending}>
+            <AlertDialogCancel
+              onClick={handleDeleteCancel}
+              disabled={deleteMutation.isPending}
+            >
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction

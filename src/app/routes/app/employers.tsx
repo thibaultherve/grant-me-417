@@ -1,14 +1,24 @@
+import { Plus, Building2 } from 'lucide-react';
 import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { InfoCard } from '@/components/ui/info-card';
-import { Plus, Building2 } from 'lucide-react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-
-import { EmployersList } from '@/features/employers/components/employers-list';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
+import {
+  useEmployers,
+  useAddEmployer,
+  useUpdateEmployer,
+  useDeleteEmployer,
+} from '@/features/employers/api/use-employers';
 import { EmployerForm } from '@/features/employers/components/employer-form';
+import { EmployersList } from '@/features/employers/components/employers-list';
 import type { CreateEmployerFormData } from '@/features/employers/schemas';
 import type { Employer } from '@/features/employers/types';
-import { useEmployers, useAddEmployer, useUpdateEmployer, useDeleteEmployer } from '@/features/employers/api/use-employers';
 
 export const EmployersRoute = () => {
   const [isAddingEmployer, setIsAddingEmployer] = useState(false);
@@ -37,7 +47,7 @@ export const EmployersRoute = () => {
         onSuccess: () => {
           setEditingEmployer(null);
         },
-      }
+      },
     );
   };
 
@@ -73,7 +83,8 @@ export const EmployersRoute = () => {
             <div>
               <h3 className="font-semibold mb-1">Add your first employer</h3>
               <p className="text-sm text-muted-foreground">
-                Track where you've worked during your Working Holiday Visa. Add employer details to organize your work hours.
+                Track where you've worked during your Working Holiday Visa. Add
+                employer details to organize your work hours.
               </p>
             </div>
           </div>
@@ -81,7 +92,7 @@ export const EmployersRoute = () => {
       )}
 
       {/* Pass all state and handlers as props - Lift State Up pattern */}
-      <EmployersList 
+      <EmployersList
         employers={employers}
         loading={loading}
         error={error}
@@ -90,7 +101,10 @@ export const EmployersRoute = () => {
       />
 
       <Sheet open={isAddingEmployer} onOpenChange={setIsAddingEmployer}>
-        <SheetContent side="right" className="w-full sm:max-w-xl overflow-y-auto">
+        <SheetContent
+          side="right"
+          className="w-full sm:max-w-xl overflow-y-auto"
+        >
           <SheetHeader className="mb-6">
             <SheetTitle>Add New Employer</SheetTitle>
           </SheetHeader>
@@ -103,8 +117,14 @@ export const EmployersRoute = () => {
         </SheetContent>
       </Sheet>
 
-      <Sheet open={!!editingEmployer} onOpenChange={(open) => !open && setEditingEmployer(null)}>
-        <SheetContent side="right" className="w-full sm:max-w-xl overflow-y-auto">
+      <Sheet
+        open={!!editingEmployer}
+        onOpenChange={(open) => !open && setEditingEmployer(null)}
+      >
+        <SheetContent
+          side="right"
+          className="w-full sm:max-w-xl overflow-y-auto"
+        >
           <SheetHeader className="mb-6">
             <SheetTitle>Edit Employer</SheetTitle>
           </SheetHeader>

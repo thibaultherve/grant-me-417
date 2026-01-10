@@ -1,10 +1,12 @@
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from 'react';
+
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+
 import {
   validateHours,
   type HoursValidationResult,
-} from "../utils/hours-validation";
+} from '../utils/hours-validation';
 
 interface HoursInputProps {
   value: string;
@@ -14,7 +16,7 @@ interface HoursInputProps {
   className?: string;
   placeholder?: string;
   maxHours?: number;
-  "data-testid"?: string;
+  'data-testid'?: string;
 }
 
 export const HoursInput = forwardRef<HTMLInputElement, HoursInputProps>(
@@ -25,19 +27,19 @@ export const HoursInput = forwardRef<HTMLInputElement, HoursInputProps>(
       onValidationChange,
       disabled = false,
       className,
-      placeholder = "8:30 or 8.5",
+      placeholder = '8:30 or 8.5',
       maxHours = 24,
-      "data-testid": testId,
+      'data-testid': testId,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [validation, setValidation] = useState<HoursValidationResult>({
       isValid: true,
       decimalValue: 0,
       errorMessage: null,
       displayConversion: null,
-      format: "decimal",
+      format: 'decimal',
     });
 
     // Validate input whenever value changes
@@ -59,9 +61,9 @@ export const HoursInput = forwardRef<HTMLInputElement, HoursInputProps>(
       onChange(newValue, result.decimalValue || 0);
     };
 
-    const showError = !validation.isValid && value.trim() !== "";
+    const showError = !validation.isValid && value.trim() !== '';
     const showConversion =
-      validation.isValid && validation.displayConversion && value.trim() !== "";
+      validation.isValid && validation.displayConversion && value.trim() !== '';
 
     return (
       <div className="space-y-1">
@@ -74,8 +76,8 @@ export const HoursInput = forwardRef<HTMLInputElement, HoursInputProps>(
             placeholder={placeholder}
             className={cn(
               className,
-              showError && "border-destructive focus-visible:ring-destructive",
-              "text-center"
+              showError && 'border-destructive focus-visible:ring-destructive',
+              'text-center',
             )}
             data-testid={testId}
             {...props}
@@ -95,15 +97,15 @@ export const HoursInput = forwardRef<HTMLInputElement, HoursInputProps>(
         )}
 
         {/* Format hint */}
-        {!showError && !showConversion && value.trim() === "" && (
+        {!showError && !showConversion && value.trim() === '' && (
           <p className="text-xs text-muted-foreground">
-            Enter hours as hours:minutes (8:30) or decimal hours (8.5) (max{" "}
+            Enter hours as hours:minutes (8:30) or decimal hours (8.5) (max{' '}
             {maxHours}h)
           </p>
         )}
       </div>
     );
-  }
+  },
 );
 
-HoursInput.displayName = "HoursInput";
+HoursInput.displayName = 'HoursInput';
