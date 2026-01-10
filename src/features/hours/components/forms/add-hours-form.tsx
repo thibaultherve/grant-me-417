@@ -22,8 +22,8 @@ import { useEmployers } from '@/features/employers/api/use-employers';
 import type { Employer } from '@/features/employers/types';
 import { cn } from '@/lib/utils';
 
-import { EmployerSelector } from './employer-selector';
-import { Stepper } from './stepper';
+import { EmployerSelector } from '../inputs/employer-selector';
+import { Stepper } from '../ui/stepper';
 import { WeekHoursForm } from './week-hours-form';
 
 interface AddHoursFormProps {

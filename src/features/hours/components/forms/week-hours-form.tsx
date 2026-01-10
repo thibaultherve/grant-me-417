@@ -23,10 +23,10 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-import { useWeekFormState } from '../hooks/use-week-form-state';
-import { AutoDistributeToggle } from './auto-distribute-toggle';
-import { WeekHoursGrid } from './week-hours-grid';
-import { WeekNavigator } from './week-navigator';
+import { useWeekFormState } from '../../hooks/use-week-form-state';
+import { AutoDistributeToggle } from '../inputs/auto-distribute-toggle';
+import { WeekHoursGrid } from '../inputs/week-hours-grid';
+import { WeekNavigator } from '../ui/week-navigator';
 
 interface WeekHoursFormProps {
   /** Employer ID to manage hours for */

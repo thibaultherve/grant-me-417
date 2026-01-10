@@ -36,14 +36,14 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import { useDeleteWorkEntry } from '../api/use-hours';
+import { useDeleteWorkEntry } from '../../api/use-hours';
 import type {
   HourEntryWithEmployer,
   SortOptions,
   SortField,
   SortOrder,
   HoursResponse,
-} from '../types';
+} from '../../types';
 
 interface ModernHoursTableProps {
   data: HoursResponse | null | undefined;

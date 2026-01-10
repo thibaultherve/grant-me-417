@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { InfoCard } from '@/components/ui/info-card';
 import { paths } from '@/config/paths';
 import { useHours } from '@/features/hours/api/use-hours';
-import { ModernHoursTable } from '@/features/hours/components/modern-hours-table';
+import { ModernHoursTable } from '@/features/hours/components/table/modern-hours-table';
 import type { SortOptions } from '@/features/hours/types';
 
 export const HoursRoute = () => {
