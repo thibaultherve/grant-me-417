@@ -4,7 +4,7 @@ import { RouterProvider } from 'react-router/dom';
 
 import { paths } from '@/config/paths';
 
-export const createAppRouter = () =>
+const createAppRouter = () =>
   createBrowserRouter([
     {
       path: paths.home.path,
@@ -61,9 +61,8 @@ export const createAppRouter = () =>
             {
               path: 'edit',
               lazy: async () => {
-                const { HoursEditRoute } = await import(
-                  './routes/app/hours/edit'
-                );
+                const { HoursEditRoute } =
+                  await import('./routes/app/hours/edit');
                 return { Component: HoursEditRoute };
               },
             },

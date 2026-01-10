@@ -1,4 +1,6 @@
-export type HourEntry = {
+import type { IndustryType } from '@/features/employers/schemas';
+
+type HourEntry = {
   id: string;
   user_id: string;
   employer_id: string;
@@ -10,7 +12,7 @@ export type HourEntry = {
 
 export type HourEntryWithEmployer = HourEntry & {
   employer_name: string;
-  industry: string;
+  industry: IndustryType;
   is_eligible: boolean;
 };
 
@@ -40,25 +42,3 @@ export type WorkEntryInput = {
   work_date: string;
   hours: number;
 };
-
-export type WeekWorkEntryInput = {
-  week_date: string;
-  total_weekly_hours: number;
-  days_included: {
-    monday: boolean;
-    tuesday: boolean;
-    wednesday: boolean;
-    thursday: boolean;
-    friday: boolean;
-    saturday: boolean;
-    sunday: boolean;
-  };
-};
-
-// Week form types
-export type {
-  WeekFormState,
-  WeekFormActions,
-  DayColumn,
-  UseWeekFormStateReturn,
-} from './week-form';

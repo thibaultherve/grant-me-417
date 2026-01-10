@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { validatePostcode } from '../api/postcodes';
 
-export const industryTypeSchema = z.enum([
+const industryTypeSchema = z.enum([
   'plant_and_animal_cultivation',
   'fishing_and_pearling',
   'tree_farming_and_felling',
@@ -13,6 +13,9 @@ export const industryTypeSchema = z.enum([
   'critical_covid19_work',
   'other',
 ]);
+
+// Type dérivé du schéma Zod - source unique de vérité
+export type IndustryType = z.infer<typeof industryTypeSchema>;
 
 export const createEmployerSchema = z.object({
   name: z

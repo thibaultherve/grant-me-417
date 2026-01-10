@@ -6,31 +6,21 @@
 const DECIMAL_HOURS_PATTERN = /^(\d{1,3}(?:\.\d{1,2})?)$/; // Support up to 168h
 const TIME_FORMAT_PATTERN = /^(\d{1,3}):([0-5]?\d)$/; // Support up to 167:59
 
-export interface HoursValidationResult {
+/**
+ * Convert hours:minutes format to decimal hours
+ * Example: "8:30" → 8.5
+ */
+const timeToDecimal = (hours: number, minutes: number): number => {
+  return hours + minutes / 60;
+};
+
+interface HoursValidationResult {
   isValid: boolean;
   decimalValue: number | null;
   errorMessage: string | null;
   displayConversion: string | null;
   format: 'decimal' | 'time' | 'invalid';
 }
-
-/**
- * Convert hours:minutes format to decimal hours
- * Example: "8:30" → 8.5
- */
-export const timeToDecimal = (hours: number, minutes: number): number => {
-  return hours + minutes / 60;
-};
-
-/**
- * Convert decimal hours to hours:minutes format
- * Example: 8.5 → "8:30"
- */
-export const decimalToTime = (decimal: number): string => {
-  const hours = Math.floor(decimal);
-  const minutes = Math.round((decimal - hours) * 60);
-  return `${hours}:${minutes.toString().padStart(2, '0')}`;
-};
 
 /**
  * Validate and parse hours input (supports both decimal and time formats)
@@ -134,16 +124,4 @@ export const formatDecimalHours = (decimal: number): string => {
   return decimal % 1 === 0
     ? decimal.toString()
     : decimal.toFixed(2).replace(/\.?0+$/, '');
-};
-
-/**
- * Check if input is a valid hours format without full validation
- * Used for real-time validation feedback
- */
-export const isValidHoursFormat = (input: string): boolean => {
-  if (!input.trim()) return true;
-  const trimmed = input.trim();
-  return (
-    DECIMAL_HOURS_PATTERN.test(trimmed) || TIME_FORMAT_PATTERN.test(trimmed)
-  );
 };

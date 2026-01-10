@@ -6,20 +6,19 @@
  * Suit le pattern bulletproof-react state-management
  */
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import { handleError } from '@/lib/error-handler';
 import { queryKeys } from '@/lib/react-query';
 
-import type { Employer, CreateEmployerInput } from '../types';
+import type { CreateEmployerInput, Employer } from '../types';
 
 import {
-  getEmployers,
-  getEmployer,
   addEmployer,
-  updateEmployer,
   deleteEmployer,
+  getEmployers,
+  updateEmployer,
 } from './employers';
 
 /**
@@ -46,17 +45,6 @@ export const useEmployers = () => {
   return useQuery({
     queryKey: queryKeys.employers.all,
     queryFn: getEmployers,
-  });
-};
-
-/**
- * Hook pour récupérer un employeur par ID
- */
-export const useEmployer = (id: string) => {
-  return useQuery({
-    queryKey: queryKeys.employers.detail(id),
-    queryFn: () => getEmployer(id),
-    enabled: !!id, // Ne fetch que si ID existe
   });
 };
 

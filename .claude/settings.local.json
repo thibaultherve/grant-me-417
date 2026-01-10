@@ -22,7 +22,9 @@
       "Bash(npx shadcn@latest add:*)",
       "Bash(pnpm run build:*)",
       "Bash(pnpm dev)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(pnpm tsc:*)",
+      "Bash(pnpm install:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

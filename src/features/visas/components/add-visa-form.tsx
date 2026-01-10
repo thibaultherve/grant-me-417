@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Calendar, CheckCircle, Clock, Plane, AlertCircle } from 'lucide-react';
+import { AlertCircle, Calendar, CheckCircle, Clock, Plane } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 

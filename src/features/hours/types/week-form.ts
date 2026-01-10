@@ -71,7 +71,7 @@ export type DayColumn = {
  * Combined interface for the useWeekFormState hook return value.
  * Provides both state and actions in a single object.
  */
-export type UseWeekFormStateReturn = {
+export type WeekFormReturn = {
   /** Current form state */
   state: WeekFormState;
   /** Available actions to modify state */
@@ -88,13 +88,6 @@ export type UseWeekFormStateReturn = {
   selectedDaysCount: number;
   /** Maximum total hours based on selected days (24 * selectedDaysCount) */
   maxTotalHours: number;
-};
-
-/**
- * Extended return type with navigation helpers and submission.
- * This is the actual return type of the useWeekFormState hook.
- */
-export type UseWeekFormStateExtendedReturn = UseWeekFormStateReturn & {
   /** Formatted week range string (e.g., "Mon 6 Jan - Sun 12 Jan 2025") */
   weekRange: string;
   /** Whether navigation to previous week is allowed */

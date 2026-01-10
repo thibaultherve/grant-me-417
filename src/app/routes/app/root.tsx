@@ -4,7 +4,7 @@ import { DashboardLayout } from '@/components/layouts/dashboard-layout';
 import { VisaProvider } from '@/features/visas/hooks/use-visa-context';
 import { ProtectedRoute } from '@/lib/auth';
 
-export const AppRoot = () => {
+const AppRoot = () => {
   return (
     <VisaProvider>
       <DashboardLayout>

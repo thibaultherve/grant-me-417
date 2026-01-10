@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import type { Postcode } from '../types/postcode';
 
 // Badge colors for each flag type
-export const BADGE_CONFIG = {
+const BADGE_CONFIG = {
   is_regional_australia: {
     color: 'bg-green-400',
     label: 'Regional Australia',

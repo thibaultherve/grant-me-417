@@ -14,8 +14,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useEmployerHours, useSaveWeekHours } from '../api/use-hours';
 import type {
   DayColumn,
-  UseWeekFormStateExtendedReturn as ExtendedReturn,
   WeekFormActions,
+  WeekFormReturn,
   WeekFormState,
 } from '../types/week-form';
 import {
@@ -173,7 +173,7 @@ function createDayColumns(monday: Date): DayColumn[] {
 export function useWeekFormState(
   employerId: string,
   initialWeek?: Date,
-): ExtendedReturn {
+): WeekFormReturn {
   // Fetch existing hours for the employer
   const { data: existingHours } = useEmployerHours(employerId);
 
@@ -655,7 +655,13 @@ export function useWeekFormState(
       setState((prev) => ({ ...prev, isSubmitting: false }));
       return false;
     }
-  }, [canSubmit, employerId, state.dailyHours, state.initialHours, saveWeekHoursMutation]);
+  }, [
+    canSubmit,
+    employerId,
+    state.dailyHours,
+    state.initialHours,
+    saveWeekHoursMutation,
+  ]);
 
   /**
    * Check if form is currently submitting
@@ -792,6 +798,3 @@ export function useWeekFormState(
     submit,
   };
 }
-
-// Re-export the extended return type for consumers
-export type { UseWeekFormStateExtendedReturn } from '../types/week-form';

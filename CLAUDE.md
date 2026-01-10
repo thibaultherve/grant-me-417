@@ -184,6 +184,107 @@ If not clearly defined, clarify:
 
 ---
 
+## Feature Structure Convention
+
+Chaque feature dans `src/features/{feature}/` DOIT suivre cette structure :
+
+```
+features/{feature}/
+├── api/                   # Server State (données serveur)
+│   ├── {feature}.ts       # Fonctions API pures (fetch, create, update, delete)
+│   └── use-{feature}.ts   # React Query UNIQUEMENT (useQuery, useMutation)
+│
+├── hooks/                 # Client State (état local UI)
+│   └── use-{xxx}.ts       # Custom hooks (useState, useCallback, useReducer, Context)
+│
+├── schemas/               # Validation Zod UNIQUEMENT
+│   └── index.ts           # Schémas Zod + types dérivés (z.infer<>)
+│                          # ⚠️ PAS de fonctions helpers ici
+│
+├── types/                 # Types TypeScript purs
+│   └── index.ts           # Interfaces, types (entités, DTOs, state)
+│                          # ⚠️ PAS de schémas Zod ici
+│
+├── utils/                 # Fonctions utilitaires pures
+│   ├── {domain}-helpers.ts     # Helpers de transformation/formatage
+│   ├── {domain}-validation.ts  # Validation business (règles métier, pas Zod)
+│   └── {domain}-calculations.ts # Calculs purs
+│
+├── constants/             # Constantes (optionnel)
+│   └── index.ts
+│
+└── components/            # Composants React UI
+    └── {component}.tsx
+```
+
+### Règles de placement
+
+| Le code utilise...                          | → Va dans      |
+| ------------------------------------------- | -------------- |
+| `useQuery` / `useMutation` (React Query)    | `api/`         |
+| `useState` / `useReducer` / `useCallback`   | `hooks/`       |
+| `createContext` / `useContext`              | `hooks/`       |
+| `z.object()` / `z.string()` (Zod)           | `schemas/`     |
+| `interface` / `type` (TS pur)               | `types/`       |
+| Fonctions pures (calculs, formatage)        | `utils/`       |
+| Appels Supabase/API (sans React Query)      | `api/`         |
+
+### Ce que chaque dossier NE DOIT PAS contenir
+
+| Dossier      | ❌ NE DOIT PAS contenir                                    |
+| ------------ | ---------------------------------------------------------- |
+| `api/`       | Custom hooks UI (useState), composants React               |
+| `hooks/`     | Appels API directs, schémas Zod                            |
+| `schemas/`   | Fonctions helpers, logique métier, types non-dérivés       |
+| `types/`     | Schémas de validation, fonctions                           |
+| `utils/`     | Schémas Zod, hooks React, composants                       |
+
+### Exemple concret
+
+```typescript
+// ✅ api/users.ts - Fonction API pure
+export async function getUser(id: string): Promise<User> {
+  const { data } = await supabase.from('users').select('*').eq('id', id);
+  return data;
+}
+
+// ✅ api/use-users.ts - React Query hook
+export function useUser(id: string) {
+  return useQuery({
+    queryKey: ['user', id],
+    queryFn: () => getUser(id),
+  });
+}
+
+// ✅ hooks/use-user-form.ts - Custom hook UI
+export function useUserForm() {
+  const [name, setName] = useState('');
+  const [errors, setErrors] = useState({});
+  return { name, setName, errors };
+}
+
+// ✅ schemas/index.ts - Schéma Zod uniquement
+export const userSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+});
+export type UserFormData = z.infer<typeof userSchema>;
+
+// ✅ types/index.ts - Types TS purs
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+// ✅ utils/user-helpers.ts - Fonction utilitaire pure
+export function formatUserName(user: User): string {
+  return `${user.name} <${user.email}>`;
+}
+```
+
+---
+
 ## Common Commands
 
 ```bash

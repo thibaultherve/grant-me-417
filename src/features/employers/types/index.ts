@@ -1,13 +1,5 @@
-export type IndustryType =
-  | 'plant_and_animal_cultivation'
-  | 'fishing_and_pearling'
-  | 'tree_farming_and_felling'
-  | 'mining'
-  | 'construction'
-  | 'hospitality_and_tourism'
-  | 'bushfire_recovery_work'
-  | 'critical_covid19_work'
-  | 'other';
+// Import et ré-export depuis schemas (source unique de vérité)
+import type { IndustryType } from '../schemas';
 
 export interface Employer {
   id: string;

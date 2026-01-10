@@ -8,9 +8,3 @@ export interface Postcode {
   last_updated: string;
   last_scraped: string | null;
 }
-
-export interface PostcodeBadge {
-  type: 'remote' | 'northern' | 'regional' | 'bushfire' | 'disaster';
-  label: string;
-  active: boolean;
-}

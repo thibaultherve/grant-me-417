@@ -12,9 +12,7 @@ import type {
   HoursResponse,
   SortOptions,
   WorkEntryInput,
-  WeekWorkEntryInput,
 } from '../types';
-import { getSelectedWeekDates } from '../utils/date-helpers';
 
 export type GetHoursOptions = {
   page?: number;
@@ -112,26 +110,9 @@ export const getEmployerHours = async (employerId: string) => {
 };
 
 /**
- * Vérifie si des entrées existent déjà pour les dates données
- */
-export const checkExistingEntries = async (
-  employerId: string,
-  dates: string[],
-) => {
-  const { data, error } = await supabase
-    .from('work_entries')
-    .select('work_date, hours')
-    .eq('employer_id', employerId)
-    .in('work_date', dates);
-
-  if (error) throw error;
-  return data || [];
-};
-
-/**
  * Ajoute des heures de travail (mode By Day)
  */
-export const addWorkEntries = async (
+const addWorkEntries = async (
   userId: string,
   employerId: string,
   entries: WorkEntryInput[],
@@ -150,79 +131,6 @@ export const addWorkEntries = async (
 
   if (error) throw error;
   return data;
-};
-
-/**
- * Ajoute des heures de travail avec overwrite forcé
- */
-export const addWorkEntriesWithOverwrite = async (
-  userId: string,
-  employerId: string,
-  entries: WorkEntryInput[],
-) => {
-  const dates = entries.map((e) => e.work_date);
-
-  // Delete existing entries
-  const { error: deleteError } = await supabase
-    .from('work_entries')
-    .delete()
-    .eq('employer_id', employerId)
-    .in('work_date', dates);
-
-  if (deleteError) throw deleteError;
-
-  // Insert new entries
-  return addWorkEntries(userId, employerId, entries);
-};
-
-/**
- * Ajoute des heures de travail (mode By Week)
- */
-export const addWeekWorkEntries = async (
-  userId: string,
-  employerId: string,
-  weekData: WeekWorkEntryInput,
-) => {
-  // Calculer les dates de la semaine (retourne déjà des strings YYYY-MM-DD)
-  const weekDates = getSelectedWeekDates(
-    weekData.week_date,
-    weekData.days_included,
-  );
-
-  // Calculer les heures par jour
-  const hoursPerDay = weekData.total_weekly_hours / weekDates.length;
-
-  // Créer les entrées - weekDates est déjà un array de strings YYYY-MM-DD
-  const entries: WorkEntryInput[] = weekDates.map((dateString: string) => ({
-    work_date: dateString,
-    hours: Math.round(hoursPerDay * 100) / 100, // Arrondir à 2 décimales
-  }));
-
-  return addWorkEntries(userId, employerId, entries);
-};
-
-/**
- * Ajoute des heures de travail (mode By Week) avec overwrite
- */
-export const addWeekWorkEntriesWithOverwrite = async (
-  userId: string,
-  employerId: string,
-  weekData: WeekWorkEntryInput,
-) => {
-  // Calculer les dates de la semaine (retourne déjà des strings YYYY-MM-DD)
-  const weekDates = getSelectedWeekDates(
-    weekData.week_date,
-    weekData.days_included,
-  );
-  const hoursPerDay = weekData.total_weekly_hours / weekDates.length;
-
-  // Créer les entrées - weekDates est déjà un array de strings YYYY-MM-DD
-  const entries: WorkEntryInput[] = weekDates.map((dateString: string) => ({
-    work_date: dateString,
-    hours: Math.round(hoursPerDay * 100) / 100,
-  }));
-
-  return addWorkEntriesWithOverwrite(userId, employerId, entries);
 };
 
 /**

@@ -21,3 +21,17 @@ export interface CreateVisaInput {
   arrival_date: string;
   days_required?: number;
 }
+
+// Weekly progress data from visa_weekly_progress table
+export interface WeeklyProgressData {
+  id: string;
+  user_visa_id: string;
+  week_start_date: string;
+  week_end_date: string;
+  hours: number;
+  eligible_hours: number;
+  eligible_days: number;
+  days_worked: number;
+  created_at: string;
+  updated_at: string;
+}
