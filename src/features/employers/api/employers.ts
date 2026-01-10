@@ -7,7 +7,8 @@
  */
 
 import { supabase } from '@/lib/supabase';
-import type { Employer, CreateEmployerInput } from '../types';
+
+import type { CreateEmployerInput, Employer } from '../types';
 
 /**
  * Récupère tous les employeurs de l'utilisateur connecté
@@ -24,30 +25,18 @@ export const getEmployers = async (): Promise<Employer[]> => {
 };
 
 /**
- * Récupère un employeur par son ID
- */
-export const getEmployer = async (id: string): Promise<Employer> => {
-  const { data, error } = await supabase
-    .from('employers')
-    .select('*')
-    .eq('id', id)
-    .single();
-
-  if (error) throw error;
-  return data;
-};
-
-/**
  * Ajoute un nouvel employeur
  */
-export const addEmployer = async (input: CreateEmployerInput): Promise<Employer> => {
+export const addEmployer = async (
+  input: CreateEmployerInput,
+): Promise<Employer> => {
   const { data, error } = await supabase
     .from('employers')
     .insert([
       {
         name: input.name,
         industry: input.industry,
-        postcode: input.postcode || null,
+        postcode: input.postcode,
         is_eligible: input.is_eligible ?? true,
       },
     ])
@@ -63,14 +52,14 @@ export const addEmployer = async (input: CreateEmployerInput): Promise<Employer>
  */
 export const updateEmployer = async (
   id: string,
-  input: CreateEmployerInput
+  input: CreateEmployerInput,
 ): Promise<Employer> => {
   const { data, error } = await supabase
     .from('employers')
     .update({
       name: input.name,
       industry: input.industry,
-      postcode: input.postcode || null,
+      postcode: input.postcode,
       is_eligible: input.is_eligible ?? true,
     })
     .eq('id', id)

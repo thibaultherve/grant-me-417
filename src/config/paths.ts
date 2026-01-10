@@ -27,6 +27,10 @@ export const paths = {
     hours: {
       path: '/app/hours',
       getHref: () => '/app/hours',
+      edit: {
+        path: '/app/hours/edit',
+        getHref: () => '/app/hours/edit',
+      },
     },
     visas: {
       path: '/app/visas',

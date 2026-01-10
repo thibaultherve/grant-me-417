@@ -1,8 +1,15 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { Navigate, useLocation } from 'react-router';
-import { supabase } from '@/lib/supabase';
-import { paths } from '@/config/paths';
 import type { User } from '@supabase/supabase-js';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from 'react';
+import { Navigate, useLocation } from 'react-router';
+
+import { paths } from '@/config/paths';
+import { supabase } from '@/lib/supabase';
 
 interface AuthContextType {
   user: User | null;
@@ -30,7 +37,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
         setUser(session?.user ?? null);
       } catch (error) {
         console.error('Error checking auth status:', error);
@@ -42,9 +51,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     checkUser();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      async (_, session) => {
         setUser(session?.user ?? null);
-      }
+      },
     );
 
     return () => {

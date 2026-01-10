@@ -1,16 +1,17 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { ArrowRight, Building2, MapPin } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import type { Employer } from "@/features/employers/types";
-import { cn } from "@/lib/utils";
-import { ArrowRight, Building2, MapPin } from "lucide-react";
+} from '@/components/ui/select';
+import type { Employer } from '@/features/employers/types';
+import { cn } from '@/lib/utils';
 
 interface EmployerSelectorProps {
   employers: Employer[];
@@ -22,15 +23,15 @@ interface EmployerSelectorProps {
 }
 
 const industryLabels: Record<string, string> = {
-  plant_and_animal_cultivation: "Plant & Animal Cultivation",
-  fishing_and_pearling: "Fishing & Pearling",
-  tree_farming_and_felling: "Tree Farming & Felling",
-  mining: "Mining",
-  construction: "Construction",
-  hospitality_and_tourism: "Hospitality & Tourism",
-  bushfire_recovery_work: "Bushfire Recovery",
-  critical_covid19_work: "Critical COVID-19 Work",
-  other: "Other",
+  plant_and_animal_cultivation: 'Plant & Animal Cultivation',
+  fishing_and_pearling: 'Fishing & Pearling',
+  tree_farming_and_felling: 'Tree Farming & Felling',
+  mining: 'Mining',
+  construction: 'Construction',
+  hospitality_and_tourism: 'Hospitality & Tourism',
+  bushfire_recovery_work: 'Bushfire Recovery',
+  critical_covid19_work: 'Critical COVID-19 Work',
+  other: 'Other',
 };
 
 export function EmployerSelector({
@@ -43,7 +44,7 @@ export function EmployerSelector({
 }: EmployerSelectorProps) {
   if (loading) {
     return (
-      <div className={cn("space-y-4", className)}>
+      <div className={cn('space-y-4', className)}>
         <div className="text-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
           <p className="text-muted-foreground mt-2">Loading employers...</p>
@@ -54,7 +55,7 @@ export function EmployerSelector({
 
   if (employers.length === 0) {
     return (
-      <div className={cn("space-y-4", className)}>
+      <div className={cn('space-y-4', className)}>
         <Card>
           <CardContent className="p-8 text-center">
             <Building2 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
@@ -75,11 +76,11 @@ export function EmployerSelector({
   }
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn('space-y-4', className)}>
       <div className="space-y-2">
         <Label htmlFor="employer-select">Select Employer</Label>
         <Select
-          value={selectedEmployer?.id || ""}
+          value={selectedEmployer?.id || ''}
           onValueChange={(value) => {
             const employer = employers.find((e) => e.id === value);
             if (employer) {
@@ -124,9 +125,7 @@ export function EmployerSelector({
                     </div>
                     <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                       <MapPin className="w-3.5 h-3.5" />
-                      <span>
-                        {employer.postcode || "No postcode"}
-                      </span>
+                      <span>{employer.postcode || 'No postcode'}</span>
                     </div>
                   </div>
                 </div>

@@ -1,41 +1,42 @@
 import { Moon, Sun } from 'lucide-react';
+
 import { useTheme } from '@/lib/theme';
+
 import { Button } from './button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './dropdown-menu';
 
 interface ThemeToggleProps {
-  variant?: 'default' | 'ghost' | 'outline';
   size?: 'default' | 'sm' | 'lg' | 'icon';
-  showLabel?: boolean;
-  className?: string;
 }
 
-export const ThemeToggle = ({ 
-  variant = 'ghost', 
-  size = 'icon',
-  showLabel = false,
-  className 
-}: ThemeToggleProps) => {
-  const { theme, toggleTheme } = useTheme();
+export function ThemeToggle({ size = 'icon' }: ThemeToggleProps) {
+  const { setTheme } = useTheme();
 
   return (
-    <Button
-      variant={variant}
-      size={size}
-      onClick={toggleTheme}
-      className={className}
-      title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-    >
-      {theme === 'light' ? (
-        <>
-          <Moon className="h-4 w-4" />
-          {showLabel && <span className="ml-2">Dark</span>}
-        </>
-      ) : (
-        <>
-          <Sun className="h-4 w-4" />
-          {showLabel && <span className="ml-2">Light</span>}
-        </>
-      )}
-    </Button>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size={size} className={size === 'sm' ? 'h-8 w-8' : undefined}>
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme('light')}>
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('dark')}>
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('system')}>
+          System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
-};
+}

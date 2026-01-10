@@ -1,23 +1,24 @@
-import { Building2 } from 'lucide-react'
-import { EmployerCard } from './employer-card'
-import type { Employer } from '../types'
+import { Building2 } from 'lucide-react';
+
+import type { Employer } from '../types';
+
+import { EmployerCard } from './employer-card';
 
 interface EmployersListProps {
-  employers: Employer[]
-  loading: boolean
-  error: string | null
-  onEdit: (employer: Employer) => void
-  onDelete: (id: string) => Promise<void>
+  employers: Employer[];
+  loading: boolean;
+  error: Error | null;
+  onEdit: (employer: Employer) => void;
+  onDelete: (id: string) => void;
 }
 
-export function EmployersList({ 
-  employers, 
-  loading, 
-  error, 
-  onEdit, 
-  onDelete 
+export function EmployersList({
+  employers,
+  loading,
+  error,
+  onEdit,
+  onDelete,
 }: EmployersListProps) {
-  
   if (loading) {
     return (
       <div className="space-y-6">
@@ -25,17 +26,17 @@ export function EmployersList({
           <div className="text-muted-foreground">Loading employers...</div>
         </div>
       </div>
-    )
+    );
   }
 
   if (error) {
     return (
       <div className="space-y-6">
         <div className="text-center py-12">
-          <div className="text-destructive">Error: {error}</div>
+          <div className="text-destructive">Error: {error.message}</div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -51,9 +52,9 @@ export function EmployersList({
       ) : (
         <div className="space-y-3">
           {employers.map((employer) => (
-            <EmployerCard 
-              key={employer.id} 
-              employer={employer} 
+            <EmployerCard
+              key={employer.id}
+              employer={employer}
               onDelete={onDelete}
               onEdit={onEdit}
             />
@@ -61,5 +62,5 @@ export function EmployersList({
         </div>
       )}
     </>
-  )
+  );
 }

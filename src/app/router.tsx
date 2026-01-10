@@ -4,7 +4,7 @@ import { RouterProvider } from 'react-router/dom';
 
 import { paths } from '@/config/paths';
 
-export const createAppRouter = () =>
+const createAppRouter = () =>
   createBrowserRouter([
     {
       path: paths.home.path,
@@ -50,10 +50,23 @@ export const createAppRouter = () =>
         },
         {
           path: paths.app.hours.path,
-          lazy: async () => {
-            const { HoursRoute } = await import('./routes/app/hours');
-            return { Component: HoursRoute };
-          },
+          children: [
+            {
+              index: true,
+              lazy: async () => {
+                const { HoursRoute } = await import('./routes/app/hours');
+                return { Component: HoursRoute };
+              },
+            },
+            {
+              path: 'edit',
+              lazy: async () => {
+                const { HoursEditRoute } =
+                  await import('./routes/app/hours/edit');
+                return { Component: HoursEditRoute };
+              },
+            },
+          ],
         },
         {
           path: paths.app.visas.path,

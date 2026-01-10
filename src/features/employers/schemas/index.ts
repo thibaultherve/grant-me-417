@@ -1,6 +1,8 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
-export const industryTypeSchema = z.enum([
+import { validatePostcode } from '../api/postcodes';
+
+const industryTypeSchema = z.enum([
   'plant_and_animal_cultivation',
   'fishing_and_pearling',
   'tree_farming_and_felling',
@@ -9,8 +11,11 @@ export const industryTypeSchema = z.enum([
   'hospitality_and_tourism',
   'bushfire_recovery_work',
   'critical_covid19_work',
-  'other'
-])
+  'other',
+]);
+
+// Type dérivé du schéma Zod - source unique de vérité
+export type IndustryType = z.infer<typeof industryTypeSchema>;
 
 export const createEmployerSchema = z.object({
   name: z
@@ -21,10 +26,17 @@ export const createEmployerSchema = z.object({
   industry: industryTypeSchema,
   postcode: z
     .string()
+    .min(1, 'Postcode is required')
     .regex(/^\d{4}$/, 'Postcode must be 4 digits')
-    .optional()
-    .or(z.literal('')),
-  is_eligible: z.boolean().default(true)
-})
+    .refine(
+      async (postcode) => {
+        return await validatePostcode(postcode);
+      },
+      {
+        message: 'Postcode must exist in the Australian postcode database',
+      },
+    ),
+  is_eligible: z.boolean().default(true),
+});
 
-export type CreateEmployerFormData = z.input<typeof createEmployerSchema>
+export type CreateEmployerFormData = z.input<typeof createEmployerSchema>;

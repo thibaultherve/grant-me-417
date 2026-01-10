@@ -1,6 +1,5 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Trash2, Edit, Calendar, CheckCircle, Clock } from 'lucide-react';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,27 +10,36 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
-import { Trash2, Edit, Calendar, CheckCircle, Clock } from 'lucide-react'
-import type { UserVisa } from '../types'
+} from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+
+import type { UserVisa } from '../types';
 
 interface VisaCardProps {
-  visa: UserVisa
-  onDelete: (id: string) => void
-  onEdit?: (visa: UserVisa) => void
+  visa: UserVisa;
+  onDelete: (id: string) => void;
+  onEdit?: (visa: UserVisa) => void;
 }
 
 const visaLabels: Record<string, string> = {
   first_whv: 'First WHV (417)',
   second_whv: 'Second WHV (417)',
   third_whv: 'Third WHV (417)',
-}
+};
 
 const visaDescriptions: Record<string, string> = {
   first_whv: 'Your initial Working Holiday Visa',
   second_whv: 'Complete 88 days of specified work',
   third_whv: 'Complete 179 days of specified work',
-}
+};
 
 export function VisaCard({ visa, onDelete, onEdit }: VisaCardProps) {
   const getStatusBadge = () => {
@@ -41,30 +49,30 @@ export function VisaCard({ visa, onDelete, onEdit }: VisaCardProps) {
           <CheckCircle className="w-3 h-3" />
           Completed
         </Badge>
-      )
+      );
     } else if (visa.progress_percentage > 0) {
       return (
         <Badge variant="secondary" className="gap-1">
           <Clock className="w-3 h-3" />
           In Progress
         </Badge>
-      )
+      );
     } else {
       return (
         <Badge variant="outline" className="gap-1">
           Not Started
         </Badge>
-      )
+      );
     }
-  }
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-AU', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
-    })
-  }
+    });
+  };
 
   return (
     <Card className="border shadow-sm">
@@ -104,9 +112,10 @@ export function VisaCard({ visa, onDelete, onEdit }: VisaCardProps) {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Delete Visa</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Are you sure you want to delete "{visaLabels[visa.visa_type]}"?
-                    All associated work entries will remain, but visa tracking data will be lost.
-                    This action cannot be undone.
+                    Are you sure you want to delete "
+                    {visaLabels[visa.visa_type]}"? All associated work entries
+                    will remain, but visa tracking data will be lost. This
+                    action cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -155,10 +164,12 @@ export function VisaCard({ visa, onDelete, onEdit }: VisaCardProps) {
         {visa.eligible_days > 0 && (
           <div className="text-sm">
             <span className="text-muted-foreground">Eligible days: </span>
-            <span className="font-medium text-foreground">{visa.eligible_days}</span>
+            <span className="font-medium text-foreground">
+              {visa.eligible_days}
+            </span>
           </div>
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

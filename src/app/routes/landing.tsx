@@ -1,11 +1,12 @@
-import { Link } from 'react-router';
 import { useState } from 'react';
-import { paths } from '@/config/paths';
+import { Link } from 'react-router';
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { paths } from '@/config/paths';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
-import { toast } from 'sonner';
 
 export const LandingPage = () => {
   const { user, loading } = useAuth();
@@ -18,7 +19,7 @@ export const LandingPage = () => {
       // Manual fallback: clear all Supabase auth data from localStorage
       // This is necessary because signOut() with scope: 'local' still tries to call the server
       const keys = Object.keys(localStorage);
-      keys.forEach(key => {
+      keys.forEach((key) => {
         if (key.startsWith('sb-') || key.includes('supabase')) {
           localStorage.removeItem(key);
         }
@@ -27,7 +28,7 @@ export const LandingPage = () => {
       // Try to sign out normally, but ignore errors since we already cleared localStorage
       try {
         await supabase.auth.signOut({ scope: 'local' });
-      } catch (signOutError) {
+      } catch {
         // Ignore errors - we already cleared the session manually
       }
 
@@ -63,8 +64,8 @@ export const LandingPage = () => {
                 <Button asChild>
                   <Link to={paths.app.dashboard.path}>Dashboard</Link>
                 </Button>
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   onClick={handleSignOut}
                   disabled={signingOut}
                 >
@@ -93,7 +94,8 @@ export const LandingPage = () => {
                 Welcome back!
               </h2>
               <p className="mb-8 text-xl text-muted-foreground">
-                Continue tracking your specified work progress for your Working Holiday Visa
+                Continue tracking your specified work progress for your Working
+                Holiday Visa
               </p>
               <div className="flex justify-center gap-4">
                 <Button size="lg" asChild>
@@ -107,7 +109,8 @@ export const LandingPage = () => {
                 Track Your WHV Work Hours
               </h2>
               <p className="mb-8 text-xl text-muted-foreground">
-                The easiest way to track your specified work for your second or third Working Holiday Visa in Australia
+                The easiest way to track your specified work for your second or
+                third Working Holiday Visa in Australia
               </p>
               <div className="flex justify-center gap-4">
                 <Button size="lg" asChild>
@@ -124,7 +127,8 @@ export const LandingPage = () => {
             <div className="text-center">
               <h4 className="mb-4 text-xl font-semibold">Track Work Hours</h4>
               <p className="text-muted-foreground">
-                Easily log your daily work hours and keep track of your progress towards visa requirements
+                Easily log your daily work hours and keep track of your progress
+                towards visa requirements
               </p>
             </div>
             <div className="text-center">
