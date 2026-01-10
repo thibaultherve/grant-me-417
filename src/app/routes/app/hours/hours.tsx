@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { InfoCard } from '@/components/ui/info-card';
 import { paths } from '@/config/paths';
 import { useHours } from '@/features/hours/api/use-hours';
+import { MonthCalendar } from '@/features/hours/components/calendar';
 import { ModernHoursTable } from '@/features/hours/components/table/modern-hours-table';
 import type { SortOptions } from '@/features/hours/types';
 
@@ -86,6 +87,11 @@ export const HoursRoute = () => {
         setSortOptions={setSortOptions}
         limit={limit}
       />
+
+      {/* Monthly Calendar */}
+      <div className="mt-8 border-t pt-8">
+        <MonthCalendar />
+      </div>
     </div>
   );
 };

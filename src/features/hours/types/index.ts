@@ -42,3 +42,13 @@ export type WorkEntryInput = {
   work_date: string;
   hours: number;
 };
+
+// Calendar types for monthly view
+export type DayHoursEntry = {
+  employerName: string;
+  hours: number;
+};
+
+export type MonthHoursData = {
+  [dateKey: string]: DayHoursEntry[]; // dateKey format: "YYYY-MM-DD"
+};

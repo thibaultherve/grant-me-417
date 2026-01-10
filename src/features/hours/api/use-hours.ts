@@ -16,6 +16,7 @@ import {
   deleteWorkEntry,
   getEmployerHours,
   getHours,
+  getMonthHours,
   saveWeekHours,
   type GetHoursOptions,
 } from './hours';
@@ -46,6 +47,21 @@ export const useEmployerHours = (employerId: string) => {
     queryFn: () => getEmployerHours(employerId),
     enabled: !!employerId,
     staleTime: 2 * 60 * 1000, // 2 minutes (données plus volatiles)
+  });
+};
+
+/**
+ * Hook pour récupérer les heures d'un mois pour le calendrier mensuel
+ * Groupées par jour avec liste des employeurs
+ *
+ * @param year - Année (ex: 2025)
+ * @param month - Mois (1-12)
+ */
+export const useMonthHours = (year: number, month: number) => {
+  return useQuery({
+    queryKey: queryKeys.hours.month(year, month),
+    queryFn: () => getMonthHours(year, month),
+    staleTime: 2 * 60 * 1000, // 2 minutes (données volatiles)
   });
 };
 
