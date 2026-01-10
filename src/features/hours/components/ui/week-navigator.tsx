@@ -23,7 +23,7 @@ import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { memo, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
+import { CalendarDropdown } from '@/components/ui/calendar-dropdown';
 import {
   Popover,
   PopoverContent,
@@ -46,6 +46,8 @@ interface WeekNavigatorProps {
   canGoPrev?: boolean;
   /** Whether navigation to next week is allowed */
   canGoNext?: boolean;
+  /** Dates to highlight in the calendar (dates with work hours) */
+  highlightedDates?: Date[];
   /** Additional CSS classes */
   className?: string;
 }
@@ -58,6 +60,7 @@ export const WeekNavigator = memo(function WeekNavigator({
   onSelectWeek,
   canGoPrev = true,
   canGoNext = true,
+  highlightedDates,
   className,
 }: WeekNavigatorProps) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -124,11 +127,12 @@ export const WeekNavigator = memo(function WeekNavigator({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="center">
-          <Calendar
+          <CalendarDropdown
             mode="single"
             selected={currentWeek}
             onSelect={handleDateSelect}
             disabled={isDateDisabled}
+            highlightedDates={highlightedDates}
           />
         </PopoverContent>
       </Popover>

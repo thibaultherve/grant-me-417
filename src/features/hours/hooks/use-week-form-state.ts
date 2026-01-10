@@ -240,6 +240,14 @@ export function useWeekFormState(
     return MAX_HOURS_PER_DAY * selectedDaysCount;
   }, [selectedDaysCount]);
 
+  // Compute dates with hours for calendar highlighting
+  const datesWithHours = useMemo(() => {
+    if (!existingHours || existingHours.length === 0) return [];
+    return existingHours
+      .filter((entry) => entry.hours > 0)
+      .map((entry) => new Date(entry.work_date));
+  }, [existingHours]);
+
   // Validate if form can be submitted
   const canSubmit = useMemo(() => {
     // Must have employer
@@ -796,5 +804,7 @@ export function useWeekFormState(
     goNextWeek,
     // Submission
     submit,
+    // Calendar highlighting
+    datesWithHours,
   };
 }

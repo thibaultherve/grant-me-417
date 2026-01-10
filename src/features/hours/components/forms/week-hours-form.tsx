@@ -64,6 +64,7 @@ export function WeekHoursForm({
     selectedDaysCount,
     isDirty,
     maxTotalHours,
+    datesWithHours,
   } = useWeekFormState(employerId);
 
   /**
@@ -103,6 +104,7 @@ export function WeekHoursForm({
         onSelectWeek={actions.setWeek}
         canGoPrev={canGoPrevWeek}
         canGoNext={canGoNextWeek}
+        highlightedDates={datesWithHours}
       />
 
       {/* Hours Entry Grid with Day Selection and Reset */}
@@ -118,6 +120,7 @@ export function WeekHoursForm({
         onReset={actions.resetToInitial}
         isDirty={isDirty}
         disabled={state.isSubmitting}
+        showDaySelection={state.autoDistribute}
       />
 
       {/* Auto-Distribute Toggle with Max Hours Info */}

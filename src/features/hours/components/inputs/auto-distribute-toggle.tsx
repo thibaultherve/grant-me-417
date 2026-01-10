@@ -62,19 +62,9 @@ export function AutoDistributeToggle({
 
   // Calculate hours per day dynamically
   const currentTotal = parseFloat(totalHours) || 0;
-  const hoursPerDay = totalHours && selectedDaysCount > 0
-    ? (currentTotal / selectedDaysCount).toFixed(1)
-    : '0';
 
   // Check if approaching limit (>90% of max)
   const isApproachingLimit = currentTotal > maxTotalHours * 0.9 && !hasError;
-
-  // Generate dynamic label text
-  const dayCountText = selectedDaysCount === 5
-    ? 'Mon-Fri'
-    : selectedDaysCount === 7
-      ? 'all days'
-      : `${selectedDaysCount} day${selectedDaysCount !== 1 ? 's' : ''}`;
 
   return (
     <div
@@ -107,7 +97,10 @@ export function AutoDistributeToggle({
       {enabled && (
         <div className="flex flex-col gap-2 pl-7">
           <div className="flex items-center gap-3">
-            <Label htmlFor="total-hours" className="text-sm text-muted-foreground">
+            <Label
+              htmlFor="total-hours"
+              className="text-sm text-muted-foreground"
+            >
               Total hours:
             </Label>
             <Input
@@ -125,21 +118,23 @@ export function AutoDistributeToggle({
                 hasError && 'border-destructive focus-visible:ring-destructive',
               )}
             />
-            <span className="text-sm text-muted-foreground">
-              → {hoursPerDay}h/day ({dayCountText})
+            <span className="text-xs text-muted-foreground">
+              Max {maxTotalHours}h for {selectedDaysCount} selected day
+              {selectedDaysCount !== 1 ? 's' : ''}
             </span>
           </div>
 
           {/* Max hours info */}
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span>Max {maxTotalHours}h for {selectedDaysCount} selected day{selectedDaysCount !== 1 ? 's' : ''}</span>
-          </div>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground"></div>
 
           {/* Warning when approaching limit */}
           {isApproachingLimit && (
             <div className="flex items-center gap-2 text-xs text-amber-600">
               <AlertCircle className="h-3 w-3" />
-              <span>Approaching maximum hours limit ({currentTotal}h / {maxTotalHours}h)</span>
+              <span>
+                Approaching maximum hours limit ({currentTotal}h /{' '}
+                {maxTotalHours}h)
+              </span>
             </div>
           )}
         </div>
@@ -147,10 +142,7 @@ export function AutoDistributeToggle({
 
       {/* Error message */}
       {hasError && (
-        <p
-          id="auto-distribute-error"
-          className="text-xs text-destructive pl-7"
-        >
+        <p id="auto-distribute-error" className="text-xs text-destructive pl-7">
           {totalError}
         </p>
       )}
