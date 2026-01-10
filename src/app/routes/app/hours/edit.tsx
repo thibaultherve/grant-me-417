@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { paths } from '@/config/paths';
-import { AddHoursForm } from '@/features/hours/components/add-hours-form';
+import { AddHoursForm } from '@/features/hours/components/forms/add-hours-form';
 
 export function HoursEditRoute() {
   const navigate = useNavigate();

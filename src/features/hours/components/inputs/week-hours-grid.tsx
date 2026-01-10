@@ -35,8 +35,8 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
-import type { DayColumn } from '../types/week-form';
-import { formatDecimalHours } from '../utils/hours-validation';
+import type { DayColumn } from '../../types/week-form';
+import { formatDecimalHours } from '../../utils/hours-validation';
 import { DayHoursCell } from './day-hours-cell';
 
 interface WeekHoursGridProps {

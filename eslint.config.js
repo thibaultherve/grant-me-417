@@ -1,14 +1,14 @@
 import js from '@eslint/js';
-import globals from 'globals';
+import prettierConfig from 'eslint-config-prettier';
+import checkFile from 'eslint-plugin-check-file';
+import importPlugin from 'eslint-plugin-import';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import prettier from 'eslint-plugin-prettier';
+import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
+import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import react from 'eslint-plugin-react';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
-import importPlugin from 'eslint-plugin-import';
-import checkFile from 'eslint-plugin-check-file';
-import prettier from 'eslint-plugin-prettier';
-import prettierConfig from 'eslint-config-prettier';
 
 export default tseslint.config(
   // Global ignores
@@ -155,7 +155,11 @@ export default tseslint.config(
       'linebreak-style': ['error', 'unix'],
 
       // Prettier rules
-      'prettier/prettier': ['error', {}, { usePrettierrc: true }],
+      'prettier/prettier': [
+        'error',
+        {},
+        { usePrettierrc: true, endOfLine: 'auto' },
+      ],
 
       // File naming conventions
       'check-file/filename-naming-convention': [
