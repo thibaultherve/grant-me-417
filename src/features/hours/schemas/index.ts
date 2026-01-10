@@ -59,18 +59,18 @@ const isFutureDate = (date: string): boolean => {
   return inputDate > today;
 };
 
-const isWeekComplete = (date: string): boolean => {
+const isWeekStarted = (date: string): boolean => {
   const inputDate = new Date(date);
   const today = new Date();
 
-  // Get the Friday of the input date's week
+  // Get the Monday of the input date's week
   const dayOfWeek = inputDate.getDay();
-  const daysToFriday = dayOfWeek === 0 ? 6 - 7 : 5 - dayOfWeek; // Sunday = 0, Friday = 5
-  const fridayOfWeek = new Date(inputDate);
-  fridayOfWeek.setDate(inputDate.getDate() + daysToFriday);
+  const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Sunday = 0, Monday = 1
+  const mondayOfWeek = new Date(inputDate);
+  mondayOfWeek.setDate(inputDate.getDate() + daysToMonday);
 
-  // Check if today is at least the Friday of that week
-  return today >= fridayOfWeek;
+  // Check if today is at least the Monday of that week
+  return today >= mondayOfWeek;
 };
 
 // Schema for single work entry
@@ -99,8 +99,8 @@ export const weekWorkEntrySchema = z.object({
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format')
     .refine((date) => !isFutureDate(date), 'Cannot add hours for future dates')
     .refine(
-      (date) => isWeekComplete(date),
-      'Cannot add hours for incomplete weeks',
+      (date) => isWeekStarted(date),
+      'Cannot add hours for weeks that have not started yet',
     ),
   total_weekly_hours: z
     .string()

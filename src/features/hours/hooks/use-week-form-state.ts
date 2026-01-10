@@ -29,7 +29,7 @@ import {
   MAX_HOURS_PER_DAY,
   MAX_HOURS_PER_WEEK,
 } from '../utils/week-calculations';
-import { isWeekComplete } from '../utils/week-validation';
+import { isWeekStarted } from '../utils/week-validation';
 
 /**
  * Result from distributing hours across weekdays
@@ -258,7 +258,7 @@ export function useWeekFormState(
     if (computedTotal > MAX_HOURS_PER_WEEK) return false;
 
     // Week must be complete
-    if (!isWeekComplete(state.currentWeek)) return false;
+    if (!isWeekStarted(state.currentWeek)) return false;
 
     return true;
   }, [
@@ -720,7 +720,7 @@ export function useWeekFormState(
    */
   const canGoNextWeek = useMemo(() => {
     const nextMonday = addDays(state.currentWeek, 7);
-    return isWeekComplete(nextMonday);
+    return isWeekStarted(nextMonday);
   }, [state.currentWeek]);
 
   /**

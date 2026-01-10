@@ -63,7 +63,7 @@ export const WeekNavigator = memo(function WeekNavigator({
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   // Determine which dates should be disabled in the calendar
-  // Disable future dates and incomplete weeks (where Friday hasn't passed yet)
+  // Disable future dates and weeks that haven't started yet (Monday hasn't arrived)
   const isDateDisabled = (date: Date) => {
     const today = new Date();
     const dayOfWeek = date.getDay();
@@ -71,18 +71,13 @@ export const WeekNavigator = memo(function WeekNavigator({
     // If it's a future date, disable it
     if (date > today) return true;
 
-    // For current week, check if Friday (day 5) has passed
     // Get the Monday of this date's week
     const monday = new Date(date);
     monday.setDate(date.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+    monday.setHours(0, 0, 0, 0);
 
-    // Get Friday of this week
-    const friday = new Date(monday);
-    friday.setDate(monday.getDate() + 4);
-    friday.setHours(23, 59, 59, 999);
-
-    // Disable if Friday hasn't passed yet
-    return friday > today;
+    // Disable if Monday hasn't arrived yet
+    return monday > today;
   };
 
   const handleDateSelect = (date: Date | undefined) => {

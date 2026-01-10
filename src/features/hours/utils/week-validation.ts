@@ -7,7 +7,7 @@
  * @module week-validation
  */
 
-import { addDays, startOfWeek, isAfter } from 'date-fns';
+import { startOfWeek, isAfter } from 'date-fns';
 
 import type { DaysIncluded } from '../schemas';
 
@@ -26,33 +26,32 @@ export interface ValidationResult {
 }
 
 /**
- * Checks if a week is complete (at least Friday has passed).
- * A week is considered complete when Friday of that week has passed.
+ * Checks if a week has started (Monday has arrived).
+ * A week is considered started when Monday of that week has arrived.
  *
  * @param date - Any date within the week to check
- * @returns true if the week is complete (Friday has passed), false otherwise
+ * @returns true if the week has started (Monday has arrived), false otherwise
  *
  * @example
  * ```ts
  * const today = new Date('2025-01-09') // Thursday
  * const mondayThisWeek = new Date('2025-01-06')
- * const mondayLastWeek = new Date('2024-12-30')
+ * const mondayNextWeek = new Date('2025-01-13')
  *
- * isWeekComplete(mondayThisWeek) // false (Friday hasn't passed yet)
- * isWeekComplete(mondayLastWeek) // true (Friday has passed)
+ * isWeekStarted(mondayThisWeek) // true (Monday has arrived)
+ * isWeekStarted(mondayNextWeek) // false (Monday hasn't arrived yet)
  * ```
  */
-export function isWeekComplete(date: Date): boolean {
+export function isWeekStarted(date: Date): boolean {
   const today = new Date();
   const mondayOfWeek = startOfWeek(date, { weekStartsOn: 1 });
-  const fridayOfWeek = addDays(mondayOfWeek, 4); // Friday is 4 days after Monday
 
-  return today >= fridayOfWeek;
+  return today >= mondayOfWeek;
 }
 
 /**
  * Checks if a date should be disabled in the calendar.
- * Dates are disabled if they are in the future or if their week is not yet complete.
+ * Dates are disabled if they are in the future or if their week hasn't started yet.
  *
  * @param date - The date to check
  * @returns true if the date should be disabled, false if selectable
@@ -60,12 +59,12 @@ export function isWeekComplete(date: Date): boolean {
  * @example
  * ```ts
  * const futureDate = new Date('2026-01-01')
- * const incompleteWeek = new Date() // Today (week not complete)
- * const completeWeek = new Date('2024-12-01')
+ * const futureWeek = new Date() // Monday of next week
+ * const currentWeek = new Date('2024-12-01')
  *
  * isDateDisabled(futureDate) // true
- * isDateDisabled(incompleteWeek) // true
- * isDateDisabled(completeWeek) // false
+ * isDateDisabled(futureWeek) // true (week hasn't started)
+ * isDateDisabled(currentWeek) // false (week has started)
  * ```
  */
 export function isDateDisabled(date: Date): boolean {
@@ -75,8 +74,8 @@ export function isDateDisabled(date: Date): boolean {
   // Disable future dates
   if (isAfter(date, today)) return true;
 
-  // Disable incomplete weeks
-  return !isWeekComplete(date);
+  // Disable weeks that haven't started yet
+  return !isWeekStarted(date);
 }
 
 /**
