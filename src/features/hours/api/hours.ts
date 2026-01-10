@@ -7,9 +7,13 @@
 
 import { supabase } from '@/lib/supabase';
 
+import { endOfMonth, format, startOfMonth } from 'date-fns';
+
 import type {
+  DayHoursEntry,
   HourEntryWithEmployer,
   HoursResponse,
+  MonthHoursData,
   SortOptions,
   WorkEntryInput,
 } from '../types';
@@ -197,4 +201,50 @@ export const saveWeekHours = async (
   }
 
   return { deleted: toDelete.length, saved: toUpsert.length };
+};
+
+/**
+ * Récupère les heures d'un mois groupées par jour
+ * Utilisé pour le calendrier mensuel
+ *
+ * @param year - Année (ex: 2025)
+ * @param month - Mois (1-12)
+ * @returns Données groupées par date avec liste des employeurs et heures
+ */
+export const getMonthHours = async (
+  year: number,
+  month: number,
+): Promise<MonthHoursData> => {
+  // Créer les dates de début et fin du mois
+  const monthDate = new Date(year, month - 1, 1); // month is 0-indexed in JS
+  const firstDay = format(startOfMonth(monthDate), 'yyyy-MM-dd');
+  const lastDay = format(endOfMonth(monthDate), 'yyyy-MM-dd');
+
+  const { data, error } = await supabase
+    .from('work_entries_with_employers')
+    .select('work_date, hours, employer_name')
+    .gte('work_date', firstDay)
+    .lte('work_date', lastDay)
+    .order('work_date', { ascending: true })
+    .order('employer_name', { ascending: true });
+
+  if (error) throw error;
+
+  // Grouper les données par date
+  const result: MonthHoursData = {};
+
+  for (const entry of data || []) {
+    const dateKey = entry.work_date;
+    const dayEntry: DayHoursEntry = {
+      employerName: entry.employer_name || 'Unknown Employer',
+      hours: Number(entry.hours),
+    };
+
+    if (!result[dateKey]) {
+      result[dateKey] = [];
+    }
+    result[dateKey].push(dayEntry);
+  }
+
+  return result;
 };

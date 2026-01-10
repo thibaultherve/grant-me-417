@@ -73,6 +73,8 @@ export const queryKeys = {
     detail: (id: string) => ['hours', id] as const,
     byEmployer: (employerId: string) =>
       ['hours', 'employer', employerId] as const,
+    month: (year: number, month: number) =>
+      ['hours', 'month', year, month] as const,
   },
   visas: {
     all: ['visas'] as const,
