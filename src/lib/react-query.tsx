@@ -25,8 +25,9 @@ const queryConfig = {
     // Refetch après reconnexion réseau
     refetchOnReconnect: true,
 
-    // Ne pas refetch au mount si les données sont fresh
-    refetchOnMount: false,
+    // Refetch au mount si les données sont stale (comportement par défaut de React Query)
+    // Important pour que les données invalidées soient rechargées lors de la navigation
+    refetchOnMount: true,
 
     // Retry une fois en cas d'erreur
     retry: 1,
