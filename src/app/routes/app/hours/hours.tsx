@@ -13,7 +13,6 @@ import { InfoCard } from '@/components/ui/info-card';
 import { paths } from '@/config/paths';
 import { useHours } from '@/features/hours/api/use-hours';
 import { MonthCalendar } from '@/features/hours/components/calendar';
-import { ModernHoursTable } from '@/features/hours/components/table/modern-hours-table';
 import type { SortOptions } from '@/features/hours/types';
 
 export const HoursRoute = () => {
@@ -76,20 +75,7 @@ export const HoursRoute = () => {
         </InfoCard>
       )}
 
-      {/* Modern Table */}
-      <ModernHoursTable
-        data={data}
-        isLoading={isLoading}
-        error={error}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        sortOptions={sortOptions}
-        setSortOptions={setSortOptions}
-        limit={limit}
-      />
-
-      {/* Monthly Calendar */}
-      <div className="mt-8 border-t pt-8">
+      <div>
         <MonthCalendar />
       </div>
     </div>

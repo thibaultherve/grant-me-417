@@ -1,10 +1,10 @@
 import { getDay, isToday as isTodayFn } from 'date-fns';
 import * as React from 'react';
 
-import { cn } from '@/lib/utils';
 import type { MonthHoursData } from '@/features/hours/types';
 import type { CalendarDay } from '@/features/hours/utils/calendar-helpers';
 import { WEEKDAY_HEADERS } from '@/features/hours/utils/calendar-helpers';
+import { cn } from '@/lib/utils';
 
 import { CalendarDayCell } from './calendar-day-cell';
 
@@ -33,10 +33,7 @@ function CalendarGridComponent({
       aria-label="Monthly calendar"
     >
       {/* Weekday headers */}
-      <div
-        className="grid grid-cols-7 border-b bg-muted/50"
-        role="row"
-      >
+      <div className="grid grid-cols-7 border-b bg-muted/50" role="row">
         {WEEKDAY_HEADERS.map((day, index) => {
           const isWeekend = index >= 5; // Saturday (5) and Sunday (6)
           return (
@@ -55,10 +52,7 @@ function CalendarGridComponent({
       </div>
 
       {/* Calendar days grid */}
-      <div
-        className="grid grid-cols-7"
-        role="rowgroup"
-      >
+      <div className="grid grid-cols-7" role="rowgroup">
         {days.map((day) => {
           const dayOfWeek = getDay(day.date);
           // Sunday = 0, Saturday = 6, but we use Monday-first (0=Mon, 6=Sun)
