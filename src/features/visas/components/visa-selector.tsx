@@ -1,4 +1,5 @@
 import { Check, ChevronDown } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -6,17 +7,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+
 import { useVisaContext } from '../hooks/use-visa-context';
 import type { VisaType } from '../types';
 
 const visaTypeLabels: Record<VisaType, string> = {
   first_whv: '1st WHV',
-  second_whv: '2nd WHV', 
-  third_whv: '3rd WHV'
+  second_whv: '2nd WHV',
+  third_whv: '3rd WHV',
 };
 
 export function VisaSelector() {
-  const { visas, currentVisa, setCurrentVisa, isLoading: loading } = useVisaContext();
+  const {
+    visas,
+    currentVisa,
+    setCurrentVisa,
+    isLoading: loading,
+  } = useVisaContext();
 
   if (loading) {
     return (
@@ -38,11 +45,10 @@ export function VisaSelector() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          className="w-[180px] justify-between"
-        >
-          {currentVisa ? visaTypeLabels[currentVisa.visa_type] : 'Select visa...'}
+        <Button variant="outline" className="w-[180px] justify-between">
+          {currentVisa
+            ? visaTypeLabels[currentVisa.visa_type]
+            : 'Select visa...'}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </DropdownMenuTrigger>

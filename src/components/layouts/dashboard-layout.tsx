@@ -1,12 +1,4 @@
-import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
-import { paths } from '@/config/paths';
-import { Button } from '@/components/ui/button';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
-import { useAuth } from '@/lib/auth';
-import { supabase } from '@/lib/supabase';
-import { toast } from 'sonner';
 import {
   Home,
   Building2,
@@ -15,6 +7,11 @@ import {
   User,
   LogOut,
 } from 'lucide-react';
+import React from 'react';
+import { Link, useLocation } from 'react-router';
+import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +20,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { paths } from '@/config/paths';
+import { useAuth } from '@/lib/auth';
+import { supabase } from '@/lib/supabase';
 
 const navigation = [
   { name: 'Dashboard', href: paths.app.dashboard.path, icon: Home },
@@ -37,7 +38,6 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
-  const navigate = useNavigate();
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
@@ -45,7 +45,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     try {
       // Manual fallback: clear all Supabase auth data from localStorage
       const keys = Object.keys(localStorage);
-      keys.forEach(key => {
+      keys.forEach((key) => {
         if (key.startsWith('sb-') || key.includes('supabase')) {
           localStorage.removeItem(key);
         }
@@ -57,7 +57,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       // Try to sign out normally, but ignore errors since we already cleared localStorage
       try {
         await supabase.auth.signOut({ scope: 'local' });
-      } catch (signOutError) {
+      } catch {
         // Ignore errors - we already cleared the session manually
       }
 
@@ -84,13 +84,15 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 key={item.name}
                 to={item.href}
                 className={`flex flex-col items-center justify-center gap-1 min-w-[60px] h-16 px-3 py-2 text-xs rounded-lg transition-colors ${
-                  isActive 
-                    ? 'bg-primary text-primary-foreground' 
+                  isActive
+                    ? 'bg-primary text-primary-foreground'
                     : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                 }`}
               >
                 <Icon className="h-5 w-5 flex-shrink-0" />
-                <span className="leading-none truncate max-w-full">{item.name}</span>
+                <span className="leading-none truncate max-w-full">
+                  {item.name}
+                </span>
               </Link>
             );
           })}
@@ -99,8 +101,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <DropdownMenuTrigger asChild>
               <button
                 className={`flex flex-col items-center justify-center gap-1 min-w-[60px] h-16 px-3 py-2 text-xs rounded-lg transition-colors ${
-                  location.pathname === paths.app.profile.path 
-                    ? 'bg-primary text-primary-foreground' 
+                  location.pathname === paths.app.profile.path
+                    ? 'bg-primary text-primary-foreground'
                     : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                 }`}
               >
@@ -108,7 +110,11 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 <span className="leading-none">Profile</span>
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="center" side="top" className="mb-2 min-w-48">
+            <DropdownMenuContent
+              align="center"
+              side="top"
+              className="mb-2 min-w-48"
+            >
               <DropdownMenuLabel className="px-2 py-1.5">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">Account</p>
@@ -119,7 +125,10 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link to={paths.app.profile.path} className="w-full cursor-pointer">
+                <Link
+                  to={paths.app.profile.path}
+                  className="w-full cursor-pointer"
+                >
                   <User className="mr-2 h-4 w-4" />
                   Profile
                 </Link>
@@ -169,7 +178,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                       : 'text-sidebar-foreground hover:bg-sidebar-accent'
                   }`}
                 >
-                  <Icon className={`h-5 w-5 flex-shrink-0 ${isActive ? '' : 'text-muted-foreground'}`} />
+                  <Icon
+                    className={`h-5 w-5 flex-shrink-0 ${isActive ? '' : 'text-muted-foreground'}`}
+                  />
                   <span>{item.name}</span>
                 </Link>
               );
@@ -190,7 +201,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                       : 'text-sidebar-foreground hover:bg-sidebar-accent'
                   }`}
                 >
-                  <User className={`h-5 w-5 flex-shrink-0 ${location.pathname === paths.app.profile.path ? '' : 'text-muted-foreground'}`} />
+                  <User
+                    className={`h-5 w-5 flex-shrink-0 ${location.pathname === paths.app.profile.path ? '' : 'text-muted-foreground'}`}
+                  />
                   <span>Profile</span>
                 </Link>
 

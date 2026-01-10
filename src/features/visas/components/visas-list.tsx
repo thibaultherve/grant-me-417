@@ -1,13 +1,15 @@
-import { Plane } from 'lucide-react'
-import { VisaCard } from './visa-card'
-import type { UserVisa } from '../types'
+import { Plane } from 'lucide-react';
+
+import type { UserVisa } from '../types';
+
+import { VisaCard } from './visa-card';
 
 interface VisasListProps {
-  visas: UserVisa[]
-  loading: boolean
-  error: string | null
-  onEdit?: (visa: UserVisa) => void
-  onDelete: (id: string) => Promise<void>
+  visas: UserVisa[];
+  loading: boolean;
+  error: Error | null;
+  onEdit?: (visa: UserVisa) => void;
+  onDelete: (id: string) => void;
 }
 
 export function VisasList({
@@ -24,17 +26,17 @@ export function VisasList({
           <div className="text-muted-foreground">Loading visas...</div>
         </div>
       </div>
-    )
+    );
   }
 
   if (error) {
     return (
       <div className="space-y-6">
         <div className="text-center py-12">
-          <div className="text-destructive">Error: {error}</div>
+          <div className="text-destructive">Error: {error.message}</div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -60,5 +62,5 @@ export function VisasList({
         </div>
       )}
     </>
-  )
+  );
 }

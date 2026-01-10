@@ -6,18 +6,20 @@
  * Suit le pattern bulletproof-react state-management
  */
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { queryKeys } from '@/lib/react-query';
+
 import { handleError } from '@/lib/error-handler';
+import { queryKeys } from '@/lib/react-query';
+
+import type { CreateEmployerInput, Employer } from '../types';
+
 import {
-  getEmployers,
-  getEmployer,
   addEmployer,
-  updateEmployer,
   deleteEmployer,
+  getEmployers,
+  updateEmployer,
 } from './employers';
-import type { Employer, CreateEmployerInput } from '../types';
 
 /**
  * Hook pour récupérer tous les employeurs
@@ -43,17 +45,6 @@ export const useEmployers = () => {
   return useQuery({
     queryKey: queryKeys.employers.all,
     queryFn: getEmployers,
-  });
-};
-
-/**
- * Hook pour récupérer un employeur par ID
- */
-export const useEmployer = (id: string) => {
-  return useQuery({
-    queryKey: queryKeys.employers.detail(id),
-    queryFn: () => getEmployer(id),
-    enabled: !!id, // Ne fetch que si ID existe
   });
 };
 
@@ -91,21 +82,33 @@ export const useAddEmployer = () => {
       await queryClient.cancelQueries({ queryKey: queryKeys.employers.all });
 
       // Snapshot de l'état actuel (pour rollback si erreur)
-      const previousEmployers = queryClient.getQueryData<Employer[]>(queryKeys.employers.all);
+      const previousEmployers = queryClient.getQueryData<Employer[]>(
+        queryKeys.employers.all,
+      );
 
       // Optimistic update: ajoute temporairement le nouvel employeur
-      queryClient.setQueryData<Employer[]>(queryKeys.employers.all, (old = []) => [
-        { ...newEmployer, id: 'temp-id', created_at: new Date().toISOString(), updated_at: new Date().toISOString(), user_id: 'temp-user-id' } as Employer,
-        ...old,
-      ]);
+      queryClient.setQueryData<Employer[]>(
+        queryKeys.employers.all,
+        (old = []) => [
+          {
+            ...newEmployer,
+            id: 'temp-id',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            user_id: 'temp-user-id',
+          } as Employer,
+          ...old,
+        ],
+      );
 
       return { previousEmployers };
     },
 
     // Succès: remplace l'employeur temporaire par le vrai (avec ID du serveur)
     onSuccess: (data) => {
-      queryClient.setQueryData<Employer[]>(queryKeys.employers.all, (old = []) =>
-        old.map((emp) => (emp.id === 'temp-id' ? data : emp))
+      queryClient.setQueryData<Employer[]>(
+        queryKeys.employers.all,
+        (old = []) => old.map((emp) => (emp.id === 'temp-id' ? data : emp)),
       );
       toast.success('Employer added successfully');
     },
@@ -113,7 +116,10 @@ export const useAddEmployer = () => {
     // Erreur: rollback vers l'état précédent
     onError: (error, _, context) => {
       if (context?.previousEmployers) {
-        queryClient.setQueryData(queryKeys.employers.all, context.previousEmployers);
+        queryClient.setQueryData(
+          queryKeys.employers.all,
+          context.previousEmployers,
+        );
       }
       handleError(error, {
         consolePrefix: 'Error adding employer',
@@ -141,30 +147,38 @@ export const useUpdateEmployer = () => {
     onMutate: async ({ id, input }) => {
       await queryClient.cancelQueries({ queryKey: queryKeys.employers.all });
 
-      const previousEmployers = queryClient.getQueryData<Employer[]>(queryKeys.employers.all);
+      const previousEmployers = queryClient.getQueryData<Employer[]>(
+        queryKeys.employers.all,
+      );
 
       // Optimistic update
-      queryClient.setQueryData<Employer[]>(queryKeys.employers.all, (old = []) =>
-        old.map((emp) =>
-          emp.id === id
-            ? { ...emp, ...input, updated_at: new Date().toISOString() }
-            : emp
-        )
+      queryClient.setQueryData<Employer[]>(
+        queryKeys.employers.all,
+        (old = []) =>
+          old.map((emp) =>
+            emp.id === id
+              ? { ...emp, ...input, updated_at: new Date().toISOString() }
+              : emp,
+          ),
       );
 
       return { previousEmployers };
     },
 
     onSuccess: (data) => {
-      queryClient.setQueryData<Employer[]>(queryKeys.employers.all, (old = []) =>
-        old.map((emp) => (emp.id === data.id ? data : emp))
+      queryClient.setQueryData<Employer[]>(
+        queryKeys.employers.all,
+        (old = []) => old.map((emp) => (emp.id === data.id ? data : emp)),
       );
       toast.success('Employer updated successfully');
     },
 
     onError: (error, _, context) => {
       if (context?.previousEmployers) {
-        queryClient.setQueryData(queryKeys.employers.all, context.previousEmployers);
+        queryClient.setQueryData(
+          queryKeys.employers.all,
+          context.previousEmployers,
+        );
       }
       handleError(error, {
         consolePrefix: 'Error updating employer',
@@ -190,11 +204,14 @@ export const useDeleteEmployer = () => {
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: queryKeys.employers.all });
 
-      const previousEmployers = queryClient.getQueryData<Employer[]>(queryKeys.employers.all);
+      const previousEmployers = queryClient.getQueryData<Employer[]>(
+        queryKeys.employers.all,
+      );
 
       // Optimistic delete: retire immédiatement de l'UI
-      queryClient.setQueryData<Employer[]>(queryKeys.employers.all, (old = []) =>
-        old.filter((emp) => emp.id !== id)
+      queryClient.setQueryData<Employer[]>(
+        queryKeys.employers.all,
+        (old = []) => old.filter((emp) => emp.id !== id),
       );
 
       return { previousEmployers };
@@ -206,7 +223,10 @@ export const useDeleteEmployer = () => {
 
     onError: (error, _, context) => {
       if (context?.previousEmployers) {
-        queryClient.setQueryData(queryKeys.employers.all, context.previousEmployers);
+        queryClient.setQueryData(
+          queryKeys.employers.all,
+          context.previousEmployers,
+        );
       }
       handleError(error, {
         consolePrefix: 'Error deleting employer',

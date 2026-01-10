@@ -1,15 +1,17 @@
-import { useMemo } from 'react'
-import { useVisaContext } from './use-visa-context'
-import type { VisaType } from '../types'
+import { useMemo } from 'react';
+
+import type { VisaType } from '../types';
+
+import { useVisaContext } from './use-visa-context';
 
 interface AvailableVisa {
-  type: VisaType
-  title: string
-  description: string
-  requiredDays: number
-  duration: string
-  icon: string
-  variant: 'default' | 'secondary' | 'outline'
+  type: VisaType;
+  title: string;
+  description: string;
+  requiredDays: number;
+  duration: string;
+  icon: string;
+  variant: 'default' | 'secondary' | 'outline';
 }
 
 const allVisaOptions: AvailableVisa[] = [
@@ -40,27 +42,27 @@ const allVisaOptions: AvailableVisa[] = [
     icon: 'CheckCircle',
     variant: 'outline',
   },
-]
+];
 
 export function useAvailableVisas() {
-  const { visas, loading, error } = useVisaContext()
+  const { visas, isLoading, error } = useVisaContext();
 
   const availableVisas = useMemo(() => {
-    if (loading) return []
-    
+    if (isLoading) return [];
+
     // Get visa types that the user already has
-    const existingVisaTypes = visas.map(visa => visa.visa_type)
-    
+    const existingVisaTypes = visas.map((visa) => visa.visa_type);
+
     // Filter out visas that the user already possesses
-    return allVisaOptions.filter(visaOption => 
-      !existingVisaTypes.includes(visaOption.type)
-    )
-  }, [visas, loading])
+    return allVisaOptions.filter(
+      (visaOption) => !existingVisaTypes.includes(visaOption.type),
+    );
+  }, [visas, isLoading]);
 
   return {
     availableVisas,
-    loading,
+    loading: isLoading,
     error,
-    hasAvailableVisas: availableVisas.length > 0
-  }
+    hasAvailableVisas: availableVisas.length > 0,
+  };
 }

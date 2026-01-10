@@ -1,7 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3 } from "lucide-react";
-import { useState } from "react";
-import { useVisaWeeklyProgress } from "../hooks/use-visa-weekly-progress";
+import { BarChart3 } from 'lucide-react';
+import { useState } from 'react';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
+import { useVisaWeeklyProgress } from '../hooks/use-visa-weekly-progress';
 
 interface ChartData {
   week: string;
@@ -71,12 +73,12 @@ export const WeeklyProgressChart = () => {
 
   // Modern neutral color scheme - NO yellow, only grays and greens
   const getBarColor = (eligibleDays: number, isHovered: boolean) => {
-    const opacity = isHovered ? "1" : "0.9";
+    const opacity = isHovered ? '1' : '0.9';
     if (eligibleDays === 7) return `rgba(34, 197, 94, ${opacity})`; // green-500 (full week)
     if (eligibleDays >= 5) return `rgba(74, 222, 128, ${opacity})`; // green-400 (5-6 days)
     if (eligibleDays >= 3) return `rgba(134, 239, 172, ${opacity})`; // green-300 (3-4 days)
     if (eligibleDays >= 1) return `rgba(156, 163, 175, ${opacity})`; // gray-400 (1-2 days)
-    return "transparent"; // 0 days
+    return 'transparent'; // 0 days
   };
 
   const maxDays = 7;
@@ -89,8 +91,8 @@ export const WeeklyProgressChart = () => {
     weekEnd.setDate(weekStart.getDate() + 6);
 
     const formatDate = (date: Date) => {
-      const day = String(date.getDate()).padStart(2, "0");
-      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = String(date.getFullYear()).slice(-2);
       return `${day}/${month}/${year}`;
     };
@@ -122,7 +124,10 @@ export const WeeklyProgressChart = () => {
           </div>
 
           {/* Chart area */}
-          <div className="ml-10 relative overflow-hidden" style={{ height: chartHeight }}>
+          <div
+            className="ml-10 relative overflow-hidden"
+            style={{ height: chartHeight }}
+          >
             {/* Grid lines */}
             <div className="absolute inset-0 flex flex-col justify-between">
               {[7, 4, 3, 2, 1, 0].map((tick) => (
@@ -137,7 +142,8 @@ export const WeeklyProgressChart = () => {
             {/* Bars */}
             <div className="absolute inset-0 flex items-end justify-around px-2 overflow-x-auto">
               {chartData.map((data, index) => {
-                const barHeight = (data.eligible_days / maxDays) * (chartHeight - 20);
+                const barHeight =
+                  (data.eligible_days / maxDays) * (chartHeight - 20);
                 const isHovered = hoveredBar === index;
 
                 return (
@@ -152,7 +158,10 @@ export const WeeklyProgressChart = () => {
                     <div
                       style={{
                         height: barHeight,
-                        backgroundColor: getBarColor(data.eligible_days, isHovered),
+                        backgroundColor: getBarColor(
+                          data.eligible_days,
+                          isHovered,
+                        ),
                         width: '100%',
                         borderRadius: '4px 4px 0 0',
                         cursor: data.eligible_days > 0 ? 'pointer' : 'default',
@@ -163,18 +172,16 @@ export const WeeklyProgressChart = () => {
 
                     {/* Tooltip */}
                     {isHovered && data.eligible_days > 0 && (
-                      <div
-                        className="absolute bottom-full mb-2 bg-background border border-border rounded-lg shadow-lg p-3 space-y-1 z-10 min-w-[180px] transition-all duration-200"
-                      >
+                      <div className="absolute bottom-full mb-2 bg-background border border-border rounded-lg shadow-lg p-3 space-y-1 z-10 min-w-[180px] transition-all duration-200">
                         <p className="font-semibold text-xs">
                           {formatTooltipDate(data.full_date)}
                         </p>
                         <p className="text-xs">
-                          <span className="font-medium">Eligible Days:</span>{" "}
+                          <span className="font-medium">Eligible Days:</span>{' '}
                           {data.eligible_days}
                         </p>
                         <p className="text-xs">
-                          <span className="font-medium">Eligible Hours:</span>{" "}
+                          <span className="font-medium">Eligible Hours:</span>{' '}
                           {data.eligible_hours}h
                         </p>
                       </div>

@@ -1,7 +1,7 @@
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -10,25 +10,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { createEmployerSchema, type CreateEmployerFormData } from '../schemas'
-import { INDUSTRY_OPTIONS } from '../constants'
-import type { Employer } from '../types'
+} from '@/components/ui/select';
+
+import { INDUSTRY_OPTIONS } from '../constants';
+import { createEmployerSchema, type CreateEmployerFormData } from '../schemas';
+import type { Employer } from '../types';
+
+import { PostcodeCombobox } from './postcode-combobox';
 
 interface EmployerFormProps {
-  mode: 'add' | 'edit'
-  employer?: Employer
-  onSubmit: (data: CreateEmployerFormData) => Promise<void>
-  onCancel: () => void
-  isSubmitting?: boolean
-  onError?: (error: Error) => void
+  mode: 'add' | 'edit';
+  employer?: Employer;
+  onSubmit: (data: CreateEmployerFormData) => void | Promise<void>;
+  onCancel: () => void;
+  isSubmitting?: boolean;
+  onError?: (error: Error) => void;
 }
 
 export function EmployerForm({
@@ -37,51 +41,66 @@ export function EmployerForm({
   onSubmit,
   onCancel,
   isSubmitting,
-  onError
+  onError,
 }: EmployerFormProps) {
-  const isEdit = mode === 'edit'
+  const isEdit = mode === 'edit';
 
   const form = useForm<CreateEmployerFormData>({
     resolver: zodResolver(createEmployerSchema),
-    defaultValues: isEdit && employer ? {
-      name: employer.name,
-      industry: employer.industry,
-      postcode: employer.postcode || '',
-      is_eligible: employer.is_eligible
-    } : {
-      name: '',
-      industry: 'plant_and_animal_cultivation' as const,
-      postcode: '',
-      is_eligible: true
-    }
-  })
+    defaultValues:
+      isEdit && employer
+        ? {
+            name: employer.name,
+            industry: employer.industry,
+            postcode: employer.postcode || '',
+            is_eligible: employer.is_eligible,
+          }
+        : {
+            name: '',
+            industry: 'plant_and_animal_cultivation' as const,
+            postcode: '',
+            is_eligible: true,
+          },
+  });
+
+  // Watch form fields to check if all required fields are filled
+  const name = form.watch('name');
+  const postcode = form.watch('postcode');
+  const industry = form.watch('industry');
+
+  // Disable submit if any required field is empty
+  const isFormIncomplete = !name || !postcode || !industry;
 
   const handleSubmit = async (data: CreateEmployerFormData) => {
     try {
-      await onSubmit(data)
+      await onSubmit(data);
       // Reset form only in add mode after successful submission
       if (!isEdit) {
-        form.reset()
+        form.reset();
       }
     } catch (error) {
-      const errorMessage = error instanceof Error
-        ? error
-        : new Error(`Failed to ${isEdit ? 'update' : 'add'} employer`)
-      onError?.(errorMessage)
+      const errorMessage =
+        error instanceof Error
+          ? error
+          : new Error(`Failed to ${isEdit ? 'update' : 'add'} employer`);
+      onError?.(errorMessage);
 
       // Set form-level error if onError is not provided
       if (!onError) {
         form.setError('root', {
           type: 'manual',
-          message: errorMessage.message
-        })
+          message: errorMessage.message,
+        });
       }
     }
-  }
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 max-w-lg mx-auto">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-6 max-w-lg mx-auto"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -105,52 +124,15 @@ export function EmployerForm({
 
         <FormField
           control={form.control}
-          name="industry"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Industry Type</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                value={field.value}
-                defaultValue={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger className="h-12 text-base">
-                    <SelectValue placeholder="Select an industry" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {INDUSTRY_OPTIONS.map((option) => (
-                    <SelectItem
-                      key={option.value}
-                      value={option.value}
-                      className="text-base py-3"
-                    >
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                The industry type for specified work eligibility
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="postcode"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Postcode (Optional)</FormLabel>
+              <FormLabel>Postcode</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="e.g., 4000"
-                  {...field}
-                  className="h-12 text-base"
-                  maxLength={4}
+                <PostcodeCombobox
+                  value={field.value || ''}
+                  onValueChange={field.onChange}
+                  disabled={isSubmitting}
                 />
               </FormControl>
               <FormDescription>
@@ -160,6 +142,44 @@ export function EmployerForm({
             </FormItem>
           )}
         />
+
+        {form.watch('postcode') && (
+          <FormField
+            control={form.control}
+            name="industry"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Industry Type</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="h-12 text-base">
+                      <SelectValue placeholder="Select an industry" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {INDUSTRY_OPTIONS.map((option) => (
+                      <SelectItem
+                        key={option.value}
+                        value={option.value}
+                        className="text-base py-3"
+                      >
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  The industry type for specified work eligibility
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         {form.formState.errors.root && (
           <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md border border-red-200">
@@ -180,15 +200,18 @@ export function EmployerForm({
           <Button
             type="submit"
             className="flex-1 h-12 text-base"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isFormIncomplete}
           >
             {isSubmitting
-              ? (isEdit ? 'Updating...' : 'Adding...')
-              : (isEdit ? 'Update Employer' : 'Add Employer')
-            }
+              ? isEdit
+                ? 'Updating...'
+                : 'Adding...'
+              : isEdit
+                ? 'Update Employer'
+                : 'Add Employer'}
           </Button>
         </div>
       </form>
     </Form>
-  )
+  );
 }
