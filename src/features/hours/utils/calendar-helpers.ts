@@ -11,7 +11,6 @@ import {
   addWeeks,
   eachDayOfInterval,
   endOfWeek,
-  format,
   isSameMonth,
   startOfMonth,
   startOfWeek,
@@ -68,51 +67,17 @@ export function getCalendarDays(year: number, month: number): CalendarDay[] {
 }
 
 /**
- * Checks if a date falls within a specific month and year.
- *
- * @param date - The date to check
- * @param year - The target year (e.g., 2025)
- * @param month - The target month (1-12, where 1 = January)
- * @returns true if the date is within the specified month/year
- *
- * @example
- * ```ts
- * const date = new Date('2025-01-15')
- * isCurrentMonth(date, 2025, 1) // true
- * isCurrentMonth(date, 2025, 2) // false
- * ```
- */
-export function isCurrentMonth(
-  date: Date,
-  year: number,
-  month: number
-): boolean {
-  const targetDate = new Date(year, month - 1, 1);
-  return isSameMonth(date, targetDate);
-}
-
-/**
- * Formats a year and month into a readable string.
- *
- * @param year - The year (e.g., 2025)
- * @param month - The month (1-12, where 1 = January)
- * @returns Formatted string like "January 2025"
- *
- * @example
- * ```ts
- * formatMonthYear(2025, 1) // "January 2025"
- * formatMonthYear(2025, 12) // "December 2025"
- * ```
- */
-export function formatMonthYear(year: number, month: number): string {
-  const date = new Date(year, month - 1, 1);
-  return format(date, 'MMMM yyyy');
-}
-
-/**
  * Weekday headers for the calendar grid (Monday first).
  */
-export const WEEKDAY_HEADERS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+export const WEEKDAY_HEADERS = [
+  'Mon',
+  'Tue',
+  'Wed',
+  'Thu',
+  'Fri',
+  'Sat',
+  'Sun',
+];
 
 /**
  * Month names for dropdown selection.

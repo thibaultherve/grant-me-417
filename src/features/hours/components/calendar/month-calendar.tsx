@@ -1,11 +1,10 @@
 'use client';
 
-import { Calendar } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 
-import { cn } from '@/lib/utils';
 import { useMonthHours } from '@/features/hours/api/use-hours';
 import { getCalendarDays } from '@/features/hours/utils/calendar-helpers';
+import { cn } from '@/lib/utils';
 
 import { CalendarGrid } from './calendar-grid';
 import { CalendarHeader } from './calendar-header';
@@ -37,7 +36,10 @@ export function MonthCalendar({
   const { data: hoursData, isLoading } = useMonthHours(year, month);
 
   // Generate calendar grid days
-  const calendarDays = useMemo(() => getCalendarDays(year, month), [year, month]);
+  const calendarDays = useMemo(
+    () => getCalendarDays(year, month),
+    [year, month],
+  );
 
   // Navigation handlers
   const handlePreviousMonth = useCallback(() => {
@@ -68,12 +70,6 @@ export function MonthCalendar({
 
   return (
     <div className={cn('space-y-4', className)}>
-      {/* Title */}
-      <div className="flex items-center gap-2">
-        <Calendar className="h-5 w-5 text-muted-foreground" />
-        <h2 className="text-lg font-semibold">Monthly Calendar</h2>
-      </div>
-
       {/* Header with navigation */}
       <CalendarHeader
         year={year}
@@ -88,10 +84,7 @@ export function MonthCalendar({
       {isLoading ? (
         <CalendarSkeleton />
       ) : (
-        <CalendarGrid
-          days={calendarDays}
-          hoursData={hoursData ?? {}}
-        />
+        <CalendarGrid days={calendarDays} hoursData={hoursData ?? {}} />
       )}
 
       {/* Empty state message */}
@@ -111,14 +104,14 @@ export function MonthCalendar({
 function CalendarSkeleton() {
   return (
     <div className="overflow-hidden rounded-lg border">
-      {/* Header row skeleton */}
+      {/* Header row with day names */}
       <div className="grid grid-cols-7 border-b bg-muted/50">
-        {Array.from({ length: 7 }).map((_, i) => (
+        {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
           <div
-            key={i}
-            className="border-r px-2 py-2 last:border-r-0"
+            key={day}
+            className="border-r px-2 py-2 text-center text-xs font-medium text-muted-foreground last:border-r-0"
           >
-            <div className="mx-auto h-4 w-8 animate-pulse rounded bg-muted" />
+            {day}
           </div>
         ))}
       </div>
@@ -126,10 +119,7 @@ function CalendarSkeleton() {
       {/* Grid skeleton (6 rows x 7 columns = 42 cells) */}
       <div className="grid grid-cols-7">
         {Array.from({ length: 42 }).map((_, i) => (
-          <div
-            key={i}
-            className="min-h-[100px] border-b border-r p-2"
-          >
+          <div key={i} className="min-h-[100px] border-b border-r p-2">
             <div className="h-6 w-6 animate-pulse rounded-full bg-muted" />
             <div className="mt-2 space-y-1">
               <div className="h-3 w-16 animate-pulse rounded bg-muted/60" />

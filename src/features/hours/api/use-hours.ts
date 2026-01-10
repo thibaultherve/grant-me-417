@@ -6,14 +6,12 @@
  */
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
 
 import { useAuth } from '@/lib/auth';
 import { handleError } from '@/lib/error-handler';
 import { queryKeys } from '@/lib/react-query';
 
 import {
-  deleteWorkEntry,
   getEmployerHours,
   getHours,
   getMonthHours,
@@ -62,29 +60,6 @@ export const useMonthHours = (year: number, month: number) => {
     queryKey: queryKeys.hours.month(year, month),
     queryFn: () => getMonthHours(year, month),
     staleTime: 2 * 60 * 1000, // 2 minutes (données volatiles)
-  });
-};
-
-/**
- * Hook pour supprimer une entrée d'heures
- */
-export const useDeleteWorkEntry = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: deleteWorkEntry,
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.hours.all });
-      toast.success('Work entry deleted successfully');
-    },
-
-    onError: (error) => {
-      handleError(error, {
-        consolePrefix: 'Error deleting work entry',
-        fallbackMessage: 'Failed to delete work entry',
-      });
-    },
   });
 };
 

@@ -138,15 +138,6 @@ const addWorkEntries = async (
 };
 
 /**
- * Supprime une entrée d'heures
- */
-export const deleteWorkEntry = async (id: string) => {
-  const { error } = await supabase.from('work_entries').delete().eq('id', id);
-
-  if (error) throw error;
-};
-
-/**
  * Saves week hours with smart upsert/delete logic
  * - Hours > 0: Upsert (create or update)
  * - Hours === 0 AND exists in DB: Delete
