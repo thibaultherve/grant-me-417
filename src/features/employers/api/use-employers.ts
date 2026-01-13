@@ -17,6 +17,7 @@ import type { CreateEmployerInput, Employer } from '../types';
 import {
   addEmployer,
   deleteEmployer,
+  getEmployer,
   getEmployers,
   updateEmployer,
 } from './employers';
@@ -45,6 +46,33 @@ export const useEmployers = () => {
   return useQuery({
     queryKey: queryKeys.employers.all,
     queryFn: getEmployers,
+  });
+};
+
+/**
+ * Hook pour récupérer un employeur par son ID
+ *
+ * Features:
+ * - Enabled seulement si l'ID est défini
+ * - Cache 5 min (staleTime config globale)
+ *
+ * @example
+ * ```tsx
+ * function EmployerEditPage({ id }: { id: string }) {
+ *   const { data: employer, isLoading, error } = useGetEmployer(id)
+ *
+ *   if (isLoading) return <Skeleton />
+ *   if (error || !employer) return <NotFound />
+ *
+ *   return <EmployerForm employer={employer} />
+ * }
+ * ```
+ */
+export const useGetEmployer = (id: string | undefined) => {
+  return useQuery({
+    queryKey: queryKeys.employers.detail(id!),
+    queryFn: () => getEmployer(id!),
+    enabled: !!id,
   });
 };
 

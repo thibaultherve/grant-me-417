@@ -8,7 +8,9 @@ import {
   MoreVertical,
 } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
+import { paths } from '@/config/paths';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,7 +37,6 @@ import { PostcodeBadges } from './postcode-badges';
 interface EmployerCardProps {
   employer: Employer;
   onDelete: (id: string) => void;
-  onEdit: (employer: Employer) => void;
 }
 
 const industryLabels: Record<string, string> = {
@@ -53,8 +54,8 @@ const industryLabels: Record<string, string> = {
 export function EmployerCard({
   employer,
   onDelete,
-  onEdit,
 }: EmployerCardProps) {
+  const navigate = useNavigate();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   // Format suburb display: "SUBURB, POSTCODE STATE"
@@ -110,7 +111,7 @@ export function EmployerCard({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onEdit(employer)}>
+              <DropdownMenuItem onClick={() => navigate(paths.app.employers.edit.getHref(employer.id))}>
                 <Edit className="w-4 h-4 mr-2" />
                 Edit
               </DropdownMenuItem>
