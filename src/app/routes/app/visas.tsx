@@ -1,6 +1,5 @@
-import { Plus, LayoutDashboard, Plane } from 'lucide-react';
+import { Plane, Plus } from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router';
 
 import { Button } from '@/components/ui/button';
 import { InfoCard } from '@/components/ui/info-card';
@@ -79,15 +78,6 @@ export const VisasRoute = () => {
         error={error}
         onDelete={handleDeleteVisa}
       />
-
-      <div className="flex justify-center pt-8">
-        <Button asChild variant="outline" size="lg">
-          <Link to="/app">
-            <LayoutDashboard className="mr-2 h-4 w-4" />
-            Go to Dashboard
-          </Link>
-        </Button>
-      </div>
 
       <Sheet open={isAddingVisa} onOpenChange={setIsAddingVisa}>
         <SheetContent
