@@ -8,7 +8,7 @@ import {
   LogOut,
 } from 'lucide-react';
 import React from 'react';
-import { Link, useLocation } from 'react-router';
+import { Link, NavLink, useLocation } from 'react-router';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -78,22 +78,24 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         <div className="flex justify-around items-center px-2 py-2">
           {navigation.map((item) => {
             const Icon = item.icon;
-            const isActive = location.pathname === item.href;
             return (
-              <Link
+              <NavLink
                 key={item.name}
                 to={item.href}
-                className={`flex flex-col items-center justify-center gap-1 min-w-[60px] h-16 px-3 py-2 text-xs rounded-lg transition-colors ${
-                  isActive
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                }`}
+                end={item.href === paths.app.dashboard.path}
+                className={({ isActive }) =>
+                  `flex flex-col items-center justify-center gap-1 min-w-[60px] h-16 px-3 py-2 text-xs rounded-lg transition-colors ${
+                    isActive
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                  }`
+                }
               >
                 <Icon className="h-5 w-5 flex-shrink-0" />
                 <span className="leading-none truncate max-w-full">
                   {item.name}
                 </span>
-              </Link>
+              </NavLink>
             );
           })}
           {/* Profile dropdown for mobile */}
@@ -167,22 +169,28 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           <nav className="flex-1 space-y-0.5 px-3 py-4">
             {navigation.map((item) => {
               const Icon = item.icon;
-              const isActive = location.pathname === item.href;
               return (
-                <Link
+                <NavLink
                   key={item.name}
                   to={item.href}
-                  className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-normal transition-all duration-200 ${
-                    isActive
-                      ? 'bg-primary text-primary-foreground shadow-sm'
-                      : 'text-sidebar-foreground hover:bg-sidebar-accent'
-                  }`}
+                  end={item.href === paths.app.dashboard.path}
+                  className={({ isActive }) =>
+                    `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-normal transition-all duration-200 ${
+                      isActive
+                        ? 'bg-primary text-primary-foreground shadow-sm'
+                        : 'text-sidebar-foreground hover:bg-sidebar-accent'
+                    }`
+                  }
                 >
-                  <Icon
-                    className={`h-5 w-5 flex-shrink-0 ${isActive ? '' : 'text-muted-foreground'}`}
-                  />
-                  <span>{item.name}</span>
-                </Link>
+                  {({ isActive }) => (
+                    <>
+                      <Icon
+                        className={`h-5 w-5 flex-shrink-0 ${isActive ? '' : 'text-muted-foreground'}`}
+                      />
+                      <span>{item.name}</span>
+                    </>
+                  )}
+                </NavLink>
               );
             })}
           </nav>
