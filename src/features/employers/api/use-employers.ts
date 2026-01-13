@@ -76,58 +76,23 @@ export const useAddEmployer = () => {
   return useMutation({
     mutationFn: addEmployer,
 
-    // Optimistic update: met à jour l'UI avant la réponse serveur
-    onMutate: async (newEmployer) => {
-      // Annule les refetch en cours pour éviter l'écrasement
-      await queryClient.cancelQueries({ queryKey: queryKeys.employers.all });
-
-      // Snapshot de l'état actuel (pour rollback si erreur)
-      const previousEmployers = queryClient.getQueryData<Employer[]>(
-        queryKeys.employers.all,
-      );
-
-      // Optimistic update: ajoute temporairement le nouvel employeur
-      queryClient.setQueryData<Employer[]>(
-        queryKeys.employers.all,
-        (old = []) => [
-          {
-            ...newEmployer,
-            id: 'temp-id',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            user_id: 'temp-user-id',
-          } as Employer,
-          ...old,
-        ],
-      );
-
-      return { previousEmployers };
-    },
-
-    // Succès: remplace l'employeur temporaire par le vrai (avec ID du serveur)
+    // Succès: ajoute le nouvel employeur au cache et invalide pour refetch
     onSuccess: (data) => {
       queryClient.setQueryData<Employer[]>(
         queryKeys.employers.all,
-        (old = []) => old.map((emp) => (emp.id === 'temp-id' ? data : emp)),
+        (old = []) => [data, ...old],
       );
       toast.success('Employer added successfully');
     },
 
-    // Erreur: rollback vers l'état précédent
-    onError: (error, _, context) => {
-      if (context?.previousEmployers) {
-        queryClient.setQueryData(
-          queryKeys.employers.all,
-          context.previousEmployers,
-        );
-      }
+    onError: (error) => {
       handleError(error, {
         consolePrefix: 'Error adding employer',
         fallbackMessage: 'Failed to add employer',
       });
     },
 
-    // Toujours invalidate à la fin (succès ou erreur) pour resync
+    // Toujours invalidate à la fin pour resync avec le serveur
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.employers.all });
     },
@@ -144,27 +109,7 @@ export const useUpdateEmployer = () => {
     mutationFn: ({ id, input }: { id: string; input: CreateEmployerInput }) =>
       updateEmployer(id, input),
 
-    onMutate: async ({ id, input }) => {
-      await queryClient.cancelQueries({ queryKey: queryKeys.employers.all });
-
-      const previousEmployers = queryClient.getQueryData<Employer[]>(
-        queryKeys.employers.all,
-      );
-
-      // Optimistic update
-      queryClient.setQueryData<Employer[]>(
-        queryKeys.employers.all,
-        (old = []) =>
-          old.map((emp) =>
-            emp.id === id
-              ? { ...emp, ...input, updated_at: new Date().toISOString() }
-              : emp,
-          ),
-      );
-
-      return { previousEmployers };
-    },
-
+    // Succès: remplace l'employeur mis à jour dans le cache
     onSuccess: (data) => {
       queryClient.setQueryData<Employer[]>(
         queryKeys.employers.all,
@@ -173,13 +118,7 @@ export const useUpdateEmployer = () => {
       toast.success('Employer updated successfully');
     },
 
-    onError: (error, _, context) => {
-      if (context?.previousEmployers) {
-        queryClient.setQueryData(
-          queryKeys.employers.all,
-          context.previousEmployers,
-        );
-      }
+    onError: (error) => {
       handleError(error, {
         consolePrefix: 'Error updating employer',
         fallbackMessage: 'Failed to update employer',

@@ -37,11 +37,11 @@ function CalendarDayCellComponent({
         // Current month vs padding days
         isCurrentMonth
           ? 'bg-card'
-          : 'bg-muted/30 text-muted-foreground/60',
+          : 'bg-muted text-muted-foreground',
         // Weekend styling
-        isWeekend && isCurrentMonth && 'bg-muted/20',
+        isWeekend && isCurrentMonth && 'bg-muted',
         // Hover effect for days with hours
-        hasHours && isCurrentMonth && 'hover:bg-accent/50',
+        hasHours && isCurrentMonth && 'hover:bg-accent',
       )}
     >
       {/* Day number */}
@@ -49,7 +49,7 @@ function CalendarDayCellComponent({
         className={cn(
           'mb-1 flex h-6 w-6 items-center justify-center rounded-full text-xs font-medium',
           isToday && 'bg-primary text-primary-foreground',
-          !isToday && !isCurrentMonth && 'text-muted-foreground/60',
+          !isToday && !isCurrentMonth && 'text-muted-foreground',
         )}
       >
         {dayNumber}

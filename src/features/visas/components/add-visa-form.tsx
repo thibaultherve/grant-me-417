@@ -111,7 +111,7 @@ export function AddVisaForm({
   if (!hasAvailableVisas) {
     return (
       <div className="text-center p-8">
-        <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+        <CheckCircle className="h-12 w-12 text-success mx-auto mb-4" />
         <h3 className="text-lg font-semibold mb-2">All Visas Added</h3>
         <p className="text-sm text-muted-foreground mb-4">
           You have already added all available Working Holiday Visas to your
@@ -148,10 +148,10 @@ export function AddVisaForm({
                     return (
                       <Card
                         key={option.type}
-                        className={`cursor-pointer transition-all border-2 hover:shadow-md ${
+                        className={`cursor-pointer transition-all ${
                           isSelected
-                            ? 'border-primary bg-primary/5 shadow-md'
-                            : 'border-border hover:border-primary/50'
+                            ? 'border-primary bg-primary/5 shadow-sm'
+                            : 'hover:border-primary/50'
                         }`}
                         onClick={() => handleVisaTypeSelect(option.type)}
                       >
@@ -233,7 +233,7 @@ export function AddVisaForm({
         />
 
         {form.formState.errors.root && (
-          <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md border border-red-200">
+          <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md border border-destructive/20">
             {form.formState.errors.root.message}
           </div>
         )}

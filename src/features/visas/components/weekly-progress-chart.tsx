@@ -133,7 +133,7 @@ export const WeeklyProgressChart = () => {
               {[7, 4, 3, 2, 1, 0].map((tick) => (
                 <div
                   key={tick}
-                  className="border-t border-border/40"
+                  className="border-t border-border"
                   style={{ width: '100%' }}
                 />
               ))}
@@ -172,7 +172,7 @@ export const WeeklyProgressChart = () => {
 
                     {/* Tooltip */}
                     {isHovered && data.eligible_days > 0 && (
-                      <div className="absolute bottom-full mb-2 bg-background border border-border rounded-lg shadow-lg p-3 space-y-1 z-10 min-w-[180px] transition-all duration-200">
+                      <div className="absolute bottom-full mb-2 bg-popover text-popover-foreground border rounded-md shadow-md p-3 space-y-1 z-10 min-w-[180px]">
                         <p className="font-semibold text-xs">
                           {formatTooltipDate(data.full_date)}
                         </p>

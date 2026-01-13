@@ -1,4 +1,4 @@
-import { Briefcase, Calendar, ArrowRight } from 'lucide-react';
+import { ArrowRight, Briefcase, Calendar } from 'lucide-react';
 import { Link } from 'react-router';
 
 import { Button } from '@/components/ui/button';
@@ -55,7 +55,7 @@ export const DashboardRoute = () => {
       {/* Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Welcome back,</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
           <p className="mt-1 text-muted-foreground">
             Track your Working Holiday Visa progress and manage your work hours.
           </p>
@@ -144,7 +144,7 @@ export const DashboardRoute = () => {
                       </div>
                       <div className="relative h-2 w-full overflow-hidden rounded-full bg-muted">
                         <div
-                          className="h-full bg-amber-500 transition-all"
+                          className="h-full bg-warning transition-all"
                           style={{ width: `${visaPeriod.progress}%` }}
                         />
                       </div>

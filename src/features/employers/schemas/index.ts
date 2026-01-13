@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { validatePostcode } from '../api/postcodes';
+import { validateSuburbId } from '../api/suburbs';
 
 const industryTypeSchema = z.enum([
   'plant_and_animal_cultivation',
@@ -24,16 +24,16 @@ export const createEmployerSchema = z.object({
     .max(200, 'Employer name must be less than 200 characters')
     .trim(),
   industry: industryTypeSchema,
-  postcode: z
-    .string()
-    .min(1, 'Postcode is required')
-    .regex(/^\d{4}$/, 'Postcode must be 4 digits')
+  suburb_id: z
+    .number({ message: 'Please select a suburb' })
+    .int()
+    .positive('Please select a valid suburb')
     .refine(
-      async (postcode) => {
-        return await validatePostcode(postcode);
+      async (suburbId) => {
+        return await validateSuburbId(suburbId);
       },
       {
-        message: 'Postcode must exist in the Australian postcode database',
+        message: 'Selected suburb does not exist',
       },
     ),
   is_eligible: z.boolean().default(true),

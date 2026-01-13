@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 
 import type { Postcode } from '../types/postcode';
+import type { PostcodeBadgeData } from '../types/suburb';
 
 // Badge colors for each flag type
 const BADGE_CONFIG = {
@@ -27,7 +28,7 @@ const BADGE_CONFIG = {
 } as const;
 
 interface PostcodeBadgesProps {
-  postcode: Postcode;
+  postcode: Postcode | PostcodeBadgeData;
   size?: 'sm' | 'md';
   className?: string;
 }

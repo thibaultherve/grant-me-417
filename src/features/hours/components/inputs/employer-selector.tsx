@@ -100,8 +100,13 @@ export function EmployerSelector({
                     <div className="text-sm text-muted-foreground truncate">
                       {industryLabels[selectedEmployer.industry] ||
                         selectedEmployer.industry}
-                      {selectedEmployer.postcode && (
-                        <span> · {selectedEmployer.postcode}</span>
+                      {selectedEmployer.suburb && (
+                        <span>
+                          {' '}
+                          · {selectedEmployer.suburb.suburb_name},{' '}
+                          {selectedEmployer.suburb.postcode}{' '}
+                          {selectedEmployer.suburb.state_code}
+                        </span>
                       )}
                     </div>
                   </div>
@@ -125,7 +130,11 @@ export function EmployerSelector({
                     </div>
                     <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                       <MapPin className="w-3.5 h-3.5" />
-                      <span>{employer.postcode || 'No postcode'}</span>
+                      <span>
+                        {employer.suburb
+                          ? `${employer.suburb.suburb_name}, ${employer.suburb.postcode} ${employer.suburb.state_code}`
+                          : 'No location'}
+                      </span>
                     </div>
                   </div>
                 </div>

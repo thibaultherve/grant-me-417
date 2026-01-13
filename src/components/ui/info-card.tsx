@@ -18,9 +18,9 @@ export const InfoCard = React.forwardRef<HTMLDivElement, InfoCardProps>(
       <div
         ref={ref}
         className={cn(
-          'rounded-lg p-6',
-          variant === 'accent' && 'bg-cream border border-border',
-          variant === 'default' && 'bg-card border border-border',
+          'rounded-lg p-6 border',
+          variant === 'accent' && 'bg-secondary',
+          variant === 'default' && 'bg-card',
           className,
         )}
         {...props}

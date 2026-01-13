@@ -24,7 +24,7 @@ import { INDUSTRY_OPTIONS } from '../constants';
 import { createEmployerSchema, type CreateEmployerFormData } from '../schemas';
 import type { Employer } from '../types';
 
-import { PostcodeCombobox } from './postcode-combobox';
+import { SuburbCombobox } from './suburb-combobox';
 
 interface EmployerFormProps {
   mode: 'add' | 'edit';
@@ -52,24 +52,24 @@ export function EmployerForm({
         ? {
             name: employer.name,
             industry: employer.industry,
-            postcode: employer.postcode || '',
+            suburb_id: employer.suburb_id,
             is_eligible: employer.is_eligible,
           }
         : {
             name: '',
             industry: 'plant_and_animal_cultivation' as const,
-            postcode: '',
+            suburb_id: undefined,
             is_eligible: true,
           },
   });
 
   // Watch form fields to check if all required fields are filled
   const name = form.watch('name');
-  const postcode = form.watch('postcode');
+  const suburbId = form.watch('suburb_id');
   const industry = form.watch('industry');
 
   // Disable submit if any required field is empty
-  const isFormIncomplete = !name || !postcode || !industry;
+  const isFormIncomplete = !name || !suburbId || !industry;
 
   const handleSubmit = async (data: CreateEmployerFormData) => {
     try {
@@ -124,26 +124,26 @@ export function EmployerForm({
 
         <FormField
           control={form.control}
-          name="postcode"
+          name="suburb_id"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Postcode</FormLabel>
+              <FormLabel>Location</FormLabel>
               <FormControl>
-                <PostcodeCombobox
-                  value={field.value || ''}
+                <SuburbCombobox
+                  value={field.value}
                   onValueChange={field.onChange}
                   disabled={isSubmitting}
                 />
               </FormControl>
               <FormDescription>
-                Australian postcode where you worked
+                Search by postcode or suburb name
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        {form.watch('postcode') && (
+        {form.watch('suburb_id') && (
           <FormField
             control={form.control}
             name="industry"
@@ -182,7 +182,7 @@ export function EmployerForm({
         )}
 
         {form.formState.errors.root && (
-          <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md border border-red-200">
+          <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md border border-destructive/20">
             {form.formState.errors.root.message}
           </div>
         )}

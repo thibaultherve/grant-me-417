@@ -13,11 +13,29 @@ import type { CreateEmployerInput, Employer } from '../types';
 /**
  * Récupère tous les employeurs de l'utilisateur connecté
  * Triés par date de création (plus récent en premier)
+ * Inclut les données du suburb avec les badges postcode
  */
 export const getEmployers = async (): Promise<Employer[]> => {
   const { data, error } = await supabase
     .from('employers')
-    .select('*')
+    .select(
+      `
+      *,
+      suburb:suburbs (
+        id,
+        suburb_name,
+        postcode,
+        state_code,
+        postcodes:postcodes!fk_postcode (
+          is_regional_australia,
+          is_remote_very_remote,
+          is_northern_australia,
+          is_bushfire_declared,
+          is_natural_disaster_declared
+        )
+      )
+    `,
+    )
     .order('created_at', { ascending: false });
 
   if (error) throw error;
@@ -36,11 +54,28 @@ export const addEmployer = async (
       {
         name: input.name,
         industry: input.industry,
-        postcode: input.postcode,
+        suburb_id: input.suburb_id,
         is_eligible: input.is_eligible ?? true,
       },
     ])
-    .select()
+    .select(
+      `
+      *,
+      suburb:suburbs (
+        id,
+        suburb_name,
+        postcode,
+        state_code,
+        postcodes:postcodes!fk_postcode (
+          is_regional_australia,
+          is_remote_very_remote,
+          is_northern_australia,
+          is_bushfire_declared,
+          is_natural_disaster_declared
+        )
+      )
+    `,
+    )
     .single();
 
   if (error) throw error;
@@ -59,11 +94,28 @@ export const updateEmployer = async (
     .update({
       name: input.name,
       industry: input.industry,
-      postcode: input.postcode,
+      suburb_id: input.suburb_id,
       is_eligible: input.is_eligible ?? true,
     })
     .eq('id', id)
-    .select()
+    .select(
+      `
+      *,
+      suburb:suburbs (
+        id,
+        suburb_name,
+        postcode,
+        state_code,
+        postcodes:postcodes!fk_postcode (
+          is_regional_australia,
+          is_remote_very_remote,
+          is_northern_australia,
+          is_bushfire_declared,
+          is_natural_disaster_declared
+        )
+      )
+    `,
+    )
     .single();
 
   if (error) throw error;
