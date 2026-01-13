@@ -23,6 +23,14 @@ export const paths = {
     employers: {
       path: '/app/employers',
       getHref: () => '/app/employers',
+      new: {
+        path: '/app/employers/new',
+        getHref: () => '/app/employers/new',
+      },
+      edit: {
+        path: '/app/employers/:id/edit',
+        getHref: (id: string) => `/app/employers/${id}/edit`,
+      },
     },
     hours: {
       path: '/app/hours',

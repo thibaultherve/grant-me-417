@@ -43,10 +43,33 @@ const createAppRouter = () =>
         },
         {
           path: paths.app.employers.path,
-          lazy: async () => {
-            const { EmployersRoute } = await import('./routes/app/employers');
-            return { Component: EmployersRoute };
-          },
+          children: [
+            {
+              index: true,
+              lazy: async () => {
+                const { EmployersRoute } = await import('./routes/app/employers');
+                return { Component: EmployersRoute };
+              },
+            },
+            {
+              path: 'new',
+              lazy: async () => {
+                const { EmployerNewRoute } = await import(
+                  './routes/app/employers/new'
+                );
+                return { Component: EmployerNewRoute };
+              },
+            },
+            {
+              path: ':id/edit',
+              lazy: async () => {
+                const { EmployerEditRoute } = await import(
+                  './routes/app/employers/edit'
+                );
+                return { Component: EmployerEditRoute };
+              },
+            },
+          ],
         },
         {
           path: paths.app.hours.path,

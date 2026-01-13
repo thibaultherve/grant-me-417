@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 
 import { CalendarGrid } from './calendar-grid';
 import { CalendarHeader } from './calendar-header';
+import { CalendarSkeleton } from './calendar-skeleton';
 
 export type MonthCalendarProps = {
   /** Optional initial year (defaults to current year) */
@@ -97,37 +98,3 @@ export function MonthCalendar({
   );
 }
 
-/**
- * Skeleton loader for the calendar grid.
- * Shows an animated placeholder while data is loading.
- */
-function CalendarSkeleton() {
-  return (
-    <div className="overflow-hidden rounded-lg border">
-      {/* Header row with day names */}
-      <div className="grid grid-cols-7 border-b bg-muted/50">
-        {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
-          <div
-            key={day}
-            className="border-r px-2 py-2 text-center text-xs font-medium text-muted-foreground last:border-r-0"
-          >
-            {day}
-          </div>
-        ))}
-      </div>
-
-      {/* Grid skeleton (6 rows x 7 columns = 42 cells) */}
-      <div className="grid grid-cols-7">
-        {Array.from({ length: 42 }).map((_, i) => (
-          <div key={i} className="min-h-[100px] border-b border-r p-2">
-            <div className="h-6 w-6 animate-pulse rounded-full bg-muted" />
-            <div className="mt-2 space-y-1">
-              <div className="h-3 w-16 animate-pulse rounded bg-muted/60" />
-              <div className="h-3 w-12 animate-pulse rounded bg-muted/40" />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}

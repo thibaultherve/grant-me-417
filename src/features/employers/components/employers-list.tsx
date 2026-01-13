@@ -8,7 +8,6 @@ interface EmployersListProps {
   employers: Employer[];
   loading: boolean;
   error: Error | null;
-  onEdit: (employer: Employer) => void;
   onDelete: (id: string) => void;
 }
 
@@ -16,7 +15,6 @@ export function EmployersList({
   employers,
   loading,
   error,
-  onEdit,
   onDelete,
 }: EmployersListProps) {
   if (loading) {
@@ -56,7 +54,6 @@ export function EmployersList({
               key={employer.id}
               employer={employer}
               onDelete={onDelete}
-              onEdit={onEdit}
             />
           ))}
         </div>

@@ -130,3 +130,40 @@ export const deleteEmployer = async (id: string): Promise<void> => {
 
   if (error) throw error;
 };
+
+/**
+ * Récupère un employeur par son ID
+ * Retourne null si non trouvé ou accès refusé (RLS)
+ */
+export const getEmployer = async (id: string): Promise<Employer | null> => {
+  const { data, error } = await supabase
+    .from('employers')
+    .select(
+      `
+      *,
+      suburb:suburbs (
+        id,
+        suburb_name,
+        postcode,
+        state_code,
+        postcodes:postcodes!fk_postcode (
+          is_regional_australia,
+          is_remote_very_remote,
+          is_northern_australia,
+          is_bushfire_declared,
+          is_natural_disaster_declared
+        )
+      )
+    `,
+    )
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    // PGRST116: Not found
+    if (error.code === 'PGRST116') return null;
+    throw error;
+  }
+
+  return data;
+};
