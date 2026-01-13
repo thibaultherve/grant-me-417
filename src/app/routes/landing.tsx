@@ -53,7 +53,7 @@ export const LandingPage = () => {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
       <header className="container mx-auto px-4 py-6">
         <nav className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Grant Me 417</h1>
