@@ -28,7 +28,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { useGetPostcode } from '../api/use-postcodes';
 import type { Employer } from '../types';
 
 import { PostcodeBadges } from './postcode-badges';
@@ -57,11 +56,13 @@ export function EmployerCard({
   onEdit,
 }: EmployerCardProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const { data: postcodeData } = useGetPostcode(employer.postcode || '');
+
+  // Format suburb display: "SUBURB, POSTCODE STATE"
+  const locationDisplay = `${employer.suburb.suburb_name}, ${employer.suburb.postcode} ${employer.suburb.state_code}`;
 
   return (
-    <Card className="border-border/40 shadow-none">
-      <CardContent className="p-2.5">
+    <Card className="shadow-sm">
+      <CardContent className="p-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 flex-1 min-w-0">
             <div className="w-7 h-7 bg-primary/10 rounded flex items-center justify-center flex-shrink-0">
@@ -73,7 +74,7 @@ export function EmployerCard({
                   {employer.name}
                 </h3>
                 {employer.is_eligible ? (
-                  <CheckCircle className="w-3.5 h-3.5 text-green-600 flex-shrink-0" />
+                  <CheckCircle className="w-3.5 h-3.5 text-success flex-shrink-0" />
                 ) : (
                   <XCircle className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
                 )}
@@ -82,22 +83,18 @@ export function EmployerCard({
                 <span className="truncate">
                   {industryLabels[employer.industry] || employer.industry}
                 </span>
-                {employer.postcode && (
-                  <>
-                    <span>•</span>
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3 h-3" />
-                      {employer.postcode}
-                      {postcodeData && (
-                        <PostcodeBadges
-                          postcode={postcodeData}
-                          size="sm"
-                          className="ml-0.5 gap-1"
-                        />
-                      )}
-                    </span>
-                  </>
-                )}
+                <span>•</span>
+                <span className="flex items-center gap-1">
+                  <MapPin className="w-3 h-3" />
+                  <span className="truncate">{locationDisplay}</span>
+                  {employer.suburb.postcodes && (
+                    <PostcodeBadges
+                      postcode={employer.suburb.postcodes}
+                      size="sm"
+                      className="ml-0.5 gap-1"
+                    />
+                  )}
+                </span>
               </div>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { CalendarClock, Plus } from 'lucide-react';
+import { CalendarClock, Pencil } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
 
@@ -50,7 +50,7 @@ export const HoursRoute = () => {
         </div>
         <Button asChild size="lg">
           <Link to={paths.app.hours.edit.getHref()}>
-            <Plus className="mr-2 h-4 w-4" />
+            <Pencil className="mr-2 h-4 w-4" />
             Edit Hours
           </Link>
         </Button>
