@@ -5,7 +5,7 @@ import { paths } from '@/config/paths';
 
 export const NotFoundRoute = () => {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background text-foreground">
       <div className="mx-auto max-w-md text-center">
         <h1 className="text-9xl font-bold text-primary">404</h1>
         <h2 className="mt-4 text-3xl font-bold">Page not found</h2>

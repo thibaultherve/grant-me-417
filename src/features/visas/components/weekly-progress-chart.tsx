@@ -71,13 +71,13 @@ export const WeeklyProgressChart = () => {
     };
   });
 
-  // Modern neutral color scheme - NO yellow, only grays and greens
+  // Themed color scheme using CSS variables
   const getBarColor = (eligibleDays: number, isHovered: boolean) => {
     const opacity = isHovered ? '1' : '0.9';
-    if (eligibleDays === 7) return `rgba(34, 197, 94, ${opacity})`; // green-500 (full week)
-    if (eligibleDays >= 5) return `rgba(74, 222, 128, ${opacity})`; // green-400 (5-6 days)
-    if (eligibleDays >= 3) return `rgba(134, 239, 172, ${opacity})`; // green-300 (3-4 days)
-    if (eligibleDays >= 1) return `rgba(156, 163, 175, ${opacity})`; // gray-400 (1-2 days)
+    if (eligibleDays === 7) return `oklch(from var(--chart-1) l c h / ${opacity})`; // full week
+    if (eligibleDays >= 5) return `oklch(from var(--chart-2) l c h / ${opacity})`; // 5-6 days
+    if (eligibleDays >= 3) return `oklch(from var(--chart-3) l c h / ${opacity})`; // 3-4 days
+    if (eligibleDays >= 1) return `oklch(from var(--chart-4) l c h / ${opacity})`; // 1-2 days
     return 'transparent'; // 0 days
   };
 
@@ -198,22 +198,22 @@ export const WeeklyProgressChart = () => {
           </div>
         </div>
 
-        {/* Legend with neutral colors */}
+        {/* Legend with themed colors */}
         <div className="mt-6 flex flex-wrap gap-3 justify-center text-xs">
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-gray-400" />
+            <div className="w-3 h-3 rounded bg-chart-4" />
             <span className="text-muted-foreground">1-2 days</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-green-300" />
+            <div className="w-3 h-3 rounded bg-chart-3" />
             <span className="text-muted-foreground">3-4 days</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-green-400" />
+            <div className="w-3 h-3 rounded bg-chart-2" />
             <span className="text-muted-foreground">5-6 days</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-green-500" />
+            <div className="w-3 h-3 rounded bg-chart-1" />
             <span className="text-muted-foreground">7 days (full)</span>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { ArrowRight, Briefcase, Calendar } from 'lucide-react';
+import { ArrowRight, Briefcase, Calendar, Pencil } from 'lucide-react';
 import { Link } from 'react-router';
 
 import { Button } from '@/components/ui/button';
@@ -62,6 +62,27 @@ export const DashboardRoute = () => {
         </div>
         <VisaSelector />
       </div>
+
+      {/* Quick Actions Card */}
+      <Card>
+        <CardContent>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h3 className="font-semibold mb-1">Track your work hours</h3>
+              <p className="text-sm text-muted-foreground">
+                Log your specified work hours to track progress toward your next
+                visa.
+              </p>
+            </div>
+            <Button asChild size="lg">
+              <Link to={paths.app.hours.edit.getHref()}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Edit Hours
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {!currentVisa ? (
         <InfoCard variant="accent">
@@ -158,25 +179,6 @@ export const DashboardRoute = () => {
               </Card>
             );
           })()}
-
-          {/* Quick Actions Card */}
-          <InfoCard variant="accent">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <h3 className="font-semibold mb-1">Track your work hours</h3>
-                <p className="text-sm text-muted-foreground">
-                  Log your specified work hours to track progress toward your
-                  next visa.
-                </p>
-              </div>
-              <Button asChild>
-                <Link to={paths.app.hours.path}>
-                  Add Hours
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          </InfoCard>
 
           {/* Weekly Progress Chart */}
           <WeeklyProgressChart />
