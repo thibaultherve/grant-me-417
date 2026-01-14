@@ -20,6 +20,9 @@ dist-ssr
 .env.development.local
 .env.test.local
 
+# Claude code
+.claude
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
