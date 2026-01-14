@@ -8,8 +8,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { VISA_LABELS } from '../constants';
 import { useVisaContext } from '../hooks/use-visa-context';
+import { getVisaLabel } from '../utils/visa-helpers';
 
 export function VisaSelector() {
   const {
@@ -40,9 +40,7 @@ export function VisaSelector() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="w-[180px] justify-between">
-          {currentVisa
-            ? VISA_LABELS[currentVisa.visa_type]
-            : 'Select visa...'}
+          {currentVisa ? getVisaLabel(currentVisa.visa_type) : 'Select visa...'}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
@@ -58,7 +56,7 @@ export function VisaSelector() {
                 currentVisa?.id === visa.id ? 'opacity-100' : 'opacity-0'
               }`}
             />
-            {VISA_LABELS[visa.visa_type]}
+            {getVisaLabel(visa.visa_type)}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
