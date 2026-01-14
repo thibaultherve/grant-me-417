@@ -9,7 +9,7 @@ arguments:
 
 Follow CLAUDE.md rules.
 
-**Output file:** `{$ARGUMENTS.name}_FEATURE.md` (uppercase, root directory)
+**Output file:** `.claude/{$ARGUMENTS.name}_FEATURE.md` (uppercase, .claude directory)
 
 ## Ultra Think Strategy
 
@@ -111,7 +111,7 @@ Ask with AskUserQuestion: "Validate this architecture?"
 
 ## 4. WRITE SPEC FILE
 
-After validation, write complete spec to `{$ARGUMENTS.name}_FEATURE.md`:
+After validation, write complete spec to `.claude/{$ARGUMENTS.name}_FEATURE.md`:
 
 Structure:
 1. Overview (objective, summary, tech stack)
@@ -137,8 +137,8 @@ Structure:
 - Confirm file created
 - Summarize the phases
 - Indicate next steps:
-  - `/dev-backend spec=[name]_FEATURE.md phase=1`
-  - `/dev-frontend spec=[name]_FEATURE.md phase=8`
+  - `/dev-backend spec=.claude/[name]_FEATURE.md phase=1`
+  - `/dev-frontend spec=.claude/[name]_FEATURE.md phase=8`
 
 ---
 

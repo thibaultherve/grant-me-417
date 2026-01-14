@@ -10,6 +10,27 @@
         ]
       }
     ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ffplay -nodisp -autoexit \"C:\\Users\\thiba\\Documents\\dev\\get-granted-417\\.claude\\song\\need-human.mp3\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ffplay -nodisp -autoexit \"C:\\Users\\thiba\\Documents\\dev\\get-granted-417\\.claude\\song\\need-human.mp3\""
+          }
+        ]
+      }
+    ],
     "Notification": [
       {
         "matcher": "permission_prompt",

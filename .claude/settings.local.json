@@ -45,7 +45,8 @@
       "mcp__supabase__get_advisors",
       "Bash(npx tailwindcss:*)",
       "Bash(pnpm exec tailwindcss:*)",
-      "Bash(pnpm run lint:*)"
+      "Bash(pnpm run lint:*)",
+      "Bash(gh api:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
