@@ -1,37 +1,25 @@
 import { Plane, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { InfoCard } from '@/components/ui/info-card';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from '@/components/ui/sheet';
 import { paths } from '@/config/paths';
-import { useAddVisa, useDeleteVisa } from '@/features/visas/api/use-visas';
-import { AddVisaForm } from '@/features/visas/components/add-visa-form';
+import { useDeleteVisa } from '@/features/visas/api/use-visas';
 import { VisasList } from '@/features/visas/components/visas-list';
 import { useVisaContext } from '@/features/visas/hooks/use-visa-context';
-import type { CreateVisaFormData } from '@/features/visas/schemas';
-import { Link } from 'react-router';
+import type { UserVisa } from '@/features/visas/types';
+import { visaTypeToSlug } from '@/features/visas/utils/visa-helpers';
 
 export const VisasRoute = () => {
-  const [isAddingVisa, setIsAddingVisa] = useState(false);
+  const navigate = useNavigate();
 
   // React Query hooks
   const { visas, isLoading, error } = useVisaContext();
-  const addMutation = useAddVisa();
   const deleteMutation = useDeleteVisa();
 
-  const handleAddVisa = (data: CreateVisaFormData) => {
-    addMutation.mutate(data, {
-      onSuccess: () => {
-        setIsAddingVisa(false);
-      },
-    });
+  const handleEditVisa = (visa: UserVisa) => {
+    navigate(paths.app.visas.edit.getHref(visaTypeToSlug(visa.visa_type)));
   };
 
   const handleDeleteVisa = (id: string) => {
@@ -45,9 +33,11 @@ export const VisasRoute = () => {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h3 className="font-semibold mb-1">Manage your visas</h3>
-              <p className="text-sm text-muted-foreground">Manage your visas</p>
+              <p className="text-sm text-muted-foreground">
+                Manage your Working Holiday Visas (up to 3 visas)
+              </p>
             </div>
-            <Button asChild size="lg">
+            <Button asChild size="lg" disabled={visas.length >= 3}>
               <Link to={paths.app.visas.new.getHref()}>
                 <Plus className="mr-2 h-4 w-4" />
                 Add Visa
@@ -56,23 +46,6 @@ export const VisasRoute = () => {
           </div>
         </CardContent>
       </Card>
-
-      {/* Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <p className="text-muted-foreground">
-            Manage your Working Holiday Visas (up to 3 visas)
-          </p>
-        </div>
-        <Button
-          onClick={() => setIsAddingVisa(true)}
-          size="lg"
-          disabled={visas.length >= 3}
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Add Visa
-        </Button>
-      </div>
 
       {/* Info tip */}
       {visas.length === 0 && !isLoading && (
@@ -95,24 +68,9 @@ export const VisasRoute = () => {
         visas={visas}
         loading={isLoading}
         error={error}
+        onEdit={handleEditVisa}
         onDelete={handleDeleteVisa}
       />
-
-      <Sheet open={isAddingVisa} onOpenChange={setIsAddingVisa}>
-        <SheetContent
-          side="right"
-          className="w-full sm:max-w-4xl overflow-y-auto"
-        >
-          <SheetHeader className="mb-6">
-            <SheetTitle>Add New Visa</SheetTitle>
-          </SheetHeader>
-          <AddVisaForm
-            onSubmit={handleAddVisa}
-            onCancel={() => setIsAddingVisa(false)}
-            isSubmitting={addMutation.isPending}
-          />
-        </SheetContent>
-      </Sheet>
     </div>
   );
 };

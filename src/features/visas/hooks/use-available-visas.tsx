@@ -1,68 +1,27 @@
 import { useMemo } from 'react';
 
+import { VISA_LABELS } from '../constants';
 import type { VisaType } from '../types';
 
 import { useVisaContext } from './use-visa-context';
 
-interface AvailableVisa {
-  type: VisaType;
-  title: string;
-  description: string;
-  requiredDays: number;
-  duration: string;
-  icon: string;
-  variant: 'default' | 'secondary' | 'outline';
-}
-
-const allVisaOptions: AvailableVisa[] = [
-  {
-    type: 'first_whv',
-    title: '1st WHV',
-    description: 'Your initial Working Holiday Visa',
-    requiredDays: 0,
-    duration: '12 months',
-    icon: 'Plane',
-    variant: 'default',
-  },
-  {
-    type: 'second_whv',
-    title: '2nd WHV',
-    description: 'Requires 88 days of specified work during 1st WHV',
-    requiredDays: 88,
-    duration: '12 months',
-    icon: 'Clock',
-    variant: 'secondary',
-  },
-  {
-    type: 'third_whv',
-    title: '3rd WHV',
-    description: 'Requires 179 days of specified work during 2nd WHV',
-    requiredDays: 179,
-    duration: '12 months',
-    icon: 'CheckCircle',
-    variant: 'outline',
-  },
-];
-
 export function useAvailableVisas() {
   const { visas, isLoading, error } = useVisaContext();
 
-  const availableVisas = useMemo(() => {
+  const availableVisaTypes = useMemo(() => {
     if (isLoading) return [];
 
-    // Get visa types that the user already has
     const existingVisaTypes = visas.map((visa) => visa.visa_type);
 
-    // Filter out visas that the user already possesses
-    return allVisaOptions.filter(
-      (visaOption) => !existingVisaTypes.includes(visaOption.type),
+    return (Object.keys(VISA_LABELS) as VisaType[]).filter(
+      (type) => !existingVisaTypes.includes(type),
     );
   }, [visas, isLoading]);
 
   return {
-    availableVisas,
+    availableVisaTypes,
     loading: isLoading,
     error,
-    hasAvailableVisas: availableVisas.length > 0,
+    hasAvailableVisas: availableVisaTypes.length > 0,
   };
 }

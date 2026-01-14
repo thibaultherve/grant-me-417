@@ -41,6 +41,15 @@ const routeConfig: Record<string, RouteConfig> = {
   [paths.app.visas.path]: {
     label: 'Visas',
   },
+  [paths.app.visas.new.path]: {
+    label: 'New',
+    parent: paths.app.visas.path,
+  },
+  // Dynamic route pattern - will be matched with regex
+  '/app/visas/:type/edit': {
+    label: 'Edit',
+    parent: paths.app.visas.path,
+  },
   [paths.app.profile.path]: {
     label: 'Profile',
   },

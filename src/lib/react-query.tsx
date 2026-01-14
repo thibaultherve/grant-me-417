@@ -79,6 +79,7 @@ export const queryKeys = {
   visas: {
     all: ['visas'] as const,
     detail: (id: string) => ['visas', id] as const,
+    byType: (type: string) => ['visas', 'type', type] as const,
     weeklyProgress: (visaId: string) =>
       ['visas', visaId, 'weekly-progress'] as const,
   },

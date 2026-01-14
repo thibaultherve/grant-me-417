@@ -92,10 +92,30 @@ const createAppRouter = () =>
         },
         {
           path: paths.app.visas.path,
-          lazy: async () => {
-            const { VisasRoute } = await import('./routes/app/visas');
-            return { Component: VisasRoute };
-          },
+          children: [
+            {
+              index: true,
+              lazy: async () => {
+                const { VisasRoute } = await import('./routes/app/visas');
+                return { Component: VisasRoute };
+              },
+            },
+            {
+              path: 'new',
+              lazy: async () => {
+                const { VisaNewRoute } = await import('./routes/app/visas/new');
+                return { Component: VisaNewRoute };
+              },
+            },
+            {
+              path: ':type/edit',
+              lazy: async () => {
+                const { VisaEditRoute } =
+                  await import('./routes/app/visas/edit');
+                return { Component: VisaEditRoute };
+              },
+            },
+          ],
         },
         {
           path: paths.app.profile.path,

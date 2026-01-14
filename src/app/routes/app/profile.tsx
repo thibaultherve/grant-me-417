@@ -50,26 +50,6 @@ export const ProfileRoute = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Visa Information</CardTitle>
-          <CardDescription>Your Working Holiday Visa details</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="visaType">Current Visa</Label>
-              <Input id="visaType" placeholder="First WHV (417)" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="visaExpiry">Visa Expiry Date</Label>
-              <Input id="visaExpiry" type="date" />
-            </div>
-          </div>
-          <Button>Update Visa Details</Button>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
           <CardTitle>Account Settings</CardTitle>
           <CardDescription>Manage your account preferences</CardDescription>
         </CardHeader>
