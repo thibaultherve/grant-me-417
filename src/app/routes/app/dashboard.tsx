@@ -1,4 +1,12 @@
-import { ArrowRight, Briefcase, Calendar, CalendarClock } from 'lucide-react';
+import {
+  ArrowRight,
+  Briefcase,
+  Building2,
+  Calendar,
+  CalendarClock,
+  Info,
+  Plane,
+} from 'lucide-react';
 import { Link } from 'react-router';
 
 import { Button } from '@/components/ui/button';
@@ -8,6 +16,7 @@ import { paths } from '@/config/paths';
 import { VisaSelector } from '@/features/visas/components/visa-selector';
 import { WeeklyProgressChart } from '@/features/visas/components/weekly-progress-chart';
 import { useVisaContext } from '@/features/visas/hooks/use-visa-context';
+import { getVisaLabel } from '@/features/visas/utils/visa-helpers';
 
 export const DashboardRoute = () => {
   const { currentVisa } = useVisaContext();
@@ -53,32 +62,108 @@ export const DashboardRoute = () => {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <p className="text-muted-foreground">
-            Track your Working Holiday Visa progress and manage your work hours.
-          </p>
-        </div>
-        <VisaSelector />
+      <div>
+        <p className="text-muted-foreground">
+          Track your Working Holiday Visa progress and manage your work hours.
+        </p>
       </div>
 
-      {/* Quick Actions Card */}
-      <Card>
-        <CardContent>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h3 className="font-semibold mb-1">Track your work hours</h3>
-              <p className="text-sm text-muted-foreground">
-                Log your specified work hours to track progress toward your next
-                visa.
-              </p>
+      {/* Quick Actions Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* My Hours Card */}
+        <Card className="py-4">
+          <CardContent className="px-4 py-0">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h3 className="font-semibold mb-1">My Hours</h3>
+                <p className="text-sm text-muted-foreground">
+                  Manage your Hours.
+                </p>
+              </div>
+              <Button asChild size="sm" className="shrink-0">
+                <Link to={paths.app.hours.getHref()}>
+                  <CalendarClock className="mr-2 h-4 w-4" />
+                  Manage
+                </Link>
+              </Button>
             </div>
-            <Button asChild size="lg">
-              <Link to={paths.app.hours.getHref()}>
-                <CalendarClock className="mr-2 h-4 w-4" />
-                My Hours
-              </Link>
-            </Button>
+          </CardContent>
+        </Card>
+
+        {/* My Employers Card */}
+        <Card className="py-4">
+          <CardContent className="px-4 py-0">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h3 className="font-semibold mb-1">My Employers</h3>
+                <p className="text-sm text-muted-foreground">
+                  Manage your employers.
+                </p>
+              </div>
+              <Button asChild size="sm" className="shrink-0">
+                <Link to={paths.app.employers.getHref()}>
+                  <Building2 className="mr-2 h-4 w-4" />
+                  Manage
+                </Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* My Visas Card */}
+        <Card className="py-4">
+          <CardContent className="px-4 py-0">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h3 className="font-semibold mb-1">My Visas</h3>
+                <p className="text-sm text-muted-foreground">
+                  Manage your visas.
+                </p>
+              </div>
+              <Button asChild size="sm" className="shrink-0">
+                <Link to={paths.app.visas.getHref()}>
+                  <Plane className="mr-2 h-4 w-4" />
+                  Manage
+                </Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Active Visa Selector Card */}
+      <Card className="border-primary/30 bg-primary/5">
+        <CardContent className="p-6">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-start gap-4">
+              <div className="rounded-full bg-primary/10 p-3">
+                <Plane className="h-6 w-6 text-primary" />
+              </div>
+              <div className="space-y-1">
+                <h2 className="text-lg font-semibold">Active Visa</h2>
+                <p className="text-sm text-muted-foreground max-w-md">
+                  Select the visa you're currently tracking. All work hours and
+                  progress displayed on this dashboard are linked to this visa.
+                </p>
+                {currentVisa && (
+                  <div className="flex items-center gap-2 pt-2">
+                    <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+                      {getVisaLabel(currentVisa.visa_type)}
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      {currentVisa.progress_percentage}% complete
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="flex items-center gap-3 lg:flex-col lg:items-end">
+              <VisaSelector />
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Info className="h-3 w-3" />
+                <span>Switch between your visas</span>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>

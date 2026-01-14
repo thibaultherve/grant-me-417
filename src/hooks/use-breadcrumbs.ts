@@ -20,7 +20,7 @@ const routeConfig: Record<string, RouteConfig> = {
     label: 'Dashboard',
   },
   [paths.app.hours.path]: {
-    label: 'Work Hours',
+    label: 'Hours',
   },
   [paths.app.hours.edit.path]: {
     label: 'Edit',

@@ -34,7 +34,7 @@ export const EmployersRoute = () => {
             <Button asChild size="lg">
               <Link to={paths.app.employers.new.getHref()}>
                 <Plus className="mr-2 h-4 w-4" />
-                Add Employer
+                New Employer
               </Link>
             </Button>
           </div>

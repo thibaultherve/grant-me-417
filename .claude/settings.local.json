@@ -46,7 +46,8 @@
       "Bash(npx tailwindcss:*)",
       "Bash(pnpm exec tailwindcss:*)",
       "Bash(pnpm run lint:*)",
-      "Bash(gh api:*)"
+      "Bash(gh api:*)",
+      "Bash(npx vite build:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

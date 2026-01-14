@@ -30,9 +30,11 @@ export function PageBreadcrumb() {
             {index > 0 && <BreadcrumbSeparator />}
             <BreadcrumbItem>
               {item.isCurrentPage ? (
-                <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                <BreadcrumbPage className="text-2xl font-bold">
+                  {item.label}
+                </BreadcrumbPage>
               ) : (
-                <BreadcrumbLink asChild>
+                <BreadcrumbLink asChild className="text-2xl font-bold">
                   <Link to={item.href!}>{item.label}</Link>
                 </BreadcrumbLink>
               )}
