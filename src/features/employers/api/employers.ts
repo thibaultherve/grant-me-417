@@ -26,7 +26,7 @@ export const getEmployers = async (): Promise<Employer[]> => {
         suburb_name,
         postcode,
         state_code,
-        postcodes:postcodes!fk_postcode (
+        postcodeData:postcodes!fk_postcode (
           is_regional_australia,
           is_remote_very_remote,
           is_northern_australia,
@@ -66,7 +66,7 @@ export const addEmployer = async (
         suburb_name,
         postcode,
         state_code,
-        postcodes:postcodes!fk_postcode (
+        postcodeData:postcodes!fk_postcode (
           is_regional_australia,
           is_remote_very_remote,
           is_northern_australia,
@@ -106,7 +106,7 @@ export const updateEmployer = async (
         suburb_name,
         postcode,
         state_code,
-        postcodes:postcodes!fk_postcode (
+        postcodeData:postcodes!fk_postcode (
           is_regional_australia,
           is_remote_very_remote,
           is_northern_australia,
@@ -146,7 +146,7 @@ export const getEmployer = async (id: string): Promise<Employer | null> => {
         suburb_name,
         postcode,
         state_code,
-        postcodes:postcodes!fk_postcode (
+        postcodeData:postcodes!fk_postcode (
           is_regional_australia,
           is_remote_very_remote,
           is_northern_australia,

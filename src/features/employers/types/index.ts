@@ -4,7 +4,7 @@ import type { PostcodeBadgeData, Suburb } from './suburb';
 
 // Suburb data as returned by Supabase join in employer queries
 export interface EmployerSuburb extends Suburb {
-  postcodes: PostcodeBadgeData | null;
+  postcodeData: PostcodeBadgeData | null;
 }
 
 export interface Employer {

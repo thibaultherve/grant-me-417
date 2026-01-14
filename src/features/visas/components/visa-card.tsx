@@ -157,7 +157,7 @@ export function VisaCard({ visa, onDelete, onEdit }: VisaCardProps) {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Calendar className="w-4 h-4" />
           <span>
-            {formatDate(visa.arrival_date)} → {formatDate(visa.end_date)}
+            {formatDate(visa.arrival_date)} → {formatDate(visa.expiry_date)}
           </span>
         </div>
 

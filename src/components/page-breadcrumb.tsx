@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { Link } from 'react-router';
 
 import {
@@ -25,16 +26,18 @@ export function PageBreadcrumb() {
     <Breadcrumb>
       <BreadcrumbList>
         {items.map((item, index) => (
-          <BreadcrumbItem key={item.label}>
+          <Fragment key={item.label}>
             {index > 0 && <BreadcrumbSeparator />}
-            {item.isCurrentPage ? (
-              <BreadcrumbPage>{item.label}</BreadcrumbPage>
-            ) : (
-              <BreadcrumbLink asChild>
-                <Link to={item.href!}>{item.label}</Link>
-              </BreadcrumbLink>
-            )}
-          </BreadcrumbItem>
+            <BreadcrumbItem>
+              {item.isCurrentPage ? (
+                <BreadcrumbPage>{item.label}</BreadcrumbPage>
+              ) : (
+                <BreadcrumbLink asChild>
+                  <Link to={item.href!}>{item.label}</Link>
+                </BreadcrumbLink>
+              )}
+            </BreadcrumbItem>
+          </Fragment>
         ))}
       </BreadcrumbList>
     </Breadcrumb>
