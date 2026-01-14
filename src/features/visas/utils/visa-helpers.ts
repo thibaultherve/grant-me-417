@@ -1,6 +1,18 @@
 import type { VisaType, VisaTypeSlug } from '../types';
 
 /**
+ * Get human-readable label for a visa type
+ */
+export const getVisaLabel = (type: VisaType): string => {
+  const labels: Record<VisaType, string> = {
+    first_whv: '1st WHV (417)',
+    second_whv: '2nd WHV (417)',
+    third_whv: '3rd WHV (417)',
+  };
+  return labels[type];
+};
+
+/**
  * Convert DB visa type to URL slug
  */
 export const visaTypeToSlug = (type: VisaType): VisaTypeSlug => {

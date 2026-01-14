@@ -22,7 +22,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-import { VISA_LABELS } from '../constants';
 import { useAvailableVisas } from '../hooks/use-available-visas';
 import {
   createVisaSchema,
@@ -31,6 +30,7 @@ import {
   type UpdateVisaFormData,
 } from '../schemas';
 import type { UserVisa, VisaType } from '../types';
+import { getVisaLabel } from '../utils/visa-helpers';
 
 type VisaFormAddProps = {
   mode: 'add';
@@ -85,7 +85,9 @@ export function VisaForm({
     );
   };
 
-  const handleSubmit = async (data: CreateVisaFormData | UpdateVisaFormData) => {
+  const handleSubmit = async (
+    data: CreateVisaFormData | UpdateVisaFormData,
+  ) => {
     try {
       if (mode === 'add') {
         await (onSubmit as (data: CreateVisaFormData) => Promise<void>)(
@@ -174,7 +176,7 @@ export function VisaForm({
                   <SelectContent>
                     {availableVisaTypes.map((type) => (
                       <SelectItem key={type} value={type}>
-                        {VISA_LABELS[type]}
+                        {getVisaLabel(type)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -193,9 +195,7 @@ export function VisaForm({
           <div className="space-y-2">
             <label className="text-sm font-medium">Visa Type</label>
             <div className="p-3 bg-muted rounded-md">
-              <span className="font-medium">
-                {VISA_LABELS[visa.visa_type]}
-              </span>
+              <span className="font-medium">{getVisaLabel(visa.visa_type)}</span>
               <p className="text-sm text-muted-foreground mt-1">
                 Visa type cannot be changed
               </p>

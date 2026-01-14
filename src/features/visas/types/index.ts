@@ -1,5 +1,4 @@
 export type VisaType = 'first_whv' | 'second_whv' | 'third_whv';
-
 export type VisaTypeSlug = 'first-whv' | 'second-whv' | 'third-whv';
 
 export interface UserVisa {

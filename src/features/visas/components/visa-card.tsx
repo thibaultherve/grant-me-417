@@ -14,8 +14,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-import { VISA_LABELS } from '../constants';
 import type { UserVisa } from '../types';
+import { getVisaLabel } from '../utils/visa-helpers';
 
 interface VisaCardProps {
   visa: UserVisa;
@@ -38,7 +38,7 @@ export function VisaCard({ visa, onDelete, onEdit }: VisaCardProps) {
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <CardTitle className="text-lg">
-              {VISA_LABELS[visa.visa_type] || visa.visa_type}
+              {getVisaLabel(visa.visa_type)}
             </CardTitle>
           </div>
           <div className="flex items-center gap-2">
@@ -67,7 +67,7 @@ export function VisaCard({ visa, onDelete, onEdit }: VisaCardProps) {
                   <AlertDialogTitle>Delete Visa</AlertDialogTitle>
                   <AlertDialogDescription>
                     Are you sure you want to delete "
-                    {VISA_LABELS[visa.visa_type]}"? All associated work entries
+                    {getVisaLabel(visa.visa_type)}"? All associated work entries
                     will remain, but visa tracking data will be lost. This
                     action cannot be undone.
                   </AlertDialogDescription>

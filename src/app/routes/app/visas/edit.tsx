@@ -10,8 +10,7 @@ import {
 } from '@/features/visas/api/use-visas';
 import { VisaForm } from '@/features/visas/components/visa-form';
 import type { UpdateVisaFormData } from '@/features/visas/schemas';
-import { VISA_LABELS } from '@/features/visas/constants';
-import { slugToVisaType } from '@/features/visas/utils/visa-helpers';
+import { getVisaLabel, slugToVisaType } from '@/features/visas/utils/visa-helpers';
 
 export function VisaEditRoute() {
   const { type } = useParams<{ type: string }>();
@@ -85,7 +84,7 @@ export function VisaEditRoute() {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Edit {VISA_LABELS[visa.visa_type]}</CardTitle>
+          <CardTitle>Edit {getVisaLabel(visa.visa_type)}</CardTitle>
         </CardHeader>
         <CardContent>
           <VisaForm
