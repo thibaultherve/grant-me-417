@@ -66,7 +66,7 @@ export function EmployerSelector({
             <Button variant="outline" asChild>
               <a href="/app/employers">
                 <Building2 className="w-4 h-4 mr-2" />
-                Add Employer
+                New Employer
               </a>
             </Button>
           </CardContent>
