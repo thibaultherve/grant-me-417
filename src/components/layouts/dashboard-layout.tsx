@@ -11,6 +11,7 @@ import React from 'react';
 import { Link, NavLink, useLocation } from 'react-router';
 import { toast } from 'sonner';
 
+import { PageBreadcrumb } from '@/components/page-breadcrumb';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -245,7 +246,10 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       <div className="flex flex-1 flex-col md:pl-56">
         <main className="flex-1 pb-16 md:pb-0">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-            {children}
+            <div className="space-y-6">
+              <PageBreadcrumb />
+              {children}
+            </div>
           </div>
         </main>
       </div>

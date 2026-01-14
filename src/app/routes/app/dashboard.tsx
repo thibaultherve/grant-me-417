@@ -55,8 +55,7 @@ export const DashboardRoute = () => {
       {/* Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="mt-1 text-muted-foreground">
+          <p className="text-muted-foreground">
             Track your Working Holiday Visa progress and manage your work hours.
           </p>
         </div>
@@ -75,9 +74,9 @@ export const DashboardRoute = () => {
               </p>
             </div>
             <Button asChild size="lg">
-              <Link to={paths.app.hours.edit.getHref()}>
+              <Link to={paths.app.hours.getHref()}>
                 <Pencil className="mr-2 h-4 w-4" />
-                Edit Hours
+                My Hours
               </Link>
             </Button>
           </div>

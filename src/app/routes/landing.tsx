@@ -114,7 +114,7 @@ export const LandingPage = () => {
               </p>
               <div className="flex justify-center gap-4">
                 <Button size="lg" asChild>
-                  <Link to={paths.auth.register.path}>Start Tracking Now</Link>
+                  <Link to={paths.auth.register.path}>Get Started</Link>
                 </Button>
               </div>
             </>

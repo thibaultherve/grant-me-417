@@ -65,12 +65,8 @@ export const RegisterRoute = () => {
     <div className="flex min-h-screen items-center justify-center px-4 bg-background text-foreground">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">
-            Create an account
-          </CardTitle>
-          <CardDescription>
-            Start tracking your WHV work hours today
-          </CardDescription>
+          <CardTitle className="text-2xl font-bold">Register</CardTitle>
+          <CardDescription>Create your account to get started</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
@@ -129,7 +125,7 @@ export const RegisterRoute = () => {
                 to={paths.auth.login.getHref(redirectTo)}
                 className="font-medium text-primary hover:underline"
               >
-                Sign in
+                Login here
               </Link>
             </p>
           </CardFooter>

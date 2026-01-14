@@ -43,6 +43,10 @@ export const paths = {
     visas: {
       path: '/app/visas',
       getHref: () => '/app/visas',
+      new: {
+        path: '/app/visas/new',
+        getHref: () => '/app/visas/new',
+      },
     },
     profile: {
       path: '/app/profile',

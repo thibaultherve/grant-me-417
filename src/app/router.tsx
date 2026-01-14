@@ -47,25 +47,24 @@ const createAppRouter = () =>
             {
               index: true,
               lazy: async () => {
-                const { EmployersRoute } = await import('./routes/app/employers');
+                const { EmployersRoute } =
+                  await import('./routes/app/employers');
                 return { Component: EmployersRoute };
               },
             },
             {
               path: 'new',
               lazy: async () => {
-                const { EmployerNewRoute } = await import(
-                  './routes/app/employers/new'
-                );
+                const { EmployerNewRoute } =
+                  await import('./routes/app/employers/new');
                 return { Component: EmployerNewRoute };
               },
             },
             {
               path: ':id/edit',
               lazy: async () => {
-                const { EmployerEditRoute } = await import(
-                  './routes/app/employers/edit'
-                );
+                const { EmployerEditRoute } =
+                  await import('./routes/app/employers/edit');
                 return { Component: EmployerEditRoute };
               },
             },
