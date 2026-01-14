@@ -6,3 +6,9 @@ export const createVisaSchema = z.object({
 });
 
 export type CreateVisaFormData = z.infer<typeof createVisaSchema>;
+
+export const updateVisaSchema = z.object({
+  arrival_date: z.string().min(1, 'Arrival date is required'),
+});
+
+export type UpdateVisaFormData = z.infer<typeof updateVisaSchema>;

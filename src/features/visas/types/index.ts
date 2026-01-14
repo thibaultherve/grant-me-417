@@ -1,5 +1,7 @@
 export type VisaType = 'first_whv' | 'second_whv' | 'third_whv';
 
+export type VisaTypeSlug = 'first-whv' | 'second-whv' | 'third-whv';
+
 export interface UserVisa {
   id: string;
   user_id: string;
@@ -22,7 +24,10 @@ export interface CreateVisaInput {
   days_required?: number;
 }
 
-// Weekly progress data from visa_weekly_progress table
+export interface UpdateVisaInput {
+  arrival_date: string;
+}
+
 export interface WeeklyProgressData {
   id: string;
   user_visa_id: string;

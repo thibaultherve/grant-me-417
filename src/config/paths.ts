@@ -47,6 +47,10 @@ export const paths = {
         path: '/app/visas/new',
         getHref: () => '/app/visas/new',
       },
+      edit: {
+        path: '/app/visas/:type/edit',
+        getHref: (type: string) => `/app/visas/${type}/edit`,
+      },
     },
     profile: {
       path: '/app/profile',

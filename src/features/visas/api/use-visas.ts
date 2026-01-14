@@ -12,9 +12,16 @@ import { useAuth } from '@/lib/auth';
 import { handleError } from '@/lib/error-handler';
 import { queryKeys } from '@/lib/react-query';
 
-import type { CreateVisaInput, UserVisa } from '../types';
+import type { CreateVisaInput, UpdateVisaInput, UserVisa, VisaType } from '../types';
 
-import { addVisa, deleteVisa, getVisas, getVisaWeeklyProgress } from './visas';
+import {
+  addVisa,
+  deleteVisa,
+  getVisaByType,
+  getVisas,
+  getVisaWeeklyProgress,
+  updateVisa,
+} from './visas';
 
 /**
  * Hook pour récupérer tous les visas
@@ -132,6 +139,71 @@ export const useDeleteVisa = () => {
       handleError(error, {
         consolePrefix: 'Error deleting visa',
         fallbackMessage: 'Failed to delete visa',
+      });
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.visas.all });
+    },
+  });
+};
+
+/**
+ * Hook pour récupérer un visa par type
+ */
+export const useGetVisaByType = (type: VisaType | null) => {
+  return useQuery({
+    queryKey: queryKeys.visas.byType(type || ''),
+    queryFn: () => getVisaByType(type!),
+    enabled: !!type,
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  });
+};
+
+/**
+ * Hook pour mettre à jour un visa
+ */
+export const useUpdateVisa = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, input }: { id: string; input: UpdateVisaInput }) =>
+      updateVisa(id, input),
+
+    onMutate: async ({ id, input }) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.visas.all });
+
+      const previousVisas = queryClient.getQueryData<UserVisa[]>(
+        queryKeys.visas.all,
+      );
+
+      // Optimistic update
+      queryClient.setQueryData<UserVisa[]>(queryKeys.visas.all, (old = []) =>
+        old.map((visa) =>
+          visa.id === id
+            ? {
+                ...visa,
+                arrival_date: input.arrival_date,
+                updated_at: new Date().toISOString(),
+              }
+            : visa,
+        ),
+      );
+
+      return { previousVisas };
+    },
+
+    onSuccess: () => {
+      toast.success('Visa updated successfully');
+    },
+
+    onError: (error, _, context) => {
+      if (context?.previousVisas) {
+        queryClient.setQueryData(queryKeys.visas.all, context.previousVisas);
+      }
+      handleError(error, {
+        consolePrefix: 'Error updating visa',
+        fallbackMessage: 'Failed to update visa',
       });
     },
 
