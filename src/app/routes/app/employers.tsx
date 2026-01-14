@@ -1,12 +1,13 @@
-import { Plus, Building2 } from 'lucide-react';
+import { Building2, Plus } from 'lucide-react';
 import { Link } from 'react-router';
 
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { InfoCard } from '@/components/ui/info-card';
 import { paths } from '@/config/paths';
 import {
-  useEmployers,
   useDeleteEmployer,
+  useEmployers,
 } from '@/features/employers/api/use-employers';
 import { EmployersList } from '@/features/employers/components/employers-list';
 
@@ -21,21 +22,24 @@ export const EmployersRoute = () => {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Employers</h1>
-          <p className="mt-1 text-muted-foreground">
-            Manage your employers and work locations
-          </p>
-        </div>
-        <Button asChild size="lg">
-          <Link to={paths.app.employers.new.getHref()}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Employer
-          </Link>
-        </Button>
-      </div>
+      <Card>
+        <CardContent>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h3 className="font-semibold mb-1">Manage your employers</h3>
+              <p className="text-sm text-muted-foreground">
+                Manage your employers and work locations
+              </p>
+            </div>
+            <Button asChild size="lg">
+              <Link to={paths.app.employers.new.getHref()}>
+                <Plus className="mr-2 h-4 w-4" />
+                Add Employer
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Info tip */}
       {employers.length === 0 && !loading && (

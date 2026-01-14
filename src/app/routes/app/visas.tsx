@@ -2,6 +2,7 @@ import { Plane, Plus } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { InfoCard } from '@/components/ui/info-card';
 import {
   Sheet,
@@ -9,11 +10,13 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet';
+import { paths } from '@/config/paths';
 import { useAddVisa, useDeleteVisa } from '@/features/visas/api/use-visas';
 import { AddVisaForm } from '@/features/visas/components/add-visa-form';
 import { VisasList } from '@/features/visas/components/visas-list';
 import { useVisaContext } from '@/features/visas/hooks/use-visa-context';
 import type { CreateVisaFormData } from '@/features/visas/schemas';
+import { Link } from 'react-router';
 
 export const VisasRoute = () => {
   const [isAddingVisa, setIsAddingVisa] = useState(false);
@@ -37,11 +40,27 @@ export const VisasRoute = () => {
 
   return (
     <div className="space-y-8">
+      <Card>
+        <CardContent>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h3 className="font-semibold mb-1">Manage your visas</h3>
+              <p className="text-sm text-muted-foreground">Manage your visas</p>
+            </div>
+            <Button asChild size="lg">
+              <Link to={paths.app.visas.new.getHref()}>
+                <Plus className="mr-2 h-4 w-4" />
+                Add Visa
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Visas</h1>
-          <p className="mt-1 text-muted-foreground">
+          <p className="text-muted-foreground">
             Manage your Working Holiday Visas (up to 3 visas)
           </p>
         </div>

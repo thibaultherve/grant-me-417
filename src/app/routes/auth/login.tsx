@@ -52,12 +52,11 @@ export const LoginRoute = () => {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background text-foreground">
       <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Sign In</CardTitle>
-          <CardDescription>
-            Enter your email and password to access your account
-          </CardDescription>
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold">Login</CardTitle>
+          <CardDescription>Please enter your details to log in</CardDescription>
         </CardHeader>
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
@@ -94,7 +93,7 @@ export const LoginRoute = () => {
               to={paths.auth.register.getHref(redirectTo)}
               className="text-primary hover:underline"
             >
-              Sign up
+              Register here
             </Link>
           </p>
         </CardFooter>

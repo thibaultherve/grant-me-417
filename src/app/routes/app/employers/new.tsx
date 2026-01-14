@@ -1,13 +1,5 @@
-import { Link, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { paths } from '@/config/paths';
 import { EmployerForm } from '@/features/employers/components/employer-form';
@@ -30,24 +22,6 @@ export function EmployerNewRoute() {
 
   return (
     <div className="space-y-6">
-      {/* Breadcrumb */}
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to={paths.app.employers.getHref()}>Employers</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>New Employer</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-
-      {/* Header */}
-      <h1 className="text-2xl font-bold">Add New Employer</h1>
-
       {/* Form in Card */}
       <Card>
         <CardHeader>
