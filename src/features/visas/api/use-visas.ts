@@ -63,9 +63,10 @@ export const useAddVisa = () => {
           days_remaining: newVisa.days_required || 88,
           progress_percentage: 0,
           is_eligible: false,
-          end_date: new Date(
-            new Date(newVisa.arrival_date).getTime() +
-              365 * 24 * 60 * 60 * 1000,
+          expiry_date: new Date(
+            new Date(newVisa.arrival_date).getFullYear() + 1,
+            new Date(newVisa.arrival_date).getMonth(),
+            new Date(newVisa.arrival_date).getDate() - 1,
           ).toISOString(),
         } as UserVisa,
       ]);

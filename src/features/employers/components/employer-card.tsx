@@ -88,9 +88,9 @@ export function EmployerCard({
                 <span className="flex items-center gap-1">
                   <MapPin className="w-3 h-3" />
                   <span className="truncate">{locationDisplay}</span>
-                  {employer.suburb.postcodes && (
+                  {employer.suburb.postcodeData && (
                     <PostcodeBadges
-                      postcode={employer.suburb.postcodes}
+                      postcode={employer.suburb.postcodeData}
                       size="sm"
                       className="ml-0.5 gap-1"
                     />

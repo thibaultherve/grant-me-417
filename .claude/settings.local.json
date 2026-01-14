@@ -44,7 +44,8 @@
       "mcp__supabase__apply_migration",
       "mcp__supabase__get_advisors",
       "Bash(npx tailwindcss:*)",
-      "Bash(pnpm exec tailwindcss:*)"
+      "Bash(pnpm exec tailwindcss:*)",
+      "Bash(pnpm run lint:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

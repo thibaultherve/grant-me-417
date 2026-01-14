@@ -1,4 +1,4 @@
-import { ArrowRight, Briefcase, Calendar, Pencil } from 'lucide-react';
+import { ArrowRight, Briefcase, Calendar, CalendarClock } from 'lucide-react';
 import { Link } from 'react-router';
 
 import { Button } from '@/components/ui/button';
@@ -22,11 +22,11 @@ export const DashboardRoute = () => {
 
   const calculateVisaPeriodProgress = (
     arrivalDate: string,
-    endDate: string,
+    expiryDate: string,
   ) => {
     const today = new Date();
     const start = new Date(arrivalDate);
-    const end = new Date(endDate);
+    const end = new Date(expiryDate);
 
     const totalDays = Math.ceil(
       (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24),
@@ -75,7 +75,7 @@ export const DashboardRoute = () => {
             </div>
             <Button asChild size="lg">
               <Link to={paths.app.hours.getHref()}>
-                <Pencil className="mr-2 h-4 w-4" />
+                <CalendarClock className="mr-2 h-4 w-4" />
                 My Hours
               </Link>
             </Button>
@@ -109,7 +109,7 @@ export const DashboardRoute = () => {
           {(() => {
             const visaPeriod = calculateVisaPeriodProgress(
               currentVisa.arrival_date,
-              currentVisa.end_date,
+              currentVisa.expiry_date,
             );
             const isWorkComplete = currentVisa.is_eligible;
 
@@ -159,7 +159,7 @@ export const DashboardRoute = () => {
                         </div>
                         <span className="text-sm text-muted-foreground">
                           {formatDate(currentVisa.arrival_date)} -{' '}
-                          {formatDate(currentVisa.end_date)}
+                          {formatDate(currentVisa.expiry_date)}
                         </span>
                       </div>
                       <div className="relative h-2 w-full overflow-hidden rounded-full bg-muted">

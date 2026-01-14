@@ -17,7 +17,7 @@ interface AvailableVisa {
 const allVisaOptions: AvailableVisa[] = [
   {
     type: 'first_whv',
-    title: 'First WHV (417)',
+    title: '1st WHV',
     description: 'Your initial Working Holiday Visa',
     requiredDays: 0,
     duration: '12 months',
@@ -26,7 +26,7 @@ const allVisaOptions: AvailableVisa[] = [
   },
   {
     type: 'second_whv',
-    title: 'Second WHV (417)',
+    title: '2nd WHV',
     description: 'Requires 88 days of specified work during 1st WHV',
     requiredDays: 88,
     duration: '12 months',
@@ -35,7 +35,7 @@ const allVisaOptions: AvailableVisa[] = [
   },
   {
     type: 'third_whv',
-    title: 'Third WHV (417)',
+    title: '3rd WHV',
     description: 'Requires 179 days of specified work during 2nd WHV',
     requiredDays: 179,
     duration: '12 months',

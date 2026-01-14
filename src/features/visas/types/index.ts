@@ -5,7 +5,7 @@ export interface UserVisa {
   user_id: string;
   visa_type: VisaType;
   arrival_date: string;
-  end_date: string;
+  expiry_date: string;
   days_required: number;
   eligible_days: number;
   days_worked: number;
