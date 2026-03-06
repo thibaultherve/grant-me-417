@@ -19,11 +19,12 @@
   --border: oklch(0.87 0.01 261.81);
   --input: oklch(0.87 0.01 261.81);
   --ring: oklch(0.59 0.2 277.06);
-  --chart-1: oklch(0.59 0.2 277.06);
-  --chart-2: oklch(0.51 0.23 276.97);
-  --chart-3: oklch(0.46 0.21 277.06);
-  --chart-4: oklch(0.4 0.18 277.16);
-  --chart-5: oklch(0.36 0.14 278.65);
+  --chart-1: #6366F1;
+  --chart-2: #8B5CF6;
+  --chart-3: #EC4899;
+  --chart-4: #F59E0B;
+  --chart-5: #10B981;
+  --chart-6: #3B82F6;
   --sidebar: oklch(0.97 0 0);
   --sidebar-foreground: oklch(0.28 0.04 260.33);
   --sidebar-primary: oklch(0.59 0.2 277.06);
@@ -38,6 +39,20 @@
   --font-mono: JetBrains Mono, monospace;
 
   --radius: 0.5rem;
+
+  /* ── Semantic status colors (from design) ── */
+  --info: #3B82F6;
+  --info-light: #DBEAFE;
+  --success: #10B981;
+  --success-light: #D1FAE5;
+  --warning: #F59E0B;
+  --warning-light: #FEF3C7;
+  --danger: #EF4444;
+  --danger-light: #FEE2E2;
+  /* ── Bar chart tier colors ── */
+  --bar-track: #e5e7eb;
+  --bar-low: #a5b4fc;
+  --bar-high: #3730a3;
 
   --shadow-2xs: 0px 4px 8px -1px oklch(0 0 0 / 0.05);
   --shadow-xs: 0px 4px 8px -1px oklch(0 0 0 / 0.05);
@@ -73,11 +88,12 @@
   --border: oklch(0.45 0.03 257.68);
   --input: oklch(0.45 0.03 257.68);
   --ring: oklch(0.68 0.16 276.93);
-  --chart-1: oklch(0.68 0.16 276.93);
-  --chart-2: oklch(0.59 0.2 277.06);
-  --chart-3: oklch(0.51 0.23 276.97);
-  --chart-4: oklch(0.46 0.21 277.06);
-  --chart-5: oklch(0.4 0.18 277.16);
+  --chart-1: #818cf8;
+  --chart-2: #a78bfa;
+  --chart-3: #f472b6;
+  --chart-4: #fcd34d;
+  --chart-5: #6ee7b7;
+  --chart-6: #93c5fd;
   --sidebar: oklch(0.28 0.04 260.33);
   --sidebar-foreground: oklch(0.93 0.01 256.71);
   --sidebar-primary: oklch(0.68 0.16 276.93);
@@ -86,6 +102,20 @@
   --sidebar-accent-foreground: oklch(0.87 0.01 261.81);
   --sidebar-border: oklch(0.45 0.03 257.68);
   --sidebar-ring: oklch(0.68 0.16 276.93);
+
+  /* ── Semantic status colors (dark mode) ── */
+  --info: #93c5fd;
+  --info-light: #1e3a5f;
+  --success: #6ee7b7;
+  --success-light: #052e1c;
+  --warning: #fcd34d;
+  --warning-light: #3d2900;
+  --danger: #fca5a5;
+  --danger-light: #3f0000;
+  /* ── Bar chart tier colors (dark mode) ── */
+  --bar-track: #374151;
+  --bar-low: #818cf8;
+  --bar-high: #6366f1;
 
   --shadow-2xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
   --shadow-xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
@@ -125,6 +155,7 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -133,6 +164,20 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* ── Semantic status colors ── */
+  --color-info: var(--info);
+  --color-info-light: var(--info-light);
+  --color-success: var(--success);
+  --color-success-light: var(--success-light);
+  --color-warning: var(--warning);
+  --color-warning-light: var(--warning-light);
+  --color-danger: var(--danger);
+  --color-danger-light: var(--danger-light);
+  /* ── Bar chart tier colors ── */
+  --color-bar-track: var(--bar-track);
+  --color-bar-low: var(--bar-low);
+  --color-bar-high: var(--bar-high);
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
