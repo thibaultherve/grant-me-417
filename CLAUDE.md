@@ -2,29 +2,34 @@
 
 ## Project Overview
 
-**GET GRANTED 417** Claude Code stack (React 19.1.1 + Supabase).
+**GET GRANTED 417** - Monorepo (React + NestJS + PostgreSQL)
 
-- **Frontend**: React 19.1.1 (react-router 7.9.4), TypeScript, TailwindCSS 4.1.12, @tanstack/react-query 5.90.5, Shadcn UI
-- **Backend**: Supabase
-- **Database**: Supabase (PostgreSQL), Redis
+### Stack
 
-### Supabase Project IDs
+- **Client** (`/client`): React 19.1.1 (react-router 7.9.4), TypeScript, TailwindCSS 4.1.12, @tanstack/react-query 5.90.5, Shadcn UI, Zod 4
+- **Server** (`/server`): NestJS, Prisma ORM, Passport.js + JWT, Zod validation
+- **Shared** (`/shared`): Zod schemas (API contracts), inferred TypeScript types, shared constants
+- **Database**: PostgreSQL (Railway)
+- **Hosting**: Railway (React static + NestJS API + PostgreSQL)
+- **Monorepo**: pnpm workspaces
 
-- **Dev**: `dev_project_id`
-- **Prod**: `prod_project_id`
+### Architecture Summary
+
+- **Prisma** = source of truth for **database schema** (tables, relations, migrations). Prisma-generated types are used only server-side in the data access layer.
+- **Zod** = source of truth for **API contracts** (input/output DTOs). Zod schemas live in `/shared` and are used by both client (form validation) and server (request validation via NestJS pipes).
+- **Mapping** between Prisma types (DB) and Zod schemas (API) happens in **NestJS services**. DTOs and DB models intentionally diverge.
+- TypeScript types in `/shared` are inferred from Zod via `z.infer<typeof schema>`.
 
 ---
 
 ## Fundamental Development Principles
 
-### 1. Database Interaction via MCP Supabase (PRIORITY)
+### 1. Database Interaction
 
-**All database interactions MUST use MCP Supabase servers:**
-
-- **Read/Write**: Use `mcp__supabase-dev__execute_sql` or `mcp__supabase-prod__execute_sql`
-- **Migrations**: Use `mcp__supabase-dev__apply_migration` or `mcp__supabase-prod__apply_migration`
-- **Inspection**: Use MCP commands `list_tables`, `list_extensions`, `list_migrations`
-- **NEVER**: Direct connections, psql, or other SQL clients
+- **Server**: All database access goes through **Prisma** in NestJS services/repositories
+- **Client**: All data access goes through **REST API calls** to NestJS (never direct DB access)
+- **Migrations**: Use `prisma migrate dev` for development, `prisma migrate deploy` for production
+- **MCP Supabase**: Can still be used for ad-hoc SQL queries during development/debugging
 
 ### 2. Maximum Reuse of Existing Code
 
@@ -37,8 +42,10 @@
 
 **Practical examples**:
 
-- Creating a UI component → check `./src/components/`
-- Adding a hook → check `./src/hooks/`
+- Creating a UI component → check `client/src/components/`
+- Adding a hook → check `client/src/hooks/`
+- Adding a NestJS service → check existing modules in `server/src/`
+- Adding a Zod schema → check `shared/src/schemas/`
 
 ### 3. Dynamic & Modular Code
 
@@ -56,8 +63,9 @@
 
 - **ALWAYS** handle all error cases in API responses
 - Never return 500 unless it's a genuine internal server error
-- **NEVER** simplify external API calls without understanding their constraints (Stripe, Google, etc.)
+- **NEVER** simplify external API calls without understanding their constraints
 - Never expose internal errors in API responses
+- Use NestJS exception filters for consistent error response format
 
 ### 6. Up-to-Date Information & Documentation
 
@@ -65,77 +73,65 @@
 
 #### Priority Order for Documentation:
 
-1. **MCP Context7** (`mcp__plugin_context7_context7__resolve-library-id` + `mcp__plugin_context7_context7__query-docs`)
-   - Use FIRST for any library documentation (React, Supabase, etc.)
+1. **MCP Context7** (`mcp__context7__resolve-library-id` + `mcp__context7__query-docs`)
+   - Use FIRST for any library documentation (React, NestJS, Prisma, etc.)
    - Provides indexed, structured documentation
-   - Example: Before using a React Query pattern, query Context7 for latest API
 
 2. **WebSearch** (`WebSearch` tool)
    - Use when Context7 doesn't have the library
-   - Use for latest best practices and patterns (add "2024 2025" to queries)
+   - Use for latest best practices and patterns (add "2025 2026" to queries)
    - Use for error messages and troubleshooting
-   - Use for external API documentation
 
 3. **WebFetch** (`WebFetch` tool)
    - Use to fetch specific documentation pages found via WebSearch
-   - Use for official API documentation URLs
-
-#### When to Search for Documentation:
-
-- **Before using any library feature** you're not 100% certain about
-- **When implementing a new pattern** (auth, caching, state management, etc.)
-- **When encountering an error** from an external library
-- **When integrating external APIs** (always check current API version)
-- **When the codebase pattern seems outdated** compared to current best practices
-
-#### Examples:
-
-```
-# Check React Query v5 patterns
-mcp__plugin_context7_context7__resolve-library-id(libraryName="tanstack-query")
-mcp__plugin_context7_context7__query-docs(libraryId="/tanstack/query", query="useMutation optimistic updates")
-
-# Check latest Supabase RLS patterns
-WebSearch(query="Supabase RLS policies best practices 2025 2026")
-
-```
 
 **NEVER assume library APIs haven't changed. Always verify.**
 
 ### 7. Internationalization
 
-- **ALWAYS** use `react-i18next` for all user-facing text
-- Define messages in `frontend/messages/{language}.json`
+- **ALWAYS** use `react-i18next` for all user-facing text in the client
+- Define messages in `client/messages/{language}.json`
 - **NEVER** hardcode user-facing strings
 - Write code in English first, then translate
 
-### 8. Context Propagation (Go)
+### 8. UI Design Quality (Frontend)
 
-- **ALWAYS** use `context.Context` as first parameter for I/O operations
-- Applies to: repository methods, use case Execute methods, service methods
-- **NEVER** use `context.Background()` except at application entry point
-
-### 9. UI Design Quality (Frontend)
-
-Pour toute création de composant UI significatif (pages, modals, forms, dashboards, cards), utilise le skill `frontend-design:frontend-design` pour garantir un design distinctif et production-ready.
+Pour toute creation de composant UI significatif (pages, modals, forms, dashboards, cards), utilise le skill `frontend-design:frontend-design` pour garantir un design distinctif et production-ready.
 
 ---
 
 ## Core Architecture
 
-### Frontend (React 19.1.1)
+### Client (React 19.1.1) - `/client`
 
-- **Pattern**: Hybrid Server/Client Components
-  - **Server Components** (default): Layouts, initial data fetching, static UI
-  - **Client Components** (`'use client'`): Interactivity, state, hooks, providers
-- **I18n**: MUST use `react-i18next`
+- **Routing**: react-router 7.9.4 with lazy loading
+- **State**: @tanstack/react-query for server state, React hooks for local state
 - **Styling**: Tailwind CSS + Shadcn UI
+- **Forms**: react-hook-form + Zod validation (schemas from `/shared`)
+- **API Client**: Fetch/Axios wrapper with JWT interceptor and refresh token rotation
+- **Tests**: Vitest + React Testing Library
+
+### Server (NestJS) - `/server`
+
+- **Pattern**: Module-based (Controller → Service → Repository/Prisma)
+- **Auth**: Passport.js (Local + JWT strategies), access token (15min) + refresh token (7d)
+- **Validation**: Zod schemas from `/shared` via ZodValidationPipe
+- **ORM**: Prisma with connection pooling
+- **Tests**: Jest + @nestjs/testing (unit + integration)
+- **Security**: Helmet, CORS, @nestjs/throttler for rate limiting
+
+### Shared Package - `/shared`
+
+- **Schemas**: Zod schemas for all API DTOs (input + output)
+- **Types**: TypeScript types inferred from Zod via `z.infer<>`
+- **Constants**: Business rules (WHV 417 visa rules, industry enum, eligible countries)
 
 ### Database & Environment
 
-- **Parameterized Queries**: All database operations MUST use parameterized queries
-- **Supabase Remote ONLY**: Never use local Supabase
-- **Configuration**: `.env` for secrets
+- **PostgreSQL**: Hosted on Railway
+- **ORM**: Prisma (schema in `server/prisma/schema.prisma`)
+- **Migrations**: Prisma Migrate
+- **Configuration**: `.env` for secrets (per package)
 
 ### Logging Strategy
 
@@ -146,6 +142,58 @@ Pour toute création de composant UI significatif (pages, modals, forms, dashboa
 ### Security
 
 - **Secrets**: NEVER commit `.env`
+- **Auth**: JWT tokens (access + refresh), bcrypt password hashing
+- **Authorization**: NestJS guards + service-level ownership checks (replaces Supabase RLS)
+- **API**: Helmet headers, CORS, rate limiting on auth endpoints
+
+---
+
+## Testing Strategy
+
+### Backend (Jest)
+
+- **Unit Tests**: Services, business logic (visa progress calculations, validation rules)
+- **Integration Tests**: Controllers with database (use test database, seed/cleanup per test)
+- **Location**: `server/src/**/*.spec.ts` (unit), `server/test/**/*.e2e-spec.ts` (integration)
+- **Coverage**: All business logic MUST be tested (visa progress engine, auth, CRUD operations)
+
+### Frontend (Vitest + React Testing Library)
+
+- **Unit Tests**: Utility functions, hooks, pure logic
+- **Component Tests**: React components with RTL (user interaction, rendering)
+- **Integration Tests**: API hooks with MSW (mock service worker) for API mocking
+- **Location**: `client/src/**/*.test.ts(x)`
+- **Coverage**: All critical user flows (auth, CRUD, form validation)
+
+### Testing Rules
+
+- **Write tests alongside code** - every new feature/module must include tests
+- **Test behavior, not implementation** - focus on what the code does, not how
+- **No snapshot tests** unless explicitly requested
+- **Mock external dependencies** (DB, API calls) in unit tests; use real DB in integration tests
+
+---
+
+## CI/CD (GitHub Actions)
+
+### Pipeline (runs on every PR and push to main)
+
+1. **Lint**: ESLint for client + server
+2. **Type-check**: `tsc --noEmit` for client + server + shared
+3. **Test**: Run all unit + integration tests (client Vitest, server Jest)
+4. **Build**: Verify build passes for client + server
+5. **Deploy**: Auto-deploy to Railway on merge to main
+
+### Workflow Files
+
+- `.github/workflows/ci.yml` - Lint, type-check, test, build (on PR)
+- `.github/workflows/deploy.yml` - Deploy to Railway (on push to main)
+
+### Rules
+
+- **PRs must pass CI** before merge
+- **No skipping tests** in CI pipeline
+- **Server integration tests** use a dedicated test database (Railway or in-memory PG)
 
 ---
 
@@ -179,36 +227,36 @@ If not clearly defined, clarify:
 
 ## Naming Conventions
 
-- **JS/TS**: camelCase for variables
-- **Files**: kebab-case for frontend
+- **JS/TS**: camelCase for variables, PascalCase for classes/types/components
+- **Files**: kebab-case for all packages (client, server, shared)
+- **NestJS**: `{name}.module.ts`, `{name}.controller.ts`, `{name}.service.ts`, `{name}.repository.ts`
+- **Tests**: `{name}.spec.ts` (Jest/backend), `{name}.test.ts(x)` (Vitest/frontend)
 
 ---
 
-## Feature Structure Convention
+## Client Feature Structure Convention
 
-Chaque feature dans `src/features/{feature}/` DOIT suivre cette structure :
+Chaque feature dans `client/src/features/{feature}/` DOIT suivre cette structure :
 
 ```
 features/{feature}/
-├── api/                   # Server State (données serveur)
-│   ├── {feature}.ts       # Fonctions API pures (fetch, create, update, delete)
+├── api/                   # Server State (donnees serveur)
+│   ├── {feature}.ts       # Fonctions API pures (fetch, create, update, delete via REST)
 │   └── use-{feature}.ts   # React Query UNIQUEMENT (useQuery, useMutation)
 │
-├── hooks/                 # Client State (état local UI)
+├── hooks/                 # Client State (etat local UI)
 │   └── use-{xxx}.ts       # Custom hooks (useState, useCallback, useReducer, Context)
 │
-├── schemas/               # Validation Zod UNIQUEMENT
-│   └── index.ts           # Schémas Zod + types dérivés (z.infer<>)
-│                          # ⚠️ PAS de fonctions helpers ici
+├── schemas/               # Validation Zod UNIQUEMENT (ou re-export from @shared)
+│   └── index.ts           # Schemas Zod + types derives (z.infer<>)
 │
 ├── types/                 # Types TypeScript purs
-│   └── index.ts           # Interfaces, types (entités, DTOs, state)
-│                          # ⚠️ PAS de schémas Zod ici
+│   └── index.ts           # Interfaces, types (entites, DTOs, state)
 │
 ├── utils/                 # Fonctions utilitaires pures
-│   ├── {domain}-helpers.ts     # Helpers de transformation/formatage
-│   ├── {domain}-validation.ts  # Validation business (règles métier, pas Zod)
-│   └── {domain}-calculations.ts # Calculs purs
+│   ├── {domain}-helpers.ts
+│   ├── {domain}-validation.ts
+│   └── {domain}-calculations.ts
 │
 ├── constants/             # Constantes (optionnel)
 │   └── index.ts
@@ -217,7 +265,7 @@ features/{feature}/
     └── {component}.tsx
 ```
 
-### Règles de placement
+### Regles de placement
 
 | Le code utilise...                          | → Va dans      |
 | ------------------------------------------- | -------------- |
@@ -227,71 +275,62 @@ features/{feature}/
 | `z.object()` / `z.string()` (Zod)           | `schemas/`     |
 | `interface` / `type` (TS pur)               | `types/`       |
 | Fonctions pures (calculs, formatage)        | `utils/`       |
-| Appels Supabase/API (sans React Query)      | `api/`         |
+| Appels REST API (sans React Query)          | `api/`         |
 
-### Ce que chaque dossier NE DOIT PAS contenir
+---
 
-| Dossier      | ❌ NE DOIT PAS contenir                                    |
-| ------------ | ---------------------------------------------------------- |
-| `api/`       | Custom hooks UI (useState), composants React               |
-| `hooks/`     | Appels API directs, schémas Zod                            |
-| `schemas/`   | Fonctions helpers, logique métier, types non-dérivés       |
-| `types/`     | Schémas de validation, fonctions                           |
-| `utils/`     | Schémas Zod, hooks React, composants                       |
+## Server Module Structure Convention
 
-### Exemple concret
+Chaque module NestJS dans `server/src/{module}/` suit cette structure :
 
-```typescript
-// ✅ api/users.ts - Fonction API pure
-export async function getUser(id: string): Promise<User> {
-  const { data } = await supabase.from('users').select('*').eq('id', id);
-  return data;
-}
-
-// ✅ api/use-users.ts - React Query hook
-export function useUser(id: string) {
-  return useQuery({
-    queryKey: ['user', id],
-    queryFn: () => getUser(id),
-  });
-}
-
-// ✅ hooks/use-user-form.ts - Custom hook UI
-export function useUserForm() {
-  const [name, setName] = useState('');
-  const [errors, setErrors] = useState({});
-  return { name, setName, errors };
-}
-
-// ✅ schemas/index.ts - Schéma Zod uniquement
-export const userSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-});
-export type UserFormData = z.infer<typeof userSchema>;
-
-// ✅ types/index.ts - Types TS purs
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-}
-
-// ✅ utils/user-helpers.ts - Fonction utilitaire pure
-export function formatUserName(user: User): string {
-  return `${user.name} <${user.email}>`;
-}
 ```
+{module}/
+├── {module}.module.ts       # NestJS module definition
+├── {module}.controller.ts   # HTTP endpoints (thin, delegates to service)
+├── {module}.service.ts      # Business logic
+├── {module}.repository.ts   # Prisma data access (optional, for complex queries)
+├── dto/                     # Re-exports from @shared or module-specific DTOs
+│   └── index.ts
+└── __tests__/               # Module-specific tests
+    ├── {module}.service.spec.ts
+    └── {module}.controller.spec.ts
+```
+
+### NestJS Rules
+
+- **Controllers**: Thin - validate input (ZodPipe), call service, return response
+- **Services**: All business logic lives here. Services own the mapping Prisma ↔ DTO
+- **Repositories**: Optional, only when Prisma queries are complex (raw SQL, transactions)
+- **Guards**: `JwtAuthGuard` on all protected routes, ownership checks in services
+- **Pipes**: `ZodValidationPipe` with schemas from `@shared`
 
 ---
 
 ## Common Commands
 
 ```bash
-# Setup
+# Setup (from root)
 pnpm install
 
-# Start Dev (React frontend)
-pnpm dev
+# Start Dev
+pnpm --filter client dev        # React frontend
+pnpm --filter server start:dev  # NestJS backend (watch mode)
 
+# Build
+pnpm --filter client build
+pnpm --filter server build
+
+# Test
+pnpm --filter client test       # Vitest
+pnpm --filter server test       # Jest unit tests
+pnpm --filter server test:e2e   # Jest integration tests
+
+# Prisma
+pnpm --filter server prisma:generate   # Generate Prisma client
+pnpm --filter server prisma:migrate    # Run migrations
+pnpm --filter server prisma:studio     # Open Prisma Studio
+
+# Lint
+pnpm --filter client lint
+pnpm --filter server lint
 ```

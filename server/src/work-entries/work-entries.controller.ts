@@ -1,0 +1,60 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Query,
+  UseGuards,
+  ParseIntPipe,
+} from '@nestjs/common';
+import { WorkEntriesService } from './work-entries.service.js';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
+import {
+  CurrentUser,
+  type JwtPayload,
+} from '../common/decorators/current-user.decorator.js';
+import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe.js';
+import {
+  saveWeekHoursSchema,
+  type SaveWeekHoursInput,
+} from '@get-granted/shared';
+
+@Controller('work-entries')
+@UseGuards(JwtAuthGuard)
+export class WorkEntriesController {
+  constructor(private workEntriesService: WorkEntriesService) {}
+
+  @Get()
+  async findAll(
+    @CurrentUser() user: JwtPayload,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('sortField') sortField?: string,
+    @Query('sortOrder') sortOrder?: 'asc' | 'desc',
+  ) {
+    return this.workEntriesService.findAll(user.sub, {
+      page: page ? parseInt(page, 10) : undefined,
+      limit: limit ? parseInt(limit, 10) : undefined,
+      sortField,
+      sortOrder,
+    });
+  }
+
+  @Post('week')
+  async saveWeekHours(
+    @CurrentUser() user: JwtPayload,
+    @Body(new ZodValidationPipe(saveWeekHoursSchema)) body: SaveWeekHoursInput,
+  ) {
+    return this.workEntriesService.saveWeekHours(user.sub, body);
+  }
+
+  @Get('month/:year/:month')
+  async getMonthHours(
+    @CurrentUser() user: JwtPayload,
+    @Param('year', ParseIntPipe) year: number,
+    @Param('month', ParseIntPipe) month: number,
+  ) {
+    return this.workEntriesService.getMonthHours(user.sub, year, month);
+  }
+}

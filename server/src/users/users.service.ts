@@ -1,0 +1,98 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import type { Prisma } from '../../generated/prisma/client.js';
+import { PrismaService } from '../prisma/prisma.service.js';
+import type {
+  UpdateProfileInput,
+  UserProfile as UserProfileResponse,
+} from '@get-granted/shared';
+import { formatDate, formatTimestamp } from '../common/utils/format.js';
+
+const USER_INCLUDE = { profile: true } as const;
+
+type UserWithProfile = Prisma.UserGetPayload<{
+  include: typeof USER_INCLUDE;
+}>;
+
+@Injectable()
+export class UsersService {
+  constructor(private prisma: PrismaService) {}
+
+  async getProfile(userId: string): Promise<UserProfileResponse> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: USER_INCLUDE,
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.mapToResponse(user);
+  }
+
+  async updateProfile(
+    userId: string,
+    input: UpdateProfileInput,
+  ): Promise<UserProfileResponse> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: USER_INCLUDE,
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const { firstName, lastName, ...profileFields } = input;
+
+    // Update user fields (firstName, lastName) if provided
+    if (firstName !== undefined || lastName !== undefined) {
+      await this.prisma.user.update({
+        where: { id: userId },
+        data: {
+          ...(firstName !== undefined && { firstName }),
+          ...(lastName !== undefined && { lastName }),
+        },
+      });
+    }
+
+    // Update profile fields if any provided
+    const hasProfileFields = Object.keys(profileFields).length > 0;
+    if (hasProfileFields) {
+      await this.prisma.userProfile.update({
+        where: { userId },
+        data: {
+          ...(profileFields.nationality !== undefined && {
+            nationality: profileFields.nationality,
+          }),
+          ...(profileFields.dateOfBirth !== undefined && {
+            dateOfBirth: profileFields.dateOfBirth
+              ? new Date(profileFields.dateOfBirth)
+              : null,
+          }),
+          ...(profileFields.ukCitizenExemption !== undefined && {
+            ukCitizenExemption: profileFields.ukCitizenExemption,
+          }),
+        },
+      });
+    }
+
+    return this.getProfile(userId);
+  }
+
+  private mapToResponse(user: UserWithProfile): UserProfileResponse {
+    return {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName ?? '',
+      lastName: user.lastName ?? '',
+      nationality: user.profile?.nationality ?? null,
+      dateOfBirth: user.profile?.dateOfBirth
+        ? formatDate(user.profile.dateOfBirth)
+        : null,
+      ukCitizenExemption: user.profile?.ukCitizenExemption ?? false,
+      createdAt: formatTimestamp(user.createdAt),
+      updatedAt: formatTimestamp(user.profile?.updatedAt ?? user.updatedAt),
+    };
+  }
+}
