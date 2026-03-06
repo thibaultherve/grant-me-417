@@ -1,0 +1,17 @@
+{
+  "version": "2.8",
+  "children": [
+    {
+      "type": "rectangle",
+      "id": "1SoAr",
+      "x": -450,
+      "y": -392,
+      "fill": "#CCCCCC",
+      "width": 325,
+      "height": 200
+    }
+  ],
+  "imports": {
+    "i": "pencil:shadcn.lib.pen"
+  }
+}

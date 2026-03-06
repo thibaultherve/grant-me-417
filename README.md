@@ -1,69 +1,93 @@
-# React + TypeScript + Vite
+# GET GRANTED 417
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Web application to help Working Holiday Visa (417) holders in Australia track their work hours, manage employers, and monitor visa compliance requirements.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+| Layer      | Technology                                                    |
+| ---------- | ------------------------------------------------------------- |
+| **Client** | React 19, TypeScript, Vite 7, TailwindCSS 4, Shadcn UI       |
+| **Server** | NestJS 11, Prisma ORM, Passport.js + JWT                      |
+| **Shared** | Zod 4 schemas, inferred TypeScript types, shared constants    |
+| **DB**     | PostgreSQL (Railway)                                          |
+| **Hosting**| Railway                                                       |
 
-## Expanding the ESLint configuration
+## Monorepo Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+get-granted-417/
+├── client/          # React SPA (@get-granted/client)
+├── server/          # NestJS API (@get-granted/server)
+├── shared/          # Zod schemas & types (@get-granted/shared)
+└── pnpm-workspace.yaml
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Prerequisites
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Node.js** >= 20
+- **pnpm** >= 9
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Getting Started
+
+```bash
+# Install dependencies
+pnpm install
+
+# Build the shared package first
+pnpm build:shared
+
+# Start development servers
+pnpm dev:client    # React frontend (Vite)
+pnpm dev:server    # NestJS backend (watch mode)
 ```
+
+## Environment Variables
+
+Copy the example files and fill in your values:
+
+```bash
+cp client/.env.example client/.env
+```
+
+### Client (`client/.env`)
+
+| Variable                 | Description          |
+| ------------------------ | -------------------- |
+| `VITE_SUPABASE_URL`     | Supabase project URL |
+| `VITE_SUPABASE_ANON_KEY`| Supabase anon key    |
+
+## Scripts
+
+```bash
+# Development
+pnpm dev:client          # Start React dev server
+pnpm dev:server          # Start NestJS in watch mode
+
+# Build
+pnpm build               # Build all packages
+pnpm build:client        # Build React app
+pnpm build:server        # Build NestJS app
+pnpm build:shared        # Build shared package
+
+# Test
+pnpm test                # Run all tests
+
+# Lint
+pnpm lint                # Lint all packages
+
+# Prisma (from server)
+pnpm --filter server prisma:generate   # Generate Prisma client
+pnpm --filter server prisma:migrate    # Run migrations
+pnpm --filter server prisma:studio     # Open Prisma Studio
+```
+
+## Architecture
+
+- **Prisma** is the source of truth for the **database schema** (migrations, relations)
+- **Zod** (in `/shared`) is the source of truth for **API contracts** (DTOs, validation)
+- NestJS services handle the mapping between Prisma models and Zod DTOs
+- The client never accesses the database directly — all data flows through REST API calls
+
+## License
+
+Private — All rights reserved.

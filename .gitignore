@@ -7,18 +7,23 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+
+# Build outputs
 dist
 dist-ssr
-*.local
-.mcp.json
 
 # Environment variables
+*.local
 .env
 .env.local
 .env.production.local
 .env.development.local
 .env.test.local
+
+# MCP config
+.mcp.json
 
 # Claude code
 .claude
@@ -33,3 +38,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Server specific
+server/coverage
+server/generated

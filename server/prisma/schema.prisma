@@ -1,0 +1,241 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum IndustryType {
+  plant_and_animal_cultivation
+  fishing_and_pearling
+  tree_farming_and_felling
+  mining
+  construction
+  hospitality_and_tourism
+  bushfire_recovery_work
+  critical_covid19_work
+  other
+
+  @@map("industry_type")
+}
+
+// ─── Users (replaces Supabase auth.users) ────────────────────────────────────
+
+model User {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email        String   @unique @db.VarChar(255)
+  passwordHash String   @map("password_hash") @db.VarChar(255)
+  firstName    String?  @map("first_name") @db.VarChar(100)
+  lastName     String?  @map("last_name") @db.VarChar(100)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  profile       UserProfile?
+  visas         UserVisa[]
+  employers     Employer[]
+  workEntries   WorkEntry[]
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+}
+
+// ─── Refresh Tokens ─────────────────────────────────────────────────────────
+
+model RefreshToken {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  tokenHash String   @map("token_hash") @db.VarChar(255)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_refresh_tokens_user_id")
+  @@index([expiresAt], map: "idx_refresh_tokens_expires_at")
+  @@map("refresh_tokens")
+}
+
+// ─── User Profiles ───────────────────────────────────────────────────────────
+
+model UserProfile {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId             String   @unique @map("user_id") @db.Uuid
+  nationality        String?  @db.VarChar(2) // ISO 3166-1 alpha-2, CHECK ^[A-Z]{2}$
+  dateOfBirth        DateTime? @map("date_of_birth") @db.Date // CHECK age 17-40
+  ukCitizenExemption Boolean? @default(false) @map("uk_citizen_exemption")
+  createdAt          DateTime? @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt          DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_user_profiles_user_id")
+  @@index([nationality], map: "idx_user_profiles_nationality")
+  @@map("user_profiles")
+}
+
+// ─── User Visas ──────────────────────────────────────────────────────────────
+
+model UserVisa {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String   @map("user_id") @db.Uuid
+  visaType            String   @map("visa_type") @db.VarChar // CHECK IN ('first_whv', 'second_whv', 'third_whv')
+  arrivalDate         DateTime @map("arrival_date") @db.Date
+  daysRequired        Int      @default(0) @map("days_required")
+  eligibleDays        Int      @default(0) @map("eligible_days")
+  daysWorked          Int      @default(0) @map("days_worked")
+  // Computed by application (VisaProgressService)
+  progressPercentage  Decimal? @map("progress_percentage") @db.Decimal
+  isEligible          Boolean? @map("is_eligible")
+  daysRemaining       Int      @default(0) @map("days_remaining")
+  expiryDate          DateTime? @map("expiry_date") @db.Date
+  createdAt           DateTime? @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt           DateTime? @default(now()) @map("updated_at") @db.Timestamptz
+
+  user            User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weeklyProgress  VisaWeeklyProgress[]
+
+  @@unique([userId, visaType], map: "unique_user_visa_type")
+  @@map("user_visas")
+}
+
+// ─── Visa Weekly Progress ────────────────────────────────────────────────────
+
+model VisaWeeklyProgress {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userVisaId    String   @map("user_visa_id") @db.Uuid
+  weekStartDate DateTime @map("week_start_date") @db.Date // CHECK: Monday (dow = 1)
+  weekEndDate   DateTime @map("week_end_date") @db.Date   // CHECK: Sunday (dow = 0)
+  hours         Decimal  @default(0) @db.Decimal           // CHECK >= 0
+  eligibleHours Decimal  @default(0) @map("eligible_hours") @db.Decimal // CHECK >= 0
+  eligibleDays  Int      @default(0) @map("eligible_days") // CHECK IN (0,1,2,3,4,7)
+  daysWorked    Int      @default(0) @map("days_worked")   // CHECK >= 0 AND <= 7
+  createdAt     DateTime? @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime? @default(now()) @map("updated_at") @db.Timestamptz
+
+  userVisa UserVisa @relation(fields: [userVisaId], references: [id], onDelete: Cascade)
+
+  @@unique([userVisaId, weekStartDate], map: "unique_visa_week")
+  @@index([userVisaId], map: "idx_visa_weekly_progress_visa_id")
+  @@index([weekStartDate], map: "idx_visa_weekly_progress_week_start")
+  @@map("visa_weekly_progress")
+}
+
+// ─── Employers ───────────────────────────────────────────────────────────────
+
+model Employer {
+  id         String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String       @map("user_id") @db.Uuid
+  name       String       @db.Text // CHECK length 2-200
+  industry   IndustryType
+  isEligible Boolean?     @default(true) @map("is_eligible")
+  suburbId   Int?         @map("suburb_id")
+  createdAt  DateTime?    @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime?    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  suburb      Suburb?     @relation(fields: [suburbId], references: [id])
+  workEntries WorkEntry[]
+
+  @@index([userId], map: "idx_employers_user_id")
+  @@index([suburbId], map: "idx_employers_suburb_id")
+  @@map("employers")
+}
+
+// ─── Work Entries ────────────────────────────────────────────────────────────
+
+model WorkEntry {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  employerId String   @map("employer_id") @db.Uuid
+  workDate   DateTime @map("work_date") @db.Date
+  hours      Decimal  @db.Decimal // CHECK >= 0 AND <= 24
+  createdAt  DateTime? @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  employer Employer @relation(fields: [employerId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, employerId, workDate], map: "work_entries_user_id_employer_id_work_date_key")
+  @@index([userId], map: "idx_work_entries_user_id")
+  @@index([employerId], map: "idx_work_entries_employer_id")
+  @@index([workDate], map: "idx_work_entries_work_date")
+  @@index([userId, workDate], map: "idx_work_entries_user_date")
+  @@map("work_entries")
+}
+
+// ─── Reference Data: Postcodes ───────────────────────────────────────────────
+
+model Postcode {
+  postcode                 String   @id @db.VarChar // CHECK ^\d{4}$
+  isRemoteVeryRemote       Boolean? @default(false) @map("is_remote_very_remote")
+  isNorthernAustralia      Boolean? @default(false) @map("is_northern_australia")
+  isRegionalAustralia      Boolean? @default(false) @map("is_regional_australia")
+  isBushfireDeclared       Boolean? @default(false) @map("is_bushfire_declared")
+  isNaturalDisasterDeclared Boolean? @default(false) @map("is_natural_disaster_declared")
+  lastUpdated              DateTime? @default(now()) @map("last_updated") @db.Timestamptz
+  lastScraped              DateTime? @map("last_scraped") @db.Timestamptz
+
+  suburbs Suburb[]
+
+  @@map("postcodes")
+}
+
+// ─── Reference Data: Suburbs ─────────────────────────────────────────────────
+
+model Suburb {
+  id         Int    @id @default(autoincrement())
+  suburbName String @map("suburb_name") @db.VarChar
+  postcode   String @db.VarChar
+  stateCode  String @map("state_code") @db.VarChar // CHECK IN ('NSW','VIC','QLD','SA','WA','TAS','NT','ACT','OT')
+
+  postcodeRef Postcode   @relation(fields: [postcode], references: [postcode])
+  employers   Employer[]
+
+  @@unique([suburbName, postcode], map: "unique_suburb_postcode")
+  @@index([postcode], map: "idx_suburbs_postcode")
+  @@index([suburbName], map: "idx_suburbs_name")
+  @@index([stateCode], map: "idx_suburbs_state")
+  @@index([postcode, suburbName], map: "idx_suburbs_postcode_name")
+  @@map("suburbs")
+}
+
+// ─── System: Scrape Runs ─────────────────────────────────────────────────────
+
+model ScrapeRun {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  runAt             DateTime? @default(now()) @map("run_at") @db.Timestamptz
+  totalPostcodes    Int?      @map("total_postcodes")
+  changesDetected   Int?      @default(0) @map("changes_detected")
+  postcodesAffected Int?      @default(0) @map("postcodes_affected")
+  status            String?   @default("success") @db.VarChar // CHECK IN ('success','failed','partial')
+  notes             String?   @db.Text
+  pageModifiedDate  DateTime? @map("page_modified_date") @db.Date
+
+  changelog Changelog?
+
+  @@index([runAt(sort: Desc)], map: "idx_scrape_runs_date")
+  @@map("scrape_runs")
+}
+
+// ─── System: Changelogs ──────────────────────────────────────────────────────
+
+model Changelog {
+  id              Int      @id @default(autoincrement())
+  scrapeRunId     String   @unique @map("scrape_run_id") @db.Uuid
+  changelogDate   DateTime @map("changelog_date") @db.Date
+  title           String   @db.VarChar
+  contentMarkdown String   @map("content_markdown") @db.Text
+  summary         Json?    @db.JsonB
+  createdAt       DateTime? @default(now()) @map("created_at") @db.Timestamptz
+
+  scrapeRun ScrapeRun @relation(fields: [scrapeRunId], references: [id])
+
+  @@index([scrapeRunId], map: "idx_changelogs_run")
+  @@index([changelogDate(sort: Desc)], map: "idx_changelogs_date")
+  @@map("changelogs")
+}
