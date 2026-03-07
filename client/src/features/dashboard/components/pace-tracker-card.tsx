@@ -1,14 +1,18 @@
-import { Equal, Flag, TrendingDown, TrendingUp } from 'lucide-react';
 import type { VisaOverview } from '@get-granted/shared';
-import { getPaceStatus, calcProgressPct } from '../utils/dashboard-calculations';
-import { StatCardWrapper } from './stat-card-wrapper';
-import type { IconVariant, BadgeVariant } from './stat-card-wrapper';
+import { Equal, Minus, Target, TrendingDown, TrendingUp } from 'lucide-react';
+import {
+  calcProgressPct,
+  getPaceStatus,
+} from '../utils/dashboard-calculations';
+import type { BadgeVariant, IconVariant } from './stat-card-wrapper';
+import { CardTooltip, StatCardWrapper } from './stat-card-wrapper';
 
 interface PaceTrackerCardProps {
   pace: VisaOverview['pace'];
 }
 
 function formatPaceDelta(delta: number, pct: number, status: string): string {
+  if (status === 'no-data') return 'No data yet';
   if (status === 'at-pace') {
     const sign = pct >= 0 ? '+' : '';
     return `${sign}${Math.round(pct)}% on pace`;
@@ -46,62 +50,132 @@ export function PaceTrackerCard({ pace }: PaceTrackerCardProps) {
       barColor: 'bg-warning',
       statusLabel: 'Low Pace',
     },
+    'no-data': {
+      icon: Minus,
+      iconVariant: 'muted' as IconVariant,
+      badgeVariant: 'muted' as BadgeVariant,
+      statusColor: 'text-muted-foreground',
+      barColor: 'bg-muted-foreground',
+      statusLabel: 'No Pace',
+    },
   }[status];
 
   const badge = formatPaceDelta(delta, pct, status);
 
-  // Scale both bars relative to the larger value
-  const maxPace = Math.max(currentPace, requiredPace, 0.1);
-  const currentPct = calcProgressPct(currentPace, maxPace);
-  const requiredPct = calcProgressPct(requiredPace, maxPace);
+  const scale = 2 * requiredPace;
+  const currentPct = calcProgressPct(currentPace, scale);
 
   return (
     <StatCardWrapper
       icon={config.icon}
       iconVariant={config.iconVariant}
       title="Pace Tracker"
-      tooltip="Compares your average eligible days per week with the required pace to reach your goal by visa expiry."
+      tooltip={
+        <CardTooltip title="Pace Tracker">
+          <p className="mb-2">The <span className="font-medium text-foreground">pace status</span> is based on the % difference between <span className="font-medium text-foreground">your pace</span> and the <span className="font-medium text-foreground">target pace</span>:</p>
+          <div className="flex flex-col gap-0.5 border-t border-border pt-2 mb-2">
+            <ul className="flex flex-col gap-0.5">
+              <li>
+                <span className="font-medium text-warning">Low Pace</span> —
+                more than 5% below
+              </li>
+              <li>
+                <span className="font-medium text-info">At Pace</span> — within
+                ±5%
+              </li>
+              <li>
+                <span className="font-medium text-success">Good Pace</span> —
+                more than 5% above
+              </li>
+            </ul>
+          </div>
+          <div className="flex flex-col gap-2 border-t border-border pt-2">
+            <div className="flex items-center gap-2">
+              <span className="font-medium text-foreground shrink-0">
+                Your Pace
+              </span>
+              <span>=</span>
+              <div className="flex flex-col items-center text-center leading-tight">
+                <span>total eligible days</span>
+                <span className="w-full border-t border-muted-foreground/40 my-0.5" />
+                <span>weeks elapsed</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="font-medium text-foreground shrink-0">
+                Target Pace
+              </span>
+              <span>=</span>
+              <div className="flex flex-col items-center text-center leading-tight">
+                <span>days required</span>
+                <span className="w-full border-t border-muted-foreground/40 my-0.5" />
+                <span>visa duration (52 weeks · 1 year)</span>
+              </div>
+            </div>
+          </div>
+        </CardTooltip>
+      }
       badge={badge}
       badgeVariant={config.badgeVariant}
     >
       {/* Status label */}
-      <div className={`text-2xl font-bold leading-none ${config.statusColor}`}>
+      <div
+        className={`text-2xl font-bold leading-none tracking-tight ${config.statusColor}`}
+      >
         {config.statusLabel}
       </div>
 
-      {/* Pace rows */}
-      <div className="flex flex-col gap-2">
+      {/* Pace rows — pushed to bottom */}
+      <div className="flex flex-col gap-2 mt-auto">
         {/* Your pace */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground w-20 shrink-0 flex items-center gap-1">
-            <span className="w-3 h-3 rounded-full border-2 border-muted-foreground shrink-0" />
-            Your pace
-          </span>
-          <div className="flex-1 h-1.5 rounded-full bg-bar-track overflow-hidden">
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center justify-between">
+            <span className="text-xs leading-none text-muted-foreground flex items-center gap-1">
+              <Target className={`w-3 h-3 shrink-0 ${config.statusColor}`} />
+              Your pace
+            </span>
+            <span className="text-xs leading-none font-semibold text-foreground">
+              {currentPace.toFixed(2)} days/wk
+            </span>
+          </div>
+          {/* Gradient bar — full width, highlighted up to currentPct */}
+          <div className="relative h-2 w-full rounded-full overflow-hidden">
+            {/* Full gradient — dimmed background */}
             <div
-              className={`h-full rounded-full ${config.barColor}`}
-              style={{ width: `${currentPct}%` }}
+              className="absolute inset-0"
+              style={{
+                background:
+                  'linear-gradient(to right, #F59E0B 0% 47.5%, #3B82F6 47.5% 52.5%, #10B981 52.5% 100%)',
+                opacity: 0.2,
+              }}
+            />
+            {/* Full gradient — highlighted fill clipped to current value */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  'linear-gradient(to right, #F59E0B 0% 47.5%, #3B82F6 47.5% 52.5%, #10B981 52.5% 100%)',
+                clipPath: `inset(0 ${100 - currentPct}% 0 0)`,
+                transition: 'clip-path 0.3s ease',
+              }}
             />
           </div>
-          <span className="text-xs font-medium text-foreground w-20 text-right shrink-0">
-            {currentPace.toFixed(2)} days/wk
-          </span>
-        </div>
-        {/* Required */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground w-20 shrink-0 flex items-center gap-1">
-            <Flag className="w-3 h-3 shrink-0 text-muted-foreground" />
-            Required
-          </span>
-          <div className="flex-1 h-1.5 rounded-full bg-bar-track overflow-hidden">
-            <div
-              className="h-full rounded-full bg-info"
-              style={{ width: `${requiredPct}%` }}
-            />
+          {/* Zone legend */}
+          <div className="flex items-center justify-between text-[10px] text-muted-foreground/70 mt-0.5">
+            <span className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-warning shrink-0" />
+              Low
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-info shrink-0" />
+              At pace · {requiredPace.toFixed(2)} days/wk{' '}
+              <span className="opacity-60">±5%</span>
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-success shrink-0" />
+              Good
+            </span>
           </div>
-          <span className="text-xs font-medium text-foreground w-20 text-right shrink-0">
-            {requiredPace.toFixed(2)} days/wk
-          </span>
         </div>
       </div>
     </StatCardWrapper>

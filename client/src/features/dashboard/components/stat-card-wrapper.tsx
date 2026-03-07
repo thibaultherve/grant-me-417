@@ -17,13 +17,14 @@ const badgeClasses: Record<BadgeVariant, string> = {
   muted: 'bg-muted text-muted-foreground',
 };
 
-export type IconVariant = 'info' | 'success' | 'warning' | 'danger';
+export type IconVariant = 'info' | 'success' | 'warning' | 'danger' | 'muted';
 
 const iconBgClasses: Record<IconVariant, string> = {
   info: 'bg-info-light',
   success: 'bg-success-light',
   warning: 'bg-warning-light',
   danger: 'bg-danger-light',
+  muted: 'bg-muted',
 };
 
 const iconColorClasses: Record<IconVariant, string> = {
@@ -31,17 +32,33 @@ const iconColorClasses: Record<IconVariant, string> = {
   success: 'text-success',
   warning: 'text-warning',
   danger: 'text-danger',
+  muted: 'text-muted-foreground',
 };
 
 interface StatCardWrapperProps {
   icon: LucideIcon;
   iconVariant: IconVariant;
   title: string;
-  tooltip: string;
+  tooltip: React.ReactNode;
   badge: string;
   badgeVariant: BadgeVariant;
   className?: string;
   children: React.ReactNode;
+}
+
+export function CardTooltip({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-1.5 py-3 px-4">
+      <p className="text-[13px] font-bold leading-[1.4] text-foreground">{title}</p>
+      <div className="text-xs leading-normal text-muted-foreground text-justify">{children}</div>
+    </div>
+  );
 }
 
 export function StatCardWrapper({
@@ -83,7 +100,10 @@ export function StatCardWrapper({
                 <HelpCircle className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-muted-foreground transition-colors" />
               </button>
             </TooltipTrigger>
-            <TooltipContent side="top" className="max-w-xs">
+            <TooltipContent
+              side="top"
+              className="w-56 bg-[#fafafa] border border-[#d1d4db] rounded-lg p-0 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04),0_8px_16px_-4px_rgba(0,0,0,0.08),0_16px_24px_-6px_rgba(0,0,0,0.04)]"
+            >
               {tooltip}
             </TooltipContent>
           </Tooltip>
@@ -91,7 +111,7 @@ export function StatCardWrapper({
         {/* Badge */}
         <span
           className={cn(
-            'text-xs font-medium px-2.5 py-0.5 rounded-full whitespace-nowrap',
+            'text-xs font-semibold px-2.5 py-0.5 rounded-full whitespace-nowrap',
             badgeClasses[badgeVariant],
           )}
         >

@@ -1,4 +1,4 @@
-export type PaceStatus = 'good' | 'at-pace' | 'low';
+export type PaceStatus = 'good' | 'at-pace' | 'low' | 'no-data';
 
 export interface PaceStatusInfo {
   status: PaceStatus;
