@@ -98,14 +98,14 @@ export function WeeklyProgressChart({
             <span className="flex items-center gap-1">
               <span
                 className="inline-block w-5 h-0.5"
-                style={{ backgroundColor: 'hsl(var(--chart-4))' }}
+                style={{ backgroundColor: 'var(--chart-4)' }}
               />
               Cumulative
             </span>
             <span className="flex items-center gap-1">
               <span
                 className="inline-block w-5 h-0.5 border-t-2 border-dashed"
-                style={{ borderColor: 'hsl(var(--chart-4))' }}
+                style={{ borderColor: 'var(--chart-4)' }}
               />
               Prediction
             </span>
@@ -129,13 +129,13 @@ export function WeeklyProgressChart({
         >
           <CartesianGrid
             strokeDasharray="3 3"
-            stroke="hsl(var(--border))"
+            stroke="var(--border)"
             opacity={0.4}
             vertical={false}
           />
           <XAxis
             dataKey="xLabel"
-            tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+            tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
             axisLine={false}
             tickLine={false}
           />
@@ -143,7 +143,7 @@ export function WeeklyProgressChart({
             yAxisId="left"
             domain={[0, 7]}
             ticks={[0, 1, 2, 3, 4, 5, 6, 7]}
-            tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+            tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
             axisLine={false}
             tickLine={false}
             width={20}
@@ -152,18 +152,18 @@ export function WeeklyProgressChart({
             yAxisId="right"
             orientation="right"
             domain={[0, yRightMax]}
-            tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+            tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
             axisLine={false}
             tickLine={false}
             width={36}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: 'hsl(var(--card))',
-              border: '1px solid hsl(var(--border))',
+              backgroundColor: 'var(--card)',
+              border: '1px solid var(--border)',
               borderRadius: '8px',
               fontSize: '12px',
-              color: 'hsl(var(--foreground))',
+              color: 'var(--foreground)',
             }}
             labelStyle={{ fontWeight: 600 }}
           />
@@ -171,7 +171,7 @@ export function WeeklyProgressChart({
             yAxisId="left"
             dataKey="eligibleDays"
             name="Days/week"
-            fill="hsl(var(--primary))"
+            fill="var(--primary)"
             radius={[2, 2, 0, 0]}
             maxBarSize={20}
           />
@@ -180,7 +180,7 @@ export function WeeklyProgressChart({
             type="monotone"
             dataKey="cumulative"
             name="Cumulative"
-            stroke="hsl(var(--chart-4))"
+            stroke="var(--chart-4)"
             strokeWidth={2}
             dot={false}
             connectNulls={false}
@@ -190,7 +190,7 @@ export function WeeklyProgressChart({
             type="monotone"
             dataKey="predictionLine"
             name="Prediction"
-            stroke="hsl(var(--chart-4))"
+            stroke="var(--chart-4)"
             strokeWidth={2}
             strokeDasharray="5 4"
             dot={false}
@@ -199,7 +199,7 @@ export function WeeklyProgressChart({
           <ReferenceLine
             yAxisId="right"
             y={daysRequired}
-            stroke="hsl(var(--muted-foreground))"
+            stroke="var(--muted-foreground)"
             strokeDasharray="4 3"
             opacity={0.5}
           />

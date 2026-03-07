@@ -91,37 +91,37 @@ export function MonthlyTrendChart({
           >
             <CartesianGrid
               strokeDasharray="3 3"
-              stroke="hsl(var(--border))"
+              stroke="var(--border)"
               opacity={0.4}
               vertical={false}
             />
             <XAxis
               dataKey="label"
-              tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+              tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
-              domain={[0, yMax]}
-              tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+              domain={[0, Math.ceil(yMax)]}
+              tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
               axisLine={false}
               tickLine={false}
-              width={24}
+              width={32}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: 'hsl(var(--card))',
-                border: '1px solid hsl(var(--border))',
+                backgroundColor: 'var(--card)',
+                border: '1px solid var(--border)',
                 borderRadius: '8px',
                 fontSize: '12px',
-                color: 'hsl(var(--foreground))',
+                color: 'var(--foreground)',
               }}
               labelStyle={{ fontWeight: 600 }}
             />
             <Bar
               dataKey="eligibleDays"
               name="Eligible days"
-              fill="hsl(var(--primary))"
+              fill="var(--primary)"
               radius={[3, 3, 0, 0]}
               maxBarSize={40}
             />
@@ -129,7 +129,7 @@ export function MonthlyTrendChart({
               type="monotone"
               dataKey="idealPace"
               name="Ideal pace"
-              stroke="hsl(var(--muted-foreground))"
+              stroke="var(--muted-foreground)"
               strokeWidth={1.5}
               strokeDasharray="4 3"
               dot={false}
