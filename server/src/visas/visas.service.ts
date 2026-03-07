@@ -34,7 +34,7 @@ export class VisasService {
   async findAll(userId: string): Promise<Visa[]> {
     const visas = await this.prisma.userVisa.findMany({
       where: { userId },
-      orderBy: { arrivalDate: 'desc' },
+      orderBy: { arrivalDate: 'asc' },
     });
 
     return visas.map(this.mapToResponse);
