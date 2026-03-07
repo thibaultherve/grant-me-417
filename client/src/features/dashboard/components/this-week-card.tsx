@@ -1,7 +1,7 @@
-import { CalendarDays } from 'lucide-react';
 import type { VisaOverview } from '@get-granted/shared';
+import { CalendarDays } from 'lucide-react';
 import { formatHours } from '../utils/dashboard-calculations';
-import { StatCardWrapper } from './stat-card-wrapper';
+import { CardTooltip, StatCardWrapper } from './stat-card-wrapper';
 
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 const MAX_BAR_HEIGHT = 40; // px
@@ -23,7 +23,10 @@ function getHoursLabelClass(hours: number): string {
 
 function getBarHeight(hours: number): number {
   if (hours === 0) return 4;
-  return Math.min(Math.round((hours / MAX_HOURS_REF) * MAX_BAR_HEIGHT), MAX_BAR_HEIGHT);
+  return Math.min(
+    Math.round((hours / MAX_HOURS_REF) * MAX_BAR_HEIGHT),
+    MAX_BAR_HEIGHT,
+  );
 }
 
 interface ThisWeekCardProps {
@@ -45,7 +48,14 @@ export function ThisWeekCard({ thisWeek }: ThisWeekCardProps) {
       icon={CalendarDays}
       iconVariant="info"
       title="This Week"
-      tooltip="Hours worked this week and how they translate to eligible days. Thresholds: 6h=1d, 12h=2d, 18h=3d, 24h=4d, 30h=7d."
+      tooltip={
+        <CardTooltip title="This Week">
+          <p className="mb-2">
+            The bar chart shows your daily hours this week. Each bar height
+            reflects hours worked that day — the color indicates intensity.
+          </p>
+        </CardTooltip>
+      }
       badge={`${eligibleDays} eligible day${eligibleDays !== 1 ? 's' : ''}`}
       badgeVariant="info"
     >
@@ -82,9 +92,14 @@ export function ThisWeekCard({ thisWeek }: ThisWeekCardProps) {
             : null;
 
           return (
-            <div key={idx} className="flex flex-col items-center gap-0.5 flex-1">
+            <div
+              key={idx}
+              className="flex flex-col items-center gap-0.5 flex-1"
+            >
               {/* Hours label */}
-              <span className={`text-[10px] font-medium leading-none ${labelColorClass}`}>
+              <span
+                className={`text-[10px] font-medium leading-none ${labelColorClass}`}
+              >
                 {day.hours > 0 ? formatHours(day.hours) : ''}
               </span>
               {/* Bar */}

@@ -17,12 +17,16 @@ import type {
 
 /**
  * Determines pace status based on current vs required pace.
- * Good: currentPace > requiredPace * 1.1 (more than 10% above)
- * At Pace: currentPace >= requiredPace * 0.9 (within 10%)
- * Low: currentPace < requiredPace * 0.9
+ * Good: currentPace > requiredPace * 1.05 (more than 5% above)
+ * At Pace: currentPace >= requiredPace * 0.95 (within 5%)
+ * Low: currentPace < requiredPace * 0.95
  */
 export function getPaceStatus(pace: VisaOverviewPace): PaceStatusInfo {
   const { currentPace, requiredPace } = pace;
+
+  if (!currentPace || currentPace === 0) {
+    return { status: 'no-data', delta: 0, pct: 0 };
+  }
 
   if (requiredPace === 0) {
     return { status: 'good', delta: 0, pct: 0 };
@@ -32,9 +36,9 @@ export function getPaceStatus(pace: VisaOverviewPace): PaceStatusInfo {
   const pct = (delta / requiredPace) * 100;
 
   let status: PaceStatus;
-  if (currentPace > requiredPace * 1.1) {
+  if (currentPace > requiredPace * 1.05) {
     status = 'good';
-  } else if (currentPace >= requiredPace * 0.9) {
+  } else if (currentPace >= requiredPace * 0.95) {
     status = 'at-pace';
   } else {
     status = 'low';

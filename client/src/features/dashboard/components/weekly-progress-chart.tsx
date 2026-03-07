@@ -1,23 +1,24 @@
-import { BarChart2, HelpCircle } from 'lucide-react';
 import {
-  ComposedChart,
-  Bar,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ReferenceLine,
-  ResponsiveContainer,
-  CartesianGrid,
-} from 'recharts';
-import {
-  Tooltip as UITooltip,
   TooltipContent,
   TooltipTrigger,
+  Tooltip as UITooltip,
 } from '@/components/ui/tooltip';
-import type { VisaOverview } from '@get-granted/shared';
-import { buildWeeklyProgressChartData } from '../utils/dashboard-calculations';
 import { cn } from '@/lib/utils';
+import type { VisaOverview } from '@get-granted/shared';
+import { BarChart2, HelpCircle } from 'lucide-react';
+import {
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  Line,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
+import { buildWeeklyProgressChartData } from '../utils/dashboard-calculations';
+import { CardTooltip } from './stat-card-wrapper';
 
 interface WeeklyProgressChartProps {
   overview: VisaOverview;
@@ -82,8 +83,17 @@ export function WeeklyProgressChart({
                 <HelpCircle className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-muted-foreground transition-colors" />
               </button>
             </TooltipTrigger>
-            <TooltipContent side="top" className="max-w-xs">
-              Weekly eligible days compared to cumulative progress toward your goal.
+            <TooltipContent
+              side="top"
+              className="w-60 bg-[#fafafa] border border-[#d1d4db] rounded-lg p-0 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04),0_8px_16px_-4px_rgba(0,0,0,0.08),0_16px_24px_-6px_rgba(0,0,0,0.04)]"
+            >
+              <CardTooltip title="Weekly Progress">
+                <p className="mb-2">
+                  Bars show eligible days earned each week. The line tracks your
+                  cumulative total toward the goal — dashed where it's a
+                  projection at your current pace.
+                </p>
+              </CardTooltip>
             </TooltipContent>
           </UITooltip>
         </div>
