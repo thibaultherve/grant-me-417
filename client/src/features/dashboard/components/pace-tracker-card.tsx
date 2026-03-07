@@ -1,4 +1,4 @@
-import { Equal, TrendingDown, TrendingUp } from 'lucide-react';
+import { Equal, Flag, TrendingDown, TrendingUp } from 'lucide-react';
 import type { VisaOverview } from '@get-granted/shared';
 import { getPaceStatus, calcProgressPct } from '../utils/dashboard-calculations';
 import { StatCardWrapper } from './stat-card-wrapper';
@@ -90,7 +90,7 @@ export function PaceTrackerCard({ pace }: PaceTrackerCardProps) {
         {/* Required */}
         <div className="flex items-center gap-2">
           <span className="text-xs text-muted-foreground w-20 shrink-0 flex items-center gap-1">
-            <span className="w-3 h-3 shrink-0 text-base leading-none">🏁</span>
+            <Flag className="w-3 h-3 shrink-0 text-muted-foreground" />
             Required
           </span>
           <div className="flex-1 h-1.5 rounded-full bg-bar-track overflow-hidden">
