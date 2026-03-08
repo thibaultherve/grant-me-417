@@ -1,6 +1,12 @@
 import { api } from '@/lib/api-client';
 
-import type { Employer, CreateEmployerInput, UpdateEmployerInput } from '@get-granted/shared';
+import type {
+  CheckEligibilityInput,
+  CheckEligibilityOutput,
+  CreateEmployerInput,
+  Employer,
+  UpdateEmployerInput,
+} from '@get-granted/shared';
 
 export const getEmployers = async (): Promise<Employer[]> => {
   return api.get('/employers');
@@ -29,4 +35,10 @@ export const getEmployer = async (id: string): Promise<Employer | null> => {
   } catch {
     return null;
   }
+};
+
+export const checkEmployerEligibility = async (
+  input: CheckEligibilityInput,
+): Promise<CheckEligibilityOutput> => {
+  return api.post('/employers/check-eligibility', input);
 };
