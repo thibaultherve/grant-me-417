@@ -2,6 +2,26 @@ import type { VisaType } from '@get-granted/shared';
 
 type VisaTypeSlug = 'first-whv' | 'second-whv' | 'third-whv';
 
+/** Get short ordinal badge text (1st, 2nd, 3rd) */
+export const getVisaOrdinal = (type: VisaType): string => {
+  const ordinals: Record<VisaType, string> = {
+    first_whv: '1st',
+    second_whv: '2nd',
+    third_whv: '3rd',
+  };
+  return ordinals[type];
+};
+
+/** Get Tailwind bg color class for the ordinal badge */
+export const getVisaBadgeColor = (type: VisaType): string => {
+  const colors: Record<VisaType, string> = {
+    first_whv: 'bg-success',
+    second_whv: 'bg-info',
+    third_whv: 'bg-warning',
+  };
+  return colors[type];
+};
+
 /**
  * Get human-readable label for a visa type
  */

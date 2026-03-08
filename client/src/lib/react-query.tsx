@@ -82,5 +82,6 @@ export const queryKeys = {
     byType: (type: string) => ['visas', 'type', type] as const,
     weeklyProgress: (visaId: string) =>
       ['visas', visaId, 'weekly-progress'] as const,
+    overview: (visaId: string) => ['visas', visaId, 'overview'] as const,
   },
 } as const;

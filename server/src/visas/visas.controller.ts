@@ -9,6 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { VisasService } from './visas.service.js';
+import { VisaOverviewService } from './visa-overview.service.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import {
   CurrentUser,
@@ -25,7 +26,10 @@ import {
 @Controller('visas')
 @UseGuards(JwtAuthGuard)
 export class VisasController {
-  constructor(private visasService: VisasService) {}
+  constructor(
+    private visasService: VisasService,
+    private visaOverviewService: VisaOverviewService,
+  ) {}
 
   @Get()
   async findAll(@CurrentUser() user: JwtPayload) {
@@ -38,6 +42,14 @@ export class VisasController {
     @Param('id') id: string,
   ) {
     return this.visasService.getWeeklyProgress(user.sub, id);
+  }
+
+  @Get(':id/overview')
+  async getOverview(
+    @CurrentUser() user: JwtPayload,
+    @Param('id') id: string,
+  ) {
+    return this.visaOverviewService.getOverview(user.sub, id);
   }
 
   @Get(':type')
