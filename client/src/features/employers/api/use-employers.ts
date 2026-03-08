@@ -12,10 +12,16 @@ import { toast } from 'sonner';
 import { handleError } from '@/lib/error-handler';
 import { queryKeys } from '@/lib/react-query';
 
-import type { Employer, UpdateEmployerInput } from '@get-granted/shared';
+import type {
+  CheckEligibilityInput,
+  CheckEligibilityOutput,
+  Employer,
+  UpdateEmployerInput,
+} from '@get-granted/shared';
 
 import {
   addEmployer,
+  checkEmployerEligibility,
   deleteEmployer,
   getEmployer,
   getEmployers,
@@ -128,6 +134,18 @@ export const useAddEmployer = () => {
 };
 
 /**
+ * Hook pour vérifier l'éligibilité automatique d'un employeur
+ *
+ * Mutation car l'appel est déclenché explicitement (suburb + industry sélectionnés).
+ * Uniquement pour l'affichage — ne modifie pas le formulaire directement.
+ */
+export const useCheckEligibility = () => {
+  return useMutation<CheckEligibilityOutput, Error, CheckEligibilityInput>({
+    mutationFn: checkEmployerEligibility,
+  });
+};
+
+/**
  * Hook pour mettre à jour un employeur
  */
 export const useUpdateEmployer = () => {
@@ -153,8 +171,12 @@ export const useUpdateEmployer = () => {
       });
     },
 
-    onSettled: () => {
+    onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.employers.all });
+      // Recalcul visa progress si isEligible a changé
+      if (variables.input.isEligible !== undefined) {
+        queryClient.invalidateQueries({ queryKey: queryKeys.visas.all });
+      }
     },
   });
 };
@@ -203,6 +225,8 @@ export const useDeleteEmployer = () => {
 
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.employers.all });
+      // Supprimer un employeur éligible affecte la progression des visas
+      queryClient.invalidateQueries({ queryKey: queryKeys.visas.all });
     },
   });
 };
