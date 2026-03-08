@@ -18,6 +18,7 @@ enum IndustryType {
   construction
   hospitality_and_tourism
   bushfire_recovery_work
+  weather_recovery_work
   critical_covid19_work
   other
 
@@ -132,8 +133,9 @@ model Employer {
   userId     String       @map("user_id") @db.Uuid
   name       String       @db.Text // CHECK length 2-200
   industry   IndustryType
-  isEligible Boolean?     @default(true) @map("is_eligible")
-  suburbId   Int?         @map("suburb_id")
+  isEligible      Boolean  @default(true) @map("is_eligible")
+  eligibilityMode String   @default("automatic") @map("eligibility_mode")
+  suburbId        Int?     @map("suburb_id")
   createdAt  DateTime?    @default(now()) @map("created_at") @db.Timestamptz
   updatedAt  DateTime?    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
 
