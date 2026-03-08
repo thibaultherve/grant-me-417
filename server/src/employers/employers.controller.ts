@@ -18,8 +18,10 @@ import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe.js';
 import {
   createEmployerSchema,
   updateEmployerSchema,
+  checkEligibilityInputSchema,
   type CreateEmployerInput,
   type UpdateEmployerInput,
+  type CheckEligibilityInput,
 } from '@get-granted/shared';
 
 @Controller('employers')
@@ -38,6 +40,13 @@ export class EmployersController {
     @Param('id') id: string,
   ) {
     return this.employersService.findOne(user.sub, id);
+  }
+
+  @Post('check-eligibility')
+  async checkEligibility(
+    @Body(new ZodValidationPipe(checkEligibilityInputSchema)) body: CheckEligibilityInput,
+  ) {
+    return this.employersService.checkEligibility(body.suburbId, body.industry);
   }
 
   @Post()
