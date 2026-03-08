@@ -1,272 +1,168 @@
-import {
-  ArrowRight,
-  Briefcase,
-  Building2,
-  Calendar,
-  CalendarClock,
-  Info,
-  Plane,
-} from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { InfoCard } from '@/components/ui/info-card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { paths } from '@/config/paths';
+import { useVisaOverview } from '@/features/dashboard/api/use-dashboard';
+import { EligibleDaysCard } from '@/features/dashboard/components/eligible-days-card';
+import { EmployerBreakdownCard } from '@/features/dashboard/components/employer-breakdown-card';
+import { MonthlyTrendChart } from '@/features/dashboard/components/monthly-trend-chart';
+import { PaceTrackerCard } from '@/features/dashboard/components/pace-tracker-card';
+import { ThisWeekCard } from '@/features/dashboard/components/this-week-card';
+import { VisaTimelineCard } from '@/features/dashboard/components/visa-timeline-card';
+import { WeeklyProgressChart } from '@/features/dashboard/components/weekly-progress-chart';
+import { WorkDistributionCard } from '@/features/dashboard/components/work-distribution-card';
 import { VisaSelector } from '@/features/visas/components/visa-selector';
-import { WeeklyProgressChart } from '@/features/visas/components/weekly-progress-chart';
 import { useVisaContext } from '@/features/visas/hooks/use-visa-context';
-import { getVisaLabel } from '@/features/visas/utils/visa-helpers';
 
-export const DashboardRoute = () => {
-  const { currentVisa } = useVisaContext();
+// ─── Skeleton layout for loading state ───────────────────────────────────────
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-AU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: '2-digit',
-    });
-  };
-
-  const calculateVisaPeriodProgress = (
-    arrivalDate: string,
-    expiryDate: string,
-  ) => {
-    const today = new Date();
-    const start = new Date(arrivalDate);
-    const end = new Date(expiryDate);
-
-    const totalDays = Math.ceil(
-      (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24),
-    );
-    const daysPassed = Math.ceil(
-      (today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24),
-    );
-    const daysLeft = Math.max(0, totalDays - daysPassed);
-
-    const progress = Math.min(100, Math.max(0, (daysPassed / totalDays) * 100));
-
-    return {
-      totalDays,
-      daysPassed,
-      daysLeft,
-      progress,
-    };
-  };
-
-  const formatDaysLeft = (days: number) => {
-    return days === 1 ? `${days} day left` : `${days} days left`;
-  };
-
+function DashboardSkeleton() {
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <p className="text-muted-foreground">
-          Track your Working Holiday Visa progress and manage your work hours.
-        </p>
+    <div className="space-y-6">
+      {/* Stats grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Card key={i}>
+            <CardContent className="p-5 space-y-4">
+              <Skeleton className="h-4 w-1/3" />
+              <Skeleton className="h-10 w-1/2" />
+              <Skeleton className="h-2 w-full" />
+              <Skeleton className="h-3 w-2/3" />
+            </CardContent>
+          </Card>
+        ))}
       </div>
-
-      {/* Quick Actions Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* My Hours Card */}
-        <Card className="py-4">
-          <CardContent className="px-4 py-0">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <h3 className="font-semibold mb-1">My Hours</h3>
-                <p className="text-sm text-muted-foreground">
-                  Manage your Hours.
-                </p>
-              </div>
-              <Button asChild size="sm" className="shrink-0">
-                <Link to={paths.app.hours.getHref()}>
-                  <CalendarClock className="mr-2 h-4 w-4" />
-                  Manage
-                </Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* My Employers Card */}
-        <Card className="py-4">
-          <CardContent className="px-4 py-0">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <h3 className="font-semibold mb-1">My Employers</h3>
-                <p className="text-sm text-muted-foreground">
-                  Manage your employers.
-                </p>
-              </div>
-              <Button asChild size="sm" className="shrink-0">
-                <Link to={paths.app.employers.getHref()}>
-                  <Building2 className="mr-2 h-4 w-4" />
-                  Manage
-                </Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* My Visas Card */}
-        <Card className="py-4">
-          <CardContent className="px-4 py-0">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <h3 className="font-semibold mb-1">My Visas</h3>
-                <p className="text-sm text-muted-foreground">
-                  Manage your visas.
-                </p>
-              </div>
-              <Button asChild size="sm" className="shrink-0">
-                <Link to={paths.app.visas.getHref()}>
-                  <Plane className="mr-2 h-4 w-4" />
-                  Manage
-                </Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Active Visa Selector Card */}
-      <Card className="border-primary/30 bg-primary/5">
-        <CardContent className="p-6">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-start gap-4">
-              <div className="rounded-full bg-primary/10 p-3">
-                <Plane className="h-6 w-6 text-primary" />
-              </div>
-              <div className="space-y-1">
-                <h2 className="text-lg font-semibold">Active Visa</h2>
-                <p className="text-sm text-muted-foreground max-w-md">
-                  Select the visa you're currently tracking. All work hours and
-                  progress displayed on this dashboard are linked to this visa.
-                </p>
-                {currentVisa && (
-                  <div className="flex items-center gap-2 pt-2">
-                    <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-                      {getVisaLabel(currentVisa.visaType)}
-                    </span>
-                    <span className="text-sm text-muted-foreground">
-                      {currentVisa.progressPercentage}% complete
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="flex items-center gap-3 lg:flex-col lg:items-end">
-              <VisaSelector />
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Info className="h-3 w-3" />
-                <span>Switch between your visas</span>
-              </div>
-            </div>
-          </div>
+      {/* Weekly progress */}
+      <Card>
+        <CardContent className="p-5">
+          <Skeleton className="h-48 w-full" />
         </CardContent>
       </Card>
+      {/* Distribution charts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card>
+          <CardContent className="p-5">
+            <Skeleton className="h-40 w-full" />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-5">
+            <Skeleton className="h-40 w-full" />
+          </CardContent>
+        </Card>
+      </div>
+      {/* Monthly trend */}
+      <Card>
+        <CardContent className="p-5">
+          <Skeleton className="h-40 w-full" />
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
 
-      {!currentVisa ? (
-        <InfoCard variant="accent">
-          <div className="flex flex-col gap-4">
-            <div>
-              <h2 className="text-xl font-semibold mb-2">
-                Get started with Grant Me 417
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                Start tracking your specified work hours to qualify for your
-                next Working Holiday Visa. Create your first visa to begin.
-              </p>
-            </div>
-            <Button asChild className="w-fit">
-              <Link to={paths.app.visas.path}>
-                Create Your First Visa
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </InfoCard>
+// ─── Empty state: no visa selected ───────────────────────────────────────────
+
+function NoVisaState() {
+  return (
+    <Card className="border-primary/30 bg-primary/5">
+      <CardContent className="p-8 flex flex-col items-center text-center gap-4">
+        <div className="space-y-2">
+          <h2 className="text-xl font-semibold">Get started with Get Granted 417</h2>
+          <p className="text-sm text-muted-foreground max-w-sm">
+            Start tracking your specified work hours to qualify for your next Working
+            Holiday Visa. Create your first visa to begin.
+          </p>
+        </div>
+        <Button asChild>
+          <Link to={paths.app.visas.path}>
+            Create Your First Visa
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ─── Error state ──────────────────────────────────────────────────────────────
+
+function ErrorState({ message }: { message: string }) {
+  return (
+    <Card className="border-destructive/30 bg-destructive/5">
+      <CardContent className="p-6">
+        <p className="text-sm text-destructive font-medium">
+          Failed to load dashboard data: {message}
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ─── Dashboard widgets ────────────────────────────────────────────────────────
+
+function DashboardWidgets({ visaId }: { visaId: string }) {
+  const { data: overview, isLoading, error } = useVisaOverview(visaId);
+
+  if (isLoading) return <DashboardSkeleton />;
+  if (error) return <ErrorState message={error.message} />;
+  if (!overview) return null;
+
+  return (
+    <div className="space-y-6">
+      {/* Stats grid (2x2) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <EligibleDaysCard visa={overview.visa} />
+        <VisaTimelineCard visa={overview.visa} timeline={overview.timeline} />
+        <PaceTrackerCard pace={overview.pace} />
+        <ThisWeekCard thisWeek={overview.thisWeek} />
+      </div>
+
+      {/* Weekly Progress (full width) */}
+      <WeeklyProgressChart overview={overview} />
+
+      {/* Work Distribution + Employer Breakdown (2-col on desktop) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <WorkDistributionCard workDistribution={overview.workDistribution} />
+        <EmployerBreakdownCard employerBreakdown={overview.employerBreakdown} />
+      </div>
+
+      {/* Monthly Trend (full width) */}
+      <MonthlyTrendChart
+        monthlyTrend={overview.monthlyTrend}
+        daysRequired={overview.visa.daysRequired}
+      />
+    </div>
+  );
+}
+
+// ─── Main route ───────────────────────────────────────────────────────────────
+
+export const DashboardRoute = () => {
+  const { currentVisa, isLoading: visaLoading } = useVisaContext();
+
+  return (
+    <div className="space-y-6">
+      {/* Page header */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-muted-foreground">
+          Welcome back — Here's an overview of your WHV 417 progress.
+        </p>
+        <div className="shrink-0">
+          <VisaSelector />
+        </div>
+      </div>
+
+      {/* Content */}
+      {visaLoading ? (
+        <DashboardSkeleton />
+      ) : !currentVisa ? (
+        <NoVisaState />
       ) : (
-        <>
-          {/* Progress Overview Card */}
-          {(() => {
-            const visaPeriod = calculateVisaPeriodProgress(
-              currentVisa.arrivalDate,
-              currentVisa.expiryDate,
-            );
-            const isWorkComplete = currentVisa.isEligible;
-
-            return (
-              <Card>
-                <CardContent className="p-6">
-                  <h2 className="text-lg font-semibold mb-6">
-                    Progress Details
-                  </h2>
-
-                  <div className="space-y-8">
-                    {/* Work Progress */}
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Briefcase className="h-5 w-5 text-muted-foreground" />
-                          <span className="font-medium">Work Requirement</span>
-                        </div>
-                        <span className="text-sm text-muted-foreground">
-                          {currentVisa.eligibleDays} /{' '}
-                          {currentVisa.daysRequired} days
-                        </span>
-                      </div>
-                      <div className="relative h-2 w-full overflow-hidden rounded-full bg-muted">
-                        <div
-                          className={`h-full transition-all ${
-                            isWorkComplete ? 'bg-success' : 'bg-primary'
-                          }`}
-                          style={{
-                            width: `${Math.min(100, Number(currentVisa.progressPercentage))}%`,
-                          }}
-                        />
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        {isWorkComplete
-                          ? '✓ Work requirement completed!'
-                          : `${currentVisa.daysRemaining} days remaining`}
-                      </p>
-                    </div>
-
-                    {/* Visa Period */}
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-5 w-5 text-muted-foreground" />
-                          <span className="font-medium">Visa Period</span>
-                        </div>
-                        <span className="text-sm text-muted-foreground">
-                          {formatDate(currentVisa.arrivalDate)} -{' '}
-                          {formatDate(currentVisa.expiryDate)}
-                        </span>
-                      </div>
-                      <div className="relative h-2 w-full overflow-hidden rounded-full bg-muted">
-                        <div
-                          className="h-full bg-warning transition-all"
-                          style={{ width: `${visaPeriod.progress}%` }}
-                        />
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        {formatDaysLeft(visaPeriod.daysLeft)} (
-                        {visaPeriod.progress.toFixed(0)}% used)
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })()}
-
-          {/* Weekly Progress Chart */}
-          <WeeklyProgressChart />
-        </>
+        <DashboardWidgets visaId={currentVisa.id} />
       )}
     </div>
   );

@@ -234,6 +234,14 @@ If not clearly defined, clarify:
 
 ---
 
+## Git & Commits
+
+- **NEVER** include `Co-Authored-By` footer in commits
+- Use `commits` skill for automated commit creation following Conventional Commits
+- Follow commit types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`
+
+---
+
 ## Client Feature Structure Convention
 
 Chaque feature dans `client/src/features/{feature}/` DOIT suivre cette structure :
