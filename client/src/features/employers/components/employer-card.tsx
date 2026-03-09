@@ -1,4 +1,4 @@
-import { Building2, Edit, Factory, MapPin, Trash2 } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -13,99 +13,153 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { paths } from '@/config/paths';
 
-import type { Employer } from '@get-granted/shared';
+import type { Employer, PostcodeBadgeData } from '@get-granted/shared';
 
-import { PostcodeBadges } from './postcode-badges';
+import { EligibilityStatusBadge } from './eligibility-status-badge';
+import { IndustryChip } from './industry-chip';
+import { ZoneBadge, type ZoneKey } from './zone-badge';
+
+const STATE_CONFIG: Record<string, { bg: string; fg: string }> = {
+  ACT: { bg: 'bg-state-act', fg: 'text-white' },
+  NSW: { bg: 'bg-state-nsw', fg: 'text-state-nsw-fg' },
+  NT: { bg: 'bg-state-nt', fg: 'text-white' },
+  QLD: { bg: 'bg-state-qld', fg: 'text-white' },
+  SA: { bg: 'bg-state-sa', fg: 'text-white' },
+  TAS: { bg: 'bg-state-tas', fg: 'text-white' },
+  VIC: { bg: 'bg-state-vic', fg: 'text-white' },
+  WA: { bg: 'bg-state-wa', fg: 'text-state-wa-fg' },
+};
+
+const ZONE_FLAGS: { flag: keyof PostcodeBadgeData; zone: ZoneKey }[] = [
+  { flag: 'isNorthernAustralia', zone: 'northern' },
+  { flag: 'isRemoteVeryRemote', zone: 'remote' },
+  { flag: 'isRegionalAustralia', zone: 'regional' },
+  { flag: 'isBushfireDeclared', zone: 'bushfire' },
+  { flag: 'isNaturalDisasterDeclared', zone: 'weather' },
+];
 
 interface EmployerCardProps {
   employer: Employer;
   onDelete: (id: string) => void;
 }
 
-const industryLabels: Record<string, string> = {
-  plant_and_animal_cultivation: 'Plant & Animal Cultivation',
-  fishing_and_pearling: 'Fishing & Pearling',
-  tree_farming_and_felling: 'Tree Farming & Felling',
-  mining: 'Mining',
-  construction: 'Construction',
-  hospitality_and_tourism: 'Hospitality & Tourism',
-  bushfire_recovery_work: 'Bushfire Recovery',
-  critical_covid19_work: 'Critical COVID-19 Work',
-  other: 'Other',
-};
-
 export function EmployerCard({ employer, onDelete }: EmployerCardProps) {
   const navigate = useNavigate();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  // Format suburb display: "SUBURB, POSTCODE STATE"
-  const locationDisplay = `${employer.suburb.suburbName}, ${employer.suburb.postcode} ${employer.suburb.stateCode}`;
+  const stateConfig =
+    STATE_CONFIG[employer.suburb.stateCode] ?? {
+      bg: 'bg-muted',
+      fg: 'text-muted-foreground',
+    };
+
+  const zones: ZoneKey[] = employer.suburb.postcodeData
+    ? ZONE_FLAGS.filter(
+        ({ flag }) => employer.suburb.postcodeData?.[flag] === true,
+      ).map(({ zone }) => zone)
+    : [];
+
+  if (employer.industry === 'critical_covid19_work') {
+    zones.push('anywhere');
+  }
+
+  const eligibilityStatus = employer.isEligible ? 'eligible' : 'not-eligible';
 
   return (
-    <Card className="shadow-sm">
-      <CardContent>
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex items-start gap-2 flex-1 min-w-0">
-            <div className="w-7 h-7 bg-primary/10 rounded flex items-center justify-center flex-shrink-0 mt-0.5">
-              <Building2 className="w-3.5 h-3.5 text-primary" />
-            </div>
-            <div className="flex-1 min-w-0 space-y-1">
-              <div className="flex items-center gap-2">
-                <h3 className="font-medium text-sm truncate">
-                  {employer.name}
-                </h3>
-                <span
-                  className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                    employer.isEligible ? 'bg-success' : 'bg-muted-foreground/40'
-                  }`}
-                  title={employer.isEligible ? 'Eligible' : 'Not eligible'}
-                />
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Factory className="w-3 h-3 flex-shrink-0" />
-                <span className="truncate">
-                  {industryLabels[employer.industry] || employer.industry}
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <MapPin className="w-3 h-3 flex-shrink-0" />
-                <span className="truncate">{locationDisplay}</span>
-                {employer.suburb.postcodeData && (
-                  <PostcodeBadges
-                    postcode={employer.suburb.postcodeData}
-                    size="sm"
-                    className="ml-0.5"
-                  />
-                )}
-              </div>
+    <>
+      <Card className="flex flex-col shadow-sm gap-0 py-0">
+        {/* Card Header */}
+        <CardHeader className="flex flex-row items-center justify-between px-5 py-4 space-y-0 border-b border-border">
+          <span className="text-base font-semibold text-foreground truncate">
+            {employer.name}
+          </span>
+          <div className="flex items-center gap-1.5 shrink-0 ml-3">
+            <EligibilityStatusBadge status={eligibilityStatus} className="px-0 py-0" />
+            <span className="text-[11px] font-light text-muted-foreground opacity-40">
+              |
+            </span>
+            <span
+              className={
+                employer.eligibilityMode === 'automatic'
+                  ? 'text-[9px] font-normal text-indigo-500 opacity-80'
+                  : 'text-[9px] font-normal text-muted-foreground opacity-60'
+              }
+            >
+              {employer.eligibilityMode === 'automatic' ? 'auto' : 'manual'}
+            </span>
+          </div>
+        </CardHeader>
+
+        {/* Info Section */}
+        <CardContent className="flex flex-col gap-3.5 p-5">
+          {/* Location */}
+          <div className="flex items-center gap-2.5">
+            <span className="text-[11px] font-medium text-muted-foreground tracking-[0.5px] uppercase w-[70px] shrink-0">
+              Location
+            </span>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-[13px] font-medium text-foreground">
+                {employer.suburb.suburbName}
+              </span>
+              <span
+                className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold ${stateConfig.bg} ${stateConfig.fg}`}
+              >
+                {employer.suburb.stateCode}
+              </span>
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded border border-border text-[10px] font-medium text-muted-foreground">
+                {employer.suburb.postcode}
+              </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-1 flex-shrink-0">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 w-7 p-0"
-              onClick={() =>
-                navigate(paths.app.employers.edit.getHref(employer.id))
-              }
-            >
-              <Edit className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 w-7 p-0 text-destructive hover:bg-destructive/10"
-              onClick={() => setIsDeleteDialogOpen(true)}
-            >
-              <Trash2 className="w-4 h-4" />
-            </Button>
+          {/* Industry */}
+          <div className="flex items-center gap-2.5">
+            <span className="text-[11px] font-medium text-muted-foreground tracking-[0.5px] uppercase w-[70px] shrink-0">
+              Industry
+            </span>
+            <IndustryChip industry={employer.industry} className="px-0" />
           </div>
-        </div>
-      </CardContent>
+
+          {/* Zones */}
+          {zones.length > 0 && (
+            <div className="flex items-center gap-2.5">
+              <span className="text-[11px] font-medium text-muted-foreground tracking-[0.5px] uppercase w-[70px] shrink-0">
+                Zones
+              </span>
+              <div className="flex items-center gap-1">
+                {zones.map((zone) => (
+                  <ZoneBadge key={zone} zone={zone} size="sm" />
+                ))}
+              </div>
+            </div>
+          )}
+        </CardContent>
+
+        {/* Card Actions */}
+        <CardFooter className="flex items-center justify-end gap-2 px-5 py-3 border-t border-border mt-auto">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              navigate(paths.app.employers.edit.getHref(employer.id))
+            }
+          >
+            <Pencil className="w-3.5 h-3.5 mr-1.5" />
+            Edit
+          </Button>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => setIsDeleteDialogOpen(true)}
+          >
+            <Trash2 className="w-3.5 h-3.5 mr-1.5" />
+            Delete
+          </Button>
+        </CardFooter>
+      </Card>
 
       <AlertDialog
         open={isDeleteDialogOpen}
@@ -115,8 +169,8 @@ export function EmployerCard({ employer, onDelete }: EmployerCardProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Employer</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{employer.name}"? This action
-              cannot be undone.
+              Are you sure you want to delete &quot;{employer.name}&quot;? This
+              action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -133,6 +187,6 @@ export function EmployerCard({ employer, onDelete }: EmployerCardProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </Card>
+    </>
   );
 }
