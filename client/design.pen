@@ -21540,51 +21540,50 @@
               "children": [
                 {
                   "type": "frame",
-                  "id": "23LEQ",
-                  "name": "Top Row",
+                  "id": "O3Q1i",
+                  "name": "Content Row",
                   "width": "fill_container",
                   "gap": 24,
                   "children": [
                     {
-                      "id": "NiHQD",
-                      "type": "ref",
-                      "ref": "GRAT0",
+                      "type": "frame",
+                      "id": "q4b9D",
+                      "name": "Left Column",
                       "width": "fill_container",
-                      "name": "employerName"
+                      "layout": "vertical",
+                      "gap": 20,
+                      "children": [
+                        {
+                          "id": "LmNey",
+                          "type": "ref",
+                          "ref": "GRAT0",
+                          "width": "fill_container",
+                          "name": "empName"
+                        },
+                        {
+                          "id": "tWnCW",
+                          "type": "ref",
+                          "ref": "pQJRy",
+                          "width": "fill_container",
+                          "name": "indSelect"
+                        },
+                        {
+                          "id": "84cUG",
+                          "type": "ref",
+                          "ref": "4pkAW",
+                          "width": "fill_container",
+                          "name": "subSearch"
+                        }
+                      ]
                     },
                     {
-                      "id": "N206L",
+                      "id": "76zlC",
                       "type": "ref",
-                      "ref": "pQJRy",
+                      "ref": "XvqN3",
                       "width": "fill_container",
-                      "name": "industrySelector"
+                      "name": "eligibility"
                     }
                   ]
-                },
-                {
-                  "id": "ayN7K",
-                  "type": "ref",
-                  "ref": "4pkAW",
-                  "width": "fill_container",
-                  "name": "suburbSearch"
-                },
-                {
-                  "type": "line",
-                  "id": "ejx36",
-                  "name": "Divider",
-                  "width": "fill_container",
-                  "height": 0,
-                  "stroke": {
-                    "thickness": 1,
-                    "fill": "$--border"
-                  }
-                },
-                {
-                  "id": "sqtAE",
-                  "type": "ref",
-                  "ref": "XvqN3",
-                  "width": "fill_container",
-                  "name": "eligibility"
                 },
                 {
                   "type": "frame",
@@ -21736,131 +21735,146 @@
               "children": [
                 {
                   "type": "frame",
-                  "id": "FpKML",
-                  "name": "Top Row",
+                  "id": "FIA7l",
+                  "name": "Content Row",
                   "width": "fill_container",
                   "gap": 24,
                   "children": [
                     {
-                      "id": "MwGeK",
-                      "type": "ref",
-                      "ref": "lQPSH",
-                      "name": "Employer Name",
-                      "width": "fill_container"
-                    },
-                    {
                       "type": "frame",
-                      "id": "ARvSb",
-                      "name": "Industry Selector",
-                      "context": "Industry Selector / Selected state - shows a single selected industry badge inside the trigger. The badge is a ref to a reusable Industry badge component (e.g. Hospitality qFKYB). Includes an X clear button to deselect and a chevron-down. In React: the selected industry comes from form state, clicking X clears the selection. Reusable component with variants: Default (xSAVS), Open (jnvSd), Multi-Selected (cvUtu).",
+                      "id": "paqjr",
+                      "name": "Left Column",
                       "width": "fill_container",
                       "layout": "vertical",
-                      "gap": 6,
+                      "gap": 20,
                       "children": [
                         {
-                          "type": "text",
-                          "id": "XFlzt",
-                          "name": "label",
-                          "fill": "$--foreground",
-                          "content": "Industry",
-                          "lineHeight": 1.43,
-                          "fontFamily": "Inter",
-                          "fontSize": 14,
-                          "fontWeight": "500"
+                          "id": "YVlQ9",
+                          "type": "ref",
+                          "ref": "lQPSH",
+                          "width": "fill_container",
+                          "name": "empName"
                         },
                         {
                           "type": "frame",
-                          "id": "j4bVs",
-                          "name": "trigger",
+                          "id": "0o7kA",
+                          "name": "industrySelector",
+                          "context": "Industry Selector / Selected state - shows a single selected industry badge inside the trigger. The badge is a ref to a reusable Industry badge component (e.g. Hospitality qFKYB). Includes an X clear button to deselect and a chevron-down. In React: the selected industry comes from form state, clicking X clears the selection. Reusable component with variants: Default (xSAVS), Open (jnvSd), Multi-Selected (cvUtu).",
                           "width": "fill_container",
-                          "fill": "$--background",
-                          "cornerRadius": 6,
-                          "stroke": {
-                            "align": "inside",
-                            "thickness": 1,
-                            "fill": "$--input"
-                          },
-                          "gap": 8,
-                          "padding": [
-                            10,
-                            12
-                          ],
-                          "alignItems": "center",
+                          "layout": "vertical",
+                          "gap": 6,
                           "children": [
                             {
-                              "id": "VqCe2",
-                              "type": "ref",
-                              "ref": "qFKYB",
-                              "name": "badge"
+                              "type": "text",
+                              "id": "eEfsJ",
+                              "name": "label",
+                              "fill": "$--foreground",
+                              "content": "Industry",
+                              "lineHeight": 1.43,
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "500"
                             },
                             {
                               "type": "frame",
-                              "id": "bm0w9",
-                              "name": "spacer",
+                              "id": "D3bC6",
+                              "name": "trigger",
                               "width": "fill_container",
-                              "height": 1
+                              "fill": "$--background",
+                              "cornerRadius": 6,
+                              "stroke": {
+                                "align": "inside",
+                                "thickness": 1,
+                                "fill": "$--input"
+                              },
+                              "gap": 8,
+                              "padding": [
+                                10,
+                                12
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "id": "m3TSQ",
+                                  "type": "ref",
+                                  "ref": "qFKYB",
+                                  "name": "badge"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "EGLOg",
+                                  "name": "spacer",
+                                  "width": "fill_container",
+                                  "height": 1
+                                },
+                                {
+                                  "type": "icon_font",
+                                  "id": "Zq6F5",
+                                  "name": "clearIcon",
+                                  "width": 16,
+                                  "height": 16,
+                                  "iconFontName": "x",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "$--muted-foreground"
+                                },
+                                {
+                                  "type": "icon_font",
+                                  "id": "S6JrA",
+                                  "name": "chevron",
+                                  "width": 16,
+                                  "height": 16,
+                                  "iconFontName": "chevron-down",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "$--muted-foreground"
+                                }
+                              ]
                             },
                             {
-                              "type": "icon_font",
-                              "id": "aKCxl",
-                              "name": "clearIcon",
-                              "width": 16,
-                              "height": 16,
-                              "iconFontName": "x",
-                              "iconFontFamily": "lucide",
-                              "fill": "$--muted-foreground"
-                            },
-                            {
-                              "type": "icon_font",
-                              "id": "klP6O",
-                              "name": "chevron",
-                              "width": 16,
-                              "height": 16,
-                              "iconFontName": "chevron-down",
-                              "iconFontFamily": "lucide",
-                              "fill": "$--muted-foreground"
+                              "type": "text",
+                              "id": "ICSBn",
+                              "name": "helperText",
+                              "fill": "$--muted-foreground",
+                              "content": "Select the type of work performed for this employer",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
                             }
                           ]
+                        },
+                        {
+                          "id": "MksMK",
+                          "type": "ref",
+                          "ref": "4pkAW",
+                          "width": "fill_container",
+                          "name": "location"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "jIVL2",
+                      "name": "Right Column",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "children": [
+                        {
+                          "id": "GoKIq",
+                          "type": "ref",
+                          "ref": "XvqN3",
+                          "width": "fill_container",
+                          "name": "eligibility",
+                          "descendants": {
+                            "8vRcX": {
+                              "id": "ddDKF",
+                              "type": "ref",
+                              "ref": "zrdBt",
+                              "name": "newStatus"
+                            }
+                          }
                         }
                       ]
                     }
                   ]
-                },
-                {
-                  "id": "aph2t",
-                  "type": "ref",
-                  "ref": "4pkAW",
-                  "name": "Location",
-                  "width": "fill_container"
-                },
-                {
-                  "type": "line",
-                  "id": "uNfM7",
-                  "name": "Divider",
-                  "width": "fill_container",
-                  "height": 0,
-                  "stroke": {
-                    "thickness": 1,
-                    "fill": "$--border"
-                  }
-                },
-                {
-                  "id": "Y3EBS",
-                  "type": "ref",
-                  "ref": "XvqN3",
-                  "name": "Eligibility Check",
-                  "width": "fill_container",
-                  "descendants": {
-                    "8vRcX": {
-                      "id": "DV2bT",
-                      "type": "ref",
-                      "ref": "zrdBt",
-                      "name": "Status Inline"
-                    },
-                    "acgN0": {
-                      "opacity": 1
-                    }
-                  }
                 },
                 {
                   "type": "frame",

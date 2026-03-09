@@ -53,6 +53,35 @@
   --bar-track: #e5e7eb;
   --bar-low: #a5b4fc;
   --bar-high: #3730a3;
+  /* ── Zone / postcode badge colors ── */
+  --badge-northern: #166534;
+  --badge-remote: #B45309;
+  --badge-regional: #16A34A;
+  --badge-bushfire: #EA580C;
+  --badge-disaster: #0EA5E9;
+  --badge-anywhere: #6366F1;
+  /* ── Industry badge colors ── */
+  --industry-hospitality: #D97706;
+  --industry-fishing: #2563EB;
+  --industry-tree-farming: #059669;
+  --industry-mining: #57534E;
+  --industry-construction: #CA8A04;
+  --industry-covid: #9333EA;
+  --industry-other: #6B7280;
+  /* ── Warning banner text colors ── */
+  --warning-dark: #92400E;
+  --danger-dark: #991B1B;
+  /* ── Australian state badge colors ── */
+  --state-act: #1E40AF;
+  --state-nsw: #87CEEB;
+  --state-nsw-fg: #1e293b;
+  --state-nt: #CC5500;
+  --state-qld: #800020;
+  --state-sa: #EF4444;
+  --state-tas: #006A4E;
+  --state-vic: #1E3A5F;
+  --state-wa: #FFD700;
+  --state-wa-fg: #1e293b;
 
   --shadow-2xs: 0px 4px 8px -1px oklch(0 0 0 / 0.05);
   --shadow-xs: 0px 4px 8px -1px oklch(0 0 0 / 0.05);
@@ -116,6 +145,35 @@
   --bar-track: #374151;
   --bar-low: #818cf8;
   --bar-high: #6366f1;
+  /* ── Zone / postcode badge colors (dark mode — same hues, readable on dark cards) ── */
+  --badge-northern: #166534;
+  --badge-remote: #B45309;
+  --badge-regional: #16A34A;
+  --badge-bushfire: #EA580C;
+  --badge-disaster: #0EA5E9;
+  --badge-anywhere: #6366F1;
+  /* ── Industry badge colors (dark mode) ── */
+  --industry-hospitality: #D97706;
+  --industry-fishing: #2563EB;
+  --industry-tree-farming: #059669;
+  --industry-mining: #57534E;
+  --industry-construction: #CA8A04;
+  --industry-covid: #9333EA;
+  --industry-other: #6B7280;
+  /* ── Warning banner text colors (dark mode — lighter for readability) ── */
+  --warning-dark: #FDE68A;
+  --danger-dark: #FCA5A5;
+  /* ── Australian state badge colors (dark mode) ── */
+  --state-act: #1E40AF;
+  --state-nsw: #87CEEB;
+  --state-nsw-fg: #1e293b;
+  --state-nt: #CC5500;
+  --state-qld: #800020;
+  --state-sa: #EF4444;
+  --state-tas: #006A4E;
+  --state-vic: #1E3A5F;
+  --state-wa: #FFD700;
+  --state-wa-fg: #1e293b;
 
   --shadow-2xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
   --shadow-xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
@@ -178,6 +236,35 @@
   --color-bar-track: var(--bar-track);
   --color-bar-low: var(--bar-low);
   --color-bar-high: var(--bar-high);
+  /* ── Zone / postcode badge colors ── */
+  --color-badge-northern: var(--badge-northern);
+  --color-badge-remote: var(--badge-remote);
+  --color-badge-regional: var(--badge-regional);
+  --color-badge-bushfire: var(--badge-bushfire);
+  --color-badge-disaster: var(--badge-disaster);
+  --color-badge-anywhere: var(--badge-anywhere);
+  /* ── Industry badge colors ── */
+  --color-industry-hospitality: var(--industry-hospitality);
+  --color-industry-fishing: var(--industry-fishing);
+  --color-industry-tree-farming: var(--industry-tree-farming);
+  --color-industry-mining: var(--industry-mining);
+  --color-industry-construction: var(--industry-construction);
+  --color-industry-covid: var(--industry-covid);
+  --color-industry-other: var(--industry-other);
+  /* ── Warning banner text colors ── */
+  --color-warning-dark: var(--warning-dark);
+  --color-danger-dark: var(--danger-dark);
+  /* ── Australian state badge colors ── */
+  --color-state-act: var(--state-act);
+  --color-state-nsw: var(--state-nsw);
+  --color-state-nsw-fg: var(--state-nsw-fg);
+  --color-state-nt: var(--state-nt);
+  --color-state-qld: var(--state-qld);
+  --color-state-sa: var(--state-sa);
+  --color-state-tas: var(--state-tas);
+  --color-state-vic: var(--state-vic);
+  --color-state-wa: var(--state-wa);
+  --color-state-wa-fg: var(--state-wa-fg);
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);

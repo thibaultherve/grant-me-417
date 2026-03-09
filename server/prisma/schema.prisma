@@ -25,7 +25,7 @@ enum IndustryType {
   @@map("industry_type")
 }
 
-// ─── Users (replaces Supabase auth.users) ────────────────────────────────────
+// ─── Users ────────────────────────────────────
 
 model User {
   id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid

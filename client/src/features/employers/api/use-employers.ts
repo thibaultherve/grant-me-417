@@ -134,14 +134,21 @@ export const useAddEmployer = () => {
 };
 
 /**
- * Hook pour vérifier l'éligibilité automatique d'un employeur
+ * Hook pour vérifier l'éligibilité automatique d'un employeur.
  *
- * Mutation car l'appel est déclenché explicitement (suburb + industry sélectionnés).
- * Uniquement pour l'affichage — ne modifie pas le formulaire directement.
+ * Utilise useQuery pour cacher le résultat par (suburbId, industry) —
+ * pas d'appel API si la combinaison est déjà en cache.
  */
-export const useCheckEligibility = () => {
-  return useMutation<CheckEligibilityOutput, Error, CheckEligibilityInput>({
-    mutationFn: checkEmployerEligibility,
+export const useCheckEligibility = (
+  suburbId: string | undefined,
+  industry: string | undefined,
+) => {
+  return useQuery<CheckEligibilityOutput>({
+    queryKey: queryKeys.employers.eligibility(suburbId!, industry!),
+    queryFn: () =>
+      checkEmployerEligibility({ suburbId: Number(suburbId!), industry: industry! as CheckEligibilityInput['industry'] }),
+    enabled: !!suburbId && !!industry,
+    staleTime: Infinity, // Les règles WHV ne changent pas pendant la session
   });
 };
 
