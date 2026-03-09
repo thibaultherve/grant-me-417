@@ -65,6 +65,8 @@ export const queryKeys = {
   employers: {
     all: ['employers'] as const,
     detail: (id: string) => ['employers', id] as const,
+    eligibility: (suburbId: string, industry: string) =>
+      ['employers', 'eligibility', suburbId, industry] as const,
   },
   hours: {
     all: ['hours'] as const,

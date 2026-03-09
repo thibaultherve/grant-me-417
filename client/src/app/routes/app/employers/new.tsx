@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { paths } from '@/config/paths';
 import { EmployerForm } from '@/features/employers/components/employer-form';
 import { useAddEmployer } from '@/features/employers/api/use-employers';
@@ -22,12 +22,8 @@ export function EmployerNewRoute() {
 
   return (
     <div className="space-y-6">
-      {/* Form in Card */}
       <Card>
-        <CardHeader>
-          <CardTitle>Employer Details</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <EmployerForm
             mode="add"
             onSubmit={handleSubmit}

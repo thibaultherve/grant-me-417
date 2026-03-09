@@ -1,12 +1,13 @@
 import { useNavigate, useParams } from 'react-router';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { paths } from '@/config/paths';
 import {
   useGetEmployer,
   useUpdateEmployer,
+  useDeleteEmployer,
 } from '@/features/employers/api/use-employers';
 import { EmployerForm } from '@/features/employers/components/employer-form';
 
@@ -17,7 +18,8 @@ export function EmployerEditRoute() {
   const navigate = useNavigate();
 
   const { data: employer, isLoading, error } = useGetEmployer(id);
-  const { mutateAsync: updateEmployer, isPending } = useUpdateEmployer();
+  const { mutateAsync: updateEmployer, isPending: isUpdating } = useUpdateEmployer();
+  const { mutateAsync: deleteEmployer, isPending: isDeleting } = useDeleteEmployer();
 
   const handleSubmit = async (data: CreateEmployerFormData) => {
     if (!id) return;
@@ -29,27 +31,31 @@ export function EmployerEditRoute() {
     navigate(paths.app.employers.getHref());
   };
 
+  const handleDelete = async () => {
+    if (!id) return;
+    await deleteEmployer(id);
+    navigate(paths.app.employers.getHref());
+  };
+
   // Loading state
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <Skeleton className="h-6 w-48" />
-        <Skeleton className="h-8 w-64" />
         <Card>
-          <CardHeader>
-            <Skeleton className="h-6 w-32" />
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
+          <CardContent className="pt-6 space-y-4">
+            <div className="grid grid-cols-2 gap-6">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-64 w-full" />
           </CardContent>
         </Card>
       </div>
     );
   }
 
-  // Error state - employer not found or access denied
+  // Error state
   if (error || !employer) {
     return (
       <div className="space-y-6">
@@ -67,18 +73,16 @@ export function EmployerEditRoute() {
 
   return (
     <div className="space-y-6">
-      {/* Form in Card */}
       <Card>
-        <CardHeader>
-          <CardTitle>Employer Details</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <EmployerForm
             mode="edit"
             employer={employer}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
-            isSubmitting={isPending}
+            onDelete={handleDelete}
+            isSubmitting={isUpdating}
+            isDeleting={isDeleting}
           />
         </CardContent>
       </Card>
