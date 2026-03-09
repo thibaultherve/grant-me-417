@@ -18413,13 +18413,7 @@
           "context": "Industry badge: Hospitality & Tourism. Full variant with icon + label. Small icon-only variant: Industry/Hospitality/Small (Qq7CK). Props: color=#D97706, icon=utensils, label=Hospitality & Tourism",
           "reusable": true,
           "height": 30,
-          "fill": "$--card",
           "cornerRadius": 8,
-          "stroke": {
-            "align": "outside",
-            "thickness": 1.5,
-            "fill": "#D97706"
-          },
           "gap": 8,
           "padding": [
             5,
@@ -18469,13 +18463,7 @@
           "context": "Industry badge: Critical COVID-19 Work. Full variant with icon + label. Small icon-only variant: Industry/COVID/Small (wfIxu). Props: color=#9333EA, icon=heart-pulse, label=Critical COVID-19 Work",
           "reusable": true,
           "height": 30,
-          "fill": "$--card",
           "cornerRadius": 8,
-          "stroke": {
-            "align": "outside",
-            "thickness": 1.5,
-            "fill": "#9333EA"
-          },
           "gap": 8,
           "padding": [
             5,
@@ -18525,13 +18513,7 @@
           "context": "Industry badge: Bushfire Recovery Work. Full variant with icon + label. Small icon-only variant: Industry/Bushfire/Small (Vumny). Props: color=#EA580C, icon=flame, label=Bushfire Recovery Work",
           "reusable": true,
           "height": 30,
-          "fill": "$--card",
           "cornerRadius": 8,
-          "stroke": {
-            "align": "outside",
-            "thickness": 1.5,
-            "fill": "#EA580C"
-          },
           "gap": 8,
           "padding": [
             5,
@@ -18581,13 +18563,7 @@
           "context": "Industry badge: Plant & Animal Cultivation. Full variant with icon + label. Small icon-only variant: Industry/Cultivation/Small (D8Cr2). Props: color=#16A34A, icon=sprout, label=Plant & Animal Cultivation",
           "reusable": true,
           "height": 30,
-          "fill": "$--card",
           "cornerRadius": 8,
-          "stroke": {
-            "align": "outside",
-            "thickness": 1.5,
-            "fill": "#16A34A"
-          },
           "gap": 8,
           "padding": [
             5,
@@ -18637,13 +18613,7 @@
           "context": "Industry badge: Fishing & Pearling. Full variant with icon + label. Small icon-only variant: Industry/Fishing/Small (iofb4). Props: color=#2563EB, icon=fish, label=Fishing & Pearling",
           "reusable": true,
           "height": 30,
-          "fill": "$--card",
           "cornerRadius": 8,
-          "stroke": {
-            "align": "outside",
-            "thickness": 1.5,
-            "fill": "#2563EB"
-          },
           "gap": 8,
           "padding": [
             5,
@@ -18693,13 +18663,7 @@
           "context": "Industry badge: Mining. Full variant with icon + label. Small icon-only variant: Industry/Mining/Small (8UnUQ). Props: color=#57534E, icon=pickaxe, label=Mining",
           "reusable": true,
           "height": 30,
-          "fill": "$--card",
           "cornerRadius": 8,
-          "stroke": {
-            "align": "outside",
-            "thickness": 1.5,
-            "fill": "#57534E"
-          },
           "gap": 8,
           "padding": [
             5,
@@ -18749,13 +18713,7 @@
           "context": "Industry badge: Tree Farming & Felling. Full variant with icon + label. Small icon-only variant: Industry/TreeFarming/Small (MNgsX). Props: color=#059669, icon=tree-pine, label=Tree Farming & Felling",
           "reusable": true,
           "height": 30,
-          "fill": "$--card",
           "cornerRadius": 8,
-          "stroke": {
-            "align": "outside",
-            "thickness": 1.5,
-            "fill": "#059669"
-          },
           "gap": 8,
           "padding": [
             5,
@@ -18805,13 +18763,7 @@
           "context": "Industry badge: Construction. Full variant with icon + label. Small icon-only variant: Industry/Construction/Small (1Sqpp). Props: color=#CA8A04, icon=hard-hat, label=Construction",
           "reusable": true,
           "height": 30,
-          "fill": "$--card",
           "cornerRadius": 8,
-          "stroke": {
-            "align": "outside",
-            "thickness": 1.5,
-            "fill": "#CA8A04"
-          },
           "gap": 8,
           "padding": [
             5,
@@ -18861,13 +18813,7 @@
           "context": "Industry badge: Other. Full variant with icon + label. Small icon-only variant: Industry/Other/Small. Props: color=#6B7280, icon=briefcase, label=Other",
           "reusable": true,
           "height": 30,
-          "fill": "$--card",
           "cornerRadius": 8,
-          "stroke": {
-            "align": "outside",
-            "thickness": 1.5,
-            "fill": "#6B7280"
-          },
           "gap": 8,
           "padding": [
             5,
@@ -25817,6 +25763,1372 @@
           "x": 0,
           "y": 772,
           "width": 390
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "5hcVM",
+      "x": -5437,
+      "y": 5260,
+      "name": "Employer Card / Desktop",
+      "reusable": true,
+      "width": 420,
+      "fill": "$--card",
+      "cornerRadius": 8,
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$--border"
+      },
+      "effect": {
+        "type": "shadow",
+        "shadowType": "outer",
+        "color": "#0000000d",
+        "offset": {
+          "x": 0,
+          "y": 1
+        },
+        "blur": 1.75
+      },
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "2qx5W",
+          "name": "Card Header",
+          "width": "fill_container",
+          "stroke": {
+            "align": "inside",
+            "thickness": {
+              "bottom": 1
+            },
+            "fill": "$--border"
+          },
+          "padding": [
+            16,
+            20
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "IoRKk",
+              "name": "Header Left",
+              "layout": "vertical",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "p99mY",
+                  "name": "employerName",
+                  "fill": "$--foreground",
+                  "content": "Farm Fresh Produce",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "VAIvl",
+              "name": "Eligibility Group",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "id": "6YacW",
+                  "type": "ref",
+                  "ref": "zrdBt",
+                  "name": "badge",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "gap": 6,
+                  "width": "fit_content"
+                },
+                {
+                  "type": "text",
+                  "id": "bNyfT",
+                  "name": "separator",
+                  "opacity": 0.4,
+                  "fill": "$--muted-foreground",
+                  "content": "|",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "300"
+                },
+                {
+                  "type": "text",
+                  "id": "hCULt",
+                  "name": "modeText",
+                  "opacity": 0.8,
+                  "fill": "$--primary",
+                  "content": "auto",
+                  "fontFamily": "Inter",
+                  "fontSize": 9,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "HmF46",
+          "name": "Info Section",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 14,
+          "padding": 20,
+          "children": [
+            {
+              "type": "frame",
+              "id": "O6CS1",
+              "name": "Location Row",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "wKVHy",
+                  "name": "locLabel",
+                  "fill": "$--muted-foreground",
+                  "textGrowth": "fixed-width",
+                  "width": 70,
+                  "content": "LOCATION",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500",
+                  "letterSpacing": 0.5
+                },
+                {
+                  "type": "frame",
+                  "id": "nGTqs",
+                  "name": "Location Value",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "iPHZS",
+                      "name": "suburbName",
+                      "fill": "$--foreground",
+                      "content": "Cairns",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "O4TfZ",
+                      "name": "StateBadge",
+                      "fill": "$--qld-main-color",
+                      "cornerRadius": 4,
+                      "padding": [
+                        2,
+                        6
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ZxEcr",
+                          "name": "stateText",
+                          "fill": "#FFFFFF",
+                          "content": "QLD",
+                          "fontFamily": "Inter",
+                          "fontSize": 10,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "RLgy5",
+                      "name": "PostcodeBadge",
+                      "cornerRadius": 4,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "$--border"
+                      },
+                      "padding": [
+                        2,
+                        6
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "55RQ3",
+                          "name": "postcodeText",
+                          "fill": "$--muted-foreground",
+                          "content": "4870",
+                          "fontFamily": "Inter",
+                          "fontSize": 10,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "SHekE",
+              "name": "Industry Row",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "CfHiK",
+                  "name": "industryLabel",
+                  "fill": "$--muted-foreground",
+                  "textGrowth": "fixed-width",
+                  "width": 70,
+                  "content": "INDUSTRY",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500",
+                  "letterSpacing": 0.5
+                },
+                {
+                  "id": "zajFG",
+                  "type": "ref",
+                  "ref": "qFKYB",
+                  "name": "row1Badge"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "zlec2",
+              "name": "Zones Row",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "O9zMK",
+                  "name": "zonesLabel",
+                  "fill": "$--muted-foreground",
+                  "textGrowth": "fixed-width",
+                  "width": 70,
+                  "content": "ZONES",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500",
+                  "letterSpacing": 0.5
+                },
+                {
+                  "type": "frame",
+                  "id": "MFDPN",
+                  "name": "ZoneBadges",
+                  "gap": 4,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "id": "0RtmM",
+                      "type": "ref",
+                      "ref": "RB4zL",
+                      "width": 22,
+                      "height": 22,
+                      "name": "z1"
+                    },
+                    {
+                      "id": "sjCK4",
+                      "type": "ref",
+                      "ref": "E3YvB",
+                      "width": 22,
+                      "height": 22,
+                      "name": "z2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "K25hL",
+          "name": "Card Actions",
+          "width": "fill_container",
+          "stroke": {
+            "align": "inside",
+            "thickness": {
+              "top": 1
+            },
+            "fill": "$--border"
+          },
+          "gap": 8,
+          "padding": [
+            12,
+            20
+          ],
+          "justifyContent": "end",
+          "alignItems": "center",
+          "children": [
+            {
+              "id": "T7qIn",
+              "type": "ref",
+              "ref": "qY8X8",
+              "name": "editBtn",
+              "descendants": {
+                "MOukB": {
+                  "iconFontName": "pencil"
+                },
+                "9QkPP": {
+                  "content": "Edit"
+                }
+              }
+            },
+            {
+              "id": "vNUTw",
+              "type": "ref",
+              "ref": "KVSpr",
+              "name": "deleteBtn",
+              "descendants": {
+                "QmAWH": {
+                  "iconFontName": "trash-2"
+                },
+                "4cTi2": {
+                  "content": "Delete"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "ke1qb",
+      "x": -4917,
+      "y": 5260,
+      "name": "Employer Card / Mobile",
+      "reusable": true,
+      "width": 340,
+      "fill": "$--card",
+      "cornerRadius": 8,
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$--border"
+      },
+      "effect": {
+        "type": "shadow",
+        "shadowType": "outer",
+        "color": "#0000000d",
+        "offset": {
+          "x": 0,
+          "y": 1
+        },
+        "blur": 1.75
+      },
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "4yn9Z",
+          "name": "Card Header",
+          "width": "fill_container",
+          "layout": "vertical",
+          "padding": [
+            12,
+            16
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "xBTTf",
+              "name": "Header Top",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "7Dq9Q",
+                  "name": "employerName",
+                  "fill": "$--foreground",
+                  "content": "Tropical Farms Pty Ltd",
+                  "fontFamily": "Inter",
+                  "fontSize": 15,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "QTZNV",
+                  "name": "Eligibility Group",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "id": "ikTkD",
+                      "type": "ref",
+                      "ref": "zrdBt",
+                      "name": "eligBadge"
+                    },
+                    {
+                      "type": "text",
+                      "id": "VbZOC",
+                      "name": "sep",
+                      "opacity": 0.4,
+                      "fill": "$--muted-foreground",
+                      "content": "|",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "300"
+                    },
+                    {
+                      "type": "text",
+                      "id": "uzy5m",
+                      "name": "modeLabel",
+                      "opacity": 0.8,
+                      "fill": "$--primary",
+                      "content": "auto",
+                      "textAlign": "center",
+                      "fontFamily": "Inter",
+                      "fontSize": 9,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "1rTPM",
+                      "name": "sep",
+                      "opacity": 0.4,
+                      "fill": "$--muted-foreground",
+                      "content": "|",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "300"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "TPjND",
+          "name": "Info Section",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": [
+            12,
+            16,
+            16,
+            16
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "TPo5j",
+              "name": "Location Row",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Ewlva",
+                  "name": "locLabel",
+                  "fill": "$--muted-foreground",
+                  "textGrowth": "fixed-width",
+                  "width": 65,
+                  "content": "LOCATION",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500",
+                  "letterSpacing": 0.5
+                },
+                {
+                  "type": "frame",
+                  "id": "KxuYM",
+                  "name": "locValue",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "3fLUj",
+                      "name": "suburbName",
+                      "fill": "$--foreground",
+                      "content": "Cairns",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "5nRQn",
+                      "name": "stateBadge",
+                      "fill": "$--qld-main-color",
+                      "cornerRadius": 4,
+                      "padding": [
+                        2,
+                        6
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "6uHQr",
+                          "name": "stateText",
+                          "fill": "$--white",
+                          "content": "QLD",
+                          "fontFamily": "Inter",
+                          "fontSize": 10,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "QIUJS",
+                      "name": "postcodeBadge",
+                      "cornerRadius": 4,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "$--border"
+                      },
+                      "padding": [
+                        2,
+                        6
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "aYm1V",
+                          "name": "postcodeText",
+                          "fill": "$--muted-foreground",
+                          "content": "4870",
+                          "fontFamily": "Inter",
+                          "fontSize": 10,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "NhnxI",
+              "name": "Industry Row",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "tvHg5",
+                  "name": "indLabel",
+                  "fill": "$--muted-foreground",
+                  "textGrowth": "fixed-width",
+                  "width": 65,
+                  "content": "INDUSTRY",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500",
+                  "letterSpacing": 0.5
+                },
+                {
+                  "id": "tkTao",
+                  "type": "ref",
+                  "ref": "qFKYB",
+                  "name": "industryBadge"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "is12E",
+              "name": "Zones Row",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "F8dC3",
+                  "name": "zonesLabel",
+                  "fill": "$--muted-foreground",
+                  "textGrowth": "fixed-width",
+                  "width": 65,
+                  "content": "ZONES",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500",
+                  "letterSpacing": 0.5
+                },
+                {
+                  "type": "frame",
+                  "id": "fg7WQ",
+                  "name": "zoneBadges",
+                  "gap": 4,
+                  "justifyContent": "end",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "id": "zLbGP",
+                      "type": "ref",
+                      "ref": "RB4zL",
+                      "name": "zoneBadge1",
+                      "width": 22,
+                      "height": 22
+                    },
+                    {
+                      "id": "MQUBS",
+                      "type": "ref",
+                      "ref": "E3YvB",
+                      "name": "zoneBadge2",
+                      "width": 22,
+                      "height": 22
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ekQB3",
+          "name": "Card Actions",
+          "width": "fill_container",
+          "stroke": {
+            "align": "inside",
+            "thickness": {
+              "top": 1
+            },
+            "fill": "$--border"
+          },
+          "gap": 8,
+          "padding": [
+            10,
+            16
+          ],
+          "justifyContent": "end",
+          "alignItems": "center",
+          "children": [
+            {
+              "id": "1juGj",
+              "type": "ref",
+              "ref": "K4T7O",
+              "name": "editBtn",
+              "descendants": {
+                "2a0vw": {
+                  "iconFontName": "pencil"
+                }
+              }
+            },
+            {
+              "id": "4BAGY",
+              "type": "ref",
+              "ref": "yAezs",
+              "name": "deleteBtn",
+              "descendants": {
+                "SFE6i": {
+                  "iconFontName": "trash-2"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "V3FUF",
+      "x": -4400,
+      "y": 5260,
+      "name": "Employer Cards - Showcase",
+      "width": 1380,
+      "fill": "$--background",
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 32,
+      "children": [
+        {
+          "type": "text",
+          "id": "Mwbvs",
+          "name": "Title",
+          "fill": "$--foreground",
+          "content": "Employer Card Component",
+          "fontFamily": "Inter",
+          "fontSize": 20,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "wrIce",
+          "name": "Cards Row",
+          "width": "fill_container",
+          "gap": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "hMqNM",
+              "name": "Card 1 - Auto Eligible",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "bJGbU",
+                  "name": "lbl1",
+                  "fill": "$--muted-foreground",
+                  "content": "Auto + Eligible",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "500"
+                },
+                {
+                  "id": "PCWxZ",
+                  "type": "ref",
+                  "ref": "5hcVM",
+                  "width": "fill_container",
+                  "name": "card1",
+                  "descendants": {
+                    "p99mY": {
+                      "content": "Tropical Fruit Farm"
+                    },
+                    "iPHZS": {
+                      "content": "Cairns"
+                    },
+                    "O4TfZ": {
+                      "fill": "$--qld-main-color"
+                    },
+                    "ZxEcr": {
+                      "content": "QLD"
+                    },
+                    "55RQ3": {
+                      "content": "4870"
+                    },
+                    "zajFG": {
+                      "id": "rLf5q",
+                      "type": "ref",
+                      "ref": "cu2jm",
+                      "name": "newBadge"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "S6QzL",
+              "name": "Card 2 - Auto Not Eligible",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "dgvPT",
+                  "name": "lbl2",
+                  "fill": "$--muted-foreground",
+                  "content": "Auto + Not Eligible",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "500"
+                },
+                {
+                  "id": "oWqQg",
+                  "type": "ref",
+                  "ref": "5hcVM",
+                  "width": "fill_container",
+                  "name": "card2",
+                  "descendants": {
+                    "p99mY": {
+                      "content": "Sydney CBD Hotel"
+                    },
+                    "6YacW": {
+                      "id": "zmFNB",
+                      "type": "ref",
+                      "ref": "gb2Md",
+                      "name": "notElig"
+                    },
+                    "iPHZS": {
+                      "content": "Sydney"
+                    },
+                    "O4TfZ": {
+                      "fill": "$--nsw-main-color"
+                    },
+                    "ZxEcr": {
+                      "content": "NSW"
+                    },
+                    "55RQ3": {
+                      "content": "2000"
+                    },
+                    "zajFG": {
+                      "id": "2tRZt",
+                      "type": "ref",
+                      "ref": "Vzr3i",
+                      "name": "construction"
+                    },
+                    "0RtmM": {
+                      "id": "bAK02",
+                      "type": "ref",
+                      "ref": "BPbUz",
+                      "width": 22,
+                      "height": 22,
+                      "name": "regional"
+                    },
+                    "sjCK4": {
+                      "id": "Pf2Kw",
+                      "type": "ref",
+                      "ref": "9l5VX",
+                      "width": 22,
+                      "height": 22,
+                      "name": "anywhere"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "KglWi",
+              "name": "Card 3 - Manual Eligible",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "UPbTN",
+                  "name": "lbl3",
+                  "fill": "$--muted-foreground",
+                  "content": "Manual + Eligible",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "500"
+                },
+                {
+                  "id": "AfECX",
+                  "type": "ref",
+                  "ref": "5hcVM",
+                  "width": "fill_container",
+                  "name": "card3",
+                  "descendants": {
+                    "p99mY": {
+                      "content": "Outback Mining Co"
+                    },
+                    "hCULt": {
+                      "content": "manual",
+                      "fill": "$--muted-foreground",
+                      "opacity": 0.6
+                    },
+                    "iPHZS": {
+                      "content": "Kalgoorlie"
+                    },
+                    "O4TfZ": {
+                      "fill": "$--wa-main-color"
+                    },
+                    "ZxEcr": {
+                      "content": "WA",
+                      "x": 6,
+                      "y": 2
+                    },
+                    "55RQ3": {
+                      "content": "6430"
+                    },
+                    "zajFG": {
+                      "id": "8V9NX",
+                      "type": "ref",
+                      "ref": "i0Pym",
+                      "name": "mining"
+                    },
+                    "MFDPN": {
+                      "type": "frame",
+                      "id": "bYJNF",
+                      "name": "ZoneBadges",
+                      "gap": 4,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "id": "unKfQ",
+                          "type": "ref",
+                          "ref": "RB4zL",
+                          "width": 22,
+                          "height": 22,
+                          "name": "z1"
+                        },
+                        {
+                          "id": "R0r5y",
+                          "type": "ref",
+                          "ref": "E3YvB",
+                          "width": 22,
+                          "height": 22,
+                          "name": "z2"
+                        },
+                        {
+                          "id": "DZqyr",
+                          "type": "ref",
+                          "ref": "BPbUz",
+                          "width": 22,
+                          "height": 22,
+                          "name": "z3"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "sdg8i",
+      "x": 5373,
+      "y": 2780,
+      "name": "Employers / List - Desktop",
+      "width": 1280,
+      "height": 1200,
+      "fill": "$--background",
+      "layout": "none",
+      "children": [
+        {
+          "id": "6XTOc",
+          "type": "ref",
+          "ref": "X1cZm",
+          "width": 256,
+          "height": 1200,
+          "x": 0,
+          "y": 0,
+          "name": "sidebar"
+        },
+        {
+          "type": "frame",
+          "id": "PjqAA",
+          "x": 256,
+          "y": 0,
+          "name": "Main Content",
+          "clip": true,
+          "width": 1024,
+          "height": 1200,
+          "layout": "vertical",
+          "gap": 24,
+          "padding": [
+            32,
+            40
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "QXmMm",
+              "name": "Page Header",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "WC7Wv",
+                  "name": "leftGroup",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "RaybA",
+                      "name": "title",
+                      "fill": "$--foreground",
+                      "content": "Employers",
+                      "fontFamily": "Inter",
+                      "fontSize": 28,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "7pq7W",
+                      "name": "subtitle",
+                      "fill": "$--muted-foreground",
+                      "content": "Manage your work experience employers",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    }
+                  ]
+                },
+                {
+                  "id": "CDWip",
+                  "type": "ref",
+                  "ref": "UQjhb",
+                  "name": "btn",
+                  "descendants": {
+                    "tOFF6": {
+                      "iconFontName": "plus"
+                    },
+                    "OO6Vt": {
+                      "content": "Add Employer"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "reTv8",
+              "name": "Summary Bar",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "CZ2KW",
+                  "name": "count",
+                  "fill": "$--muted-foreground",
+                  "content": "3 employers",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "nqn3b",
+              "name": "Cards Grid",
+              "width": "fill_container",
+              "height": "fit_content(800)",
+              "layout": "none",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Uohei",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Column 1",
+                  "width": 460,
+                  "layout": "vertical",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "id": "aM0Nq",
+                      "type": "ref",
+                      "ref": "5hcVM",
+                      "width": "fill_container",
+                      "name": "card1"
+                    },
+                    {
+                      "id": "nsCfh",
+                      "type": "ref",
+                      "ref": "5hcVM",
+                      "width": "fill_container",
+                      "name": "card2",
+                      "descendants": {
+                        "p99mY": {
+                          "content": "Outback Mining Co."
+                        },
+                        "6YacW/Dl4bJ": {
+                          "fill": "$--danger"
+                        },
+                        "6YacW/GIbc0": {
+                          "content": "Not Eligible",
+                          "fill": "$--danger"
+                        },
+                        "iPHZS": {
+                          "content": "Broken Hill"
+                        },
+                        "ZxEcr": {
+                          "content": "NSW"
+                        },
+                        "55RQ3": {
+                          "content": "2880"
+                        },
+                        "zajFG/XLo6w": {
+                          "fill": "#57534E"
+                        },
+                        "zajFG/79hM3": {
+                          "iconFontName": "pickaxe"
+                        },
+                        "zajFG/gOHOX": {
+                          "content": "Mining"
+                        },
+                        "sjCK4": {
+                          "enabled": false
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ebvaH",
+                  "x": 484,
+                  "y": 0,
+                  "name": "Column 2",
+                  "width": 460,
+                  "layout": "vertical",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "id": "ofPTP",
+                      "type": "ref",
+                      "ref": "5hcVM",
+                      "width": "fill_container",
+                      "name": "card3",
+                      "descendants": {
+                        "p99mY": {
+                          "content": "Coral Coast Fisheries"
+                        },
+                        "hCULt": {
+                          "content": "manual"
+                        },
+                        "iPHZS": {
+                          "content": "Exmouth"
+                        },
+                        "ZxEcr": {
+                          "content": "WA"
+                        },
+                        "55RQ3": {
+                          "content": "6707"
+                        },
+                        "zajFG/XLo6w": {
+                          "fill": "#2563EB"
+                        },
+                        "zajFG/79hM3": {
+                          "iconFontName": "fish"
+                        },
+                        "zajFG/gOHOX": {
+                          "content": "Fishing & Pearling"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "mJQgW",
+      "x": 5373,
+      "y": 4080,
+      "name": "Employers / List - Mobile",
+      "width": 390,
+      "height": 1200,
+      "fill": "$--background",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "25QlO",
+          "x": 0,
+          "y": 0,
+          "name": "Scroll Content",
+          "clip": true,
+          "width": 390,
+          "height": 1128,
+          "layout": "vertical",
+          "gap": 16,
+          "padding": [
+            24,
+            16,
+            100,
+            16
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "GUYoq",
+              "name": "Page Header",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "E2pnD",
+                  "name": "titleGroup",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "mzcpt",
+                      "name": "title",
+                      "fill": "$--foreground",
+                      "content": "Employers",
+                      "fontFamily": "Inter",
+                      "fontSize": 24,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "AvTUY",
+                      "name": "subtitle",
+                      "fill": "$--muted-foreground",
+                      "content": "Manage your work experience employers",
+                      "fontFamily": "Inter",
+                      "fontSize": 13
+                    }
+                  ]
+                },
+                {
+                  "id": "NRWFs",
+                  "type": "ref",
+                  "ref": "TFQa9",
+                  "width": "fill_container",
+                  "name": "btn",
+                  "descendants": {
+                    "AQvdH": {
+                      "iconFontName": "plus"
+                    },
+                    "Syk6S": {
+                      "content": "Add Employer"
+                    }
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "WN2WH",
+                  "name": "countText",
+                  "fill": "$--muted-foreground",
+                  "content": "3 employers",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "O1CS7",
+              "name": "Cards List",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 16,
+              "children": [
+                {
+                  "id": "0THJM",
+                  "type": "ref",
+                  "ref": "ke1qb",
+                  "width": "fill_container",
+                  "name": "card1",
+                  "descendants": {
+                    "7Dq9Q": {
+                      "content": "Farm Fresh Produce"
+                    }
+                  }
+                },
+                {
+                  "id": "uqc1l",
+                  "type": "ref",
+                  "ref": "ke1qb",
+                  "width": "fill_container",
+                  "name": "card2",
+                  "descendants": {
+                    "7Dq9Q": {
+                      "content": "Outback Mining Co."
+                    },
+                    "ikTkD/Dl4bJ": {
+                      "fill": "$--danger"
+                    },
+                    "ikTkD/GIbc0": {
+                      "content": "Not Eligible",
+                      "fill": "$--danger"
+                    },
+                    "3fLUj": {
+                      "content": "Broken Hill"
+                    },
+                    "6uHQr": {
+                      "content": "NSW"
+                    },
+                    "aYm1V": {
+                      "content": "2880"
+                    },
+                    "tkTao/XLo6w": {
+                      "fill": "#57534E"
+                    },
+                    "tkTao/79hM3": {
+                      "iconFontName": "pickaxe"
+                    },
+                    "tkTao/gOHOX": {
+                      "content": "Mining"
+                    },
+                    "MQUBS": {
+                      "enabled": false
+                    }
+                  }
+                },
+                {
+                  "id": "wll6A",
+                  "type": "ref",
+                  "ref": "ke1qb",
+                  "width": "fill_container",
+                  "name": "card3",
+                  "descendants": {
+                    "7Dq9Q": {
+                      "content": "Coral Coast Fisheries"
+                    },
+                    "uzy5m": {
+                      "content": "manual"
+                    },
+                    "3fLUj": {
+                      "content": "Exmouth"
+                    },
+                    "6uHQr": {
+                      "content": "WA"
+                    },
+                    "aYm1V": {
+                      "content": "6707"
+                    },
+                    "tkTao/XLo6w": {
+                      "fill": "#2563EB"
+                    },
+                    "tkTao/79hM3": {
+                      "iconFontName": "fish"
+                    },
+                    "tkTao/gOHOX": {
+                      "content": "Fishing & Pearling"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hhGxt",
+          "type": "ref",
+          "ref": "rlxi4",
+          "width": 390,
+          "x": 0,
+          "y": 1128,
+          "name": "bottomNav"
         }
       ]
     }
