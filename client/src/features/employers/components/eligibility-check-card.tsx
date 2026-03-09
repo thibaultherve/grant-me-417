@@ -15,7 +15,7 @@ import {
   EligibilityStatusBadge,
   getEligibilityStatus,
 } from './eligibility-status-badge';
-import { IndustryBadge } from './industry-badge';
+import { IndustryChip } from './industry-chip';
 import { ZoneBadge, type ZoneKey } from './zone-badge';
 
 // ── Zone / flag mapping ──────────────────────────────────────────────────────
@@ -168,8 +168,8 @@ function MatrixRow({
     >
       {/* Industry badge column — compact on mobile, full on sm+ */}
       <div className="w-28 sm:w-50 shrink-0 py-2.5">
-        <IndustryBadge industry={industry} className="sm:hidden" compact />
-        <IndustryBadge industry={industry} className="hidden sm:inline-flex" />
+        <IndustryChip industry={industry} className="sm:hidden" compact />
+        <IndustryChip industry={industry} className="hidden sm:inline-flex" />
       </div>
 
       {/* Zone cells */}

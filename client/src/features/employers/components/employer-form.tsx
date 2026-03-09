@@ -1,4 +1,3 @@
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
@@ -39,7 +38,7 @@ import { INDUSTRY_OPTIONS } from '../constants';
 import { createEmployerSchema, type CreateEmployerFormData } from '../schemas';
 
 import { EligibilityCheckCard } from './eligibility-check-card';
-import { IndustryBadge } from './industry-badge';
+import { IndustryChip } from './industry-chip';
 import { SuburbCombobox } from './suburb-combobox';
 
 interface EmployerFormProps {
@@ -90,10 +89,7 @@ export function EmployerForm({
   const suburbFlags = suburb?.postcodeData ?? null;
 
   // Auto eligibility check — cached per (suburbId, industry) combination
-  const {
-    data: autoCheckResult,
-    isFetching: isChecking,
-  } = useCheckEligibility(
+  const { data: autoCheckResult, isFetching: isChecking } = useCheckEligibility(
     eligibilityMode === 'automatic' ? suburbId?.toString() : undefined,
     eligibilityMode === 'automatic' ? industry : undefined,
   );
@@ -138,7 +134,7 @@ export function EmployerForm({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Employer Name</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="e.g., Sunshine Farm"
@@ -164,7 +160,9 @@ export function EmployerForm({
                     <FormControl>
                       <SelectTrigger className="h-10 w-full py-2.5 px-3">
                         {field.value ? (
-                          <IndustryBadge industry={field.value as IndustryType} />
+                          <IndustryChip
+                            industry={field.value as IndustryType}
+                          />
                         ) : (
                           <span className="text-muted-foreground text-sm">
                             Select Industry...
@@ -175,7 +173,7 @@ export function EmployerForm({
                     <SelectContent>
                       {INDUSTRY_OPTIONS.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
-                          <IndustryBadge
+                          <IndustryChip
                             industry={option.value as IndustryType}
                           />
                         </SelectItem>
@@ -262,8 +260,8 @@ export function EmployerForm({
                 <AlertDialogHeader>
                   <AlertDialogTitle>Delete employer?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This will permanently delete this employer and all associated
-                    hours. This action cannot be undone.
+                    This will permanently delete this employer and all
+                    associated hours. This action cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

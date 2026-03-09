@@ -62,10 +62,13 @@
   --badge-anywhere: #6366F1;
   /* ── Industry badge colors ── */
   --industry-hospitality: #D97706;
+  --industry-cultivation: #16A34A;
   --industry-fishing: #2563EB;
   --industry-tree-farming: #059669;
   --industry-mining: #57534E;
   --industry-construction: #CA8A04;
+  --industry-bushfire: #EA580C;
+  --industry-weather-recovery: #0EA5E9;
   --industry-covid: #9333EA;
   --industry-other: #6B7280;
   /* ── Warning banner text colors ── */
@@ -154,10 +157,13 @@
   --badge-anywhere: #6366F1;
   /* ── Industry badge colors (dark mode) ── */
   --industry-hospitality: #D97706;
+  --industry-cultivation: #16A34A;
   --industry-fishing: #2563EB;
   --industry-tree-farming: #059669;
   --industry-mining: #57534E;
   --industry-construction: #CA8A04;
+  --industry-bushfire: #EA580C;
+  --industry-weather-recovery: #0EA5E9;
   --industry-covid: #9333EA;
   --industry-other: #6B7280;
   /* ── Warning banner text colors (dark mode — lighter for readability) ── */
@@ -245,10 +251,13 @@
   --color-badge-anywhere: var(--badge-anywhere);
   /* ── Industry badge colors ── */
   --color-industry-hospitality: var(--industry-hospitality);
+  --color-industry-cultivation: var(--industry-cultivation);
   --color-industry-fishing: var(--industry-fishing);
   --color-industry-tree-farming: var(--industry-tree-farming);
   --color-industry-mining: var(--industry-mining);
   --color-industry-construction: var(--industry-construction);
+  --color-industry-bushfire: var(--industry-bushfire);
+  --color-industry-weather-recovery: var(--industry-weather-recovery);
   --color-industry-covid: var(--industry-covid);
   --color-industry-other: var(--industry-other);
   /* ── Warning banner text colors ── */
