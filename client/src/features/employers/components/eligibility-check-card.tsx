@@ -158,7 +158,7 @@ function MatrixRow({
   return (
     <div
       className={cn(
-        'flex items-center gap-1.5 px-3.5 border-l-[3px]',
+        'flex items-center gap-1.5 px-3 border-l-[3px]',
         isSelected
           ? 'border-l-primary'
           : index % 2 === 0
@@ -167,7 +167,7 @@ function MatrixRow({
       )}
     >
       {/* Industry badge column — compact on mobile, full on sm+ */}
-      <div className="w-28 sm:w-50 shrink-0 py-2.5">
+      <div className="w-28 sm:w-50 shrink-0 py-1">
         <IndustryChip industry={industry} className="sm:hidden" compact />
         <IndustryChip industry={industry} className="hidden sm:inline-flex" />
       </div>
@@ -180,7 +180,7 @@ function MatrixRow({
         return (
           <div
             key={zone}
-            className="flex-1 h-11.5 flex items-center justify-center"
+            className="flex-1 h-7 flex items-center justify-center"
           >
             {hasRule ? (
               <MatrixDot active={isSelected && zoneActive} />
@@ -228,9 +228,9 @@ export function EligibilityCheckCard({
   return (
     <div className="rounded-xl border border-border bg-card p-4 flex flex-col gap-3">
       {/* Header Row */}
-      <div className="flex items-center justify-between gap-1.5">
-        <div className="flex items-center gap-1.5">
-          <EligibilitySwitch mode={mode} onChange={onModeChange} />
+      <div className="flex items-center gap-1.5">
+        {/* Left: title + help */}
+        <div className="flex items-center gap-1.5 shrink-0">
           <span className="text-[13px] font-semibold text-foreground">
             Eligibility Check
           </span>
@@ -240,47 +240,52 @@ export function EligibilityCheckCard({
           />
         </div>
 
-        {/* In manual mode: inline dropdown trigger; in auto mode: read-only status badge */}
-        {isManual ? (
-          <Select
-            value={isEligible === null ? undefined : isEligible ? 'eligible' : 'not-eligible'}
-            onValueChange={(v) => onManualEligibilityChange(v === 'eligible')}
-            open={selectOpen}
-            onOpenChange={setSelectOpen}
-          >
-            <SelectTrigger className="h-auto min-h-0 bg-transparent dark:bg-transparent border-0 shadow-none px-0 py-px gap-1 text-[11px] font-medium focus:ring-0 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:opacity-60">
-              {isEligible === null ? (
-                <span className="text-muted-foreground">Select status...</span>
-              ) : isEligible ? (
-                <span className="flex items-center gap-1.5 text-success font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-success inline-block shrink-0" />
-                  Eligible
-                </span>
-              ) : (
-                <span className="flex items-center gap-1.5 text-danger font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-danger inline-block shrink-0" />
-                  Not Eligible
-                </span>
-              )}
-            </SelectTrigger>
-            <SelectContent align="end">
-              <SelectItem value="eligible" className="text-xs">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-success inline-block" />
-                  Eligible
-                </span>
-              </SelectItem>
-              <SelectItem value="not-eligible" className="text-xs">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-danger inline-block" />
-                  Not Eligible
-                </span>
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        ) : (
-          <EligibilityStatusBadge status={status} />
-        )}
+        {/* Center: status (auto badge or manual select) */}
+        <div className="flex-1 flex items-center justify-center">
+          {isManual ? (
+            <Select
+              value={isEligible === null ? undefined : isEligible ? 'eligible' : 'not-eligible'}
+              onValueChange={(v) => onManualEligibilityChange(v === 'eligible')}
+              open={selectOpen}
+              onOpenChange={setSelectOpen}
+            >
+              <SelectTrigger className="h-auto min-h-0 bg-transparent dark:bg-transparent border-0 shadow-none px-0 py-px gap-1 text-[11px] font-medium focus:ring-0 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:opacity-60">
+                {isEligible === null ? (
+                  <span className="text-muted-foreground">Select status...</span>
+                ) : isEligible ? (
+                  <span className="flex items-center gap-1.5 text-success font-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-success inline-block shrink-0" />
+                    Eligible
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1.5 text-danger font-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-danger inline-block shrink-0" />
+                    Not Eligible
+                  </span>
+                )}
+              </SelectTrigger>
+              <SelectContent align="center">
+                <SelectItem value="eligible" className="text-xs">
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-success inline-block" />
+                    Eligible
+                  </span>
+                </SelectItem>
+                <SelectItem value="not-eligible" className="text-xs">
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-danger inline-block" />
+                    Not Eligible
+                  </span>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          ) : (
+            <EligibilityStatusBadge status={status} />
+          )}
+        </div>
+
+        {/* Right: auto/manual switch */}
+        <EligibilitySwitch mode={mode} onChange={onModeChange} />
       </div>
 
       {/* Warning banner (manual mode only) */}
@@ -319,7 +324,7 @@ export function EligibilityCheckCard({
       >
         <div>
           {/* Zone header */}
-          <div className="flex items-center gap-1.5 px-3.5 py-2.5 bg-muted">
+          <div className="flex items-center gap-1.5 px-3 py-1 bg-muted">
             {/* Spacer for industry column — matches MatrixRow industry column width */}
             <div className="w-28 sm:w-50 shrink-0" />
             {ZONES.map((zone) => {
