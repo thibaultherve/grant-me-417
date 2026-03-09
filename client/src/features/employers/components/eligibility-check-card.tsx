@@ -115,23 +115,23 @@ function EligibilitySwitch({ mode, onChange }: EligibilitySwitchProps) {
   );
 }
 
-function MatrixDot({ active }: { active: boolean }) {
+function MatrixDot({ active, zoneActive }: { active: boolean; zoneActive: boolean }) {
   return (
     <div
       className={cn(
         'w-2.5 h-2.5 rounded-full shrink-0',
-        active ? 'bg-success' : 'bg-muted-foreground/30',
+        active ? 'bg-success' : zoneActive ? 'bg-muted-foreground/50' : 'bg-muted-foreground/20',
       )}
     />
   );
 }
 
-function MatrixCross({ active }: { active: boolean }) {
+function MatrixCross({ active, zoneActive }: { active: boolean; zoneActive: boolean }) {
   return (
     <span
       className={cn(
         'font-bold text-sm leading-none',
-        active ? 'text-danger' : 'text-muted-foreground/25',
+        active ? 'text-danger' : zoneActive ? 'text-muted-foreground/60' : 'text-muted-foreground/20',
       )}
     >
       ✖
@@ -183,9 +183,9 @@ function MatrixRow({
             className="flex-1 h-7 flex items-center justify-center"
           >
             {hasRule ? (
-              <MatrixDot active={isSelected && zoneActive} />
+              <MatrixDot active={isSelected && zoneActive} zoneActive={zoneActive} />
             ) : (
-              <MatrixCross active={isSelected && zoneActive} />
+              <MatrixCross active={isSelected && zoneActive} zoneActive={zoneActive} />
             )}
           </div>
         );
