@@ -4,13 +4,13 @@ Web application to help Working Holiday Visa (417) holders in Australia track th
 
 ## Tech Stack
 
-| Layer      | Technology                                                    |
-| ---------- | ------------------------------------------------------------- |
-| **Client** | React 19, TypeScript, Vite 7, TailwindCSS 4, Shadcn UI       |
-| **Server** | NestJS 11, Prisma ORM, Passport.js + JWT                      |
-| **Shared** | Zod 4 schemas, inferred TypeScript types, shared constants    |
-| **DB**     | PostgreSQL (Railway)                                          |
-| **Hosting**| Railway                                                       |
+| Layer       | Technology                                                 |
+| ----------- | ---------------------------------------------------------- |
+| **Client**  | React 19, TypeScript, Vite 7, TailwindCSS 4, Shadcn UI     |
+| **Server**  | NestJS 11, Prisma ORM, Passport.js + JWT                   |
+| **Shared**  | Zod 4 schemas, inferred TypeScript types, shared constants |
+| **DB**      | PostgreSQL (Railway)                                       |
+| **Hosting** | Railway                                                    |
 
 ## Monorepo Structure
 
@@ -50,11 +50,6 @@ cp client/.env.example client/.env
 ```
 
 ### Client (`client/.env`)
-
-| Variable                 | Description          |
-| ------------------------ | -------------------- |
-| `VITE_SUPABASE_URL`     | Supabase project URL |
-| `VITE_SUPABASE_ANON_KEY`| Supabase anon key    |
 
 ## Scripts
 

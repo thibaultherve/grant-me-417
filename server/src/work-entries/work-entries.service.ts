@@ -1,22 +1,22 @@
-import {
-  Injectable,
-  NotFoundException,
-  ForbiddenException,
-} from '@nestjs/common';
-import { Prisma } from '../../generated/prisma/client.js';
-import { PrismaService } from '../prisma/prisma.service.js';
-import { VisaProgressService } from '../visas/visa-progress.service.js';
 import type {
-  SaveWeekHoursInput,
   HoursList,
   MonthHours,
+  SaveWeekHoursInput,
   WorkEntryWithEmployer,
 } from '@get-granted/shared';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { Prisma } from '../../generated/prisma/client.js';
 import {
   formatDate,
   formatTimestamp,
   toNumber,
 } from '../common/utils/format.js';
+import { PrismaService } from '../prisma/prisma.service.js';
+import { VisaProgressService } from '../visas/visa-progress.service.js';
 
 const ENTRY_EMPLOYER_INCLUDE = {
   employer: {
@@ -37,7 +37,7 @@ export class WorkEntriesService {
 
   /**
    * List work entries with pagination, sorting, and employer join.
-   * Replaces the `work_entries_with_employers` Supabase view.
+   *
    */
   async findAll(
     userId: string,
@@ -48,7 +48,12 @@ export class WorkEntriesService {
       sortOrder?: 'asc' | 'desc';
     } = {},
   ): Promise<HoursList> {
-    const { page = 1, limit = 10, sortField = 'workDate', sortOrder = 'desc' } = options;
+    const {
+      page = 1,
+      limit = 10,
+      sortField = 'workDate',
+      sortOrder = 'desc',
+    } = options;
     const skip = (page - 1) * limit;
 
     const orderBy = this.buildOrderBy(sortField, sortOrder);
