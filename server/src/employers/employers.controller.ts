@@ -42,7 +42,7 @@ export class EmployersController {
     return this.employersService.findOne(user.sub, id);
   }
 
-  @Post('check-eligibility')
+  @Post('eligibilityCheck')
   async checkEligibility(
     @Body(new ZodValidationPipe(checkEligibilityInputSchema)) body: CheckEligibilityInput,
   ) {
