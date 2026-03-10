@@ -25,7 +25,7 @@ dist-ssr
 # MCP config
 .mcp.json
 
-# Claude code
+# Claude Code
 .claude
 CLAUDE.md
 

@@ -31,13 +31,23 @@ export class WorkEntriesController {
     @Query('page') page?: string,
     @Query('limit') limit?: string,
     @Query('sortField') sortField?: string,
-    @Query('sortOrder') sortOrder?: 'asc' | 'desc',
+    @Query('sortOrder') sortOrder?: string,
   ) {
+    const VALID_SORT_FIELDS = ['workDate', 'hours', 'employerName', 'industry', 'isEligible'];
+    const VALID_SORT_ORDERS = ['asc', 'desc'] as const;
+
+    const safePage = Math.max(1, page ? parseInt(page, 10) : 1);
+    const safeLimit = Math.min(100, Math.max(1, limit ? parseInt(limit, 10) : 10));
+    const safeSortField = sortField && VALID_SORT_FIELDS.includes(sortField) ? sortField : undefined;
+    const safeSortOrder = sortOrder && VALID_SORT_ORDERS.includes(sortOrder as 'asc' | 'desc')
+      ? (sortOrder as 'asc' | 'desc')
+      : undefined;
+
     return this.workEntriesService.findAll(user.sub, {
-      page: page ? parseInt(page, 10) : undefined,
-      limit: limit ? parseInt(limit, 10) : undefined,
-      sortField,
-      sortOrder,
+      page: safePage,
+      limit: safeLimit,
+      sortField: safeSortField,
+      sortOrder: safeSortOrder,
     });
   }
 

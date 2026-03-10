@@ -108,12 +108,14 @@ Launch agents based on detected scope (single message, parallel execution):
 
 | Condition | Agent | Prompt |
 |-----------|-------|--------|
-| Backend present | explore-codebase | "Review Go files [list]. Check duplication, unused code, Clean Architecture violations" |
-| Backend present | explore-codebase | "Find similar existing patterns in backend/. Compare with changes" |
-| Backend present | explore-db | "dev - Find tables related to [feature]" |
-| Frontend present | explore-codebase | "Review React/TypeScript files [list]. Check duplication, unused hooks, pattern violations" |
-| Frontend present | explore-codebase | "Find similar existing components/hooks. Compare patterns" |
-| External library | explore-docs | "[library] best practices" |
+| Backend present | `explore-codebase` | "Review NestJS files [list]. Check duplication, unused code, module/service/repository pattern violations" |
+| Backend present | `explore-codebase` | "Find similar existing patterns in server/src/. Compare with changes" |
+| Backend present | `explore-db` | "dev - Find tables related to [feature]" |
+| Backend present | `Security Engineer` | "Security review of these NestJS files: [list]. Check: JWT guard usage, ownership checks, input validation via Zod, data exposure in responses, OWASP Top 10." |
+| Frontend present | `explore-codebase` | "Review React/TypeScript files [list]. Check duplication, unused hooks, feature structure violations" |
+| Frontend present | `explore-codebase` | "Find similar existing components/hooks in client/src/. Compare patterns" |
+| Frontend present | `Frontend Developer` | "Review these React + TailwindCSS files: [list]. Check: TypeScript strictness, react-query patterns, i18n compliance (react-i18next), accessibility, performance (memo, useMemo)." |
+| External library | `explore-docs` | "[library] best practices" |
 
 ---
 
