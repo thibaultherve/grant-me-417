@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Get,
   Post,
@@ -65,6 +66,12 @@ export class WorkEntriesController {
     @Param('year', ParseIntPipe) year: number,
     @Param('month', ParseIntPipe) month: number,
   ) {
+    if (year < 2000 || year > 2100) {
+      throw new BadRequestException('year must be between 2000 and 2100');
+    }
+    if (month < 1 || month > 12) {
+      throw new BadRequestException('month must be between 1 and 12');
+    }
     return this.workEntriesService.getMonthHours(user.sub, year, month);
   }
 }

@@ -9,8 +9,10 @@ if (!API_URL) {
 }
 
 // --- Token storage ---
+// Refresh token is stored as an HttpOnly cookie (set by the server, inaccessible to JS).
+// Only the access token is kept in memory.
 
-const REFRESH_TOKEN_KEY = 'auth_refresh_token';
+const IS_LOGGED_IN_KEY = 'auth_logged_in';
 
 let accessToken: string | null = null;
 
@@ -18,19 +20,19 @@ export const setAccessToken = (token: string | null) => {
   accessToken = token;
 };
 
-export const getStoredRefreshToken = (): string | null =>
-  localStorage.getItem(REFRESH_TOKEN_KEY);
+export const isLoggedIn = (): boolean =>
+  localStorage.getItem(IS_LOGGED_IN_KEY) === 'true';
 
-export const setStoredRefreshToken = (token: string | null) => {
-  if (token) {
-    localStorage.setItem(REFRESH_TOKEN_KEY, token);
+export const setLoggedIn = (value: boolean) => {
+  if (value) {
+    localStorage.setItem(IS_LOGGED_IN_KEY, 'true');
   } else {
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
+    localStorage.removeItem(IS_LOGGED_IN_KEY);
   }
 };
 
 export const clearAuthStorage = () => {
-  localStorage.removeItem(REFRESH_TOKEN_KEY);
+  localStorage.removeItem(IS_LOGGED_IN_KEY);
   accessToken = null;
 };
 
@@ -48,6 +50,7 @@ function authRequestInterceptor(config: InternalAxiosRequestConfig) {
 
 export const api = Axios.create({
   baseURL: API_URL,
+  withCredentials: true, // Required to send/receive HttpOnly cookies
 });
 
 api.interceptors.request.use(authRequestInterceptor);
@@ -79,9 +82,7 @@ api.interceptors.response.use(
     };
 
     if (error.response?.status === 401 && !originalConfig._retry) {
-      const refreshToken = getStoredRefreshToken();
-
-      if (!refreshToken) {
+      if (!isLoggedIn()) {
         clearAuthStorage();
         const redirectTo = window.location.pathname;
         window.location.href = paths.auth.login.getHref(redirectTo);
@@ -101,16 +102,16 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Use plain Axios to avoid interceptor loop
-        const { data } = await Axios.post(`${API_URL}/auth/refresh`, {
-          refreshToken,
-        });
+        // Refresh token is sent automatically via HttpOnly cookie (withCredentials)
+        const { data } = await Axios.post(
+          `${API_URL}/auth/refresh`,
+          {},
+          { withCredentials: true },
+        );
 
         const newAccessToken = data.tokens.accessToken as string;
-        const newRefreshToken = data.tokens.refreshToken as string;
 
         setAccessToken(newAccessToken);
-        setStoredRefreshToken(newRefreshToken);
 
         originalConfig.headers.Authorization = `Bearer ${newAccessToken}`;
         processQueue(null, newAccessToken);

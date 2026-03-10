@@ -14,19 +14,10 @@ export const loginSchema = z.object({
   password: z.string().min(1),
 });
 
-export const refreshTokenSchema = z.object({
-  refreshToken: z.string().min(1),
-});
-
-export const logoutBodySchema = z.object({
-  refreshToken: z.string().optional(),
-});
-
 // --- Response schemas ---
 
 export const authTokensSchema = z.object({
   accessToken: z.string(),
-  refreshToken: z.string(),
 });
 
 export const authUserSchema = z.object({
@@ -50,8 +41,6 @@ export const registerResponseSchema = z.object({
 
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
-export type RefreshTokenInput = z.infer<typeof refreshTokenSchema>;
-export type LogoutBodyInput = z.infer<typeof logoutBodySchema>;
 export type AuthTokens = z.infer<typeof authTokensSchema>;
 export type AuthUser = z.infer<typeof authUserSchema>;
 export type LoginResponse = z.infer<typeof loginResponseSchema>;

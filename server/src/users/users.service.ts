@@ -45,32 +45,34 @@ export class UsersService {
 
     const { firstName, lastName, ...profileFields } = input;
 
-    // Update user fields (firstName, lastName) if provided
-    if (firstName !== undefined || lastName !== undefined) {
-      await this.prisma.user.update({
-        where: { id: userId },
-        data: {
-          ...(firstName !== undefined && { firstName }),
-          ...(lastName !== undefined && { lastName }),
-        },
-      });
-    }
-
-    // Update profile fields if any provided
+    const hasUserFields = firstName !== undefined || lastName !== undefined;
     const hasProfileFields = Object.keys(profileFields).length > 0;
-    if (hasProfileFields) {
-      await this.prisma.userProfile.update({
-        where: { userId },
-        data: {
-          ...(profileFields.nationality !== undefined && {
-            nationality: profileFields.nationality,
-          }),
-          ...(profileFields.ukCitizenExemption !== undefined && {
-            ukCitizenExemption: profileFields.ukCitizenExemption,
-          }),
-        },
-      });
-    }
+
+    await this.prisma.$transaction(async (tx) => {
+      if (hasUserFields) {
+        await tx.user.update({
+          where: { id: userId },
+          data: {
+            ...(firstName !== undefined && { firstName }),
+            ...(lastName !== undefined && { lastName }),
+          },
+        });
+      }
+
+      if (hasProfileFields) {
+        await tx.userProfile.update({
+          where: { userId },
+          data: {
+            ...(profileFields.nationality !== undefined && {
+              nationality: profileFields.nationality,
+            }),
+            ...(profileFields.ukCitizenExemption !== undefined && {
+              ukCitizenExemption: profileFields.ukCitizenExemption,
+            }),
+          },
+        });
+      }
+    });
 
     return this.getProfile(userId);
   }

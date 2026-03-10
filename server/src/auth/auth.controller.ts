@@ -4,11 +4,14 @@ import {
   Body,
   UseGuards,
   Req,
+  Res,
   HttpCode,
   HttpStatus,
   UsePipes,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
+import type { Request, Response } from 'express';
 import { AuthService } from './auth.service.js';
 import { LocalAuthGuard } from './guards/local-auth.guard.js';
 import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
@@ -19,13 +22,19 @@ import {
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe.js';
 import {
   registerSchema,
-  refreshTokenSchema,
-  logoutBodySchema,
   type RegisterInput,
-  type RefreshTokenInput,
-  type LogoutBodyInput,
   type AuthUser,
 } from '@get-granted/shared';
+
+const REFRESH_TOKEN_COOKIE = 'refresh_token';
+
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'strict' as const,
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in ms
+  path: '/',
+};
 
 @Controller('auth')
 export class AuthController {
@@ -34,36 +43,42 @@ export class AuthController {
   @Post('register')
   @Throttle({ default: { ttl: 60000, limit: 5 } })
   @UsePipes(new ZodValidationPipe(registerSchema))
-  async register(@Body() body: RegisterInput) {
-    return this.authService.register(body);
+  async register(@Body() body: RegisterInput, @Res({ passthrough: true }) res: Response) {
+    const result = await this.authService.register(body);
+    res.cookie(REFRESH_TOKEN_COOKIE, result.tokens.refreshToken, COOKIE_OPTIONS);
+    return { user: result.user, tokens: { accessToken: result.tokens.accessToken } };
   }
 
   @Post('login')
   @Throttle({ default: { ttl: 60000, limit: 5 } })
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
-  async login(@Req() req: { user: AuthUser }) {
-    return this.authService.login(req.user);
+  async login(@Req() req: { user: AuthUser }, @Res({ passthrough: true }) res: Response) {
+    const result = await this.authService.login(req.user);
+    res.cookie(REFRESH_TOKEN_COOKIE, result.tokens.refreshToken, COOKIE_OPTIONS);
+    return { user: result.user, tokens: { accessToken: result.tokens.accessToken } };
   }
 
   @Post('refresh')
   @Throttle({ default: { ttl: 60000, limit: 5 } })
   @HttpCode(HttpStatus.OK)
-  async refresh(
-    @Body(new ZodValidationPipe(refreshTokenSchema))
-    body: RefreshTokenInput,
-  ) {
-    return this.authService.refreshTokens(body.refreshToken);
+  async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    const refreshToken = req.cookies?.[REFRESH_TOKEN_COOKIE] as string | undefined;
+    if (!refreshToken) {
+      throw new UnauthorizedException('Missing refresh token');
+    }
+    const result = await this.authService.refreshTokens(refreshToken);
+    res.cookie(REFRESH_TOKEN_COOKIE, result.tokens.refreshToken, COOKIE_OPTIONS);
+    return { user: result.user, tokens: { accessToken: result.tokens.accessToken } };
   }
 
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
-  async logout(
-    @CurrentUser() user: JwtPayload,
-    @Body(new ZodValidationPipe(logoutBodySchema)) body: LogoutBodyInput,
-  ) {
-    await this.authService.logout(user.sub, body.refreshToken);
+  async logout(@CurrentUser() user: JwtPayload, @Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    const refreshToken = req.cookies?.[REFRESH_TOKEN_COOKIE] as string | undefined;
+    await this.authService.logout(user.sub, refreshToken);
+    res.clearCookie(REFRESH_TOKEN_COOKIE, { path: '/' });
     return { message: 'Logged out successfully' };
   }
 }
