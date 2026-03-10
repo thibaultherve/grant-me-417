@@ -2,21 +2,32 @@ import { Plane, Plus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { InfoCard } from '@/components/ui/info-card';
 import { paths } from '@/config/paths';
 import { useDeleteVisa } from '@/features/visas/api/use-visas';
 import { VisasList } from '@/features/visas/components/visas-list';
 import { useVisaContext } from '@/features/visas/hooks/use-visa-context';
-import type { Visa } from '@get-granted/shared';
 import { visaTypeToSlug } from '@/features/visas/utils/visa-helpers';
+import { usePageHeader } from '@/hooks/use-page-header';
+import type { Visa } from '@get-granted/shared';
 
 export const VisasRoute = () => {
   const navigate = useNavigate();
 
-  // React Query hooks
   const { visas, isLoading, error } = useVisaContext();
   const deleteMutation = useDeleteVisa();
+
+  usePageHeader({
+    description: 'Manage your Working Holiday Visas (up to 3 visas)',
+    action: () => (
+      <Button asChild size="lg" disabled={visas.length >= 3}>
+        <Link to={paths.app.visas.new.getHref()}>
+          <Plus className="mr-2 h-4 w-4" />
+          Add Visa
+        </Link>
+      </Button>
+    ),
+  });
 
   const handleEditVisa = (visa: Visa) => {
     navigate(paths.app.visas.edit.getHref(visaTypeToSlug(visa.visaType)));
@@ -28,26 +39,6 @@ export const VisasRoute = () => {
 
   return (
     <div className="space-y-8">
-      <Card>
-        <CardContent>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h3 className="font-semibold mb-1">Manage your visas</h3>
-              <p className="text-sm text-muted-foreground">
-                Manage your Working Holiday Visas (up to 3 visas)
-              </p>
-            </div>
-            <Button asChild size="lg" disabled={visas.length >= 3}>
-              <Link to={paths.app.visas.new.getHref()}>
-                <Plus className="mr-2 h-4 w-4" />
-                Add Visa
-              </Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Info tip */}
       {visas.length === 0 && !isLoading && (
         <InfoCard variant="accent">
           <div className="flex items-start gap-4">
@@ -63,7 +54,6 @@ export const VisasRoute = () => {
         </InfoCard>
       )}
 
-      {/* Pass all state and handlers as props - Lift State Up pattern */}
       <VisasList
         visas={visas}
         loading={isLoading}

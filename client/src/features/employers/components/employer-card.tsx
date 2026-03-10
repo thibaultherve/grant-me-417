@@ -1,4 +1,5 @@
-import { Pencil, Trash2 } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { Ban, Building2, CalendarDays, Factory, Globe, MapPin, Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -13,8 +14,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { paths } from '@/config/paths';
+import { cn } from '@/lib/utils';
 
 import type { Employer, PostcodeBadgeData } from '@get-granted/shared';
 
@@ -70,96 +71,147 @@ export function EmployerCard({ employer, onDelete }: EmployerCardProps) {
 
   return (
     <>
-      <Card className="flex flex-col shadow-sm gap-0 py-0">
-        {/* Card Header */}
-        <CardHeader className="flex flex-row items-center justify-between px-5 py-4 space-y-0 border-b border-border">
-          <span className="text-base font-semibold text-foreground truncate">
-            {employer.name}
-          </span>
-          <div className="flex items-center gap-1.5 shrink-0 ml-3">
-            <EligibilityStatusBadge status={eligibilityStatus} className="px-0 py-0" />
-            <span className="text-[11px] font-light text-muted-foreground opacity-40">
-              |
-            </span>
-            <span
-              className={
-                employer.eligibilityMode === 'automatic'
-                  ? 'text-[9px] font-normal text-indigo-500 opacity-80'
-                  : 'text-[9px] font-normal text-muted-foreground opacity-60'
-              }
-            >
-              {employer.eligibilityMode === 'automatic' ? 'auto' : 'manual'}
-            </span>
-          </div>
-        </CardHeader>
+      <div className="flex rounded-lg border border-border shadow-sm overflow-hidden bg-card">
+        {/* Accent strip */}
+        <div
+          className={cn(
+            'w-0.75 md:w-1 self-stretch shrink-0 rounded-l-lg',
+            employer.isEligible ? 'bg-success' : 'bg-destructive',
+          )}
+        />
 
-        {/* Info Section */}
-        <CardContent className="flex flex-col gap-3.5 p-5">
-          {/* Location */}
-          <div className="flex items-center gap-2.5">
-            <span className="text-[11px] font-medium text-muted-foreground tracking-[0.5px] uppercase w-[70px] shrink-0">
-              Location
-            </span>
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-[13px] font-medium text-foreground">
-                {employer.suburb.suburbName}
+        {/* Card content */}
+        <div className="flex flex-col flex-1 min-w-0">
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3 md:px-5 md:py-4 md:border-b md:border-border">
+            <div className="flex items-center gap-2 min-w-0">
+              <Building2 className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary shrink-0" />
+              <span className="text-[15px] md:text-base font-semibold text-foreground truncate">
+                {employer.name}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 shrink-0 ml-3">
+              <EligibilityStatusBadge status={eligibilityStatus} className="px-0 py-0" />
+              <span className="text-[11px] font-light text-muted-foreground opacity-40">
+                |
               </span>
               <span
-                className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold ${stateConfig.bg} ${stateConfig.fg}`}
+                className={
+                  employer.eligibilityMode === 'automatic'
+                    ? 'text-[9px] font-normal text-indigo-500 opacity-80'
+                    : 'text-[9px] font-normal text-muted-foreground opacity-60'
+                }
               >
-                {employer.suburb.stateCode}
-              </span>
-              <span className="inline-flex items-center px-1.5 py-0.5 rounded border border-border text-[10px] font-medium text-muted-foreground">
-                {employer.suburb.postcode}
+                {employer.eligibilityMode === 'automatic' ? 'auto' : 'manual'}
               </span>
             </div>
           </div>
 
-          {/* Industry */}
-          <div className="flex items-center gap-2.5">
-            <span className="text-[11px] font-medium text-muted-foreground tracking-[0.5px] uppercase w-[70px] shrink-0">
-              Industry
-            </span>
-            <IndustryChip industry={employer.industry} className="px-0" />
-          </div>
-
-          {/* Zones */}
-          {zones.length > 0 && (
+          {/* Info Section */}
+          <div className="flex flex-col gap-3 md:gap-3.5 px-4 pb-4 pt-3 md:p-5">
+            {/* Location */}
             <div className="flex items-center gap-2.5">
-              <span className="text-[11px] font-medium text-muted-foreground tracking-[0.5px] uppercase w-[70px] shrink-0">
-                Zones
+              <MapPin className="h-3.25 w-3.25 md:h-3.5 md:w-3.5 text-muted-foreground shrink-0" />
+              <span className="text-[10px] font-semibold uppercase tracking-[0.8px] text-muted-foreground w-16.25 md:w-17.5 shrink-0">
+                Location
               </span>
-              <div className="flex items-center gap-1">
-                {zones.map((zone) => (
-                  <ZoneBadge key={zone} zone={zone} size="sm" />
-                ))}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[13px] font-medium text-foreground">
+                  {employer.suburb.suburbName}
+                </span>
+                <span
+                  className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold ${stateConfig.bg} ${stateConfig.fg}`}
+                >
+                  {employer.suburb.stateCode}
+                </span>
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded border border-border text-[10px] font-medium text-muted-foreground">
+                  {employer.suburb.postcode}
+                </span>
               </div>
             </div>
-          )}
-        </CardContent>
 
-        {/* Card Actions */}
-        <CardFooter className="flex items-center justify-end gap-2 px-5 py-3 border-t border-border mt-auto">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() =>
-              navigate(paths.app.employers.edit.getHref(employer.id))
-            }
-          >
-            <Pencil className="w-3.5 h-3.5 mr-1.5" />
-            Edit
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => setIsDeleteDialogOpen(true)}
-          >
-            <Trash2 className="w-3.5 h-3.5 mr-1.5" />
-            Delete
-          </Button>
-        </CardFooter>
-      </Card>
+            {/* Industry */}
+            <div className="flex items-center gap-2.5">
+              <Factory className="h-3.25 w-3.25 md:h-3.5 md:w-3.5 text-muted-foreground shrink-0" />
+              <span className="text-[10px] font-semibold uppercase tracking-[0.8px] text-muted-foreground w-16.25 md:w-17.5 shrink-0">
+                Industry
+              </span>
+              <IndustryChip industry={employer.industry} className="px-0" />
+            </div>
+
+            {/* Zones — always rendered */}
+            <div className="flex items-center gap-2.5">
+              <Globe className="h-3.25 w-3.25 md:h-3.5 md:w-3.5 text-muted-foreground shrink-0" />
+              <span className="text-[10px] font-semibold uppercase tracking-[0.8px] text-muted-foreground w-16.25 md:w-17.5 shrink-0">
+                Zones
+              </span>
+              {zones.length === 0 ? (
+                <div className="w-5 h-5 rounded bg-[#9CA3AF] flex items-center justify-center shadow-sm">
+                  <Ban className="h-3.25 w-3.25 text-white" />
+                </div>
+              ) : (
+                <div className="flex items-center gap-1">
+                  {zones.map((zone) => (
+                    <ZoneBadge key={zone} zone={zone} size="sm" />
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center justify-between px-4 py-2.5 md:px-5 md:py-3.5 bg-muted border-t border-border mt-auto">
+            {/* Date hint */}
+            <div className="flex items-center gap-1.25 md:gap-1.5">
+              <CalendarDays className="h-3.25 w-3.25 md:h-3.5 md:w-3.5 text-muted-foreground" />
+              <span className="text-[11px] md:text-xs font-normal text-muted-foreground">
+                Added {formatDistanceToNow(new Date(employer.createdAt), { addSuffix: true })}
+              </span>
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex items-center gap-2">
+              {/* Mobile: icon-only */}
+              <Button
+                variant="outline"
+                size="icon"
+                className="md:hidden"
+                onClick={() => navigate(paths.app.employers.edit.getHref(employer.id))}
+              >
+                <Pencil className="h-3.25 w-3.25" />
+              </Button>
+              <Button
+                variant="destructive"
+                size="icon"
+                className="md:hidden"
+                onClick={() => setIsDeleteDialogOpen(true)}
+              >
+                <Trash2 className="h-3.25 w-3.25" />
+              </Button>
+
+              {/* Desktop: labeled */}
+              <Button
+                variant="outline"
+                size="sm"
+                className="hidden md:inline-flex"
+                onClick={() => navigate(paths.app.employers.edit.getHref(employer.id))}
+              >
+                <Pencil className="h-3.25 w-3.25" />
+                Edit
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                className="hidden md:inline-flex"
+                onClick={() => setIsDeleteDialogOpen(true)}
+              >
+                <Trash2 className="h-3.25 w-3.25" />
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <AlertDialog
         open={isDeleteDialogOpen}

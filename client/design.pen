@@ -18392,8 +18392,8 @@
     {
       "type": "frame",
       "id": "F8c81",
-      "x": 1810,
-      "y": -25,
+      "x": 1557,
+      "y": -145,
       "name": "Badges/Industry",
       "context": "Container for all full-size Industry badge components. Each industry badge has a small icon-only variant in Badges/Industry/Small (9NVkA). Use full badges for detailed views, small variants for compact/inline displays.",
       "fill": "$--card",
@@ -18403,6 +18403,7 @@
         "thickness": 1,
         "fill": "$--border"
       },
+      "layout": "vertical",
       "gap": 8,
       "padding": 16,
       "children": [
@@ -18417,7 +18418,9 @@
           "gap": 8,
           "padding": [
             5,
-            10
+            6,
+            5,
+            0
           ],
           "alignItems": "center",
           "children": [
@@ -18467,7 +18470,9 @@
           "gap": 8,
           "padding": [
             5,
-            10
+            6,
+            5,
+            0
           ],
           "alignItems": "center",
           "children": [
@@ -18517,7 +18522,9 @@
           "gap": 8,
           "padding": [
             5,
-            10
+            6,
+            5,
+            0
           ],
           "alignItems": "center",
           "children": [
@@ -18567,7 +18574,9 @@
           "gap": 8,
           "padding": [
             5,
-            10
+            6,
+            5,
+            0
           ],
           "alignItems": "center",
           "children": [
@@ -18617,7 +18626,9 @@
           "gap": 8,
           "padding": [
             5,
-            10
+            6,
+            5,
+            0
           ],
           "alignItems": "center",
           "children": [
@@ -18667,7 +18678,9 @@
           "gap": 8,
           "padding": [
             5,
-            10
+            6,
+            5,
+            0
           ],
           "alignItems": "center",
           "children": [
@@ -18717,7 +18730,9 @@
           "gap": 8,
           "padding": [
             5,
-            10
+            6,
+            5,
+            0
           ],
           "alignItems": "center",
           "children": [
@@ -18767,7 +18782,9 @@
           "gap": 8,
           "padding": [
             5,
-            10
+            6,
+            5,
+            0
           ],
           "alignItems": "center",
           "children": [
@@ -18817,7 +18834,9 @@
           "gap": 8,
           "padding": [
             5,
-            10
+            6,
+            5,
+            0
           ],
           "alignItems": "center",
           "children": [
@@ -25769,8 +25788,8 @@
     {
       "type": "frame",
       "id": "5hcVM",
-      "x": -5437,
-      "y": 5260,
+      "x": 6013,
+      "y": 1840,
       "name": "Employer Card / Desktop",
       "reusable": true,
       "width": 420,
@@ -25791,189 +25810,114 @@
         },
         "blur": 1.75
       },
-      "layout": "vertical",
       "children": [
         {
-          "type": "frame",
-          "id": "2qx5W",
-          "name": "Card Header",
-          "width": "fill_container",
-          "stroke": {
-            "align": "inside",
-            "thickness": {
-              "bottom": 1
-            },
-            "fill": "$--border"
-          },
-          "padding": [
-            16,
-            20
+          "type": "rectangle",
+          "cornerRadius": [
+            8,
+            0,
+            0,
+            8
           ],
-          "justifyContent": "space_between",
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "frame",
-              "id": "IoRKk",
-              "name": "Header Left",
-              "layout": "vertical",
-              "gap": 2,
-              "children": [
-                {
-                  "type": "text",
-                  "id": "p99mY",
-                  "name": "employerName",
-                  "fill": "$--foreground",
-                  "content": "Farm Fresh Produce",
-                  "fontFamily": "Inter",
-                  "fontSize": 16,
-                  "fontWeight": "600"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "VAIvl",
-              "name": "Eligibility Group",
-              "gap": 6,
-              "alignItems": "center",
-              "children": [
-                {
-                  "id": "6YacW",
-                  "type": "ref",
-                  "ref": "zrdBt",
-                  "name": "badge",
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "gap": 6,
-                  "width": "fit_content"
-                },
-                {
-                  "type": "text",
-                  "id": "bNyfT",
-                  "name": "separator",
-                  "opacity": 0.4,
-                  "fill": "$--muted-foreground",
-                  "content": "|",
-                  "fontFamily": "Inter",
-                  "fontSize": 11,
-                  "fontWeight": "300"
-                },
-                {
-                  "type": "text",
-                  "id": "hCULt",
-                  "name": "modeText",
-                  "opacity": 0.8,
-                  "fill": "$--primary",
-                  "content": "auto",
-                  "fontFamily": "Inter",
-                  "fontSize": 9,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
+          "id": "TU0pv",
+          "name": "Accent Strip",
+          "fill": "$--primary",
+          "width": 4,
+          "height": "fill_container"
         },
         {
           "type": "frame",
-          "id": "HmF46",
-          "name": "Info Section",
+          "id": "rwOEa",
+          "name": "Card Content",
           "width": "fill_container",
           "layout": "vertical",
-          "gap": 14,
-          "padding": 20,
           "children": [
             {
               "type": "frame",
-              "id": "O6CS1",
-              "name": "Location Row",
+              "id": "2qx5W",
+              "name": "Card Header",
               "width": "fill_container",
-              "gap": 10,
+              "stroke": {
+                "align": "inside",
+                "thickness": {
+                  "bottom": 1
+                },
+                "fill": "$--border"
+              },
+              "padding": [
+                16,
+                20
+              ],
+              "justifyContent": "space_between",
               "alignItems": "center",
               "children": [
                 {
-                  "type": "text",
-                  "id": "wKVHy",
-                  "name": "locLabel",
-                  "fill": "$--muted-foreground",
-                  "textGrowth": "fixed-width",
-                  "width": 70,
-                  "content": "LOCATION",
-                  "fontFamily": "Inter",
-                  "fontSize": 11,
-                  "fontWeight": "500",
-                  "letterSpacing": 0.5
+                  "type": "frame",
+                  "id": "IoRKk",
+                  "name": "Header Left",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "KzovD",
+                      "name": "Building Icon",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "building-2",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--primary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "p99mY",
+                      "name": "employerName",
+                      "fill": "$--foreground",
+                      "content": "Farm Fresh Produce",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "600"
+                    }
+                  ]
                 },
                 {
                   "type": "frame",
-                  "id": "nGTqs",
-                  "name": "Location Value",
+                  "id": "VAIvl",
+                  "name": "Eligibility Group",
                   "gap": 6,
                   "alignItems": "center",
                   "children": [
                     {
+                      "id": "6YacW",
+                      "type": "ref",
+                      "ref": "zrdBt",
+                      "name": "badge",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "gap": 6,
+                      "width": "fit_content"
+                    },
+                    {
                       "type": "text",
-                      "id": "iPHZS",
-                      "name": "suburbName",
-                      "fill": "$--foreground",
-                      "content": "Cairns",
+                      "id": "bNyfT",
+                      "name": "separator",
+                      "opacity": 0.4,
+                      "fill": "$--muted-foreground",
+                      "content": "|",
                       "fontFamily": "Inter",
-                      "fontSize": 13,
-                      "fontWeight": "500"
+                      "fontSize": 11,
+                      "fontWeight": "300"
                     },
                     {
-                      "type": "frame",
-                      "id": "O4TfZ",
-                      "name": "StateBadge",
-                      "fill": "$--qld-main-color",
-                      "cornerRadius": 4,
-                      "padding": [
-                        2,
-                        6
-                      ],
-                      "justifyContent": "center",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "ZxEcr",
-                          "name": "stateText",
-                          "fill": "#FFFFFF",
-                          "content": "QLD",
-                          "fontFamily": "Inter",
-                          "fontSize": 10,
-                          "fontWeight": "600"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "RLgy5",
-                      "name": "PostcodeBadge",
-                      "cornerRadius": 4,
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$--border"
-                      },
-                      "padding": [
-                        2,
-                        6
-                      ],
-                      "justifyContent": "center",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "55RQ3",
-                          "name": "postcodeText",
-                          "fill": "$--muted-foreground",
-                          "content": "4870",
-                          "fontFamily": "Inter",
-                          "fontSize": 10,
-                          "fontWeight": "500"
-                        }
-                      ]
+                      "type": "text",
+                      "id": "hCULt",
+                      "name": "modeText",
+                      "opacity": 0.8,
+                      "fill": "$--primary",
+                      "content": "auto",
+                      "fontFamily": "Inter",
+                      "fontSize": 9,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -25981,130 +25925,305 @@
             },
             {
               "type": "frame",
-              "id": "SHekE",
-              "name": "Industry Row",
+              "id": "HmF46",
+              "name": "Info Section",
               "width": "fill_container",
-              "gap": 10,
-              "alignItems": "center",
+              "layout": "vertical",
+              "gap": 14,
+              "padding": 20,
               "children": [
-                {
-                  "type": "text",
-                  "id": "CfHiK",
-                  "name": "industryLabel",
-                  "fill": "$--muted-foreground",
-                  "textGrowth": "fixed-width",
-                  "width": 70,
-                  "content": "INDUSTRY",
-                  "fontFamily": "Inter",
-                  "fontSize": 11,
-                  "fontWeight": "500",
-                  "letterSpacing": 0.5
-                },
-                {
-                  "id": "zajFG",
-                  "type": "ref",
-                  "ref": "qFKYB",
-                  "name": "row1Badge"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "zlec2",
-              "name": "Zones Row",
-              "width": "fill_container",
-              "gap": 10,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "O9zMK",
-                  "name": "zonesLabel",
-                  "fill": "$--muted-foreground",
-                  "textGrowth": "fixed-width",
-                  "width": 70,
-                  "content": "ZONES",
-                  "fontFamily": "Inter",
-                  "fontSize": 11,
-                  "fontWeight": "500",
-                  "letterSpacing": 0.5
-                },
                 {
                   "type": "frame",
-                  "id": "MFDPN",
-                  "name": "ZoneBadges",
-                  "gap": 4,
+                  "id": "O6CS1",
+                  "name": "Location Row",
+                  "width": "fill_container",
+                  "gap": 10,
                   "alignItems": "center",
                   "children": [
                     {
-                      "id": "0RtmM",
-                      "type": "ref",
-                      "ref": "RB4zL",
-                      "width": 22,
-                      "height": 22,
-                      "name": "z1"
+                      "type": "icon_font",
+                      "id": "y6UO0",
+                      "name": "locIcon",
+                      "width": 14,
+                      "height": 14,
+                      "iconFontName": "map-pin",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
                     },
                     {
-                      "id": "sjCK4",
+                      "type": "text",
+                      "id": "wKVHy",
+                      "name": "locLabel",
+                      "fill": "$--muted-foreground",
+                      "textGrowth": "fixed-width",
+                      "width": 70,
+                      "content": "LOCATION",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "600",
+                      "letterSpacing": 0.8
+                    },
+                    {
+                      "type": "frame",
+                      "id": "nGTqs",
+                      "name": "Location Value",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "iPHZS",
+                          "name": "suburbName",
+                          "fill": "$--foreground",
+                          "content": "Cairns",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "O4TfZ",
+                          "name": "StateBadge",
+                          "fill": "$--qld-main-color",
+                          "cornerRadius": 4,
+                          "padding": [
+                            2,
+                            6
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ZxEcr",
+                              "name": "stateText",
+                              "fill": "#FFFFFF",
+                              "content": "QLD",
+                              "fontFamily": "Inter",
+                              "fontSize": 10,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "RLgy5",
+                          "name": "PostcodeBadge",
+                          "cornerRadius": 4,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1,
+                            "fill": "$--border"
+                          },
+                          "padding": [
+                            2,
+                            6
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "55RQ3",
+                              "name": "postcodeText",
+                              "fill": "$--muted-foreground",
+                              "content": "4870",
+                              "fontFamily": "Inter",
+                              "fontSize": 10,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "SHekE",
+                  "name": "Industry Row",
+                  "width": "fill_container",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "v578Z",
+                      "name": "indIcon",
+                      "width": 14,
+                      "height": 14,
+                      "iconFontName": "factory",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
+                    },
+                    {
+                      "type": "text",
+                      "id": "CfHiK",
+                      "name": "industryLabel",
+                      "fill": "$--muted-foreground",
+                      "textGrowth": "fixed-width",
+                      "width": 70,
+                      "content": "INDUSTRY",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "600",
+                      "letterSpacing": 0.8
+                    },
+                    {
+                      "id": "zajFG",
                       "type": "ref",
-                      "ref": "E3YvB",
-                      "width": 22,
-                      "height": 22,
-                      "name": "z2"
+                      "ref": "qFKYB",
+                      "name": "row1Badge"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "zlec2",
+                  "name": "Zones Row",
+                  "width": "fill_container",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "nYevw",
+                      "name": "zoneIcon",
+                      "width": 14,
+                      "height": 14,
+                      "iconFontName": "globe",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
+                    },
+                    {
+                      "type": "text",
+                      "id": "O9zMK",
+                      "name": "zonesLabel",
+                      "fill": "$--muted-foreground",
+                      "textGrowth": "fixed-width",
+                      "width": 70,
+                      "content": "ZONES",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "600",
+                      "letterSpacing": 0.8
+                    },
+                    {
+                      "type": "frame",
+                      "id": "MFDPN",
+                      "name": "ZoneBadges",
+                      "gap": 4,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "id": "0RtmM",
+                          "type": "ref",
+                          "ref": "RB4zL",
+                          "width": 20,
+                          "height": 20,
+                          "name": "z1"
+                        },
+                        {
+                          "id": "sjCK4",
+                          "type": "ref",
+                          "ref": "E3YvB",
+                          "width": 20,
+                          "height": 20,
+                          "name": "z2"
+                        }
+                      ]
                     }
                   ]
                 }
               ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "K25hL",
-          "name": "Card Actions",
-          "width": "fill_container",
-          "stroke": {
-            "align": "inside",
-            "thickness": {
-              "top": 1
-            },
-            "fill": "$--border"
-          },
-          "gap": 8,
-          "padding": [
-            12,
-            20
-          ],
-          "justifyContent": "end",
-          "alignItems": "center",
-          "children": [
-            {
-              "id": "T7qIn",
-              "type": "ref",
-              "ref": "qY8X8",
-              "name": "editBtn",
-              "descendants": {
-                "MOukB": {
-                  "iconFontName": "pencil"
-                },
-                "9QkPP": {
-                  "content": "Edit"
-                }
-              }
             },
             {
-              "id": "vNUTw",
-              "type": "ref",
-              "ref": "KVSpr",
-              "name": "deleteBtn",
-              "descendants": {
-                "QmAWH": {
-                  "iconFontName": "trash-2"
+              "type": "frame",
+              "id": "K25hL",
+              "name": "Card Actions",
+              "width": "fill_container",
+              "fill": "$--muted",
+              "stroke": {
+                "align": "inside",
+                "thickness": {
+                  "top": 1
                 },
-                "4cTi2": {
-                  "content": "Delete"
+                "fill": "$--border"
+              },
+              "gap": 8,
+              "padding": [
+                14,
+                20
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "71XVY",
+                  "name": "dateRow",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "Hi251",
+                      "name": "calIconD",
+                      "width": 14,
+                      "height": 14,
+                      "iconFontName": "calendar-days",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
+                    },
+                    {
+                      "type": "text",
+                      "id": "LKx3Q",
+                      "name": "dateTextD",
+                      "fill": "$--muted-foreground",
+                      "content": "Added 3 days ago",
+                      "fontFamily": "Inter",
+                      "fontSize": 12
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Ix1tC",
+                  "name": "rightGroup",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "id": "T7qIn",
+                      "type": "ref",
+                      "ref": "qY8X8",
+                      "name": "editBtn",
+                      "descendants": {
+                        "MOukB": {
+                          "iconFontName": "pencil"
+                        },
+                        "9QkPP": {
+                          "content": "Edit"
+                        }
+                      }
+                    },
+                    {
+                      "id": "vNUTw",
+                      "type": "ref",
+                      "ref": "KVSpr",
+                      "name": "deleteBtn",
+                      "descendants": {
+                        "QmAWH": {
+                          "iconFontName": "trash-2"
+                        },
+                        "4cTi2": {
+                          "content": "Delete"
+                        }
+                      }
+                    }
+                  ]
                 }
-              }
+              ]
             }
           ]
         }
@@ -26113,8 +26232,8 @@
     {
       "type": "frame",
       "id": "ke1qb",
-      "x": -4917,
-      "y": 5260,
+      "x": 6533,
+      "y": 1840,
       "name": "Employer Card / Mobile",
       "reusable": true,
       "width": 340,
@@ -26135,568 +26254,421 @@
         },
         "blur": 1.75
       },
-      "layout": "vertical",
       "children": [
         {
+          "type": "rectangle",
+          "cornerRadius": [
+            8,
+            0,
+            0,
+            8
+          ],
+          "id": "anNXK",
+          "name": "strip",
+          "fill": "$--primary",
+          "width": 3,
+          "height": "fill_container"
+        },
+        {
           "type": "frame",
-          "id": "4yn9Z",
-          "name": "Card Header",
+          "id": "8pHpa",
+          "name": "contentWrap",
           "width": "fill_container",
           "layout": "vertical",
-          "padding": [
-            12,
-            16
-          ],
-          "alignItems": "center",
           "children": [
             {
               "type": "frame",
-              "id": "xBTTf",
-              "name": "Header Top",
+              "id": "4yn9Z",
+              "name": "Card Header",
               "width": "fill_container",
+              "layout": "vertical",
+              "padding": [
+                12,
+                16
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "xBTTf",
+                  "name": "Header Top",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "QGxQ6",
+                      "name": "buildingIcon",
+                      "width": 14,
+                      "height": 14,
+                      "iconFontName": "building-2",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--primary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "7Dq9Q",
+                      "name": "employerName",
+                      "fill": "$--foreground",
+                      "content": "Tropical Farms Pty Ltd",
+                      "fontFamily": "Inter",
+                      "fontSize": 15,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "QTZNV",
+                      "name": "Eligibility Group",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "id": "ikTkD",
+                          "type": "ref",
+                          "ref": "zrdBt",
+                          "name": "eligBadge"
+                        },
+                        {
+                          "type": "text",
+                          "id": "VbZOC",
+                          "name": "sep",
+                          "opacity": 0.4,
+                          "fill": "$--muted-foreground",
+                          "content": "|",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "300"
+                        },
+                        {
+                          "type": "text",
+                          "id": "uzy5m",
+                          "name": "modeLabel",
+                          "opacity": 0.8,
+                          "fill": "$--primary",
+                          "content": "auto",
+                          "textAlign": "center",
+                          "fontFamily": "Inter",
+                          "fontSize": 9,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "1rTPM",
+                          "name": "sep",
+                          "opacity": 0.4,
+                          "fill": "$--muted-foreground",
+                          "content": "|",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "300"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "TPjND",
+              "name": "Info Section",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 12,
+              "padding": [
+                12,
+                16,
+                16,
+                16
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "TPo5j",
+                  "name": "Location Row",
+                  "width": "fill_container",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "yDEX4",
+                      "name": "mapPinIcon",
+                      "width": 13,
+                      "height": 13,
+                      "iconFontName": "map-pin",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Ewlva",
+                      "name": "locLabel",
+                      "fill": "$--muted-foreground",
+                      "textGrowth": "fixed-width",
+                      "width": 65,
+                      "content": "LOCATION",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "600",
+                      "letterSpacing": 0.8
+                    },
+                    {
+                      "type": "frame",
+                      "id": "KxuYM",
+                      "name": "locValue",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "3fLUj",
+                          "name": "suburbName",
+                          "fill": "$--foreground",
+                          "content": "Cairns",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "5nRQn",
+                          "name": "stateBadge",
+                          "fill": "$--qld-main-color",
+                          "cornerRadius": 4,
+                          "padding": [
+                            2,
+                            6
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "6uHQr",
+                              "name": "stateText",
+                              "fill": "$--white",
+                              "content": "QLD",
+                              "fontFamily": "Inter",
+                              "fontSize": 10,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "QIUJS",
+                          "name": "postcodeBadge",
+                          "cornerRadius": 4,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1,
+                            "fill": "$--border"
+                          },
+                          "padding": [
+                            2,
+                            6
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "aYm1V",
+                              "name": "postcodeText",
+                              "fill": "$--muted-foreground",
+                              "content": "4870",
+                              "fontFamily": "Inter",
+                              "fontSize": 10,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "NhnxI",
+                  "name": "Industry Row",
+                  "width": "fill_container",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "a6TK7",
+                      "name": "factoryIcon",
+                      "width": 13,
+                      "height": 13,
+                      "iconFontName": "factory",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
+                    },
+                    {
+                      "type": "text",
+                      "id": "tvHg5",
+                      "name": "indLabel",
+                      "fill": "$--muted-foreground",
+                      "textGrowth": "fixed-width",
+                      "width": 65,
+                      "content": "INDUSTRY",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "600",
+                      "letterSpacing": 0.8
+                    },
+                    {
+                      "id": "tkTao",
+                      "type": "ref",
+                      "ref": "qFKYB",
+                      "name": "industryBadge"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "is12E",
+                  "name": "Zones Row",
+                  "width": "fill_container",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "mB13T",
+                      "name": "globeIcon",
+                      "width": 13,
+                      "height": 13,
+                      "iconFontName": "globe",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
+                    },
+                    {
+                      "type": "text",
+                      "id": "F8dC3",
+                      "name": "zonesLabel",
+                      "fill": "$--muted-foreground",
+                      "textGrowth": "fixed-width",
+                      "width": 65,
+                      "content": "ZONES",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "600",
+                      "letterSpacing": 0.8
+                    },
+                    {
+                      "type": "frame",
+                      "id": "fg7WQ",
+                      "name": "zoneBadges",
+                      "gap": 4,
+                      "justifyContent": "end",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "id": "zLbGP",
+                          "type": "ref",
+                          "ref": "RB4zL",
+                          "name": "zoneBadge1",
+                          "width": 20,
+                          "height": 20
+                        },
+                        {
+                          "id": "MQUBS",
+                          "type": "ref",
+                          "ref": "E3YvB",
+                          "name": "zoneBadge2",
+                          "width": 20,
+                          "height": 20
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ekQB3",
+              "name": "Card Actions",
+              "width": "fill_container",
+              "fill": "$--muted",
+              "stroke": {
+                "align": "inside",
+                "thickness": {
+                  "top": 1
+                },
+                "fill": "$--border"
+              },
+              "gap": 8,
+              "padding": [
+                10,
+                16
+              ],
               "justifyContent": "space_between",
               "alignItems": "center",
               "children": [
                 {
-                  "type": "text",
-                  "id": "7Dq9Q",
-                  "name": "employerName",
-                  "fill": "$--foreground",
-                  "content": "Tropical Farms Pty Ltd",
-                  "fontFamily": "Inter",
-                  "fontSize": 15,
-                  "fontWeight": "600"
-                },
-                {
                   "type": "frame",
-                  "id": "QTZNV",
-                  "name": "Eligibility Group",
-                  "gap": 6,
+                  "id": "QbnlW",
+                  "name": "dateHint",
+                  "gap": 5,
                   "alignItems": "center",
                   "children": [
                     {
-                      "id": "ikTkD",
-                      "type": "ref",
-                      "ref": "zrdBt",
-                      "name": "eligBadge"
+                      "type": "icon_font",
+                      "id": "l4NCy",
+                      "name": "calIcon",
+                      "width": 13,
+                      "height": 13,
+                      "iconFontName": "calendar-days",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
                     },
                     {
                       "type": "text",
-                      "id": "VbZOC",
-                      "name": "sep",
-                      "opacity": 0.4,
+                      "id": "E44uM",
+                      "name": "dateText",
                       "fill": "$--muted-foreground",
-                      "content": "|",
+                      "content": "Added 3 days ago",
                       "fontFamily": "Inter",
                       "fontSize": 11,
-                      "fontWeight": "300"
-                    },
-                    {
-                      "type": "text",
-                      "id": "uzy5m",
-                      "name": "modeLabel",
-                      "opacity": 0.8,
-                      "fill": "$--primary",
-                      "content": "auto",
-                      "textAlign": "center",
-                      "fontFamily": "Inter",
-                      "fontSize": 9,
-                      "fontWeight": "normal"
-                    },
-                    {
-                      "type": "text",
-                      "id": "1rTPM",
-                      "name": "sep",
-                      "opacity": 0.4,
-                      "fill": "$--muted-foreground",
-                      "content": "|",
-                      "fontFamily": "Inter",
-                      "fontSize": 11,
-                      "fontWeight": "300"
+                      "letterSpacing": 0.1
                     }
                   ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "TPjND",
-          "name": "Info Section",
-          "width": "fill_container",
-          "layout": "vertical",
-          "gap": 12,
-          "padding": [
-            12,
-            16,
-            16,
-            16
-          ],
-          "children": [
-            {
-              "type": "frame",
-              "id": "TPo5j",
-              "name": "Location Row",
-              "width": "fill_container",
-              "gap": 10,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "Ewlva",
-                  "name": "locLabel",
-                  "fill": "$--muted-foreground",
-                  "textGrowth": "fixed-width",
-                  "width": 65,
-                  "content": "LOCATION",
-                  "fontFamily": "Inter",
-                  "fontSize": 11,
-                  "fontWeight": "500",
-                  "letterSpacing": 0.5
                 },
                 {
                   "type": "frame",
-                  "id": "KxuYM",
-                  "name": "locValue",
-                  "gap": 6,
+                  "id": "gyICQ",
+                  "name": "btnGroup",
+                  "gap": 8,
                   "alignItems": "center",
                   "children": [
                     {
-                      "type": "text",
-                      "id": "3fLUj",
-                      "name": "suburbName",
-                      "fill": "$--foreground",
-                      "content": "Cairns",
-                      "fontFamily": "Inter",
-                      "fontSize": 13,
-                      "fontWeight": "500"
+                      "id": "1juGj",
+                      "type": "ref",
+                      "ref": "K4T7O",
+                      "name": "editBtn",
+                      "descendants": {
+                        "2a0vw": {
+                          "iconFontName": "pencil"
+                        }
+                      }
                     },
                     {
-                      "type": "frame",
-                      "id": "5nRQn",
-                      "name": "stateBadge",
-                      "fill": "$--qld-main-color",
-                      "cornerRadius": 4,
-                      "padding": [
-                        2,
-                        6
-                      ],
-                      "justifyContent": "center",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "6uHQr",
-                          "name": "stateText",
-                          "fill": "$--white",
-                          "content": "QLD",
-                          "fontFamily": "Inter",
-                          "fontSize": 10,
-                          "fontWeight": "600"
+                      "id": "4BAGY",
+                      "type": "ref",
+                      "ref": "yAezs",
+                      "name": "deleteBtn",
+                      "descendants": {
+                        "SFE6i": {
+                          "iconFontName": "trash-2"
                         }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "QIUJS",
-                      "name": "postcodeBadge",
-                      "cornerRadius": 4,
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$--border"
-                      },
-                      "padding": [
-                        2,
-                        6
-                      ],
-                      "justifyContent": "center",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "aYm1V",
-                          "name": "postcodeText",
-                          "fill": "$--muted-foreground",
-                          "content": "4870",
-                          "fontFamily": "Inter",
-                          "fontSize": 10,
-                          "fontWeight": "500"
-                        }
-                      ]
+                      }
                     }
                   ]
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "NhnxI",
-              "name": "Industry Row",
-              "width": "fill_container",
-              "gap": 10,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "tvHg5",
-                  "name": "indLabel",
-                  "fill": "$--muted-foreground",
-                  "textGrowth": "fixed-width",
-                  "width": 65,
-                  "content": "INDUSTRY",
-                  "fontFamily": "Inter",
-                  "fontSize": 11,
-                  "fontWeight": "500",
-                  "letterSpacing": 0.5
-                },
-                {
-                  "id": "tkTao",
-                  "type": "ref",
-                  "ref": "qFKYB",
-                  "name": "industryBadge"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "is12E",
-              "name": "Zones Row",
-              "width": "fill_container",
-              "gap": 10,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "F8dC3",
-                  "name": "zonesLabel",
-                  "fill": "$--muted-foreground",
-                  "textGrowth": "fixed-width",
-                  "width": 65,
-                  "content": "ZONES",
-                  "fontFamily": "Inter",
-                  "fontSize": 11,
-                  "fontWeight": "500",
-                  "letterSpacing": 0.5
-                },
-                {
-                  "type": "frame",
-                  "id": "fg7WQ",
-                  "name": "zoneBadges",
-                  "gap": 4,
-                  "justifyContent": "end",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "id": "zLbGP",
-                      "type": "ref",
-                      "ref": "RB4zL",
-                      "name": "zoneBadge1",
-                      "width": 22,
-                      "height": 22
-                    },
-                    {
-                      "id": "MQUBS",
-                      "type": "ref",
-                      "ref": "E3YvB",
-                      "name": "zoneBadge2",
-                      "width": 22,
-                      "height": 22
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "ekQB3",
-          "name": "Card Actions",
-          "width": "fill_container",
-          "stroke": {
-            "align": "inside",
-            "thickness": {
-              "top": 1
-            },
-            "fill": "$--border"
-          },
-          "gap": 8,
-          "padding": [
-            10,
-            16
-          ],
-          "justifyContent": "end",
-          "alignItems": "center",
-          "children": [
-            {
-              "id": "1juGj",
-              "type": "ref",
-              "ref": "K4T7O",
-              "name": "editBtn",
-              "descendants": {
-                "2a0vw": {
-                  "iconFontName": "pencil"
-                }
-              }
-            },
-            {
-              "id": "4BAGY",
-              "type": "ref",
-              "ref": "yAezs",
-              "name": "deleteBtn",
-              "descendants": {
-                "SFE6i": {
-                  "iconFontName": "trash-2"
-                }
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "frame",
-      "id": "V3FUF",
-      "x": -4400,
-      "y": 5260,
-      "name": "Employer Cards - Showcase",
-      "width": 1380,
-      "fill": "$--background",
-      "layout": "vertical",
-      "gap": 24,
-      "padding": 32,
-      "children": [
-        {
-          "type": "text",
-          "id": "Mwbvs",
-          "name": "Title",
-          "fill": "$--foreground",
-          "content": "Employer Card Component",
-          "fontFamily": "Inter",
-          "fontSize": 20,
-          "fontWeight": "700"
-        },
-        {
-          "type": "frame",
-          "id": "wrIce",
-          "name": "Cards Row",
-          "width": "fill_container",
-          "gap": 24,
-          "children": [
-            {
-              "type": "frame",
-              "id": "hMqNM",
-              "name": "Card 1 - Auto Eligible",
-              "width": "fill_container",
-              "layout": "vertical",
-              "gap": 8,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "bJGbU",
-                  "name": "lbl1",
-                  "fill": "$--muted-foreground",
-                  "content": "Auto + Eligible",
-                  "fontFamily": "Inter",
-                  "fontSize": 12,
-                  "fontWeight": "500"
-                },
-                {
-                  "id": "PCWxZ",
-                  "type": "ref",
-                  "ref": "5hcVM",
-                  "width": "fill_container",
-                  "name": "card1",
-                  "descendants": {
-                    "p99mY": {
-                      "content": "Tropical Fruit Farm"
-                    },
-                    "iPHZS": {
-                      "content": "Cairns"
-                    },
-                    "O4TfZ": {
-                      "fill": "$--qld-main-color"
-                    },
-                    "ZxEcr": {
-                      "content": "QLD"
-                    },
-                    "55RQ3": {
-                      "content": "4870"
-                    },
-                    "zajFG": {
-                      "id": "rLf5q",
-                      "type": "ref",
-                      "ref": "cu2jm",
-                      "name": "newBadge"
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "S6QzL",
-              "name": "Card 2 - Auto Not Eligible",
-              "width": "fill_container",
-              "layout": "vertical",
-              "gap": 8,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "dgvPT",
-                  "name": "lbl2",
-                  "fill": "$--muted-foreground",
-                  "content": "Auto + Not Eligible",
-                  "fontFamily": "Inter",
-                  "fontSize": 12,
-                  "fontWeight": "500"
-                },
-                {
-                  "id": "oWqQg",
-                  "type": "ref",
-                  "ref": "5hcVM",
-                  "width": "fill_container",
-                  "name": "card2",
-                  "descendants": {
-                    "p99mY": {
-                      "content": "Sydney CBD Hotel"
-                    },
-                    "6YacW": {
-                      "id": "zmFNB",
-                      "type": "ref",
-                      "ref": "gb2Md",
-                      "name": "notElig"
-                    },
-                    "iPHZS": {
-                      "content": "Sydney"
-                    },
-                    "O4TfZ": {
-                      "fill": "$--nsw-main-color"
-                    },
-                    "ZxEcr": {
-                      "content": "NSW"
-                    },
-                    "55RQ3": {
-                      "content": "2000"
-                    },
-                    "zajFG": {
-                      "id": "2tRZt",
-                      "type": "ref",
-                      "ref": "Vzr3i",
-                      "name": "construction"
-                    },
-                    "0RtmM": {
-                      "id": "bAK02",
-                      "type": "ref",
-                      "ref": "BPbUz",
-                      "width": 22,
-                      "height": 22,
-                      "name": "regional"
-                    },
-                    "sjCK4": {
-                      "id": "Pf2Kw",
-                      "type": "ref",
-                      "ref": "9l5VX",
-                      "width": 22,
-                      "height": 22,
-                      "name": "anywhere"
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "KglWi",
-              "name": "Card 3 - Manual Eligible",
-              "width": "fill_container",
-              "layout": "vertical",
-              "gap": 8,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "UPbTN",
-                  "name": "lbl3",
-                  "fill": "$--muted-foreground",
-                  "content": "Manual + Eligible",
-                  "fontFamily": "Inter",
-                  "fontSize": 12,
-                  "fontWeight": "500"
-                },
-                {
-                  "id": "AfECX",
-                  "type": "ref",
-                  "ref": "5hcVM",
-                  "width": "fill_container",
-                  "name": "card3",
-                  "descendants": {
-                    "p99mY": {
-                      "content": "Outback Mining Co"
-                    },
-                    "hCULt": {
-                      "content": "manual",
-                      "fill": "$--muted-foreground",
-                      "opacity": 0.6
-                    },
-                    "iPHZS": {
-                      "content": "Kalgoorlie"
-                    },
-                    "O4TfZ": {
-                      "fill": "$--wa-main-color"
-                    },
-                    "ZxEcr": {
-                      "content": "WA",
-                      "x": 6,
-                      "y": 2
-                    },
-                    "55RQ3": {
-                      "content": "6430"
-                    },
-                    "zajFG": {
-                      "id": "8V9NX",
-                      "type": "ref",
-                      "ref": "i0Pym",
-                      "name": "mining"
-                    },
-                    "MFDPN": {
-                      "type": "frame",
-                      "id": "bYJNF",
-                      "name": "ZoneBadges",
-                      "gap": 4,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "id": "unKfQ",
-                          "type": "ref",
-                          "ref": "RB4zL",
-                          "width": 22,
-                          "height": 22,
-                          "name": "z1"
-                        },
-                        {
-                          "id": "R0r5y",
-                          "type": "ref",
-                          "ref": "E3YvB",
-                          "width": 22,
-                          "height": 22,
-                          "name": "z2"
-                        },
-                        {
-                          "id": "DZqyr",
-                          "type": "ref",
-                          "ref": "BPbUz",
-                          "width": 22,
-                          "height": 22,
-                          "name": "z3"
-                        }
-                      ]
-                    }
-                  }
                 }
               ]
             }
@@ -26773,7 +26745,8 @@
                       "fill": "$--muted-foreground",
                       "content": "Manage your work experience employers",
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -26843,40 +26816,7 @@
                       "type": "ref",
                       "ref": "5hcVM",
                       "width": "fill_container",
-                      "name": "card2",
-                      "descendants": {
-                        "p99mY": {
-                          "content": "Outback Mining Co."
-                        },
-                        "6YacW/Dl4bJ": {
-                          "fill": "$--danger"
-                        },
-                        "6YacW/GIbc0": {
-                          "content": "Not Eligible",
-                          "fill": "$--danger"
-                        },
-                        "iPHZS": {
-                          "content": "Broken Hill"
-                        },
-                        "ZxEcr": {
-                          "content": "NSW"
-                        },
-                        "55RQ3": {
-                          "content": "2880"
-                        },
-                        "zajFG/XLo6w": {
-                          "fill": "#57534E"
-                        },
-                        "zajFG/79hM3": {
-                          "iconFontName": "pickaxe"
-                        },
-                        "zajFG/gOHOX": {
-                          "content": "Mining"
-                        },
-                        "sjCK4": {
-                          "enabled": false
-                        }
-                      }
+                      "name": "card2"
                     }
                   ]
                 },
@@ -26895,33 +26835,7 @@
                       "type": "ref",
                       "ref": "5hcVM",
                       "width": "fill_container",
-                      "name": "card3",
-                      "descendants": {
-                        "p99mY": {
-                          "content": "Coral Coast Fisheries"
-                        },
-                        "hCULt": {
-                          "content": "manual"
-                        },
-                        "iPHZS": {
-                          "content": "Exmouth"
-                        },
-                        "ZxEcr": {
-                          "content": "WA"
-                        },
-                        "55RQ3": {
-                          "content": "6707"
-                        },
-                        "zajFG/XLo6w": {
-                          "fill": "#2563EB"
-                        },
-                        "zajFG/79hM3": {
-                          "iconFontName": "fish"
-                        },
-                        "zajFG/gOHOX": {
-                          "content": "Fishing & Pearling"
-                        }
-                      }
+                      "name": "card3"
                     }
                   ]
                 }
@@ -26993,7 +26907,8 @@
                       "fill": "$--muted-foreground",
                       "content": "Manage your work experience employers",
                       "fontFamily": "Inter",
-                      "fontSize": 13
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -27037,85 +26952,21 @@
                   "type": "ref",
                   "ref": "ke1qb",
                   "width": "fill_container",
-                  "name": "card1",
-                  "descendants": {
-                    "7Dq9Q": {
-                      "content": "Farm Fresh Produce"
-                    }
-                  }
+                  "name": "card1"
                 },
                 {
                   "id": "uqc1l",
                   "type": "ref",
                   "ref": "ke1qb",
                   "width": "fill_container",
-                  "name": "card2",
-                  "descendants": {
-                    "7Dq9Q": {
-                      "content": "Outback Mining Co."
-                    },
-                    "ikTkD/Dl4bJ": {
-                      "fill": "$--danger"
-                    },
-                    "ikTkD/GIbc0": {
-                      "content": "Not Eligible",
-                      "fill": "$--danger"
-                    },
-                    "3fLUj": {
-                      "content": "Broken Hill"
-                    },
-                    "6uHQr": {
-                      "content": "NSW"
-                    },
-                    "aYm1V": {
-                      "content": "2880"
-                    },
-                    "tkTao/XLo6w": {
-                      "fill": "#57534E"
-                    },
-                    "tkTao/79hM3": {
-                      "iconFontName": "pickaxe"
-                    },
-                    "tkTao/gOHOX": {
-                      "content": "Mining"
-                    },
-                    "MQUBS": {
-                      "enabled": false
-                    }
-                  }
+                  "name": "card2"
                 },
                 {
                   "id": "wll6A",
                   "type": "ref",
                   "ref": "ke1qb",
                   "width": "fill_container",
-                  "name": "card3",
-                  "descendants": {
-                    "7Dq9Q": {
-                      "content": "Coral Coast Fisheries"
-                    },
-                    "uzy5m": {
-                      "content": "manual"
-                    },
-                    "3fLUj": {
-                      "content": "Exmouth"
-                    },
-                    "6uHQr": {
-                      "content": "WA"
-                    },
-                    "aYm1V": {
-                      "content": "6707"
-                    },
-                    "tkTao/XLo6w": {
-                      "fill": "#2563EB"
-                    },
-                    "tkTao/79hM3": {
-                      "iconFontName": "fish"
-                    },
-                    "tkTao/gOHOX": {
-                      "content": "Fishing & Pearling"
-                    }
-                  }
+                  "name": "card3"
                 }
               ]
             }
@@ -27131,6 +26982,67 @@
           "name": "bottomNav"
         }
       ]
+    },
+    {
+      "id": "jt9Qr",
+      "type": "ref",
+      "ref": "5hcVM",
+      "name": "Employer Card / Desktop / No Zones",
+      "x": 6013,
+      "y": 2150,
+      "height": 251,
+      "descendants": {
+        "p99mY": {
+          "content": "Ocean View Resort"
+        },
+        "iPHZS": {
+          "content": "Sydney"
+        },
+        "zlec2": {
+          "enabled": true
+        },
+        "nYevw": {
+          "x": 0,
+          "y": 3
+        },
+        "O9zMK": {
+          "x": 24,
+          "y": 4
+        },
+        "MFDPN": {
+          "type": "frame",
+          "id": "VY2Kt",
+          "name": "NoZoneBadge",
+          "width": 20,
+          "height": 20,
+          "fill": "#9CA3AF",
+          "cornerRadius": 4,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#00000025",
+            "offset": {
+              "x": 0,
+              "y": 2
+            },
+            "blur": 4
+          },
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "A8Bo5",
+              "name": "banIcon",
+              "width": 13,
+              "height": 13,
+              "iconFontName": "ban",
+              "iconFontFamily": "lucide",
+              "fill": "#ffffff"
+            }
+          ]
+        }
+      }
     }
   ],
   "themes": {

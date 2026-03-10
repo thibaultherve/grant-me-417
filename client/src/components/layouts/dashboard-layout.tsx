@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { PageBreadcrumb } from '@/components/page-breadcrumb';
+import { usePageHeaderSlot } from '@/hooks/use-page-header';
 import { MobileNav } from './mobile-nav';
 import { Sidebar } from './sidebar';
 import { useSidebar } from '@/hooks/use-sidebar';
@@ -11,6 +12,7 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const { isCollapsed } = useSidebar();
+  const { action: headerAction, description: headerDescription } = usePageHeaderSlot();
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">
@@ -26,7 +28,15 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         <main className="flex-1">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
             <div className="space-y-6">
-              <PageBreadcrumb />
+              <div className="flex items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <PageBreadcrumb />
+                  {headerDescription && (
+                    <p className="text-sm text-muted-foreground">{headerDescription}</p>
+                  )}
+                </div>
+                {headerAction && <div className="shrink-0">{headerAction}</div>}
+              </div>
               {children}
             </div>
           </div>
