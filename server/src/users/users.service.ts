@@ -5,7 +5,7 @@ import type {
   UpdateProfileInput,
   UserProfile as UserProfileResponse,
 } from '@get-granted/shared';
-import { formatDate, formatTimestamp } from '../common/utils/format.js';
+import { formatTimestamp } from '../common/utils/format.js';
 
 const USER_INCLUDE = { profile: true } as const;
 
@@ -65,11 +65,6 @@ export class UsersService {
           ...(profileFields.nationality !== undefined && {
             nationality: profileFields.nationality,
           }),
-          ...(profileFields.dateOfBirth !== undefined && {
-            dateOfBirth: profileFields.dateOfBirth
-              ? new Date(profileFields.dateOfBirth)
-              : null,
-          }),
           ...(profileFields.ukCitizenExemption !== undefined && {
             ukCitizenExemption: profileFields.ukCitizenExemption,
           }),
@@ -87,9 +82,6 @@ export class UsersService {
       firstName: user.firstName ?? '',
       lastName: user.lastName ?? '',
       nationality: user.profile?.nationality ?? null,
-      dateOfBirth: user.profile?.dateOfBirth
-        ? formatDate(user.profile.dateOfBirth)
-        : null,
       ukCitizenExemption: user.profile?.ukCitizenExemption ?? false,
       createdAt: formatTimestamp(user.createdAt),
       updatedAt: formatTimestamp(user.profile?.updatedAt ?? user.updatedAt),

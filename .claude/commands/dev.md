@@ -92,19 +92,30 @@ Ask with AskUserQuestion: "Proceed with implementation?"
 
 ## 5. IMPLEMENT
 
-After validation, implement in appropriate order:
+After validation, launch specialist agents based on scope before implementing (single message):
 
-**Backend:** Domain → Application → Infrastructure → Presentation
-- context.Context as first parameter for I/O
-- Follow Clean Architecture patterns
-- Complete error handling
+| Scope | Agent | Prompt |
+|-------|-------|--------|
+| Backend phase | `Backend Architect` | "Implement [feature] in NestJS + Prisma. Files: [list]. Follow module/service/repository pattern. Zod validation via @shared. JWT ownership checks." |
+| Frontend phase | `Frontend Developer` | "Implement [feature] in React 19 + TailwindCSS + Shadcn UI. Files: [list]. react-hook-form + Zod, react-query for server state, react-i18next for all text. Strict TypeScript." |
+| UI from Pencil design | `UI Designer` | "Convert Pencil design spec [node IDs] to React + TailwindCSS + Shadcn UI components. Design tokens to use: [from design.pen]. Ensure WCAG AA." |
+
+Then implement in appropriate order, reusing agent output:
+
+**Backend:** Module → Service → Repository → Controller
+- Zod schemas from @shared via ZodValidationPipe
+- JwtAuthGuard + ownership checks in service
+- Complete error handling (NestJS exceptions)
 
 **Frontend:** Types → API → Hooks → Components → Pages
-- next-intl for ALL user-facing text
+- react-i18next for ALL user-facing text
 - Shadcn UI for standard components
 - Strict TypeScript (no `any`)
 
-For significant UI: `Skill(skill="frontend-design:frontend-design")`
+**UI with Pencil + Chrome DevTools:**
+- Use `mcp__pencil__batch_get` to read design specs
+- Implement component, then `mcp__chrome-devtools__take_screenshot` to validate visually
+- Iterate with `UI Designer` agent if pixel-perfect adjustments needed
 
 ---
 

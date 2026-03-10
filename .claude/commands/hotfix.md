@@ -112,7 +112,16 @@ Ask with AskUserQuestion: "Proceed with fix?"
 
 ## 6. IMPLEMENT
 
-After validation, implement:
+Before implementing, launch the relevant specialist agent:
+
+| Bug type | Agent | Prompt |
+|----------|-------|--------|
+| Backend / API | `Backend Architect` | "Fix [issue] in NestJS + Prisma. Root cause: [from analysis]. Files: [list]. Constraints: NestJS patterns, Zod validation, JWT auth." |
+| Frontend / UI | `Frontend Developer` | "Fix [issue] in React + TailwindCSS. Root cause: [from analysis]. Files: [list]. Constraints: react-query, react-i18next, strict TypeScript." |
+| Auth / Security | `Security Engineer` | "Fix security issue: [description]. Files: [list]. Provide hardened solution following OWASP guidelines." |
+| UI pixel-perfect | `UI Designer` | "Fix visual discrepancy in [component]. Expected: [Pencil design ref]. Current: [screenshot from Chrome DevTools]. Provide TailwindCSS fix." |
+
+Then implement using agent output:
 1. Backend changes first
 2. Frontend changes second
 
@@ -121,7 +130,10 @@ After validation, implement:
 - Fix root cause, not symptoms
 - Add defensive checks where appropriate
 
-For significant UI: `Skill(skill="frontend-design:frontend-design")`
+**UI bugs with Pencil + Chrome DevTools:**
+- `mcp__chrome-devtools__take_screenshot` before fix (evidence)
+- Fix implementation
+- `mcp__chrome-devtools__take_screenshot` after fix (validation)
 
 ---
 

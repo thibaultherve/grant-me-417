@@ -7,6 +7,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { randomBytes } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 @Injectable()
@@ -131,7 +132,7 @@ export class AuthService {
 
     const accessToken = this.jwtService.sign(payload);
 
-    const refreshToken = crypto.randomUUID() + crypto.randomUUID();
+    const refreshToken = randomBytes(32).toString('hex');
     const tokenHash = await this.hashToken(refreshToken);
     const expiresAt = new Date();
     const refreshTokenExpiryDays = this.configService.get<number>(

@@ -20,8 +20,10 @@ import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe.js';
 import {
   registerSchema,
   refreshTokenSchema,
+  logoutBodySchema,
   type RegisterInput,
   type RefreshTokenInput,
+  type LogoutBodyInput,
   type AuthUser,
 } from '@get-granted/shared';
 
@@ -45,6 +47,7 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @Throttle({ default: { ttl: 60000, limit: 5 } })
   @HttpCode(HttpStatus.OK)
   async refresh(
     @Body(new ZodValidationPipe(refreshTokenSchema))
@@ -58,7 +61,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   async logout(
     @CurrentUser() user: JwtPayload,
-    @Body() body: { refreshToken?: string },
+    @Body(new ZodValidationPipe(logoutBodySchema)) body: LogoutBodyInput,
   ) {
     await this.authService.logout(user.sub, body.refreshToken);
     return { message: 'Logged out successfully' };

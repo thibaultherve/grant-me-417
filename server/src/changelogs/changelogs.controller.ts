@@ -12,9 +12,8 @@ export class ChangelogsController {
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
-    return this.changelogsService.findAll(
-      page ? parseInt(page, 10) : 1,
-      limit ? parseInt(limit, 10) : 10,
-    );
+    const safePage = Math.max(1, page ? parseInt(page, 10) : 1);
+    const safeLimit = Math.min(100, Math.max(1, limit ? parseInt(limit, 10) : 10));
+    return this.changelogsService.findAll(safePage, safeLimit);
   }
 }

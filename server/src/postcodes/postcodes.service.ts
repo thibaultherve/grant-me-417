@@ -1,13 +1,13 @@
+import type {
+  Postcode as PostcodeResponse,
+  SuburbWithPostcode,
+} from '@get-granted/shared';
 import { Injectable } from '@nestjs/common';
 import type {
   Postcode as PostcodeRecord,
   Prisma,
 } from '../../generated/prisma/client.js';
 import { PrismaService } from '../prisma/prisma.service.js';
-import type {
-  Postcode as PostcodeResponse,
-  SuburbWithPostcode,
-} from '@get-granted/shared';
 
 const SUBURB_INCLUDE = {
   postcodeRef: {
@@ -29,10 +29,9 @@ type SuburbWithPostcodeRecord = Prisma.SuburbGetPayload<{
 export class PostcodesService {
   constructor(private prisma: PrismaService) {}
 
-  async searchPostcodes(
-    query: string,
-    limit = 5,
-  ): Promise<PostcodeResponse[]> {
+  async searchPostcodes(query: string, limit = 5): Promise<PostcodeResponse[]> {
+    if (query.length < 2) return [];
+
     const postcodes = await this.prisma.postcode.findMany({
       where: {
         postcode: { startsWith: query },
@@ -48,6 +47,8 @@ export class PostcodesService {
     query: string,
     limit = 10,
   ): Promise<SuburbWithPostcode[]> {
+    if (query.length < 2) return [];
+
     const isNumeric = /^\d+$/.test(query);
 
     const suburbs = await this.prisma.suburb.findMany({

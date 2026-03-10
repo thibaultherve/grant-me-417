@@ -79,28 +79,38 @@ After agents return, verify:
 
 ## 3. VALIDATE ARCHITECTURE
 
-Display architecture plan:
+Launch architecture validation agents in parallel (single message):
+
+| Agent | Prompt |
+|-------|--------|
+| `Backend Architect` | "Review this NestJS + Prisma architecture plan for [feature]. Check: DB schema design, API endpoint structure, NestJS module/service/repository patterns, performance indexes. Plan: [paste summary]" |
+| `Security Engineer` | "Review security implications of [feature] in a NestJS + JWT app. Check: auth guards needed, input validation, data exposure risks, IDOR/ownership checks. Feature: [paste description]" |
+| `UI Designer` *(if UI involved)* | "Review UI architecture for [feature] in React + TailwindCSS + Shadcn UI. Check: component decomposition, reusability, design system consistency. Feature: [paste description]" |
+
+After agents return, display enriched architecture plan:
 
 ```markdown
 ## Architecture Plan - [Feature Name]
 
 ### Database
-- Tables to create: [list with columns]
+- Tables to create: [columns + indexes from Backend Architect]
 - Tables to modify: [changes]
-- RLS policies needed
 
-### Backend (Go Clean Architecture)
-- Entities: [list]
-- Usecases: [list with descriptions]
-- Handlers: [endpoints]
+### Backend (NestJS)
+- Module structure: [module/controller/service/repository]
+- Endpoints: [routes + HTTP methods]
+- Security: [guards, ownership checks — from Security Engineer]
 - Code to reuse: [from exploration]
 
-### Frontend (Next.js)
-- Types, Components, Hooks, Pages
+### Frontend (React)
+- Components: [list — from UI Designer if applicable]
+- Types, Hooks, Pages
 - Code to reuse: [from exploration]
 
-### Libraries / Best Practices
-- [from exploration]
+### Architecture Feedback
+- Backend Architect: [key recommendations]
+- Security Engineer: [risks + mitigations]
+- UI Designer: [component structure feedback]
 ```
 
 Ask with AskUserQuestion: "Validate this architecture?"

@@ -6,7 +6,7 @@ import { industryTypeSchema } from './employer.js';
 // --- Input schemas ---
 
 export const weekEntrySchema = z.object({
-  workDate: z.string().min(1),
+  workDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'workDate must be a valid ISO date (YYYY-MM-DD)'),
   hours: z.number().min(0).max(MAX_HOURS_PER_DAY),
 });
 

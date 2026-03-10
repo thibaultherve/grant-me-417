@@ -8,13 +8,15 @@ export type VisaType = z.infer<typeof visaTypeSchema>;
 
 // --- Input schemas ---
 
+const isoDateString = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'arrivalDate must be a valid ISO date (YYYY-MM-DD)');
+
 export const createVisaSchema = z.object({
   visaType: visaTypeSchema,
-  arrivalDate: z.string().min(1),
+  arrivalDate: isoDateString,
 });
 
 export const updateVisaSchema = z.object({
-  arrivalDate: z.string().min(1),
+  arrivalDate: isoDateString,
 });
 
 // --- Response schemas ---
