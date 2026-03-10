@@ -40,5 +40,5 @@ export const getEmployer = async (id: string): Promise<Employer | null> => {
 export const checkEmployerEligibility = async (
   input: CheckEligibilityInput,
 ): Promise<CheckEligibilityOutput> => {
-  return api.post('/employers/check-eligibility', input);
+  return api.post('/employers/eligibilityCheck', input);
 };
