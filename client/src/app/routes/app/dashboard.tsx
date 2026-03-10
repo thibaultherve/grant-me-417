@@ -16,6 +16,7 @@ import { WeeklyProgressChart } from '@/features/dashboard/components/weekly-prog
 import { WorkDistributionCard } from '@/features/dashboard/components/work-distribution-card';
 import { VisaSelector } from '@/features/visas/components/visa-selector';
 import { useVisaContext } from '@/features/visas/hooks/use-visa-context';
+import { usePageHeader } from '@/hooks/use-page-header';
 
 // ─── Skeleton layout for loading state ───────────────────────────────────────
 
@@ -144,18 +145,13 @@ function DashboardWidgets({ visaId }: { visaId: string }) {
 export const DashboardRoute = () => {
   const { currentVisa, isLoading: visaLoading } = useVisaContext();
 
+  usePageHeader({
+    description: "Welcome back — Here's an overview of your WHV 417 progress.",
+    action: () => <VisaSelector />,
+  });
+
   return (
     <div className="space-y-6">
-      {/* Page header */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-muted-foreground">
-          Welcome back — Here's an overview of your WHV 417 progress.
-        </p>
-        <div className="shrink-0">
-          <VisaSelector />
-        </div>
-      </div>
-
       {/* Content */}
       {visaLoading ? (
         <DashboardSkeleton />
