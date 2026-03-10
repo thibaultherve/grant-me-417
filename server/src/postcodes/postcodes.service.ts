@@ -2,7 +2,9 @@ import type {
   Postcode as PostcodeResponse,
   SuburbWithPostcode,
 } from '@get-granted/shared';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import type { Cache } from 'cache-manager';
 import type {
   Postcode as PostcodeRecord,
   Prisma,
@@ -21,16 +23,25 @@ const SUBURB_INCLUDE = {
   },
 } as const;
 
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
 type SuburbWithPostcodeRecord = Prisma.SuburbGetPayload<{
   include: typeof SUBURB_INCLUDE;
 }>;
 
 @Injectable()
 export class PostcodesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   async searchPostcodes(query: string, limit = 5): Promise<PostcodeResponse[]> {
     if (query.length < 2) return [];
+
+    const cacheKey = `postcodes:${query}:${limit}`;
+    const cached = await this.cacheManager.get<PostcodeResponse[]>(cacheKey);
+    if (cached) return cached;
 
     const postcodes = await this.prisma.postcode.findMany({
       where: {
@@ -40,7 +51,9 @@ export class PostcodesService {
       orderBy: { postcode: 'asc' },
     });
 
-    return postcodes.map((p) => this.mapPostcodeToResponse(p));
+    const result = postcodes.map((p) => this.mapPostcodeToResponse(p));
+    await this.cacheManager.set(cacheKey, result, CACHE_TTL_MS);
+    return result;
   }
 
   async searchSuburbs(
@@ -48,6 +61,10 @@ export class PostcodesService {
     limit = 10,
   ): Promise<SuburbWithPostcode[]> {
     if (query.length < 2) return [];
+
+    const cacheKey = `suburbs:${query}:${limit}`;
+    const cached = await this.cacheManager.get<SuburbWithPostcode[]>(cacheKey);
+    if (cached) return cached;
 
     const isNumeric = /^\d+$/.test(query);
 
@@ -60,7 +77,9 @@ export class PostcodesService {
       orderBy: isNumeric ? { postcode: 'asc' } : { suburbName: 'asc' },
     });
 
-    return suburbs.map((s) => this.mapSuburbToResponse(s));
+    const result = suburbs.map((s) => this.mapSuburbToResponse(s));
+    await this.cacheManager.set(cacheKey, result, CACHE_TTL_MS);
+    return result;
   }
 
   async getSuburbById(id: number): Promise<SuburbWithPostcode | null> {

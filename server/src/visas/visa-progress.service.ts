@@ -500,9 +500,7 @@ export class VisaProgressService {
       where: { userId },
     });
 
-    for (const visa of visas) {
-      await this.refreshAllWeeksForVisa(visa.id);
-    }
+    await Promise.all(visas.map((visa) => this.refreshAllWeeksForVisa(visa.id)));
   }
 
   /**

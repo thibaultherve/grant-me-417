@@ -16,9 +16,9 @@ import type {
 import {
   api,
   clearAuthStorage,
-  getStoredRefreshToken,
+  isLoggedIn,
   setAccessToken,
-  setStoredRefreshToken,
+  setLoggedIn,
 } from './api-client';
 
 // --- Auth API functions ---
@@ -29,19 +29,18 @@ const authApi = {
     api.post('/auth/login', data),
   register: (data: RegisterInput): Promise<RegisterResponse> =>
     api.post('/auth/register', data),
-  logout: (refreshToken: string | null): Promise<void> =>
-    api.post('/auth/logout', { refreshToken }),
+  logout: (): Promise<void> => api.post('/auth/logout', {}),
 };
 
 // --- Query key ---
 
 const userQueryKey = ['authenticated-user'];
 
-// --- Auth hooks (bulletproof-react pattern) ---
+// --- Auth hooks ---
 
-function handleAuthResponse(data: { user: AuthUser; tokens: { accessToken: string; refreshToken: string } }) {
+function handleAuthResponse(data: { user: AuthUser; tokens: { accessToken: string } }) {
   setAccessToken(data.tokens.accessToken);
-  setStoredRefreshToken(data.tokens.refreshToken);
+  setLoggedIn(true);
   return data.user;
 }
 
@@ -49,7 +48,7 @@ export const useUser = () => {
   return useQuery({
     queryKey: userQueryKey,
     queryFn: () => authApi.getMe(),
-    enabled: !!getStoredRefreshToken(),
+    enabled: isLoggedIn(),
     staleTime: Infinity,
     retry: false,
   });
@@ -85,10 +84,7 @@ export const useLogout = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => {
-      const refreshToken = getStoredRefreshToken();
-      return authApi.logout(refreshToken);
-    },
+    mutationFn: authApi.logout,
     onSettled: () => {
       clearAuthStorage();
       queryClient.clear();
