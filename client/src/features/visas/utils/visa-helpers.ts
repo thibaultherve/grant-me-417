@@ -1,3 +1,5 @@
+import { formatDistanceToNow } from 'date-fns';
+
 import type { VisaType } from '@get-granted/shared';
 
 type VisaTypeSlug = 'first-whv' | 'second-whv' | 'third-whv';
@@ -45,6 +47,12 @@ export const visaTypeToSlug = (type: VisaType): VisaTypeSlug => {
   };
   return map[type];
 };
+
+/**
+ * Format a date string as a human-readable "X ago" string
+ */
+export const formatCreatedAgo = (dateStr: string): string =>
+  formatDistanceToNow(new Date(dateStr), { addSuffix: true });
 
 /**
  * Convert URL slug to DB visa type

@@ -50,6 +50,10 @@ export function VisasList({
           </p>
         </div>
       ) : (
+        <>
+        <p className="text-sm text-muted-foreground mb-4">
+          {visas.length} visa{visas.length !== 1 ? 's' : ''}
+        </p>
         <div className="grid gap-6 md:grid-cols-2">
           {visas.map((visa) => (
             <VisaCard
@@ -60,6 +64,7 @@ export function VisasList({
             />
           ))}
         </div>
+        </>
       )}
     </>
   );

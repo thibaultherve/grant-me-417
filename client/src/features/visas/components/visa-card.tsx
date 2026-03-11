@@ -1,4 +1,4 @@
-import { Calendar, Edit, Trash2 } from 'lucide-react';
+import { CalendarDays, Pencil, Plane, Timer, TrendingUp, Trash2 } from 'lucide-react';
 
 import {
   AlertDialog,
@@ -12,10 +12,11 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import type { Visa } from '@get-granted/shared';
-import { getVisaLabel } from '../utils/visa-helpers';
+import { formatCreatedAgo } from '../utils/visa-helpers';
+import { OrdinalBadge } from './ordinal-badge';
+import { VisaProgressBar } from './visa-progress-bar';
 
 interface VisaCardProps {
   visa: Visa;
@@ -23,53 +24,144 @@ interface VisaCardProps {
   onEdit?: (visa: Visa) => void;
 }
 
+function formatDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString('en-AU', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+}
+
 export function VisaCard({ visa, onDelete, onEdit }: VisaCardProps) {
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-AU', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    });
-  };
+  const isExpired = visa.daysRemaining <= 0;
+
+  // Timeline calculations
+  const totalDays = Math.round(
+    (new Date(visa.expiryDate).getTime() - new Date(visa.arrivalDate).getTime()) / 86400000,
+  );
+  const daysElapsed = totalDays - Math.max(0, visa.daysRemaining);
+  const timelinePercent = Math.min((daysElapsed / totalDays) * 100, 100);
+  const timelineLabel = isExpired
+    ? `${Math.abs(visa.daysRemaining)} days ago`
+    : `${visa.daysRemaining} days left`;
+
+  // Progress calculations
+  const progressPercent = Math.min((visa.eligibleDays / visa.daysRequired) * 100, 100);
+  const progressComplete = progressPercent >= 100;
+  const progressLabel = `${visa.eligibleDays} / ${visa.daysRequired} days`;
+
+  const createdAgo = formatCreatedAgo(visa.createdAt);
+
+  const accentClass = isExpired ? 'bg-[#9CA3AF]' : 'bg-primary';
+
+  const timelineVariant = isExpired ? 'timeline-expired' : 'timeline-active';
+  const progressVariant = isExpired
+    ? 'progress-expired'
+    : progressComplete
+      ? 'progress-complete'
+      : 'progress-active';
 
   return (
-    <Card className="border shadow-sm">
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <CardTitle className="text-lg">
-              {getVisaLabel(visa.visaType)}
-            </CardTitle>
+    <div className="flex rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+      {/* Accent strip */}
+      <div className={`w-1 shrink-0 ${accentClass}`} />
+
+      {/* Card content */}
+      <div className="flex flex-col flex-1 min-w-0">
+        {/* Header */}
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
+          <Plane className="w-4 h-4 text-muted-foreground shrink-0" />
+          <OrdinalBadge visaType={visa.visaType} />
+          <span className="font-bold text-sm text-foreground flex-1">WHV 417</span>
+          {/* Status badge */}
+          {isExpired ? (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-danger-light text-danger-dark text-xs font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-danger-dark shrink-0" />
+              Expired
+            </span>
+          ) : (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-accent text-primary text-xs font-semibold">
+              Active
+            </span>
+          )}
+        </div>
+
+        {/* Info rows */}
+        <div className="flex flex-col gap-2 px-4 py-3">
+          {/* Arrival */}
+          <div className="flex items-center gap-2">
+            <Plane className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide w-20 shrink-0">
+              Arrival
+            </span>
+            <span className="text-sm text-foreground whitespace-nowrap">{formatDate(visa.arrivalDate)}</span>
           </div>
+
+          {/* Departure */}
+          <div className="flex items-center gap-2">
+            <TrendingUp className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide w-20 shrink-0">
+              Departure
+            </span>
+            <span className="text-sm text-foreground whitespace-nowrap">{formatDate(visa.expiryDate)}</span>
+          </div>
+
+          {/* Timeline */}
+          <div className="flex items-center gap-2">
+            <Timer className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide w-20 shrink-0">
+              Timeline
+            </span>
+            <span className={`text-sm whitespace-nowrap ${isExpired ? 'text-destructive' : 'text-foreground'}`}>
+              {timelineLabel}
+            </span>
+            <VisaProgressBar percent={timelinePercent} variant={timelineVariant} className="w-16 md:w-30" />
+          </div>
+
+          {/* Progress */}
+          <div className="flex items-center gap-2">
+            <TrendingUp className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide w-20 shrink-0">
+              Progress
+            </span>
+            <span className="text-sm text-foreground whitespace-nowrap">{progressLabel}</span>
+            <VisaProgressBar percent={progressPercent} variant={progressVariant} className="w-16 md:w-30" />
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between gap-2 px-4 py-2.5 bg-muted/40 border-t border-border">
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <CalendarDays className="w-3.5 h-3.5 shrink-0" />
+            <span>Created {createdAgo}</span>
+          </div>
+
           <div className="flex items-center gap-2">
             {onEdit && (
               <Button
-                variant="ghost"
+                variant="outline"
                 size="sm"
-                className="h-8 w-8 p-0"
+                className="gap-1.5"
                 onClick={() => onEdit(visa)}
               >
-                <Edit className="w-4 h-4" />
+                <Pencil className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">Edit</span>
               </Button>
             )}
+
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10"
-                >
-                  <Trash2 className="w-4 h-4" />
+                <Button variant="destructive" size="sm" className="gap-1.5">
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span className="hidden md:inline">Delete</span>
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Delete Visa</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Are you sure you want to delete "
-                    {getVisaLabel(visa.visaType)}"? All associated work entries
-                    will remain, but visa tracking data will be lost. This
-                    action cannot be undone.
+                    Are you sure you want to delete this WHV 417 visa? All associated work entries
+                    will remain, but visa tracking data will be lost. This action cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -85,15 +177,7 @@ export function VisaCard({ visa, onDelete, onEdit }: VisaCardProps) {
             </AlertDialog>
           </div>
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Calendar className="w-4 h-4" />
-          <span>
-            {formatDate(visa.arrivalDate)} → {formatDate(visa.expiryDate)}
-          </span>
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

@@ -1032,6 +1032,81 @@
       ]
     },
     {
+      "type": "frame",
+      "id": "gluUE",
+      "x": 4293,
+      "y": 5065,
+      "name": "Visa Date Picker / Input / Empty",
+      "context": "Visa Date Picker / Input / Empty — Trigger button that opens the Visa Date Picker calendar. Shows label 'Arrival Date in Australia' + calendar icon + placeholder text 'Pick a date' in muted color, followed by a short description: 'Select your first day on Australian soil — this sets the start of your visa period.' In React: same Popover trigger as gbSZC but no date selected yet. On date pick, transitions to filled state (gbSZC).",
+      "reusable": true,
+      "width": 280,
+      "layout": "vertical",
+      "gap": 6,
+      "children": [
+        {
+          "type": "frame",
+          "id": "X49zZ",
+          "name": "Label Row",
+          "width": "fill_container",
+          "children": [
+            {
+              "type": "text",
+              "id": "OZf3v",
+              "name": "labelText",
+              "fill": "$--foreground",
+              "content": "Arrival Date in Australia",
+              "lineHeight": 1.43,
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "500"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "5uGtP",
+          "name": "Trigger",
+          "width": "fill_container",
+          "fill": "$--background",
+          "cornerRadius": 6,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$--input"
+          },
+          "gap": 8,
+          "padding": [
+            10,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "NOFLs",
+              "name": "calIcon",
+              "width": 16,
+              "height": 16,
+              "iconFontName": "calendar",
+              "iconFontFamily": "lucide",
+              "fill": "$--muted-foreground"
+            },
+            {
+              "type": "text",
+              "id": "B3SvS",
+              "name": "dateValue",
+              "fill": "$--muted-foreground",
+              "content": "Pick a date",
+              "lineHeight": 1.43,
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "lrkIc",
       "type": "ref",
       "reusable": true,
@@ -7875,7 +7950,7 @@
                   "name": "ordinalBadge",
                   "width": 28,
                   "height": 20,
-                  "fill": "#10b981",
+                  "fill": "$--visa-1st-color",
                   "cornerRadius": 4,
                   "layout": "vertical",
                   "justifyContent": "center",
@@ -8000,7 +8075,7 @@
                   "name": "badge",
                   "width": 28,
                   "height": 20,
-                  "fill": "#10b981",
+                  "fill": "$--visa-1st-color",
                   "cornerRadius": 4,
                   "layout": "vertical",
                   "justifyContent": "center",
@@ -8059,7 +8134,7 @@
                   "name": "badge",
                   "width": 28,
                   "height": 20,
-                  "fill": "#3b82f6",
+                  "fill": "$--visa-2nd-color",
                   "cornerRadius": 4,
                   "layout": "vertical",
                   "justifyContent": "center",
@@ -8124,7 +8199,7 @@
                   "name": "ordinalBadge",
                   "width": 28,
                   "height": 20,
-                  "fill": "#f59e0b",
+                  "fill": "$--visa-3rd-color",
                   "cornerRadius": 4,
                   "layout": "vertical",
                   "justifyContent": "center",
@@ -26683,7 +26758,7 @@
       "id": "sdg8i",
       "x": 5373,
       "y": 2780,
-      "name": "Employers / List - Desktop",
+      "name": "Visas / List - Desktop",
       "width": 1280,
       "height": 1200,
       "fill": "$--background",
@@ -26735,7 +26810,7 @@
                       "id": "RaybA",
                       "name": "title",
                       "fill": "$--foreground",
-                      "content": "Employers",
+                      "content": "Visas",
                       "fontFamily": "Inter",
                       "fontSize": 28,
                       "fontWeight": "700"
@@ -26745,7 +26820,7 @@
                       "id": "7pq7W",
                       "name": "subtitle",
                       "fill": "$--muted-foreground",
-                      "content": "Manage your work experience employers",
+                      "content": "Manage your Working Holiday Visas (up to 3 visas)",
                       "fontFamily": "Inter",
                       "fontSize": 14,
                       "fontWeight": "normal"
@@ -26762,7 +26837,7 @@
                       "iconFontName": "plus"
                     },
                     "OO6Vt": {
-                      "content": "Add Employer"
+                      "content": "Add Visa"
                     }
                   }
                 }
@@ -26781,7 +26856,7 @@
                   "id": "CZ2KW",
                   "name": "count",
                   "fill": "$--muted-foreground",
-                  "content": "3 employers",
+                  "content": "3 visas",
                   "fontFamily": "Inter",
                   "fontSize": 13,
                   "fontWeight": "500"
@@ -26852,7 +26927,7 @@
       "id": "mJQgW",
       "x": 5373,
       "y": 4080,
-      "name": "Employers / List - Mobile",
+      "name": "Visas / List - Mobile",
       "width": 390,
       "height": 1200,
       "fill": "$--background",
@@ -26897,7 +26972,7 @@
                       "id": "mzcpt",
                       "name": "title",
                       "fill": "$--foreground",
-                      "content": "Employers",
+                      "content": "Visas",
                       "fontFamily": "Inter",
                       "fontSize": 24,
                       "fontWeight": "700"
@@ -26907,7 +26982,7 @@
                       "id": "AvTUY",
                       "name": "subtitle",
                       "fill": "$--muted-foreground",
-                      "content": "Manage your work experience employers",
+                      "content": "Manage your Working Holiday Visas (up to 3 visas)",
                       "fontFamily": "Inter",
                       "fontSize": 13,
                       "fontWeight": "normal"
@@ -26925,7 +27000,7 @@
                       "iconFontName": "plus"
                     },
                     "Syk6S": {
-                      "content": "Add Employer"
+                      "content": "Add Visa"
                     }
                   }
                 },
@@ -26934,7 +27009,7 @@
                   "id": "WN2WH",
                   "name": "countText",
                   "fill": "$--muted-foreground",
-                  "content": "3 employers",
+                  "content": "3 visas",
                   "fontFamily": "Inter",
                   "fontSize": 13,
                   "fontWeight": "500"
@@ -29651,6 +29726,4153 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "f57Nb",
+      "x": 2613,
+      "y": 5380,
+      "name": "Visa / Add - Desktop",
+      "width": 1280,
+      "height": 1200,
+      "fill": "$--background",
+      "children": [
+        {
+          "id": "kBcrs",
+          "type": "ref",
+          "ref": "X1cZm",
+          "width": 256,
+          "height": 1200,
+          "name": "sidebar1",
+          "descendants": {
+            "o4kmH": {
+              "fill": "$--sidebar-accent"
+            },
+            "o4kmH/byvzW": {
+              "x": 12,
+              "y": 10
+            },
+            "o4kmH/FOIGI": {
+              "iconFontName": "layout-dashboard"
+            },
+            "o4kmH/2CN1f": {
+              "content": "Dashboard"
+            },
+            "o4kmH/dDOfG": {
+              "enabled": false,
+              "x": 0,
+              "y": 0
+            },
+            "o4kmH/cbB3o": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "GQnRi",
+          "name": "Main Content",
+          "clip": true,
+          "width": 1024,
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 24,
+          "padding": [
+            32,
+            40
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "aZpnt",
+              "name": "Page Header",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "70TmA",
+                  "name": "Header Left",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "QLsef",
+                      "name": "Breadcrumb Row",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "id": "vwFV7",
+                          "type": "ref",
+                          "ref": "DPuqU",
+                          "name": "visasLink",
+                          "descendants": {
+                            "xqDqs": {
+                              "content": "Visas",
+                              "fontSize": 28,
+                              "fontWeight": "700",
+                              "fill": "$--muted-foreground"
+                            }
+                          }
+                        },
+                        {
+                          "id": "2a0ro",
+                          "type": "ref",
+                          "ref": "yQ8Ca",
+                          "name": "sep1"
+                        },
+                        {
+                          "id": "RGtLo",
+                          "type": "ref",
+                          "ref": "c6T7D",
+                          "name": "pageTitle",
+                          "descendants": {
+                            "gmDs4": {
+                              "content": "Add",
+                              "fontSize": 28,
+                              "fontWeight": "700"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "psjvZ",
+                      "name": "subtitle",
+                      "fill": "$--muted-foreground",
+                      "content": "Select your visa and enter your arrival date in Australia",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "982d3",
+              "name": "Form Card",
+              "width": "fill_container",
+              "fill": "$--card",
+              "cornerRadius": 12,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "vertical",
+              "gap": 28,
+              "padding": [
+                28,
+                28,
+                24,
+                28
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "F2mE5",
+                  "name": "Content Row",
+                  "width": "fill_container",
+                  "gap": 40,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "tmvIh",
+                      "name": "Left Column",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 28,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "tOcay",
+                          "name": "visaLabelGroup",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "id": "zggIX",
+                              "type": "ref",
+                              "ref": "lJaPg",
+                              "name": "visaNumberSelector",
+                              "width": "fill_container"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "PgkU2",
+                          "name": "Arrival Date Group",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "C2xoN",
+                              "name": "arrivalLabel",
+                              "fill": "$--muted-foreground",
+                              "content": "ARRIVAL DATE IN AUSTRALIA",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.8
+                            },
+                            {
+                              "id": "Kb7O6",
+                              "type": "ref",
+                              "ref": "gbSZC",
+                              "width": "fill_container",
+                              "name": "dateInput",
+                              "descendants": {
+                                "xMdP9": {
+                                  "enabled": false,
+                                  "height": 0
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "xsgFf",
+                      "name": "Right Column",
+                      "width": 300,
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "id": "gUnqn",
+                          "type": "ref",
+                          "ref": "esEoC",
+                          "width": "fill_container",
+                          "name": "calendar"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "QzePL",
+                  "name": "Footer",
+                  "width": "fill_container",
+                  "gap": 12,
+                  "padding": [
+                    16,
+                    0,
+                    0,
+                    0
+                  ],
+                  "justifyContent": "end",
+                  "children": [
+                    {
+                      "id": "qNDPU",
+                      "type": "ref",
+                      "ref": "qY8X8",
+                      "name": "cancelBtn",
+                      "descendants": {
+                        "VqHOn": {
+                          "enabled": false
+                        },
+                        "9QkPP": {
+                          "content": "Cancel"
+                        }
+                      }
+                    },
+                    {
+                      "id": "5JVkc",
+                      "type": "ref",
+                      "ref": "TFQa9",
+                      "name": "saveBtn",
+                      "descendants": {
+                        "UizdN": {
+                          "enabled": false
+                        },
+                        "Syk6S": {
+                          "content": "Add Visa"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "n24rQ",
+      "x": 3973,
+      "y": 5380,
+      "name": "Visa / Add - Mobile",
+      "context": "Mobile version of the Visa / Add page. No sidebar - uses mobile bottom nav. Form: Visa Selector (l3cLX open state) + Arrival Date picker (gbSZC) with calendar open (esEoC). Cancel + Add Visa buttons.",
+      "width": 390,
+      "height": 992,
+      "fill": "$--background",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "i2vdo",
+          "x": 0,
+          "y": 0,
+          "name": "Scrollable Content",
+          "clip": true,
+          "width": 390,
+          "height": 920,
+          "layout": "vertical",
+          "gap": 16,
+          "padding": [
+            24,
+            16,
+            100,
+            16
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "eRBQx",
+              "name": "Page Header",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "nzsz9",
+                  "name": "breadcrumbRow",
+                  "width": "fill_container",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "id": "vn8xZ",
+                      "type": "ref",
+                      "ref": "DPuqU",
+                      "name": "breadcrumbVisas",
+                      "descendants": {
+                        "xqDqs": {
+                          "content": "Visas",
+                          "fontSize": 24,
+                          "fontWeight": "700",
+                          "fill": "$--muted-foreground"
+                        }
+                      }
+                    },
+                    {
+                      "id": "Qnpnh",
+                      "type": "ref",
+                      "ref": "yQ8Ca",
+                      "name": "breadcrumbSep"
+                    },
+                    {
+                      "id": "BYYNq",
+                      "type": "ref",
+                      "ref": "c6T7D",
+                      "name": "breadcrumbCurrent",
+                      "descendants": {
+                        "gmDs4": {
+                          "content": "Add",
+                          "fontSize": 24,
+                          "fontWeight": "700",
+                          "fill": "$--foreground"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "vertA",
+                  "name": "subtitleText",
+                  "fill": "$--muted-foreground",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Select your visa and enter your arrival date in Australia",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "4VjNy",
+              "name": "Form Card",
+              "width": "fill_container",
+              "fill": "$--card",
+              "cornerRadius": 12,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "vertical",
+              "gap": 20,
+              "padding": 16,
+              "children": [
+                {
+                  "id": "oAwPo",
+                  "type": "ref",
+                  "ref": "lJaPg",
+                  "width": "fill_container",
+                  "name": "newVisaSelector"
+                },
+                {
+                  "type": "frame",
+                  "id": "sB5Uj",
+                  "name": "Date Label Row",
+                  "width": "fill_container",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "HBRa7",
+                      "name": "dpLabel",
+                      "fill": "$--muted-foreground",
+                      "content": "ARRIVAL DATE IN AUSTRALIA",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "600",
+                      "letterSpacing": 0.6
+                    }
+                  ]
+                },
+                {
+                  "id": "AdK5j",
+                  "type": "ref",
+                  "ref": "gbSZC",
+                  "name": "datePicker",
+                  "width": "fill_container",
+                  "descendants": {
+                    "xMdP9": {
+                      "enabled": false,
+                      "height": 0
+                    },
+                    "vNXgu": {
+                      "enabled": false,
+                      "height": 0
+                    }
+                  }
+                },
+                {
+                  "id": "DGAjI",
+                  "type": "ref",
+                  "ref": "esEoC",
+                  "name": "calendarOpen",
+                  "width": "fill_container"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "82moP",
+              "name": "Footer",
+              "width": "fill_container",
+              "gap": 12,
+              "justifyContent": "end",
+              "children": [
+                {
+                  "id": "JTlFC",
+                  "type": "ref",
+                  "ref": "qY8X8",
+                  "name": "cancelBtn",
+                  "descendants": {
+                    "9QkPP": {
+                      "content": "Cancel"
+                    }
+                  }
+                },
+                {
+                  "id": "xk4QX",
+                  "type": "ref",
+                  "ref": "TFQa9",
+                  "name": "addBtn",
+                  "descendants": {
+                    "Syk6S": {
+                      "content": "Add Visa"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "MvJu6",
+          "type": "ref",
+          "ref": "rlxi4",
+          "name": "mobileNav",
+          "width": 390,
+          "x": 0,
+          "y": 920
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "esEoC",
+      "x": 3973,
+      "y": 4889,
+      "name": "Visa Date Picker / Calendar",
+      "context": "Visa Date Picker / Calendar — Default state (no blocked ranges). Shows a monthly calendar with prev/next navigation header, weekday row (Mo–Su), and a 6-week grid. Currently showing March 2025 with day 15 selected (filled with $--primary color, white text). Available days are fully interactive. In React: powered by shadcn/ui Calendar (DayPicker). Props: selected (Date), onSelect (Date => void), blockedRanges (Array<{ start, end, visaOrdinal }> — empty in this default state). Day underline bars appear only when blockedRanges is non-empty (see Visa Date Picker / Calendar / Blocked Range). Day colors for visa ordinals: 1st=$--visa-1st-color, 2nd=$--visa-2nd-color, 3rd=$--visa-3rd-color.",
+      "reusable": true,
+      "width": 280,
+      "fill": "$--popover",
+      "cornerRadius": 8,
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$--border"
+      },
+      "effect": {
+        "type": "shadow",
+        "shadowType": "outer",
+        "color": "#0000001a",
+        "offset": {
+          "x": 0,
+          "y": 4
+        },
+        "blur": 12,
+        "spread": -2
+      },
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "oAFdW",
+          "name": "Calendar Header",
+          "width": "fill_container",
+          "padding": [
+            12,
+            12,
+            8,
+            12
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "DOkjJ",
+              "name": "prevBtn",
+              "width": 28,
+              "height": 28,
+              "fill": "$--background",
+              "cornerRadius": 6,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "qVqo2",
+                  "name": "prevIcon",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "chevron-left",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--foreground"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "NRfsR",
+              "name": "NavSelectors",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "ZQbBg",
+                  "name": "MonthSelector",
+                  "fill": "$--background",
+                  "cornerRadius": 6,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "gap": 4,
+                  "padding": [
+                    4,
+                    8
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "3us8S",
+                      "name": "monthLabel",
+                      "fill": "$--foreground",
+                      "content": "March",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "29s0l",
+                      "name": "monthChevron",
+                      "width": 12,
+                      "height": 12,
+                      "iconFontName": "chevron-down",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "GczPc",
+                  "name": "YearSelector",
+                  "fill": "$--background",
+                  "cornerRadius": 6,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "gap": 4,
+                  "padding": [
+                    4,
+                    8
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "cLraD",
+                      "name": "yearLabel",
+                      "fill": "$--foreground",
+                      "content": "2025",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "sxetQ",
+                      "name": "yearChevron",
+                      "width": 12,
+                      "height": 12,
+                      "iconFontName": "chevron-down",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "k7n2c",
+              "name": "nextBtn",
+              "width": 28,
+              "height": 28,
+              "fill": "$--background",
+              "cornerRadius": 6,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "oEqa8",
+                  "name": "nextIcon",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "chevron-right",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--foreground"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "xuyIc",
+          "name": "Week Days Row",
+          "width": "fill_container",
+          "padding": [
+            0,
+            8
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "geOMV",
+              "name": "Mo",
+              "fill": "$--muted-foreground",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Mo",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "500"
+            },
+            {
+              "type": "text",
+              "id": "WOnoZ",
+              "name": "Tu",
+              "fill": "$--muted-foreground",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Tu",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "500"
+            },
+            {
+              "type": "text",
+              "id": "TbKoe",
+              "name": "We",
+              "fill": "$--muted-foreground",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "We",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "500"
+            },
+            {
+              "type": "text",
+              "id": "EwCog",
+              "name": "Th",
+              "fill": "$--muted-foreground",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Th",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "500"
+            },
+            {
+              "type": "text",
+              "id": "OxynS",
+              "name": "Fr",
+              "fill": "$--muted-foreground",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Fr",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "500"
+            },
+            {
+              "type": "text",
+              "id": "k2SVV",
+              "name": "Sa",
+              "fill": "$--muted-foreground",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Sa",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "500"
+            },
+            {
+              "type": "text",
+              "id": "SMCJI",
+              "name": "Su",
+              "fill": "$--muted-foreground",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Su",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "500"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Frrq9",
+          "name": "Days Grid",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 2,
+          "padding": [
+            0,
+            8,
+            8,
+            8
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "7eVoP",
+              "name": "Week 1",
+              "width": "fill_container",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "XRe46",
+                  "name": "empty1",
+                  "width": "fill_container",
+                  "height": 32
+                },
+                {
+                  "type": "frame",
+                  "id": "NzH8h",
+                  "name": "empty2",
+                  "width": "fill_container",
+                  "height": 32
+                },
+                {
+                  "type": "frame",
+                  "id": "4rrwX",
+                  "name": "empty3",
+                  "width": "fill_container",
+                  "height": 32
+                },
+                {
+                  "type": "frame",
+                  "id": "2wVUw",
+                  "name": "empty4",
+                  "width": "fill_container",
+                  "height": 32
+                },
+                {
+                  "type": "frame",
+                  "id": "MuenV",
+                  "name": "empty5",
+                  "width": "fill_container",
+                  "height": 32
+                },
+                {
+                  "type": "frame",
+                  "id": "EBozO",
+                  "name": "day1",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "6N4X9",
+                      "name": "d1t",
+                      "fill": "$--foreground",
+                      "content": "1",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "5S8Tv",
+                  "name": "day2",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "9eHqf",
+                      "name": "d2t",
+                      "fill": "$--foreground",
+                      "content": "2",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "hWJjP",
+              "name": "Week 2",
+              "width": "fill_container",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Y2Mrb",
+                  "name": "day3",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "7LtDm",
+                      "name": "d3t",
+                      "fill": "$--foreground",
+                      "content": "3",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "83bS0",
+                  "name": "day4",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "TAU7x",
+                      "name": "d4t",
+                      "fill": "$--foreground",
+                      "content": "4",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "OxIns",
+                  "name": "day5",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "mCLuT",
+                      "name": "d5t",
+                      "fill": "$--foreground",
+                      "content": "5",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "7g4QA",
+                  "name": "day6",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "k1XzI",
+                      "name": "d6t",
+                      "fill": "$--foreground",
+                      "content": "6",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ipzW1",
+                  "name": "day7",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "RDGGs",
+                      "name": "d7t",
+                      "fill": "$--foreground",
+                      "content": "7",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Q8wHV",
+                  "name": "day8",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "0tx0s",
+                      "name": "d8t",
+                      "fill": "$--foreground",
+                      "content": "8",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "oti99",
+              "name": "Week 3",
+              "width": "fill_container",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "9uSiv",
+                  "name": "day9",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "aGpo3",
+                      "name": "d9t",
+                      "fill": "$--foreground",
+                      "content": "9",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Lp1Tu",
+                  "name": "day10",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "yLhSl",
+                      "name": "d10t",
+                      "fill": "$--foreground",
+                      "content": "10",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Uj9m9",
+                  "name": "day11",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "5j36o",
+                      "name": "d11t",
+                      "fill": "$--foreground",
+                      "content": "11",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "JR4Lk",
+                  "name": "day12",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "cCU1A",
+                      "name": "d12t",
+                      "fill": "$--foreground",
+                      "content": "12",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "XNrSd",
+                  "name": "day13",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "uJAQD",
+                      "name": "d13t",
+                      "fill": "$--foreground",
+                      "content": "13",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "kf299",
+                  "name": "day14",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "HBmkO",
+                      "name": "d14t",
+                      "fill": "$--foreground",
+                      "content": "14",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "KhkAE",
+                  "name": "day15-selected",
+                  "width": "fill_container",
+                  "height": 32,
+                  "fill": "$--primary",
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "A7EyL",
+                      "name": "d15t",
+                      "fill": "#ffffff",
+                      "content": "15",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "r9BJz",
+              "name": "Week 4",
+              "width": "fill_container",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "wiN4E",
+                  "name": "day16",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "DNWlf",
+                      "name": "d16t",
+                      "fill": "$--foreground",
+                      "content": "16",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "yEsAg",
+                  "name": "day17",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "5jVkr",
+                      "name": "d17t",
+                      "fill": "$--foreground",
+                      "content": "17",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "C1PEx",
+                  "name": "day18",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "vp8pd",
+                      "name": "d18t",
+                      "fill": "$--foreground",
+                      "content": "18",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Vpeyc",
+                  "name": "day19",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "mTeUc",
+                      "name": "d19t",
+                      "fill": "$--foreground",
+                      "content": "19",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "kcpQu",
+                  "name": "day20",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "2vCZ0",
+                      "name": "d20t",
+                      "fill": "$--foreground",
+                      "content": "20",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "T2vCc",
+                  "name": "day21",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "G77VH",
+                      "name": "d21t",
+                      "fill": "$--foreground",
+                      "content": "21",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "MgjNO",
+                  "name": "day22",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Yaeys",
+                      "name": "d22t",
+                      "fill": "$--foreground",
+                      "content": "22",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "QkUb3",
+              "name": "Week 5",
+              "width": "fill_container",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "nLjyy",
+                  "name": "day23",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "if0IP",
+                      "name": "d23t",
+                      "fill": "$--foreground",
+                      "content": "23",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "VjaA8",
+                  "name": "day24",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ZtARr",
+                      "name": "d24t",
+                      "fill": "$--foreground",
+                      "content": "24",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "5CIcv",
+                  "name": "day25",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "gtbNV",
+                      "name": "d25t",
+                      "fill": "$--foreground",
+                      "content": "25",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "4NGGj",
+                  "name": "day26",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "IoQCp",
+                      "name": "d26t",
+                      "fill": "$--foreground",
+                      "content": "26",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "7X1mi",
+                  "name": "day27",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Q19NG",
+                      "name": "d27t",
+                      "fill": "$--foreground",
+                      "content": "27",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "y18PK",
+                  "name": "day28",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "UMZMb",
+                      "name": "d28t",
+                      "fill": "$--foreground",
+                      "content": "28",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "UHOvO",
+                  "name": "day29",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "EVI9s",
+                      "name": "d29t",
+                      "fill": "$--foreground",
+                      "content": "29",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "6B3k8",
+              "name": "Week 6",
+              "width": "fill_container",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "A7wW9",
+                  "name": "day30",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "hAARE",
+                      "name": "d30t",
+                      "fill": "$--foreground",
+                      "content": "30",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "aip5F",
+                  "name": "day31",
+                  "width": "fill_container",
+                  "height": 32,
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d0Wuv",
+                      "name": "d31t",
+                      "fill": "$--foreground",
+                      "content": "31",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "6WJeN",
+                  "name": "empty6a",
+                  "width": "fill_container",
+                  "height": 32
+                },
+                {
+                  "type": "frame",
+                  "id": "8Xhpz",
+                  "name": "empty6b",
+                  "width": "fill_container",
+                  "height": 32
+                },
+                {
+                  "type": "frame",
+                  "id": "F3fYN",
+                  "name": "empty6c",
+                  "width": "fill_container",
+                  "height": 32
+                },
+                {
+                  "type": "frame",
+                  "id": "SFv42",
+                  "name": "empty6d",
+                  "width": "fill_container",
+                  "height": 32
+                },
+                {
+                  "type": "frame",
+                  "id": "1Hu5V",
+                  "name": "empty6e",
+                  "width": "fill_container",
+                  "height": 32
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "gbSZC",
+      "x": 4293,
+      "y": 4882,
+      "name": "Visa Date Picker / Input / Filled",
+      "context": "Visa Date Picker / Input / Filled — Trigger button that opens the Visa Date Picker calendar (esEoC or KKpmy). Shows label 'Arrival Date in Australia' + calendar icon + selected date value (e.g. '15 Mar 2025'). Below the trigger: a short description, a VEVO hint ('Not sure? Check your exact arrival date on VEVO.'), and a clickable link to https://online.immi.gov.au/evo/firstParty?actionType=query labeled 'Open VEVO — visa details & conditions'. In React: a button wrapping shadcn/ui Popover trigger. When clicked, opens a Popover containing the Calendar component. The filled state means a date has been selected. Companion empty state: gluUE.",
+      "reusable": true,
+      "width": 280,
+      "layout": "vertical",
+      "gap": 6,
+      "children": [
+        {
+          "type": "frame",
+          "id": "xMdP9",
+          "name": "Label Row",
+          "width": "fill_container",
+          "children": [
+            {
+              "type": "text",
+              "id": "vNXgu",
+              "name": "labelText",
+              "fill": "$--foreground",
+              "content": "Arrival Date in Australia",
+              "lineHeight": 1.43,
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "500"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "y22Wq",
+          "name": "Trigger",
+          "width": "fill_container",
+          "fill": "$--background",
+          "cornerRadius": 6,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "$--input"
+          },
+          "gap": 8,
+          "padding": [
+            10,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "KGhik",
+              "name": "calIcon",
+              "width": 16,
+              "height": 16,
+              "iconFontName": "calendar",
+              "iconFontFamily": "lucide",
+              "fill": "$--muted-foreground"
+            },
+            {
+              "type": "text",
+              "id": "hXxzv",
+              "name": "dateValue",
+              "fill": "$--foreground",
+              "content": "15 Mar 2025",
+              "lineHeight": 1.43,
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "yQGcW",
+          "name": "description",
+          "fill": "$--muted-foreground",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "The date your visa period starts — either when you arrived in Australia, or when your new visa was granted if you were already in the country.",
+          "lineHeight": 1.43,
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "q2rQl",
+          "name": "vevoHint",
+          "width": "fill_container",
+          "gap": 6,
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "Umf9Z",
+              "name": "infoIcon",
+              "width": 12,
+              "height": 12,
+              "iconFontName": "info",
+              "iconFontFamily": "lucide",
+              "fill": "$--muted-foreground"
+            },
+            {
+              "type": "text",
+              "id": "wLv16",
+              "name": "hintText",
+              "fill": "$--muted-foreground",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Not sure? Check your exact arrival date on VEVO.",
+              "lineHeight": 1.4,
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "v60Jk",
+          "name": "vevoLink",
+          "width": "fill_container",
+          "gap": 4,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon_font",
+              "id": "jI4LY",
+              "name": "linkIcon",
+              "width": 11,
+              "height": 11,
+              "iconFontName": "external-link",
+              "iconFontFamily": "lucide",
+              "fill": "$--primary"
+            },
+            {
+              "type": "text",
+              "id": "9yTAN",
+              "name": "linkText",
+              "fill": "$--primary",
+              "content": "Open VEVO — visa details & conditions",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "500"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "lJaPg",
+      "x": 2958,
+      "y": 5117,
+      "name": "Visa Number Selector / Default",
+      "context": "Visa Number Selector / Default — Inline selector used ONLY in the Visa / Add form (NOT the dashboard switcher). Lets the user pick which visa number they are adding: 1st, 2nd, or 3rd WHV 417. Shows 3 card-style options side by side. Each card has a colored ordinal badge (1st=$--visa-1st-color green, 2nd=$--visa-2nd-color blue, 3rd=$--visa-3rd-color amber) with white text, and a 'WHV 417' label below in muted color. Cards have neutral background and border — no selected state in this default variant. In React: a controlled radio-group. On select, highlights the chosen option (see nqZxc for 1st-selected state). The selected value determines which ordinal badge color is used in blockedRanges for other visas in the calendar.",
+      "reusable": true,
+      "width": 320,
+      "layout": "vertical",
+      "gap": 6,
+      "children": [
+        {
+          "type": "text",
+          "id": "BYkiC",
+          "name": "label",
+          "fill": "$--muted-foreground",
+          "content": "Which visa are you adding?",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "500"
+        },
+        {
+          "type": "frame",
+          "id": "fC9aq",
+          "name": "Options",
+          "width": "fill_container",
+          "gap": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "uSGUb",
+              "name": "Option 1st",
+              "width": "fill_container",
+              "fill": "$--background",
+              "cornerRadius": 8,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "vertical",
+              "gap": 6,
+              "padding": [
+                12,
+                0
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "XMveh",
+                  "name": "badge",
+                  "width": 32,
+                  "height": 22,
+                  "fill": "$--visa-1st-color",
+                  "cornerRadius": 4,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Gvdxx",
+                      "name": "opt1badgeT",
+                      "fill": "#ffffff",
+                      "content": "1st",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "gtekC",
+                  "name": "opt1label",
+                  "fill": "$--muted-foreground",
+                  "content": "WHV 417",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Al0NJ",
+              "name": "Option 2nd",
+              "width": "fill_container",
+              "fill": "$--background",
+              "cornerRadius": 8,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "vertical",
+              "gap": 6,
+              "padding": [
+                12,
+                0
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "0YXSx",
+                  "name": "badge",
+                  "width": 32,
+                  "height": 22,
+                  "fill": "$--visa-2nd-color",
+                  "cornerRadius": 4,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "58BHn",
+                      "name": "opt2badgeT",
+                      "fill": "#ffffff",
+                      "content": "2nd",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "keNni",
+                  "name": "opt2label",
+                  "fill": "$--muted-foreground",
+                  "content": "WHV 417",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "l8M0L",
+              "name": "Option 3rd",
+              "width": "fill_container",
+              "fill": "$--background",
+              "cornerRadius": 8,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "vertical",
+              "gap": 6,
+              "padding": [
+                12,
+                0
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "T0CIs",
+                  "name": "badge",
+                  "width": 32,
+                  "height": 22,
+                  "fill": "$--visa-3rd-color",
+                  "cornerRadius": 4,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "AO8Ch",
+                      "name": "opt3badgeT",
+                      "fill": "#ffffff",
+                      "content": "3rd",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "lVWzm",
+                  "name": "opt3label",
+                  "fill": "$--muted-foreground",
+                  "content": "WHV 417",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "nqZxc",
+      "x": 3318,
+      "y": 5117,
+      "name": "Visa Number Selector / 1st Selected",
+      "context": "Visa Number Selector / 1st Selected — Filled state of lJaPg where the 1st WHV option is selected. The 1st card gets: green tinted background (#f0fdf4), green border stroke (2px, $--visa-1st-color), green badge fill ($--visa-1st-color), green label text. 2nd and 3rd cards remain in default neutral style. In React: same controlled radio-group as lJaPg — this state is rendered when value === '1st'. Similar selected states exist for 2nd ($--visa-2nd-color blue) and 3rd ($--visa-3rd-color amber) but are not yet designed as separate components.",
+      "reusable": true,
+      "width": 320,
+      "layout": "vertical",
+      "gap": 6,
+      "children": [
+        {
+          "type": "text",
+          "id": "qoNJm",
+          "name": "label",
+          "fill": "$--muted-foreground",
+          "content": "Which visa are you adding?",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "500"
+        },
+        {
+          "type": "frame",
+          "id": "LJ2kX",
+          "name": "Options",
+          "width": "fill_container",
+          "gap": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "CDllj",
+              "name": "Option 1st / Selected",
+              "width": "fill_container",
+              "fill": "#f0fdf4",
+              "cornerRadius": 8,
+              "stroke": {
+                "align": "inside",
+                "thickness": 2,
+                "fill": "$--visa-1st-color"
+              },
+              "layout": "vertical",
+              "gap": 6,
+              "padding": [
+                12,
+                0
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "hPv3w",
+                  "name": "badge",
+                  "width": 32,
+                  "height": 22,
+                  "fill": "$--visa-1st-color",
+                  "cornerRadius": 4,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Ykafl",
+                      "name": "f1badgeT",
+                      "fill": "#ffffff",
+                      "content": "1st",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "W0esc",
+                  "name": "f1label",
+                  "fill": "$--visa-1st-color",
+                  "content": "WHV 417",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "dOSCz",
+              "name": "Option 2nd",
+              "width": "fill_container",
+              "fill": "$--background",
+              "cornerRadius": 8,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "vertical",
+              "gap": 6,
+              "padding": [
+                12,
+                0
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "KLBdj",
+                  "name": "badge",
+                  "width": 32,
+                  "height": 22,
+                  "fill": "#3b82f6",
+                  "cornerRadius": 4,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Dvlm3",
+                      "name": "f2badgeT",
+                      "fill": "#ffffff",
+                      "content": "2nd",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "Ih0eS",
+                  "name": "f2label",
+                  "fill": "$--muted-foreground",
+                  "content": "WHV 417",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "qgz1t",
+              "name": "Option 3rd",
+              "width": "fill_container",
+              "fill": "$--background",
+              "cornerRadius": 8,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "vertical",
+              "gap": 6,
+              "padding": [
+                12,
+                0
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "oRiSx",
+                  "name": "badge",
+                  "width": 32,
+                  "height": 22,
+                  "fill": "#f59e0b",
+                  "cornerRadius": 4,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "AXLjH",
+                      "name": "f3badgeT",
+                      "fill": "#ffffff",
+                      "content": "3rd",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "nuhsN",
+                  "name": "f3label",
+                  "fill": "$--muted-foreground",
+                  "content": "WHV 417",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "KKpmy",
+      "x": 4633,
+      "y": 4889,
+      "name": "Visa Date Picker / Calendar / Blocked Range",
+      "context": "Visa Date Picker / Calendar / Blocked Range — Shows a month where all dates are blocked by an existing visa. Example: January 2025 fully covered by the 1st WHV (arrival Jan 1 2025). Blocked days: muted gray text (#9ca3af), no background fill on cells, a small solid colored underline bar (3px, rounded, 16px wide) placed BELOW each day number — NOT as a background overlay. The bar color matches the visa ordinal: 1st=$--visa-1st-color (#10b981 green), 2nd=$--visa-2nd-color (#3b82f6 blue), 3rd=$--visa-3rd-color (#f59e0b amber). Colors are stored as design variables (not hardcoded). A legend below the grid shows which visa blocks which range: colored bar swatch + 'Nth WHV 417 — D Mon to D Mon YYYY'. Info hint: 'Your arrival date must be outside existing visa periods'. In React: receives a blockedRanges prop — Array<{ start: Date, end: Date, visaOrdinal: 1|2|3 }>. Each range renders using $--visa-Nth-color. Non-blocked days are fully interactive. The component is powered by shadcn/ui Calendar (DayPicker). Blocked dates use the disabled modifier + custom DayContent to inject the underline bar.",
+      "reusable": true,
+      "width": 296,
+      "fill": "$--popover",
+      "cornerRadius": 8,
+      "stroke": {
+        "align": "inside",
+        "thickness": 1,
+        "fill": "$--border"
+      },
+      "effect": {
+        "type": "shadow",
+        "shadowType": "outer",
+        "color": "#0000001a",
+        "offset": {
+          "x": 0,
+          "y": 4
+        },
+        "blur": 12,
+        "spread": -2
+      },
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "IjAAP",
+          "name": "Calendar Header",
+          "width": "fill_container",
+          "padding": [
+            12,
+            12,
+            8,
+            12
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "kDiz5",
+              "name": "prevMonthBtn",
+              "width": 28,
+              "height": 28,
+              "fill": "$--background",
+              "cornerRadius": 6,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "atM5A",
+                  "name": "prev2icon",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "chevron-left",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--foreground"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cIyC0",
+              "name": "NavSelectors",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "SAW4X",
+                  "name": "MonthSelector",
+                  "fill": "$--background",
+                  "cornerRadius": 6,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "gap": 4,
+                  "padding": [
+                    4,
+                    8
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "AhugE",
+                      "name": "monthLabel",
+                      "fill": "$--foreground",
+                      "content": "January",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "G3RFG",
+                      "name": "monthChevron",
+                      "width": 12,
+                      "height": 12,
+                      "iconFontName": "chevron-down",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "VQPmk",
+                  "name": "YearSelector",
+                  "fill": "$--background",
+                  "cornerRadius": 6,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "gap": 4,
+                  "padding": [
+                    4,
+                    8
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "4cYAX",
+                      "name": "yearLabel",
+                      "fill": "$--foreground",
+                      "content": "2025",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "A9LhX",
+                      "name": "yearChevron",
+                      "width": 12,
+                      "height": 12,
+                      "iconFontName": "chevron-down",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "OYHzn",
+              "name": "nextMonthBtn",
+              "width": 28,
+              "height": 28,
+              "fill": "$--background",
+              "cornerRadius": 6,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "5yrrU",
+                  "name": "next2icon",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "chevron-right",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--foreground"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "bFyES",
+          "name": "Week Days Row",
+          "width": "fill_container",
+          "padding": [
+            0,
+            8
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "vOGPz",
+              "name": "wmo",
+              "fill": "$--muted-foreground",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Mo",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "500"
+            },
+            {
+              "type": "text",
+              "id": "1lWvh",
+              "name": "wtu",
+              "fill": "$--muted-foreground",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Tu",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "500"
+            },
+            {
+              "type": "text",
+              "id": "bxPBd",
+              "name": "wwe",
+              "fill": "$--muted-foreground",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "We",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "500"
+            },
+            {
+              "type": "text",
+              "id": "Gf4up",
+              "name": "wth",
+              "fill": "$--muted-foreground",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Th",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "500"
+            },
+            {
+              "type": "text",
+              "id": "HUi2n",
+              "name": "wfr",
+              "fill": "$--muted-foreground",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Fr",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "500"
+            },
+            {
+              "type": "text",
+              "id": "VDVFg",
+              "name": "wsa",
+              "fill": "$--muted-foreground",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Sa",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "500"
+            },
+            {
+              "type": "text",
+              "id": "g0H3e",
+              "name": "wsu",
+              "fill": "$--muted-foreground",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Su",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "500"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "NhxvD",
+          "name": "Days Grid",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 2,
+          "padding": [
+            0,
+            8,
+            8,
+            8
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "BBTAa",
+              "name": "Week 1",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#10b981",
+                "enabled": false
+              },
+              "cornerRadius": 4,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "AlWBG",
+                  "name": "empty-mo",
+                  "width": "fill_container",
+                  "height": 32
+                },
+                {
+                  "type": "frame",
+                  "id": "CCpZO",
+                  "name": "empty-tu",
+                  "width": "fill_container",
+                  "height": 32
+                },
+                {
+                  "type": "frame",
+                  "id": "wteLw",
+                  "name": "d1",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "8ejIo",
+                      "name": "d1t",
+                      "fill": "#9ca3af",
+                      "content": "1",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "RC6oy",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "cAlEy",
+                  "name": "d2",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "9cD42",
+                      "name": "d2t",
+                      "fill": "#9ca3af",
+                      "content": "2",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "IvOKF",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "KLHQ5",
+                  "name": "d3",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "XK6Oy",
+                      "name": "d3t",
+                      "fill": "#9ca3af",
+                      "content": "3",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "BzUk1",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ue4ut",
+                  "name": "d4",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "6E3iU",
+                      "name": "d4t",
+                      "fill": "#9ca3af",
+                      "content": "4",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "eitaT",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "o8eRE",
+                  "name": "d5",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "bSuQI",
+                      "name": "d5t",
+                      "fill": "#9ca3af",
+                      "content": "5",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "5aEWZ",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "8x3jF",
+              "name": "Week 2",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#10b981",
+                "enabled": false
+              },
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "ahF8l",
+                  "name": "d6",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "kzOQx",
+                      "name": "d6t",
+                      "fill": "#9ca3af",
+                      "content": "6",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "7fydj",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "I9K4l",
+                  "name": "d7",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ACQKx",
+                      "name": "d7t",
+                      "fill": "#9ca3af",
+                      "content": "7",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "RMPw3",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "2OyUJ",
+                  "name": "d8",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "TK4sl",
+                      "name": "d8t",
+                      "fill": "#9ca3af",
+                      "content": "8",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "eO7I4",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "eGciB",
+                  "name": "d9",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "oPn8X",
+                      "name": "d9t",
+                      "fill": "#9ca3af",
+                      "content": "9",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "YtwgW",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "PSL0h",
+                  "name": "d10",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "yOoK4",
+                      "name": "d10t",
+                      "fill": "#9ca3af",
+                      "content": "10",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "wCzzV",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "NejvX",
+                  "name": "d11",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "GGAd3",
+                      "name": "d11t",
+                      "fill": "#9ca3af",
+                      "content": "11",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "ACS0l",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "LNGhS",
+                  "name": "d12",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "by0OX",
+                      "name": "d12t",
+                      "fill": "#9ca3af",
+                      "content": "12",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "q50h1",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "YUng3",
+              "name": "Week 3",
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "zeGBI",
+                  "name": "d13",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "jvrFK",
+                      "name": "d13t",
+                      "fill": "#9ca3af",
+                      "content": "13",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "ti3xQ",
+                      "name": "bar13",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "IwgVn",
+                  "name": "d14",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "S5S5G",
+                      "name": "d14t",
+                      "fill": "#9ca3af",
+                      "content": "14",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "pVv6p",
+                      "name": "bar14",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "VrEgp",
+                  "name": "d15",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "eutF5",
+                      "name": "d15t",
+                      "fill": "#9ca3af",
+                      "content": "15",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "DeEAO",
+                      "name": "bar15",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ehuni",
+                  "name": "d16",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "5JsPM",
+                      "name": "d16t",
+                      "fill": "#9ca3af",
+                      "content": "16",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "Zmssr",
+                      "name": "bar16",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "tyfTI",
+                  "name": "d17",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "mdgBy",
+                      "name": "d17t",
+                      "fill": "#9ca3af",
+                      "content": "17",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "D2dkh",
+                      "name": "bar17",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "WprX3",
+                  "name": "d18",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "nAWbE",
+                      "name": "d18t",
+                      "fill": "#9ca3af",
+                      "content": "18",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "s94jH",
+                      "name": "bar18",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "idYTr",
+                  "name": "d19",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "a7ATN",
+                      "name": "d19t",
+                      "fill": "#9ca3af",
+                      "content": "19",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "qhRGo",
+                      "name": "bar19",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "acvJD",
+              "name": "Week 4",
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "W65fR",
+                  "name": "d20",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "axVUl",
+                      "name": "d20t",
+                      "fill": "#9ca3af",
+                      "content": "20",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "DH9h6",
+                      "name": "bar20",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "8FsET",
+                  "name": "d21",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "sDniW",
+                      "name": "d21t",
+                      "fill": "#9ca3af",
+                      "content": "21",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "O8Q96",
+                      "name": "bar21",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "FdNWg",
+                  "name": "d22",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "yYn4c",
+                      "name": "d22t",
+                      "fill": "#9ca3af",
+                      "content": "22",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "v84Vv",
+                      "name": "bar22",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "o8DTj",
+                  "name": "d23",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "zy9JK",
+                      "name": "d23t",
+                      "fill": "#9ca3af",
+                      "content": "23",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "jWUzH",
+                      "name": "bar23",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "5BNvL",
+                  "name": "d24",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "dsiNI",
+                      "name": "d24t",
+                      "fill": "#9ca3af",
+                      "content": "24",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "f2Obc",
+                      "name": "bar24",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d3Q3z",
+                  "name": "d25",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "GpeBm",
+                      "name": "d25t",
+                      "fill": "#9ca3af",
+                      "content": "25",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "pqjN2",
+                      "name": "bar25",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "HZoFT",
+                  "name": "d26",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "2QEio",
+                      "name": "d26t",
+                      "fill": "#9ca3af",
+                      "content": "26",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "gyhoZ",
+                      "name": "bar26",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ki296",
+              "name": "Week 5",
+              "width": "fill_container",
+              "fill": {
+                "type": "color",
+                "color": "#10b981",
+                "enabled": false
+              },
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "7RCTp",
+                  "name": "d27",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "CJSQ3",
+                      "name": "d27t",
+                      "fill": "#9ca3af",
+                      "content": "27",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "LZoMm",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "K4TEM",
+                  "name": "d28",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Mwssm",
+                      "name": "d28t",
+                      "fill": "#9ca3af",
+                      "content": "28",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "xGiGt",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "FQrJA",
+                  "name": "d29",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "e9jG5",
+                      "name": "d29t",
+                      "fill": "#9ca3af",
+                      "content": "29",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "AjDzj",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "eNbDG",
+                  "name": "d30",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "pxDm4",
+                      "name": "d30t",
+                      "fill": "#9ca3af",
+                      "content": "30",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "jUj41",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "0R0Eg",
+                  "name": "d31",
+                  "width": "fill_container",
+                  "height": 32,
+                  "layout": "vertical",
+                  "gap": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "0mDh1",
+                      "name": "d31t",
+                      "fill": "#9ca3af",
+                      "content": "31",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 2,
+                      "id": "MpEX5",
+                      "name": "bar",
+                      "fill": "$--visa-1st-color",
+                      "width": 16,
+                      "height": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "IdYMa",
+                  "name": "e5a",
+                  "width": "fill_container",
+                  "height": 32
+                },
+                {
+                  "type": "frame",
+                  "id": "XBrnM",
+                  "name": "e5b",
+                  "width": "fill_container",
+                  "height": 32
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "u3rTg",
+          "name": "divider",
+          "fill": "$--border",
+          "width": "fill_container",
+          "height": 1
+        },
+        {
+          "type": "frame",
+          "id": "WmP9h",
+          "name": "Legend",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 6,
+          "padding": [
+            8,
+            12,
+            12,
+            12
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "RmBy4",
+              "name": "legendTitle",
+              "fill": "$--muted-foreground",
+              "content": "DATES UNAVAILABLE",
+              "fontFamily": "Inter",
+              "fontSize": 10,
+              "fontWeight": "600",
+              "letterSpacing": 0.6
+            },
+            {
+              "type": "frame",
+              "id": "1YY66",
+              "name": "legendRow",
+              "width": "fill_container",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2,
+                  "id": "ybIuj",
+                  "name": "legendBar",
+                  "fill": "$--visa-1st-color",
+                  "width": 24,
+                  "height": 4
+                },
+                {
+                  "type": "text",
+                  "id": "OPadZ",
+                  "name": "legendLabel",
+                  "fill": "$--foreground",
+                  "content": "1st WHV 417 — 1 Jan to 31 Dec 2025",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "VNS4g",
+              "name": "hintRow",
+              "width": "fill_container",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "F5Vsg",
+                  "name": "hintIcon",
+                  "width": 12,
+                  "height": 12,
+                  "iconFontName": "info",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--muted-foreground"
+                },
+                {
+                  "type": "text",
+                  "id": "dD83l",
+                  "name": "hintText",
+                  "fill": "$--muted-foreground",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Your arrival date must be outside existing visa periods",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "BADFA",
+      "x": 3973,
+      "y": 6700,
+      "name": "Visa / Edit - Mobile",
+      "context": "Visa / Edit - Mobile — Edit form for an existing visa. No visa number selector (visa is already known). Shows: page header (Edit Visa / Update your visa arrival date), visa card preview (6PfjR), form card with arrival date label + date picker input (gbSZC) + open calendar (esEoC), footer with Cancel + Save Changes buttons. Mobile layout with bottom nav (rlxi4).",
+      "width": 390,
+      "height": 992,
+      "fill": "$--background",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "xwsQU",
+          "x": 0,
+          "y": 0,
+          "name": "Scrollable Content",
+          "clip": true,
+          "width": 390,
+          "height": 920,
+          "layout": "vertical",
+          "gap": 16,
+          "padding": [
+            24,
+            16,
+            100,
+            16
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "fJmrG",
+              "name": "Page Header",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "qcjIU",
+                  "name": "Breadcrumb Row",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "id": "4hAsa",
+                      "type": "ref",
+                      "ref": "DPuqU",
+                      "name": "visasLink",
+                      "descendants": {
+                        "xqDqs": {
+                          "content": "Visas",
+                          "fontSize": 24,
+                          "fontWeight": "700",
+                          "fill": "$--muted-foreground"
+                        }
+                      }
+                    },
+                    {
+                      "id": "ddWr8",
+                      "type": "ref",
+                      "ref": "yQ8Ca",
+                      "name": "sep"
+                    },
+                    {
+                      "id": "uC7i6",
+                      "type": "ref",
+                      "ref": "c6T7D",
+                      "name": "pageTitle",
+                      "descendants": {
+                        "gmDs4": {
+                          "content": "Edit",
+                          "fontSize": 24,
+                          "fontWeight": "700"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "0OJhq",
+                  "name": "subtitleText",
+                  "fill": "$--muted-foreground",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Update your visa arrival date",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "afsbT",
+              "type": "ref",
+              "ref": "6PfjR",
+              "name": "visaCard",
+              "width": "fill_container",
+              "descendants": {
+                "ujVTd": {
+                  "enabled": false
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "hcovi",
+              "name": "Form Card",
+              "width": "fill_container",
+              "fill": "$--card",
+              "cornerRadius": 12,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "vertical",
+              "gap": 20,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "FfHSE",
+                  "name": "arrivalLabel",
+                  "fill": "$--muted-foreground",
+                  "content": "ARRIVAL DATE IN AUSTRALIA",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "600",
+                  "letterSpacing": 0.8
+                },
+                {
+                  "id": "XoLUd",
+                  "type": "ref",
+                  "ref": "gbSZC",
+                  "name": "dateInput",
+                  "width": "fill_container",
+                  "descendants": {
+                    "xMdP9": {
+                      "enabled": false,
+                      "height": 0
+                    }
+                  }
+                },
+                {
+                  "id": "FAnVL",
+                  "type": "ref",
+                  "ref": "esEoC",
+                  "name": "calendarOpen",
+                  "width": "fill_container"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "OLytp",
+              "name": "Footer",
+              "width": "fill_container",
+              "gap": 12,
+              "justifyContent": "end",
+              "children": [
+                {
+                  "id": "ybVyt",
+                  "type": "ref",
+                  "ref": "qY8X8",
+                  "name": "cancelBtn",
+                  "x": 115,
+                  "y": 0,
+                  "descendants": {
+                    "VqHOn": {
+                      "enabled": false
+                    },
+                    "9QkPP": {
+                      "content": "Cancel"
+                    }
+                  }
+                },
+                {
+                  "id": "pi6gi",
+                  "type": "ref",
+                  "ref": "KVSpr",
+                  "name": "deleteBtn",
+                  "descendants": {
+                    "MuAO3": {
+                      "enabled": false
+                    },
+                    "QmAWH": {
+                      "iconFontName": "trash-2"
+                    },
+                    "4cTi2": {
+                      "content": "Delete"
+                    }
+                  }
+                },
+                {
+                  "id": "ofaoa",
+                  "type": "ref",
+                  "ref": "TFQa9",
+                  "name": "saveBtn",
+                  "x": 293,
+                  "y": 0,
+                  "descendants": {
+                    "UizdN": {
+                      "enabled": false
+                    },
+                    "Syk6S": {
+                      "content": "Save"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "QhptO",
+          "type": "ref",
+          "ref": "rlxi4",
+          "width": 390,
+          "x": 0,
+          "y": 920,
+          "name": "mobileNav"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "EJfdH",
+      "x": 2613,
+      "y": 6700,
+      "name": "Visa / Edit - Desktop",
+      "width": 1280,
+      "height": 1200,
+      "fill": "$--background",
+      "children": [
+        {
+          "id": "lDAFx",
+          "type": "ref",
+          "ref": "X1cZm",
+          "name": "sidebar1",
+          "width": 256,
+          "height": 1200
+        },
+        {
+          "type": "frame",
+          "id": "CnZUA",
+          "name": "Main Content",
+          "clip": true,
+          "width": 1024,
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 24,
+          "padding": [
+            32,
+            40
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "yjci3",
+              "name": "Page Header",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "0lZXj",
+                  "name": "Header Left",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "F7zBl",
+                      "name": "Breadcrumb Row",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "id": "uXXbV",
+                          "type": "ref",
+                          "ref": "DPuqU",
+                          "name": "visasLink",
+                          "descendants": {
+                            "xqDqs": {
+                              "content": "Visas",
+                              "fontSize": 28,
+                              "fontWeight": "700",
+                              "fill": "$--muted-foreground"
+                            }
+                          }
+                        },
+                        {
+                          "id": "mHZP4",
+                          "type": "ref",
+                          "ref": "yQ8Ca",
+                          "name": "sep1"
+                        },
+                        {
+                          "id": "hhzx7",
+                          "type": "ref",
+                          "ref": "c6T7D",
+                          "name": "pageTitle",
+                          "descendants": {
+                            "gmDs4": {
+                              "content": "Edit",
+                              "fontSize": 28,
+                              "fontWeight": "700"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "GYgS5",
+                      "name": "subtitle",
+                      "fill": "$--muted-foreground",
+                      "content": "Update your visa arrival date",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "vYb5G",
+              "type": "ref",
+              "ref": "CNC6t",
+              "name": "visaCardPreview",
+              "width": 420,
+              "descendants": {
+                "kNR42": {
+                  "enabled": false
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "4HOgD",
+              "name": "Form Card",
+              "width": "fill_container",
+              "fill": "$--card",
+              "cornerRadius": 12,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "$--border"
+              },
+              "layout": "vertical",
+              "gap": 28,
+              "padding": [
+                28,
+                28,
+                24,
+                28
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "mYl5W",
+                  "name": "Content Row",
+                  "width": "fill_container",
+                  "gap": 40,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "qgL3m",
+                      "name": "Left Column",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 28,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "2dEHu",
+                          "name": "Arrival Date Group",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "wTBTj",
+                              "name": "arrivalLabel",
+                              "fill": "$--muted-foreground",
+                              "content": "ARRIVAL DATE IN AUSTRALIA",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "600",
+                              "letterSpacing": 0.8
+                            },
+                            {
+                              "id": "8Gu6T",
+                              "type": "ref",
+                              "ref": "gbSZC",
+                              "name": "dateInput",
+                              "width": "fill_container",
+                              "descendants": {
+                                "xMdP9": {
+                                  "enabled": false,
+                                  "height": 0
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "suVfj",
+                      "name": "Right Column",
+                      "width": 300,
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "id": "HbgQk",
+                          "type": "ref",
+                          "ref": "esEoC",
+                          "name": "calendar",
+                          "width": "fill_container"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "1eZhu",
+                  "name": "Footer",
+                  "width": "fill_container",
+                  "gap": 12,
+                  "padding": [
+                    16,
+                    0,
+                    0,
+                    0
+                  ],
+                  "justifyContent": "end",
+                  "children": [
+                    {
+                      "id": "Sx1nX",
+                      "type": "ref",
+                      "ref": "qY8X8",
+                      "name": "cancelBtn",
+                      "x": 645,
+                      "y": 16,
+                      "descendants": {
+                        "VqHOn": {
+                          "enabled": false
+                        },
+                        "9QkPP": {
+                          "content": "Cancel"
+                        }
+                      }
+                    },
+                    {
+                      "id": "vC2Zf",
+                      "type": "ref",
+                      "ref": "KVSpr",
+                      "name": "deleteBtn",
+                      "descendants": {
+                        "MuAO3": {
+                          "enabled": false
+                        },
+                        "QmAWH": {
+                          "iconFontName": "trash-2"
+                        },
+                        "4cTi2": {
+                          "content": "Delete"
+                        }
+                      }
+                    },
+                    {
+                      "id": "RWSgT",
+                      "type": "ref",
+                      "ref": "TFQa9",
+                      "name": "saveBtn",
+                      "x": 823,
+                      "y": 16,
+                      "descendants": {
+                        "UizdN": {
+                          "enabled": false
+                        },
+                        "Syk6S": {
+                          "content": "Save"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "themes": {
@@ -29965,6 +34187,18 @@
     "--wa-main-color": {
       "type": "color",
       "value": "#FFD700"
+    },
+    "--visa-1st-color": {
+      "type": "color",
+      "value": "#10b981"
+    },
+    "--visa-2nd-color": {
+      "type": "color",
+      "value": "#3b82f6"
+    },
+    "--visa-3rd-color": {
+      "type": "color",
+      "value": "#f59e0b"
     }
   }
 }
