@@ -9,23 +9,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { useVisaContext } from '../hooks/use-visa-context';
-import { getVisaBadgeColor, getVisaOrdinal } from '../utils/visa-helpers';
-
-// badge: 28×20px, cornerRadius=4, white text 10px bold
-function OrdinalBadge({
-  visaType,
-}: {
-  visaType: Parameters<typeof getVisaOrdinal>[0];
-}) {
-  return (
-    <span
-      className={`inline-flex items-center justify-center rounded ${getVisaBadgeColor(visaType)} text-white shrink-0`}
-      style={{ width: 28, height: 20, fontSize: 10, fontWeight: 700, borderRadius: 4 }}
-    >
-      {getVisaOrdinal(visaType)}
-    </span>
-  );
-}
+import { getVisaOrdinal } from '../utils/visa-helpers';
+import { OrdinalBadge } from './ordinal-badge';
 
 // trigger inner layout: [textBlock (vertical, gap=2px)] [chevron 16×16]
 // outer: horizontal, alignItems=center, gap=12px, padding=[12,18], cornerRadius=10
