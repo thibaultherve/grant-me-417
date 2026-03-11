@@ -1034,8 +1034,8 @@
     {
       "type": "frame",
       "id": "gluUE",
-      "x": 4293,
-      "y": 5065,
+      "x": 4105,
+      "y": 5576,
       "name": "Visa Date Picker / Input / Empty",
       "context": "Visa Date Picker / Input / Empty — Trigger button that opens the Visa Date Picker calendar. Shows label 'Arrival Date in Australia' + calendar icon + placeholder text 'Pick a date' in muted color, followed by a short description: 'Select your first day on Australian soil — this sets the start of your visa period.' In React: same Popover trigger as gbSZC but no date selected yet. On date pick, transitions to filled state (gbSZC).",
       "reusable": true,
@@ -29730,8 +29730,8 @@
     {
       "type": "frame",
       "id": "f57Nb",
-      "x": 2613,
-      "y": 5380,
+      "x": 2618,
+      "y": 5862,
       "name": "Visa / Add - Desktop",
       "width": 1280,
       "height": 1200,
@@ -29878,88 +29878,52 @@
               "children": [
                 {
                   "type": "frame",
-                  "id": "F2mE5",
-                  "name": "Content Row",
+                  "id": "tOcay",
+                  "name": "visaLabelGroup",
                   "width": "fill_container",
-                  "gap": 40,
+                  "layout": "vertical",
+                  "gap": 8,
                   "children": [
                     {
-                      "type": "frame",
-                      "id": "tmvIh",
-                      "name": "Left Column",
-                      "width": "fill_container",
-                      "layout": "vertical",
-                      "gap": 28,
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "tOcay",
-                          "name": "visaLabelGroup",
-                          "width": "fill_container",
-                          "layout": "vertical",
-                          "gap": 8,
-                          "children": [
-                            {
-                              "id": "zggIX",
-                              "type": "ref",
-                              "ref": "lJaPg",
-                              "name": "visaNumberSelector",
-                              "width": "fill_container"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "PgkU2",
-                          "name": "Arrival Date Group",
-                          "width": "fill_container",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "C2xoN",
-                              "name": "arrivalLabel",
-                              "fill": "$--muted-foreground",
-                              "content": "ARRIVAL DATE IN AUSTRALIA",
-                              "fontFamily": "Inter",
-                              "fontSize": 11,
-                              "fontWeight": "600",
-                              "letterSpacing": 0.8
-                            },
-                            {
-                              "id": "Kb7O6",
-                              "type": "ref",
-                              "ref": "gbSZC",
-                              "width": "fill_container",
-                              "name": "dateInput",
-                              "descendants": {
-                                "xMdP9": {
-                                  "enabled": false,
-                                  "height": 0
-                                }
-                              }
-                            }
-                          ]
-                        }
-                      ]
+                      "id": "zggIX",
+                      "type": "ref",
+                      "ref": "lJaPg",
+                      "name": "visaNumberSelector",
+                      "width": "fill_container"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "PgkU2",
+                  "name": "Arrival Date Group",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "C2xoN",
+                      "name": "arrivalLabel",
+                      "fill": "$--muted-foreground",
+                      "content": "ARRIVAL DATE IN AUSTRALIA",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "600",
+                      "letterSpacing": 0.8
                     },
                     {
-                      "type": "frame",
-                      "id": "xsgFf",
-                      "name": "Right Column",
-                      "width": 300,
-                      "layout": "vertical",
-                      "gap": 8,
-                      "children": [
-                        {
-                          "id": "gUnqn",
-                          "type": "ref",
-                          "ref": "esEoC",
-                          "width": "fill_container",
-                          "name": "calendar"
+                      "id": "Kb7O6",
+                      "type": "ref",
+                      "ref": "gbSZC",
+                      "width": "fill_container",
+                      "name": "dateInput",
+                      "descendants": {
+                        "xMdP9": {
+                          "enabled": false,
+                          "height": 0
                         }
-                      ]
+                      }
                     }
                   ]
                 },
@@ -30016,8 +29980,8 @@
     {
       "type": "frame",
       "id": "n24rQ",
-      "x": 3973,
-      "y": 5380,
+      "x": 3978,
+      "y": 5862,
       "name": "Visa / Add - Mobile",
       "context": "Mobile version of the Visa / Add page. No sidebar - uses mobile bottom nav. Form: Visa Selector (l3cLX open state) + Arrival Date picker (gbSZC) with calendar open (esEoC). Cancel + Add Visa buttons.",
       "width": 390,
@@ -30167,13 +30131,6 @@
                       "height": 0
                     }
                   }
-                },
-                {
-                  "id": "DGAjI",
-                  "type": "ref",
-                  "ref": "esEoC",
-                  "name": "calendarOpen",
-                  "width": "fill_container"
                 }
               ]
             },
@@ -30225,8 +30182,8 @@
     {
       "type": "frame",
       "id": "esEoC",
-      "x": 3973,
-      "y": 4889,
+      "x": 3785,
+      "y": 5400,
       "name": "Visa Date Picker / Calendar",
       "context": "Visa Date Picker / Calendar — Default state (no blocked ranges). Shows a monthly calendar with prev/next navigation header, weekday row (Mo–Su), and a 6-week grid. Currently showing March 2025 with day 15 selected (filled with $--primary color, white text). Available days are fully interactive. In React: powered by shadcn/ui Calendar (DayPicker). Props: selected (Date), onSelect (Date => void), blockedRanges (Array<{ start, end, visaOrdinal }> — empty in this default state). Day underline bars appear only when blockedRanges is non-empty (see Visa Date Picker / Calendar / Blocked Range). Day colors for visa ordinals: 1st=$--visa-1st-color, 2nd=$--visa-2nd-color, 3rd=$--visa-3rd-color.",
       "reusable": true,
@@ -31343,8 +31300,8 @@
     {
       "type": "frame",
       "id": "gbSZC",
-      "x": 4293,
-      "y": 4882,
+      "x": 4105,
+      "y": 5393,
       "name": "Visa Date Picker / Input / Filled",
       "context": "Visa Date Picker / Input / Filled — Trigger button that opens the Visa Date Picker calendar (esEoC or KKpmy). Shows label 'Arrival Date in Australia' + calendar icon + selected date value (e.g. '15 Mar 2025'). Below the trigger: a short description, a VEVO hint ('Not sure? Check your exact arrival date on VEVO.'), and a clickable link to https://online.immi.gov.au/evo/firstParty?actionType=query labeled 'Open VEVO — visa details & conditions'. In React: a button wrapping shadcn/ui Popover trigger. When clicked, opens a Popover containing the Calendar component. The filled state means a date has been selected. Companion empty state: gluUE.",
       "reusable": true,
@@ -31493,8 +31450,8 @@
     {
       "type": "frame",
       "id": "lJaPg",
-      "x": 2958,
-      "y": 5117,
+      "x": 2724,
+      "y": 5400,
       "name": "Visa Number Selector / Default",
       "context": "Visa Number Selector / Default — Inline selector used ONLY in the Visa / Add form (NOT the dashboard switcher). Lets the user pick which visa number they are adding: 1st, 2nd, or 3rd WHV 417. Shows 3 card-style options side by side. Each card has a colored ordinal badge (1st=$--visa-1st-color green, 2nd=$--visa-2nd-color blue, 3rd=$--visa-3rd-color amber) with white text, and a 'WHV 417' label below in muted color. Cards have neutral background and border — no selected state in this default variant. In React: a controlled radio-group. On select, highlights the chosen option (see nqZxc for 1st-selected state). The selected value determines which ordinal badge color is used in blockedRanges for other visas in the calendar.",
       "reusable": true,
@@ -31691,8 +31648,8 @@
     {
       "type": "frame",
       "id": "nqZxc",
-      "x": 3318,
-      "y": 5117,
+      "x": 3084,
+      "y": 5400,
       "name": "Visa Number Selector / 1st Selected",
       "context": "Visa Number Selector / 1st Selected — Filled state of lJaPg where the 1st WHV option is selected. The 1st card gets: green tinted background (#f0fdf4), green border stroke (2px, $--visa-1st-color), green badge fill ($--visa-1st-color), green label text. 2nd and 3rd cards remain in default neutral style. In React: same controlled radio-group as lJaPg — this state is rendered when value === '1st'. Similar selected states exist for 2nd ($--visa-2nd-color blue) and 3rd ($--visa-3rd-color amber) but are not yet designed as separate components.",
       "reusable": true,
@@ -31889,8 +31846,8 @@
     {
       "type": "frame",
       "id": "KKpmy",
-      "x": 4633,
-      "y": 4889,
+      "x": 4445,
+      "y": 5400,
       "name": "Visa Date Picker / Calendar / Blocked Range",
       "context": "Visa Date Picker / Calendar / Blocked Range — Shows a month where all dates are blocked by an existing visa. Example: January 2025 fully covered by the 1st WHV (arrival Jan 1 2025). Blocked days: muted gray text (#9ca3af), no background fill on cells, a small solid colored underline bar (3px, rounded, 16px wide) placed BELOW each day number — NOT as a background overlay. The bar color matches the visa ordinal: 1st=$--visa-1st-color (#10b981 green), 2nd=$--visa-2nd-color (#3b82f6 blue), 3rd=$--visa-3rd-color (#f59e0b amber). Colors are stored as design variables (not hardcoded). A legend below the grid shows which visa blocks which range: colored bar swatch + 'Nth WHV 417 — D Mon to D Mon YYYY'. Info hint: 'Your arrival date must be outside existing visa periods'. In React: receives a blockedRanges prop — Array<{ start: Date, end: Date, visaOrdinal: 1|2|3 }>. Each range renders using $--visa-Nth-color. Non-blocked days are fully interactive. The component is powered by shadcn/ui Calendar (DayPicker). Blocked dates use the disabled modifier + custom DayContent to inject the underline bar.",
       "reusable": true,
@@ -33372,8 +33329,8 @@
     {
       "type": "frame",
       "id": "BADFA",
-      "x": 3973,
-      "y": 6700,
+      "x": 3978,
+      "y": 7182,
       "name": "Visa / Edit - Mobile",
       "context": "Visa / Edit - Mobile — Edit form for an existing visa. No visa number selector (visa is already known). Shows: page header (Edit Visa / Update your visa arrival date), visa card preview (6PfjR), form card with arrival date label + date picker input (gbSZC) + open calendar (esEoC), footer with Cancel + Save Changes buttons. Mobile layout with bottom nav (rlxi4).",
       "width": 390,
@@ -33514,13 +33471,6 @@
                       "height": 0
                     }
                   }
-                },
-                {
-                  "id": "FAnVL",
-                  "type": "ref",
-                  "ref": "esEoC",
-                  "name": "calendarOpen",
-                  "width": "fill_container"
                 }
               ]
             },
@@ -33599,8 +33549,8 @@
     {
       "type": "frame",
       "id": "EJfdH",
-      "x": 2613,
-      "y": 6700,
+      "x": 2618,
+      "y": 7182,
       "name": "Visa / Edit - Desktop",
       "width": 1280,
       "height": 1200,
@@ -33735,71 +33685,35 @@
               "children": [
                 {
                   "type": "frame",
-                  "id": "mYl5W",
-                  "name": "Content Row",
+                  "id": "2dEHu",
+                  "name": "Arrival Date Group",
                   "width": "fill_container",
-                  "gap": 40,
+                  "layout": "vertical",
+                  "gap": 6,
                   "children": [
                     {
-                      "type": "frame",
-                      "id": "qgL3m",
-                      "name": "Left Column",
-                      "width": "fill_container",
-                      "layout": "vertical",
-                      "gap": 28,
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "2dEHu",
-                          "name": "Arrival Date Group",
-                          "width": "fill_container",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "wTBTj",
-                              "name": "arrivalLabel",
-                              "fill": "$--muted-foreground",
-                              "content": "ARRIVAL DATE IN AUSTRALIA",
-                              "fontFamily": "Inter",
-                              "fontSize": 11,
-                              "fontWeight": "600",
-                              "letterSpacing": 0.8
-                            },
-                            {
-                              "id": "8Gu6T",
-                              "type": "ref",
-                              "ref": "gbSZC",
-                              "name": "dateInput",
-                              "width": "fill_container",
-                              "descendants": {
-                                "xMdP9": {
-                                  "enabled": false,
-                                  "height": 0
-                                }
-                              }
-                            }
-                          ]
-                        }
-                      ]
+                      "type": "text",
+                      "id": "wTBTj",
+                      "name": "arrivalLabel",
+                      "fill": "$--muted-foreground",
+                      "content": "ARRIVAL DATE IN AUSTRALIA",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "600",
+                      "letterSpacing": 0.8
                     },
                     {
-                      "type": "frame",
-                      "id": "suVfj",
-                      "name": "Right Column",
-                      "width": 300,
-                      "layout": "vertical",
-                      "gap": 8,
-                      "children": [
-                        {
-                          "id": "HbgQk",
-                          "type": "ref",
-                          "ref": "esEoC",
-                          "name": "calendar",
-                          "width": "fill_container"
+                      "id": "8Gu6T",
+                      "type": "ref",
+                      "ref": "gbSZC",
+                      "name": "dateInput",
+                      "width": "fill_container",
+                      "descendants": {
+                        "xMdP9": {
+                          "enabled": false,
+                          "height": 0
                         }
-                      ]
+                      }
                     }
                   ]
                 },

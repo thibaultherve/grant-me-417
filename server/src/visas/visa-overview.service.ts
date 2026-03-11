@@ -5,7 +5,6 @@ import {
   type VisaOverviewMonthlyTrend,
   type VisaOverviewPace,
   type VisaOverviewThisWeek,
-  type VisaOverviewTimeline,
   type VisaOverviewWeeklyProgress,
   type VisaType,
 } from '@get-granted/shared';
@@ -55,7 +54,6 @@ export class VisaOverviewService {
         daysRemaining: visa.daysRemaining,
         isEligible: visa.isEligible ?? false,
       },
-      timeline: this.computeTimeline(arrivalDate, expiryDate),
       pace: this.computePace(visa, arrivalDate, expiryDate),
       thisWeek: this.computeThisWeek(thisWeekEntries),
       weeklyProgress: this.buildWeeklyProgress(weeklyRows),
@@ -114,34 +112,6 @@ export class VisaOverviewService {
   }
 
   // ─── In-memory computations ────────────────────────────────────────────────
-
-  private computeTimeline(
-    arrivalDate: Date,
-    expiryDate: Date | null,
-  ): VisaOverviewTimeline {
-    const today = new Date();
-    today.setUTCHours(0, 0, 0, 0);
-    const arrival = new Date(arrivalDate);
-    arrival.setUTCHours(0, 0, 0, 0);
-    const expiry = expiryDate ? new Date(expiryDate) : new Date(arrival);
-    expiry.setUTCHours(0, 0, 0, 0);
-
-    const totalDays =
-      Math.round((expiry.getTime() - arrival.getTime()) / MS_PER_DAY) + 1;
-    const daysElapsed = Math.max(
-      0,
-      Math.min(
-        totalDays,
-        Math.round((today.getTime() - arrival.getTime()) / MS_PER_DAY),
-      ),
-    );
-    const daysLeft = Math.max(
-      0,
-      Math.round((expiry.getTime() - today.getTime()) / MS_PER_DAY),
-    );
-
-    return { totalDays, daysElapsed, daysLeft };
-  }
 
   private computePace(
     visa: { eligibleDays: number; daysRequired: number },

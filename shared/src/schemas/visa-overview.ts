@@ -15,12 +15,6 @@ export const visaOverviewVisaSchema = z.object({
   isEligible: z.boolean(),
 });
 
-export const visaOverviewTimelineSchema = z.object({
-  totalDays: z.number().int(),
-  daysElapsed: z.number().int(),
-  daysLeft: z.number().int(),
-});
-
 export const visaOverviewPaceSchema = z.object({
   weeksElapsed: z.number().int(),
   weeksRemaining: z.number().int(),
@@ -78,7 +72,6 @@ export const visaOverviewMonthlyTrendSchema = z.object({
 
 export const visaOverviewResponseSchema = z.object({
   visa: visaOverviewVisaSchema,
-  timeline: visaOverviewTimelineSchema,
   pace: visaOverviewPaceSchema,
   thisWeek: visaOverviewThisWeekSchema,
   weeklyProgress: z.array(visaOverviewWeeklyProgressSchema),
@@ -90,7 +83,6 @@ export const visaOverviewResponseSchema = z.object({
 // --- Types ---
 
 export type VisaOverviewVisa = z.infer<typeof visaOverviewVisaSchema>;
-export type VisaOverviewTimeline = z.infer<typeof visaOverviewTimelineSchema>;
 export type VisaOverviewPace = z.infer<typeof visaOverviewPaceSchema>;
 export type VisaOverviewThisWeek = z.infer<typeof visaOverviewThisWeekSchema>;
 export type VisaOverviewWeeklyProgress = z.infer<typeof visaOverviewWeeklyProgressSchema>;

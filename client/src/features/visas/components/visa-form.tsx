@@ -1,43 +1,68 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AlertCircle, Calendar, CheckCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Form,
-  FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
+import type { Visa, VisaType } from '@get-granted/shared';
 
 import { useAvailableVisas } from '../hooks/use-available-visas';
+import { useBlockedRanges } from '../hooks/use-blocked-ranges';
 import {
   createVisaSchema,
   updateVisaSchema,
   type CreateVisaFormData,
   type UpdateVisaFormData,
 } from '../schemas';
-import type { Visa, VisaType } from '@get-granted/shared';
-import { getVisaLabel } from '../utils/visa-helpers';
+import { VisaDatePicker } from './visa-date-picker';
+import { VisaNumberSelector } from './visa-number-selector';
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+/** Convert a Date to YYYY-MM-DD string */
+function dateToIsoString(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+/** Parse a YYYY-MM-DD string into a local Date (noon to avoid TZ issues) */
+function isoStringToDate(str: string): Date | undefined {
+  if (!str) return undefined;
+  const [y, m, d] = str.split('-').map(Number);
+  return new Date(y, m - 1, d, 12, 0, 0);
+}
+
+// ─── Props ────────────────────────────────────────────────────────────────────
 
 type VisaFormAddProps = {
   mode: 'add';
   visa?: never;
   onSubmit: (data: CreateVisaFormData) => Promise<void>;
   onCancel: () => void;
+  onDelete?: never;
   isSubmitting?: boolean;
+  isDeleting?: boolean;
 };
 
 type VisaFormEditProps = {
@@ -45,23 +70,35 @@ type VisaFormEditProps = {
   visa: Visa;
   onSubmit: (data: UpdateVisaFormData) => Promise<void>;
   onCancel: () => void;
+  onDelete?: (id: string) => void;
   isSubmitting?: boolean;
+  isDeleting?: boolean;
 };
 
 type VisaFormProps = VisaFormAddProps | VisaFormEditProps;
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export function VisaForm({
   mode,
   visa,
   onSubmit,
   onCancel,
+  onDelete,
   isSubmitting,
+  isDeleting,
 }: VisaFormProps) {
   const [selectedVisaType, setSelectedVisaType] = useState<VisaType | null>(
     mode === 'edit' && visa ? visa.visaType : null,
   );
-  const { availableVisaTypes, loading, error, hasAvailableVisas } =
+
+  const { allVisaTypes, loading, error, hasAvailableVisas } =
     useAvailableVisas();
+
+  const { blockedRanges, minDate, maxDate, orderingConstraint, successorConstraint } = useBlockedRanges(
+    mode === 'edit' && visa ? visa.id : undefined,
+    selectedVisaType,
+  );
 
   const schema = mode === 'add' ? createVisaSchema : updateVisaSchema;
 
@@ -110,16 +147,18 @@ export function VisaForm({
     }
   };
 
-  // Handle loading state (only for add mode)
+  const isBusy = isSubmitting || isDeleting;
+
+  // ── Loading state (add mode only) ──────────────────────────────────────────
   if (mode === 'add' && loading) {
     return (
       <div className="flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
       </div>
     );
   }
 
-  // Handle error state (only for add mode)
+  // ── Error state (add mode only) ────────────────────────────────────────────
   if (mode === 'add' && error) {
     return (
       <div className="text-center p-8">
@@ -134,7 +173,7 @@ export function VisaForm({
     );
   }
 
-  // Handle no available visas (only for add mode)
+  // ── No available visas (add mode only) ─────────────────────────────────────
   if (mode === 'add' && !hasAvailableVisas) {
     return (
       <div className="text-center p-8">
@@ -153,115 +192,149 @@ export function VisaForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        {/* Visa Type Selection - only for add mode */}
-        {mode === 'add' && (
-          <FormField
-            control={form.control}
-            name="visaType"
-            render={() => (
-              <FormItem>
-                <FormLabel>Visa Type</FormLabel>
-                <Select
-                  value={selectedVisaType || ''}
-                  onValueChange={(value) =>
-                    handleVisaTypeSelect(value as VisaType)
-                  }
-                >
-                  <FormControl>
-                    <SelectTrigger className="h-12">
-                      <SelectValue placeholder="Select a visa type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {availableVisaTypes.map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {getVisaLabel(type)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormDescription>
-                  Choose which Working Holiday Visa you want to track
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <Card className="rounded-xl border border-border">
+          <CardContent className="flex flex-col gap-7 p-7 pb-6">
+            {/* ── Visa Number Selector (add mode only) ── */}
+            {mode === 'add' && (
+              <FormField
+                control={form.control}
+                name="visaType"
+                render={() => (
+                  <FormItem>
+                    <VisaNumberSelector
+                      value={selectedVisaType}
+                      onChange={handleVisaTypeSelect}
+                      allVisaTypes={allVisaTypes}
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             )}
-          />
-        )}
 
-        {/* Visa Type Display - only for edit mode */}
-        {mode === 'edit' && visa && (
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Visa Type</label>
-            <div className="p-3 bg-muted rounded-md">
-              <span className="font-medium">{getVisaLabel(visa.visaType)}</span>
-              <p className="text-sm text-muted-foreground mt-1">
-                Visa type cannot be changed
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Arrival Date */}
-        <FormField
-          control={form.control}
-          name="arrivalDate"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Arrival Date in Australia</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    type="date"
-                    {...field}
-                    className="h-12 text-base pl-10"
+            {/* ── Date Picker ── */}
+            <FormField
+              control={form.control}
+              name="arrivalDate"
+              render={({ field }) => (
+                <FormItem>
+                  <VisaDatePicker
+                    value={isoStringToDate(field.value)}
+                    onChange={(date) => {
+                      field.onChange(date ? dateToIsoString(date) : '');
+                    }}
+                    blockedRanges={blockedRanges}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    orderingConstraint={orderingConstraint}
+                    successorConstraint={successorConstraint}
+                    disabled={mode === 'add' && !selectedVisaType}
                   />
-                </div>
-              </FormControl>
-              <FormDescription>
-                {mode === 'add'
-                  ? 'The date you first arrived in Australia on this visa'
-                  : 'Update your arrival date if needed'}
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        {/* Form error */}
-        {form.formState.errors.root && (
-          <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md border border-destructive/20">
-            {form.formState.errors.root.message}
-          </div>
-        )}
+            {/* ── Form error ── */}
+            {form.formState.errors.root && (
+              <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md border border-destructive/20">
+                {form.formState.errors.root.message}
+              </div>
+            )}
 
-        {/* Buttons */}
-        <div className="flex gap-3 pt-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onCancel}
-            className="flex-1 h-12 text-base"
-            disabled={isSubmitting}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            className="flex-1 h-12 text-base"
-            disabled={isSubmitting || (mode === 'add' && !selectedVisaType)}
-          >
-            {isSubmitting
-              ? mode === 'add'
-                ? 'Creating...'
-                : 'Saving...'
-              : mode === 'add'
-                ? 'Create Visa'
-                : 'Save Changes'}
-          </Button>
-        </div>
+            {/* ── Footer: Edit mode ── */}
+            {mode === 'edit' && (
+              <div className="flex items-center justify-end gap-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={onCancel}
+                  disabled={isBusy}
+                  className="h-10"
+                  style={{
+                    backgroundColor: '#f8f8f8',
+                    borderColor: '#d1d4db',
+                    boxShadow: '0 1px 1.75px 0 rgba(0,0,0,0.05)',
+                  }}
+                >
+                  Cancel
+                </Button>
+
+                {onDelete && visa && (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        disabled={isBusy}
+                        className="h-10 gap-1.5"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        {isDeleting ? 'Deleting...' : 'Delete'}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete Visa</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure you want to delete this WHV 417 visa? All
+                          associated work entries will remain, but visa tracking
+                          data will be lost. This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => onDelete(visa.id)}
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
+
+                <Button
+                  type="submit"
+                  disabled={isBusy}
+                  className="h-10"
+                >
+                  {isSubmitting ? 'Saving...' : 'Save'}
+                </Button>
+              </div>
+            )}
+
+            {/* ── Footer: Add mode ── */}
+            {mode === 'add' && (
+              <div className="flex items-center justify-end gap-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={onCancel}
+                  disabled={isBusy}
+                  className="h-10"
+                  style={{
+                    backgroundColor: '#f8f8f8',
+                    borderColor: '#d1d4db',
+                    boxShadow: '0 1px 1.75px 0 rgba(0,0,0,0.05)',
+                  }}
+                >
+                  Cancel
+                </Button>
+
+                <Button
+                  type="submit"
+                  disabled={isBusy || !selectedVisaType}
+                  className="h-10"
+                >
+                  {isSubmitting ? 'Adding...' : 'Add Visa'}
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </form>
     </Form>
   );

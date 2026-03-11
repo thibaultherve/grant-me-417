@@ -1,16 +1,19 @@
 import { useNavigate, useParams } from 'react-router';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { paths } from '@/config/paths';
 import {
+  useDeleteVisa,
   useGetVisaByType,
   useUpdateVisa,
 } from '@/features/visas/api/use-visas';
+import { VisaCard } from '@/features/visas/components/visa-card';
 import { VisaForm } from '@/features/visas/components/visa-form';
 import type { UpdateVisaFormData } from '@/features/visas/schemas';
-import { getVisaLabel, slugToVisaType } from '@/features/visas/utils/visa-helpers';
+import { slugToVisaType } from '@/features/visas/utils/visa-helpers';
+import { usePageHeader } from '@/hooks/use-page-header';
 
 export function VisaEditRoute() {
   const { type } = useParams<{ type: string }>();
@@ -19,6 +22,11 @@ export function VisaEditRoute() {
   const visaType = slugToVisaType(type || '');
   const { data: visa, isLoading, error } = useGetVisaByType(visaType);
   const { mutateAsync: updateVisa, isPending } = useUpdateVisa();
+  const deleteMutation = useDeleteVisa();
+
+  usePageHeader({
+    description: 'Update your visa arrival date',
+  });
 
   const handleSubmit = async (data: UpdateVisaFormData) => {
     if (!visa) return;
@@ -30,10 +38,18 @@ export function VisaEditRoute() {
     navigate(paths.app.visas.getHref());
   };
 
+  const handleDelete = (id: string) => {
+    deleteMutation.mutate(id, {
+      onSuccess: () => {
+        navigate(paths.app.visas.getHref());
+      },
+    });
+  };
+
   // Invalid visa type
   if (!visaType) {
     return (
-      <div className="space-y-6">
+      <div className="max-w-2xl">
         <Card>
           <CardContent className="py-8 text-center">
             <p className="text-muted-foreground mb-4">Invalid visa type.</p>
@@ -49,17 +65,9 @@ export function VisaEditRoute() {
   // Loading state
   if (isLoading) {
     return (
-      <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-6 w-48" />
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-          </CardContent>
-        </Card>
+      <div className="max-w-2xl space-y-4">
+        <Skeleton className="h-40 w-full rounded-xl" />
+        <Skeleton className="h-48 w-full rounded-xl" />
       </div>
     );
   }
@@ -67,7 +75,7 @@ export function VisaEditRoute() {
   // Error state - visa not found
   if (error || !visa) {
     return (
-      <div className="space-y-6">
+      <div className="max-w-2xl">
         <Card>
           <CardContent className="py-8 text-center">
             <p className="text-muted-foreground mb-4">Visa not found.</p>
@@ -81,21 +89,20 @@ export function VisaEditRoute() {
   }
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Edit {getVisaLabel(visa.visaType)}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <VisaForm
-            mode="edit"
-            visa={visa}
-            onSubmit={handleSubmit}
-            onCancel={handleCancel}
-            isSubmitting={isPending}
-          />
-        </CardContent>
-      </Card>
+    <div className="max-w-2xl space-y-4">
+      {/* Visa card preview (read-only) */}
+      <VisaCard visa={visa} hideActions />
+
+      {/* Edit form */}
+      <VisaForm
+        mode="edit"
+        visa={visa}
+        onSubmit={handleSubmit}
+        onCancel={handleCancel}
+        onDelete={handleDelete}
+        isSubmitting={isPending}
+        isDeleting={deleteMutation.isPending}
+      />
     </div>
   );
 }
