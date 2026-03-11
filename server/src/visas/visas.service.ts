@@ -71,8 +71,9 @@ export class VisasService {
       );
     }
 
-    // Validate no overlapping visa periods
+    // Validate no overlapping visa periods and correct ordering
     await this.validateNoOverlap(userId, arrivalDate);
+    await this.validateOrdering(userId, input.visaType, arrivalDate);
 
     const daysRequired = getDaysRequired(input.visaType);
     const expiryDate = computeExpiryDate(arrivalDate);
@@ -120,8 +121,9 @@ export class VisasService {
     const arrivalDate = new Date(input.arrivalDate);
     const expiryDate = computeExpiryDate(arrivalDate);
 
-    // Validate no overlapping visa periods (exclude current visa)
+    // Validate no overlapping visa periods and correct ordering (exclude current visa)
     await this.validateNoOverlap(userId, arrivalDate, id);
+    await this.validateOrdering(userId, existing.visaType, arrivalDate, id);
 
     await this.prisma.userVisa.update({
       where: { id },
@@ -183,6 +185,12 @@ export class VisasService {
 
   // ─── Validation ─────────────────────────────────────────────────────────
 
+  private static readonly VISA_ORDER: Record<string, number> = {
+    first_whv: 1,
+    second_whv: 2,
+    third_whv: 3,
+  };
+
   /**
    * Validate that a new/updated visa arrival_date does not overlap
    * with any existing visa's [arrival_date, expiry_date] range.
@@ -211,6 +219,41 @@ export class VisasService {
       if (arrivalDate <= existingEnd && expiryDate >= existingStart) {
         throw new ConflictException(
           `Visa period overlaps with existing ${visa.visaType} (${existingStart.toISOString().split('T')[0]} → ${existingEnd.toISOString().split('T')[0]})`,
+        );
+      }
+    }
+  }
+
+  /**
+   * Validate visa ordering: a higher-order visa must start after
+   * any existing lower-order visa's expiryDate.
+   * e.g. second_whv must start after first_whv ends.
+   * Only enforced when the predecessor visa exists.
+   */
+  private async validateOrdering(
+    userId: string,
+    visaType: string,
+    arrivalDate: Date,
+    excludeVisaId?: string,
+  ) {
+    const currentOrder = VisasService.VISA_ORDER[visaType];
+    if (!currentOrder) return;
+
+    const visas = await this.prisma.userVisa.findMany({
+      where: {
+        userId,
+        ...(excludeVisaId && { id: { not: excludeVisaId } }),
+      },
+    });
+
+    for (const visa of visas) {
+      if (!visa.expiryDate) continue;
+      const visaOrder = VisasService.VISA_ORDER[visa.visaType];
+      if (!visaOrder) continue;
+
+      if (visaOrder < currentOrder && arrivalDate <= visa.expiryDate) {
+        throw new ConflictException(
+          `${visaType} must start after ${visa.visaType} ends (${visa.expiryDate.toISOString().split('T')[0]})`,
         );
       }
     }

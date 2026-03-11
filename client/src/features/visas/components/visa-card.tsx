@@ -14,14 +14,15 @@ import {
 import { Button } from '@/components/ui/button';
 
 import type { Visa } from '@get-granted/shared';
-import { formatCreatedAgo } from '../utils/visa-helpers';
+import { computeVisaTimeline, formatCreatedAgo } from '../utils/visa-helpers';
 import { OrdinalBadge } from './ordinal-badge';
 import { VisaProgressBar } from './visa-progress-bar';
 
 interface VisaCardProps {
   visa: Visa;
-  onDelete: (id: string) => void;
+  onDelete?: (id: string) => void;
   onEdit?: (visa: Visa) => void;
+  hideActions?: boolean;
 }
 
 function formatDate(dateStr: string): string {
@@ -32,18 +33,8 @@ function formatDate(dateStr: string): string {
   });
 }
 
-export function VisaCard({ visa, onDelete, onEdit }: VisaCardProps) {
-  const isExpired = visa.daysRemaining <= 0;
-
-  // Timeline calculations
-  const totalDays = Math.round(
-    (new Date(visa.expiryDate).getTime() - new Date(visa.arrivalDate).getTime()) / 86400000,
-  );
-  const daysElapsed = totalDays - Math.max(0, visa.daysRemaining);
-  const timelinePercent = Math.min((daysElapsed / totalDays) * 100, 100);
-  const timelineLabel = isExpired
-    ? `${Math.abs(visa.daysRemaining)} days ago`
-    : `${visa.daysRemaining} days left`;
+export function VisaCard({ visa, onDelete, onEdit, hideActions = false }: VisaCardProps) {
+  const { isExpired, percent: timelinePercent, label: timelineLabel } = computeVisaTimeline(visa.arrivalDate, visa.expiryDate);
 
   // Progress calculations
   const progressPercent = Math.min((visa.eligibleDays / visa.daysRequired) * 100, 100);
@@ -130,7 +121,7 @@ export function VisaCard({ visa, onDelete, onEdit }: VisaCardProps) {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between gap-2 px-4 py-2.5 bg-muted/40 border-t border-border">
+        {!hideActions && <div className="flex items-center justify-between gap-2 px-4 py-2.5 bg-muted/40 border-t border-border">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <CalendarDays className="w-3.5 h-3.5 shrink-0" />
             <span>Created {createdAgo}</span>
@@ -149,34 +140,36 @@ export function VisaCard({ visa, onDelete, onEdit }: VisaCardProps) {
               </Button>
             )}
 
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="sm" className="gap-1.5">
-                  <Trash2 className="w-3.5 h-3.5" />
-                  <span className="hidden md:inline">Delete</span>
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Delete Visa</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Are you sure you want to delete this WHV 417 visa? All associated work entries
-                    will remain, but visa tracking data will be lost. This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => onDelete(visa.id)}
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  >
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            {onDelete && (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" size="sm" className="gap-1.5">
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span className="hidden md:inline">Delete</span>
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete Visa</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to delete this WHV 417 visa? All associated work entries
+                      will remain, but visa tracking data will be lost. This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => onDelete(visa.id)}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      Delete
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );

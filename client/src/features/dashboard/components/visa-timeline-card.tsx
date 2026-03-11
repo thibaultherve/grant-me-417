@@ -1,22 +1,16 @@
 import { Hourglass, PlaneLanding, PlaneTakeoff } from 'lucide-react';
 import type { VisaOverview } from '@get-granted/shared';
-import {
-  calcProgressPct,
-  formatDate,
-} from '../utils/dashboard-calculations';
+import { computeVisaTimeline } from '@/features/visas/utils/visa-helpers';
+import { formatDate } from '../utils/dashboard-calculations';
 import { StatCardWrapper, CardTooltip } from './stat-card-wrapper';
 
 interface VisaTimelineCardProps {
   visa: VisaOverview['visa'];
-  timeline: VisaOverview['timeline'];
 }
 
-export function VisaTimelineCard({ visa, timeline }: VisaTimelineCardProps) {
+export function VisaTimelineCard({ visa }: VisaTimelineCardProps) {
   const { arrivalDate, expiryDate } = visa;
-  const { totalDays, daysElapsed, daysLeft } = timeline;
-
-  const pct = calcProgressPct(daysElapsed, totalDays);
-  const expired = daysLeft <= 0;
+  const { daysRemaining: daysLeft, percent: pct, isExpired: expired } = computeVisaTimeline(arrivalDate, expiryDate);
 
   return (
     <StatCardWrapper
