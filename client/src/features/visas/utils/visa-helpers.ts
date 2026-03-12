@@ -87,7 +87,7 @@ export function computeVisaTimeline(arrivalDate: string, expiryDate: string): Vi
   const daysRemaining = Math.round((expiry.getTime() - now.getTime()) / MS_PER_DAY);
   const isExpired = daysRemaining <= 0;
   const daysElapsed = Math.max(0, Math.round((now.getTime() - arrival.getTime()) / MS_PER_DAY));
-  const percent = totalDays > 0 ? Math.min((daysElapsed / totalDays) * 100, 100) : 100;
+  const percent = totalDays > 0 ? Math.min(Math.round((daysElapsed / totalDays) * 10000) / 100, 100) : 100;
   const label = isExpired
     ? `${Math.abs(daysRemaining)} days ago`
     : `${daysRemaining} days left`;
