@@ -14,7 +14,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import type { VisaOverview } from '@get-granted/shared';
+import type { VisaOverview } from '@regranted/shared';
 import { buildMonthlyTrendChartData } from '../utils/dashboard-calculations';
 import { cn } from '@/lib/utils';
 

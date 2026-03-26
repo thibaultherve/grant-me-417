@@ -84,7 +84,7 @@ export function Sidebar() {
         {/* Brand name */}
         {!isCollapsed && (
           <span className="text-sm font-semibold text-[#1d293d] leading-none whitespace-nowrap overflow-hidden transition-all duration-300">
-            Get Granted 417
+            ReGranted
           </span>
         )}
       </div>

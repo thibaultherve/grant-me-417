@@ -1,6 +1,6 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-import type { VisaType } from '@get-granted/shared';
+import type { VisaType } from '@regranted/shared';
 import type { VisaTypeWithAvailability } from '../hooks/use-available-visas';
 import { getVisaOrdinal } from '../utils/visa-helpers';
 

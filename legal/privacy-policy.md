@@ -4,7 +4,7 @@
 
 ## 1. Introduction
 
-Get Granted ("we", "us", "our") is a free web application operated by Thibault Hervé, an individual based in France. This Privacy Policy explains how we collect, use, store, and protect your personal data when you use our service at getgranted.com and app.getgranted.com (the "Service").
+ReGranted ("we", "us", "our") is a free web application operated by Thibault Hervé, an individual based in France. This Privacy Policy explains how we collect, use, store, and protect your personal data when you use our service at getgranted.com and app.getgranted.com (the "Service").
 
 We are committed to protecting your privacy in compliance with the European General Data Protection Regulation (GDPR), the Australian Privacy Act 1988, and other applicable data protection laws.
 

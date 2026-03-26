@@ -5,7 +5,7 @@ import type {
   WorkEntryWithEmployer,
   HoursList,
   WeeklyHoursResponse,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
 export type GetHoursOptions = {
   page?: number;

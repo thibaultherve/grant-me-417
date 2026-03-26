@@ -12,7 +12,7 @@ import {
 import { cn } from '@/lib/utils';
 import { MONTH_NAMES } from '@/features/hours/utils/calendar-helpers';
 
-import type { Visa, VisaType } from '@get-granted/shared';
+import type { Visa, VisaType } from '@regranted/shared';
 import { getVisaBarColor } from '../../utils/weekly-helpers';
 
 export type CalendarHeaderProps = {
@@ -114,7 +114,7 @@ export function CalendarHeader({
         value={String(month)}
         onValueChange={(value) => onMonthChange(Number(value))}
       >
-        <SelectTrigger className="flex-1 min-w-0 sm:flex-none sm:w-40" aria-label="Select month">
+        <SelectTrigger className="flex-1 min-w-0 sm:flex-none sm:w-40 bg-card dark:bg-card shadow-sm rounded-lg" aria-label="Select month">
           <SelectValue placeholder="Month" />
         </SelectTrigger>
         <SelectContent>
@@ -149,7 +149,7 @@ export function CalendarHeader({
         value={String(year)}
         onValueChange={(value) => onYearChange(Number(value))}
       >
-        <SelectTrigger className="flex-1 min-w-0 sm:flex-none sm:w-[130px]" aria-label="Select year">
+        <SelectTrigger className="flex-1 min-w-0 sm:flex-none sm:w-[130px] bg-card dark:bg-card shadow-sm rounded-lg" aria-label="Select year">
           <SelectValue placeholder="Year" />
         </SelectTrigger>
         <SelectContent className="max-h-[240px]">
@@ -182,6 +182,7 @@ export function CalendarHeader({
         <Button
           variant="outline"
           size="icon"
+          className="bg-card dark:bg-card shadow-sm rounded-lg"
           onClick={onPreviousMonth}
           aria-label="Previous month"
         >
@@ -190,6 +191,7 @@ export function CalendarHeader({
         <Button
           variant="outline"
           size="icon"
+          className="bg-card dark:bg-card shadow-sm rounded-lg"
           onClick={onNextMonth}
           disabled={isFutureBlocked}
           aria-label="Next month"

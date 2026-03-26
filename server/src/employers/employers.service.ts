@@ -3,7 +3,7 @@ import type {
   Employer,
   IndustryType,
   UpdateEmployerInput,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 import {
   ForbiddenException,
   Injectable,

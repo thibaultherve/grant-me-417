@@ -4,12 +4,12 @@ import { toast } from 'sonner';
 import {
   computeExpiryDate,
   getDaysRequired,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
 import { handleError } from '@/lib/error-handler';
 import { queryKeys } from '@/lib/react-query';
 
-import type { CreateVisaInput, UpdateVisaInput, Visa, VisaType } from '@get-granted/shared';
+import type { CreateVisaInput, UpdateVisaInput, Visa, VisaType } from '@regranted/shared';
 
 import {
   addVisa,

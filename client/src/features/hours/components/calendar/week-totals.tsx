@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 
-import type { VisaType } from '@get-granted/shared';
-import { VISA_TYPES } from '@get-granted/shared';
+import type { VisaType } from '@regranted/shared';
+import { VISA_TYPES } from '@regranted/shared';
 import type { WeekVisaBreakdown } from '../../types/weekly';
 
 /** Visa type → Tailwind bg color class for dots */

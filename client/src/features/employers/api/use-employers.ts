@@ -17,7 +17,7 @@ import type {
   CheckEligibilityOutput,
   Employer,
   UpdateEmployerInput,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
 import {
   addEmployer,

@@ -6,7 +6,7 @@
  */
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { WorkEntryWithEmployer } from '@get-granted/shared';
+import type { WorkEntryWithEmployer } from '@regranted/shared';
 
 import { handleError } from '@/lib/error-handler';
 import { queryKeys } from '@/lib/react-query';

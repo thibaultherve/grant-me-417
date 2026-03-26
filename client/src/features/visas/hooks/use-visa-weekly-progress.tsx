@@ -9,7 +9,7 @@
  */
 
 import { useVisaWeeklyProgress as useVisaWeeklyProgressQuery } from '../api/use-visas';
-import type { WeeklyProgress } from '@get-granted/shared';
+import type { WeeklyProgress } from '@regranted/shared';
 
 import { useVisaContext } from './use-visa-context';
 

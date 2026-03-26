@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { INDUSTRY_CONFIG } from '@/features/employers/components/industry-chip';
-import type { IndustryType } from '@get-granted/shared';
+import type { IndustryType } from '@regranted/shared';
 
 import type { WeeklyEmployer } from '../../types/weekly';
 

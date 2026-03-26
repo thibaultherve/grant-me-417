@@ -7,7 +7,7 @@ import {
   type VisaOverviewThisWeek,
   type VisaOverviewWeeklyProgress,
   type VisaType,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 import { Prisma } from '../../generated/prisma/client.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 

@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import type { IndustryType } from '@get-granted/shared';
+import type { IndustryType } from '@regranted/shared';
 import { INDUSTRY_SHORT_LABELS } from '../constants';
 
 interface IndustryConfig {

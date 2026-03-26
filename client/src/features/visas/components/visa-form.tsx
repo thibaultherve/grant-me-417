@@ -23,7 +23,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
-import type { Visa, VisaType } from '@get-granted/shared';
+import type { Visa, VisaType } from '@regranted/shared';
 
 import { useAvailableVisas } from '../hooks/use-available-visas';
 import { useBlockedRanges } from '../hooks/use-blocked-ranges';

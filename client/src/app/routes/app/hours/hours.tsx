@@ -10,7 +10,7 @@ export const HoursRoute = () => {
   usePageHeader({
     description: 'Log your work hours to track progress toward your next visa.',
     action: () => (
-      <Button asChild size="lg">
+      <Button asChild size="lg" className="w-full md:w-auto">
         <Link to={paths.app.hours.edit.getHref()}>
           <Pencil className="mr-2 h-4 w-4" />
           Edit Hours

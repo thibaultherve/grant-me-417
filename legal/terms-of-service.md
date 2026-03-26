@@ -4,15 +4,15 @@
 
 ## 1. Introduction
 
-These Terms of Service ("Terms") govern your use of Get Granted, a web application available at getgranted.com and app.getgranted.com (the "Service"), operated by Thibault Hervé ("we", "us", "our"), an individual based in France.
+These Terms of Service ("Terms") govern your use of ReGranted, a web application available at getgranted.com and app.getgranted.com (the "Service"), operated by Thibault Hervé ("we", "us", "our"), an individual based in France.
 
 By creating an account or using the Service, you agree to these Terms. If you do not agree, do not use the Service.
 
 ## 2. Description of the Service
 
-Get Granted is a **personal tracking tool** that helps Working Holiday Visa (subclass 417) holders in Australia track their work days, hours, and progress toward visa eligibility requirements.
+ReGranted is a **personal tracking tool** that helps Working Holiday Visa (subclass 417) holders in Australia track their work days, hours, and progress toward visa eligibility requirements.
 
-**IMPORTANT DISCLAIMER:** Get Granted is an informational tracking tool only. It does **not** provide legal, tax, immigration, or professional advice. Visa rules and eligibility criteria may change at any time. Always verify your visa requirements directly with the **Australian Department of Home Affairs** (homeaffairs.gov.au) or a registered migration agent. We are not responsible for any decisions made based on information provided by the Service.
+**IMPORTANT DISCLAIMER:** ReGranted is an informational tracking tool only. It does **not** provide legal, tax, immigration, or professional advice. Visa rules and eligibility criteria may change at any time. Always verify your visa requirements directly with the **Australian Department of Home Affairs** (homeaffairs.gov.au) or a registered migration agent. We are not responsible for any decisions made based on information provided by the Service.
 
 ## 3. Eligibility
 

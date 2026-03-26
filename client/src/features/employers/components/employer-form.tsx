@@ -30,7 +30,7 @@ import {
   SelectTrigger,
 } from '@/components/ui/select';
 
-import type { Employer, IndustryType } from '@get-granted/shared';
+import type { Employer, IndustryType } from '@regranted/shared';
 
 import { useCheckEligibility } from '../api/use-employers';
 import { useGetSuburb } from '../api/use-suburbs';

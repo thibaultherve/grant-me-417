@@ -9,7 +9,7 @@ import { VisasList } from '@/features/visas/components/visas-list';
 import { useVisaContext } from '@/features/visas/hooks/use-visa-context';
 import { visaTypeToSlug } from '@/features/visas/utils/visa-helpers';
 import { usePageHeader } from '@/hooks/use-page-header';
-import type { Visa } from '@get-granted/shared';
+import type { Visa } from '@regranted/shared';
 
 export const VisasRoute = () => {
   const navigate = useNavigate();

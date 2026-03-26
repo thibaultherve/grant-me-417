@@ -1,4 +1,4 @@
-import type { VisaType } from '@get-granted/shared';
+import type { VisaType } from '@regranted/shared';
 import { cn } from '@/lib/utils';
 
 const LEGEND_ITEMS: { visaType: VisaType; label: string; color: string }[] = [

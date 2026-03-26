@@ -72,7 +72,13 @@
       "Skill(commits)",
       "Skill(commits:*)",
       "Bash(grep -E \"\\\\.\\(ts|spec\\\\.ts\\)$\")",
-      "Bash(grep -E \"\\\\.\\(ts\\)$\")"
+      "Bash(grep -E \"\\\\.\\(ts\\)$\")",
+      "Bash(find /c/Users/thiba/Documents/dev/get-granted-417 -type f \\\\\\(-name *.ts -o -name *.tsx -o -name *.js -o -name *.jsx -o -name *.json -o -name *.md -o -name *.html -o -name *.yml -o -name *.yaml -o -name *.env* -o -name *.txt -o -name *.config.* \\\\\\) ! -path */node_modules/* ! -path */.git/* ! -path */dist/* ! -path */build/* -type f)",
+      "Bash(find client/src server/src shared/src -type f \\\\\\( -name \"*.ts\" -o -name \"*.tsx\" \\\\\\) -exec sed -i 's/@get-granted\\\\/shared/@regranted\\\\/shared/g' {} +)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm --filter @regranted/shared build)",
+      "Bash(pnpm --filter @regranted/client exec tsc --noEmit)",
+      "Bash(pnpm --filter @regranted/server exec tsc --noEmit)"
     ],
     "deny": [],
     "ask": []

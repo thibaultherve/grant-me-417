@@ -1,4 +1,4 @@
-import type { AuthUser, RegisterInput } from '@get-granted/shared';
+import type { AuthUser, RegisterInput } from '@regranted/shared';
 import {
   ConflictException,
   Injectable,

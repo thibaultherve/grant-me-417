@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import type {
   UpdateProfileInput,
   UserProfile as UserProfileResponse,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 import { formatTimestamp } from '../common/utils/format.js';
 
 const USER_INCLUDE = { profile: true } as const;

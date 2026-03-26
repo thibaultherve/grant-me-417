@@ -6,7 +6,7 @@ import type {
   CreateEmployerInput,
   Employer,
   UpdateEmployerInput,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
 export const getEmployers = async (): Promise<Employer[]> => {
   return api.get('/employers');

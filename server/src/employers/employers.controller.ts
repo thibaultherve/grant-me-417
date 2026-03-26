@@ -22,7 +22,7 @@ import {
   type CreateEmployerInput,
   type UpdateEmployerInput,
   type CheckEligibilityInput,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
 @Controller('employers')
 @UseGuards(JwtAuthGuard)

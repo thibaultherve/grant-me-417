@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import type {
   ChangelogResponse,
   ChangelogsResponse,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 import { formatDate, formatTimestamp } from '../common/utils/format.js';
 
 @Injectable()

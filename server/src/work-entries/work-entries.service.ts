@@ -7,7 +7,7 @@ import type {
   WeeklyEmployer,
   WeeklyHoursResponse,
   WorkEntryWithEmployer,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 import {
   ForbiddenException,
   Injectable,
