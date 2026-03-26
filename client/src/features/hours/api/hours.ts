@@ -4,7 +4,7 @@ import type { SortOptions } from '../types';
 import type {
   WorkEntryWithEmployer,
   HoursList,
-  MonthHours,
+  WeeklyHoursResponse,
 } from '@get-granted/shared';
 
 export type GetHoursOptions = {
@@ -51,9 +51,9 @@ export const saveWeekHours = async (
   });
 };
 
-export const getMonthHours = async (
+export const getWeeklyHours = async (
   year: number,
   month: number,
-): Promise<MonthHours> => {
-  return api.get(`/work-entries/month/${year}/${month}`);
+): Promise<WeeklyHoursResponse> => {
+  return api.get(`/work-entries/month/${year}/${month}/weekly`);
 };

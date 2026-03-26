@@ -23,7 +23,7 @@ interface IndustryConfig {
   iconBg: string;
 }
 
-const INDUSTRY_CONFIG: Record<IndustryType, IndustryConfig> = {
+export const INDUSTRY_CONFIG: Record<IndustryType, IndustryConfig> = {
   hospitality_and_tourism: {
     icon: Utensils,
     label: 'Hospitality & Tourism',

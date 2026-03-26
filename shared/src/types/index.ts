@@ -2,7 +2,6 @@
 export type {
   RegisterInput,
   LoginInput,
-  RefreshTokenInput,
   AuthTokens,
   AuthUser,
   LoginResponse,
@@ -20,6 +19,7 @@ export type {
   UpdateVisaInput,
   Visa,
   VisaResponse,
+  VisaPeriod,
   WeeklyProgress,
 } from '../schemas/visa.js';
 
@@ -42,6 +42,10 @@ export type {
   DayHoursEntry,
   MonthHours,
   MonthHoursResponse,
+  WeeklyEmployer,
+  WeekVisaBreakdown,
+  WeekData,
+  WeeklyHoursResponse,
 } from '../schemas/work-entry.js';
 
 export type {

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
@@ -10,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { paths } from '@/config/paths';
@@ -18,6 +20,7 @@ import { useRegister } from '@/lib/auth';
 export const RegisterRoute = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const searchParams = new URLSearchParams(location.search);
   const redirectTo = searchParams.get('redirectTo') || paths.app.dashboard.path;
@@ -101,9 +104,28 @@ export const RegisterRoute = () => {
                 disabled={registerMutation.isPending}
               />
             </div>
+            <div className="flex items-start gap-2">
+              <Checkbox
+                id="terms"
+                checked={termsAccepted}
+                onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+                disabled={registerMutation.isPending}
+                className="mt-0.5"
+              />
+              <Label htmlFor="terms" className="text-sm font-normal leading-snug text-muted-foreground">
+                I agree to the{' '}
+                <Link to={paths.legal.terms.getHref()} target="_blank" className="text-primary hover:underline">
+                  Terms of Service
+                </Link>{' '}
+                and{' '}
+                <Link to={paths.legal.privacy.getHref()} target="_blank" className="text-primary hover:underline">
+                  Privacy Policy
+                </Link>
+              </Label>
+            </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={registerMutation.isPending}>
+            <Button type="submit" className="w-full" disabled={registerMutation.isPending || !termsAccepted}>
               {registerMutation.isPending ? 'Creating account...' : 'Create account'}
             </Button>
             <p className="text-center text-sm text-muted-foreground">

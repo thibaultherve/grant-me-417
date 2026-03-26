@@ -14,7 +14,7 @@ import { queryKeys } from '@/lib/react-query';
 import {
   getEmployerHours,
   getHours,
-  getMonthHours,
+  getWeeklyHours,
   saveWeekHours,
   type GetHoursOptions,
 } from './hours';
@@ -49,17 +49,17 @@ export const useEmployerHours = (employerId: string) => {
 };
 
 /**
- * Hook pour récupérer les heures d'un mois pour le calendrier mensuel
- * Groupées par jour avec liste des employeurs
+ * Hook pour récupérer les heures hebdomadaires d'un mois
+ * Données groupées par semaine avec breakdown employeur et visa
  *
- * @param year - Année (ex: 2025)
+ * @param year - Année (ex: 2026)
  * @param month - Mois (1-12)
  */
-export const useMonthHours = (year: number, month: number) => {
+export const useWeeklyHours = (year: number, month: number) => {
   return useQuery({
-    queryKey: queryKeys.hours.month(year, month),
-    queryFn: () => getMonthHours(year, month),
-    staleTime: 2 * 60 * 1000, // 2 minutes (données volatiles)
+    queryKey: queryKeys.hours.weekly(year, month),
+    queryFn: () => getWeeklyHours(year, month),
+    staleTime: 2 * 60 * 1000, // 2 minutes
   });
 };
 
