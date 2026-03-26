@@ -1,7 +1,11 @@
 import type {
   HoursList,
+  IndustryType,
   MonthHours,
   SaveWeekHoursInput,
+  VisaType,
+  WeeklyEmployer,
+  WeeklyHoursResponse,
   WorkEntryWithEmployer,
 } from '@get-granted/shared';
 import {
@@ -10,6 +14,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client.js';
+import { getWeekRanges } from '../common/utils/date.js';
 import {
   formatDate,
   formatTimestamp,
@@ -124,6 +129,172 @@ export class WorkEntriesService {
     }
 
     return result;
+  }
+
+  /**
+   * Get weekly hours breakdown for a month.
+   * Returns week rows with employer breakdown, visa progress, and daily totals.
+   * 3 DB queries: visas, work_entries+employer, visa_weekly_progress.
+   */
+  async getWeeklyHours(
+    userId: string,
+    year: number,
+    month: number,
+  ): Promise<WeeklyHoursResponse> {
+    // Date range: full month
+    const monthStart = new Date(Date.UTC(year, month - 1, 1));
+    const monthEnd = new Date(Date.UTC(year, month, 0)); // last day of month
+
+    // Get week ranges (Mon-Sun) overlapping the month (includes boundary weeks)
+    const weeks = getWeekRanges(monthStart, monthEnd);
+
+    // Overall date range from first week start to last week end
+    const rangeStart = weeks[0].start;
+    const rangeEnd = weeks[weeks.length - 1].end;
+
+    // 3 parallel DB queries
+    const [visas, entries, weeklyProgress] = await Promise.all([
+      // 1. All user visas
+      this.prisma.userVisa.findMany({
+        where: { userId },
+        select: {
+          id: true,
+          visaType: true,
+          arrivalDate: true,
+          expiryDate: true,
+        },
+      }),
+      // 2. All work entries in range with employer data
+      this.prisma.workEntry.findMany({
+        where: {
+          userId,
+          workDate: { gte: rangeStart, lte: rangeEnd },
+        },
+        include: {
+          employer: {
+            select: {
+              id: true,
+              name: true,
+              industry: true,
+              isEligible: true,
+            },
+          },
+        },
+        orderBy: { workDate: 'asc' },
+      }),
+      // 3. Visa weekly progress for all user visas in range
+      this.prisma.visaWeeklyProgress.findMany({
+        where: {
+          userVisa: { userId },
+          weekStartDate: { gte: rangeStart, lte: rangeEnd },
+        },
+        include: {
+          userVisa: {
+            select: { id: true, visaType: true },
+          },
+        },
+      }),
+    ]);
+
+    // Index weekly progress by weekStartDate key
+    const progressByWeek = new Map<
+      string,
+      typeof weeklyProgress
+    >();
+    for (const row of weeklyProgress) {
+      const key = formatDate(row.weekStartDate);
+      const bucket = progressByWeek.get(key);
+      if (bucket) {
+        bucket.push(row);
+      } else {
+        progressByWeek.set(key, [row]);
+      }
+    }
+
+    // Build response weeks
+    const responseWeeks = weeks.map(({ start, end }) => {
+      const weekStartKey = formatDate(start);
+      const weekEndKey = formatDate(end);
+
+      // Generate 7 date keys for this week
+      const dates: string[] = [];
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(start);
+        d.setUTCDate(d.getUTCDate() + i);
+        dates.push(formatDate(d));
+      }
+
+      // Filter entries for this week
+      const weekEntries = entries.filter((e) => {
+        const dateKey = formatDate(e.workDate);
+        return dateKey >= weekStartKey && dateKey <= weekEndKey;
+      });
+
+      // Group by employer
+      const employerMap = new Map<string, WeeklyEmployer>();
+
+      const dailyTotals: Record<string, number> = {};
+      let totalHours = 0;
+
+      for (const entry of weekEntries) {
+        const dateKey = formatDate(entry.workDate);
+        const hours = toNumber(entry.hours);
+
+        // Daily totals
+        dailyTotals[dateKey] = (dailyTotals[dateKey] ?? 0) + hours;
+        totalHours += hours;
+
+        // Employer breakdown
+        const empId = entry.employer.id;
+        let emp = employerMap.get(empId);
+        if (!emp) {
+          emp = {
+            employerId: empId,
+            employerName: entry.employer.name,
+            industry: entry.employer.industry as IndustryType,
+            isEligible: entry.employer.isEligible ?? false,
+            totalHours: 0,
+            dailyHours: {},
+          };
+          employerMap.set(empId, emp);
+        }
+        emp.dailyHours[dateKey] = (emp.dailyHours[dateKey] ?? 0) + hours;
+        emp.totalHours += hours;
+      }
+
+      // Visa breakdown from pre-computed weekly progress
+      const progressRows = progressByWeek.get(weekStartKey) ?? [];
+      const visaBreakdown = progressRows.map((row) => ({
+        visaId: row.userVisa.id,
+        visaType: row.userVisa.visaType as VisaType,
+        eligibleHours: toNumber(row.eligibleHours),
+        eligibleDays: row.eligibleDays,
+        daysWorked: row.daysWorked,
+      }));
+
+      return {
+        weekStart: weekStartKey,
+        weekEnd: weekEndKey,
+        dates,
+        totalHours,
+        visaBreakdown,
+        employers: Array.from(employerMap.values()),
+        dailyTotals,
+      };
+    });
+
+    // Visa info for bar coloring
+    const visaInfos = visas.map((v) => ({
+      id: v.id,
+      visaType: v.visaType as VisaType,
+      arrivalDate: formatDate(v.arrivalDate),
+      expiryDate: v.expiryDate ? formatDate(v.expiryDate) : '',
+    }));
+
+    return {
+      weeks: responseWeeks,
+      visas: visaInfos,
+    };
   }
 
   /**

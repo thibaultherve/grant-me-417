@@ -18,7 +18,7 @@ import { WorkEntriesModule } from './work-entries/work-entries.module.js';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     CacheModule.register({ isGlobal: true, ttl: 5 * 60 * 1000 }),
-    ThrottlerModule.forRoot([{ ttl: 60000, limit: 10 }]),
+    ThrottlerModule.forRoot([{ ttl: 60000, limit: 100 }]),
     PrismaModule,
     AuthModule,
     UsersModule,

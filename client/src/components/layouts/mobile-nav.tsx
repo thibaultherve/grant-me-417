@@ -50,7 +50,7 @@ export function MobileNav() {
   });
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden flex items-center justify-around bg-[#f5f5f5] border-t border-[#d1d4db] h-[72px] px-2">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around bg-[#f5f5f5] border-t border-[#d1d4db] h-[72px] px-2 transition-transform duration-300 ease-in-out translate-y-0 md:translate-y-full md:pointer-events-none">
       {navItems.map((item) => {
         const Icon = item.icon;
         return (

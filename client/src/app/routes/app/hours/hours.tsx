@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 import { Button } from '@/components/ui/button';
 import { paths } from '@/config/paths';
-import { MonthCalendar } from '@/features/hours/components/calendar';
+import { WeeklyCalendar } from '@/features/hours/components/calendar/weekly-calendar';
 import { usePageHeader } from '@/hooks/use-page-header';
 
 export const HoursRoute = () => {
@@ -21,7 +21,7 @@ export const HoursRoute = () => {
 
   return (
     <div className="space-y-6">
-      <MonthCalendar />
+      <WeeklyCalendar />
     </div>
   );
 };

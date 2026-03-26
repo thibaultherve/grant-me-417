@@ -3,6 +3,16 @@ export const paths = {
     path: '/',
     getHref: () => '/',
   },
+  legal: {
+    privacy: {
+      path: '/privacy',
+      getHref: () => '/privacy',
+    },
+    terms: {
+      path: '/terms',
+      getHref: () => '/terms',
+    },
+  },
   auth: {
     login: {
       path: '/auth/login',

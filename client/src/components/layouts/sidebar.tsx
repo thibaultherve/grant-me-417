@@ -67,10 +67,12 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`group hidden md:flex flex-col fixed inset-y-0 left-0 z-40 bg-[#f5f5f5] border-r border-[#d1d4db] transition-all duration-300 ease-in-out ${
-        isCollapsed ? 'w-16' : 'w-64'
+      className={`group flex flex-col fixed inset-y-0 left-0 z-40 bg-[#f5f5f5] transition-[width] duration-300 ease-in-out w-0 md:border-r md:border-[#d1d4db] ${
+        isCollapsed ? 'md:w-16' : 'md:w-64'
       }`}
     >
+      {/* Inner wrapper — clips content during width transition to prevent flash */}
+      <div className="flex flex-col flex-1 overflow-hidden">
       {/* Header */}
       <div
         className={`flex h-14 flex-shrink-0 items-center ${isCollapsed ? 'justify-center px-2' : 'px-4 gap-2'}`}
@@ -179,18 +181,18 @@ export function Sidebar() {
         </DropdownMenu>
       </div>
 
-      {/* Collapse toggle — visible on hover */}
+      </div>
+
+      {/* Collapse toggle — outside overflow wrapper so it's never clipped */}
       <button
         onClick={toggle}
-        className={`absolute top-1/2 -translate-y-1/2 ${
-          isCollapsed ? 'right-[-10px]' : 'right-[-10px]'
-        } w-5 h-9 bg-[#d1d4db] rounded-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 border-0 cursor-pointer`}
+        className="absolute top-1/2 -translate-y-1/2 -right-3 w-6 h-6 bg-white rounded-full hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 border border-[#d1d4db] cursor-pointer shadow-sm"
         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >
         {isCollapsed ? (
-          <ChevronRight className="w-4 h-4 text-[#1d293d]" />
+          <ChevronRight className="w-3.5 h-3.5 text-[#6c727e]" />
         ) : (
-          <ChevronLeft className="w-4 h-4 text-[#1d293d]" />
+          <ChevronLeft className="w-3.5 h-3.5 text-[#6c727e]" />
         )}
       </button>
     </aside>

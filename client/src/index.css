@@ -71,6 +71,10 @@
   --industry-weather-recovery: #0EA5E9;
   --industry-covid: #9333EA;
   --industry-other: #6B7280;
+  /* ── Visa period bar colors ── */
+  --visa-1st-color: #10B981;
+  --visa-2nd-color: #3B82F6;
+  --visa-3rd-color: #F59E0B;
   /* ── Warning banner text colors ── */
   --warning-dark: #92400E;
   --danger-dark: #991B1B;
@@ -166,6 +170,10 @@
   --industry-weather-recovery: #0EA5E9;
   --industry-covid: #9333EA;
   --industry-other: #6B7280;
+  /* ── Visa period bar colors (dark mode) ── */
+  --visa-1st-color: #10B981;
+  --visa-2nd-color: #3B82F6;
+  --visa-3rd-color: #F59E0B;
   /* ── Warning banner text colors (dark mode — lighter for readability) ── */
   --warning-dark: #FDE68A;
   --danger-dark: #FCA5A5;
@@ -260,6 +268,10 @@
   --color-industry-weather-recovery: var(--industry-weather-recovery);
   --color-industry-covid: var(--industry-covid);
   --color-industry-other: var(--industry-other);
+  /* ── Visa period bar colors ── */
+  --color-visa-1st-color: var(--visa-1st-color);
+  --color-visa-2nd-color: var(--visa-2nd-color);
+  --color-visa-3rd-color: var(--visa-3rd-color);
   /* ── Warning banner text colors ── */
   --color-warning-dark: var(--warning-dark);
   --color-danger-dark: var(--danger-dark);
