@@ -66,7 +66,11 @@ export function WeeklyCalendar({
 
   const handleYearChange = useCallback((newYear: number) => {
     setYear(newYear);
-  }, []);
+    const currentMonth = now.getMonth() + 1;
+    if (newYear === now.getFullYear()) {
+      setMonth((prev) => Math.min(prev, currentMonth));
+    }
+  }, [now]);
 
   const handleMonthChange = useCallback((newMonth: number) => {
     setMonth(newMonth);

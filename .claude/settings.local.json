@@ -70,7 +70,9 @@
       "Bash(pnpm --filter client build)",
       "mcp__chrome-devtools__hover",
       "Skill(commits)",
-      "Skill(commits:*)"
+      "Skill(commits:*)",
+      "Bash(grep -E \"\\\\.\\(ts|spec\\\\.ts\\)$\")",
+      "Bash(grep -E \"\\\\.\\(ts\\)$\")"
     ],
     "deny": [],
     "ask": []

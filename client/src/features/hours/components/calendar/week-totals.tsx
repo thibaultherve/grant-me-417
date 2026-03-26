@@ -118,12 +118,14 @@ export function VisaValues({
   getNumber,
   size = 'desktop',
   showDots = true,
+  bold = false,
 }: {
   breakdown: WeekVisaBreakdown[];
   getValue: (vb: WeekVisaBreakdown) => string;
   getNumber?: (vb: WeekVisaBreakdown) => number;
   size?: 'desktop' | 'mobile';
   showDots?: boolean;
+  bold?: boolean;
 }) {
   if (breakdown.length === 0) {
     return <span className="text-xs text-muted-foreground/50">–</span>;
@@ -150,7 +152,8 @@ export function VisaValues({
           <span className="relative">
             <span
               className={cn(
-                'tabular-nums font-semibold text-muted-foreground',
+                'tabular-nums',
+                bold ? 'font-bold text-foreground' : 'font-semibold text-muted-foreground',
                 textSize,
               )}
             >
