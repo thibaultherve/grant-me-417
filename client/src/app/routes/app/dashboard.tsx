@@ -72,7 +72,7 @@ function NoVisaState() {
     <Card className="border-primary/30 bg-primary/5">
       <CardContent className="p-8 flex flex-col items-center text-center gap-4">
         <div className="space-y-2">
-          <h2 className="text-xl font-semibold">Get started with Get Granted 417</h2>
+          <h2 className="text-xl font-semibold">Get started with ReGranted</h2>
           <p className="text-sm text-muted-foreground max-w-sm">
             Start tracking your specified work hours to qualify for your next Working
             Holiday Visa. Create your first visa to begin.

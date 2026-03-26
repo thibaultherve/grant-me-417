@@ -1,4 +1,4 @@
-import type { VisaOverview } from '@get-granted/shared';
+import type { VisaOverview } from '@regranted/shared';
 import { Award, CircleCheck, Target } from 'lucide-react';
 import { calcProgressPct } from '../utils/dashboard-calculations';
 import { CardTooltip, StatCardWrapper } from './stat-card-wrapper';

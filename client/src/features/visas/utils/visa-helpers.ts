@@ -1,6 +1,6 @@
 import { formatDistanceToNow } from 'date-fns';
 
-import type { VisaType } from '@get-granted/shared';
+import type { VisaType } from '@regranted/shared';
 
 type VisaTypeSlug = 'first-whv' | 'second-whv' | 'third-whv';
 

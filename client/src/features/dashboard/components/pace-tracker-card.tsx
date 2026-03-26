@@ -1,4 +1,4 @@
-import type { VisaOverview } from '@get-granted/shared';
+import type { VisaOverview } from '@regranted/shared';
 import { Equal, Minus, Target, TrendingDown, TrendingUp } from 'lucide-react';
 import {
   calcProgressPct,

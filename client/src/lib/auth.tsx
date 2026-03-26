@@ -11,7 +11,7 @@ import type {
   RegisterInput,
   RegisterResponse,
   UserProfile,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
 import {
   api,

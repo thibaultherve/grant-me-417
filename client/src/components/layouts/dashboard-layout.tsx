@@ -30,7 +30,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         <main className="flex-1">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
             <div className="space-y-6">
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="space-y-1">
                   <PageBreadcrumb />
                   {headerDescription && (
@@ -48,7 +48,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         <footer className="border-t border-border/40 mt-auto">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-6">
             <p className="text-xs text-muted-foreground/70 mb-3">
-              Get Granted is a personal tracking tool. It does not provide legal, tax, or immigration advice. Always verify visa requirements with the{' '}
+              ReGranted is a personal tracking tool. It does not provide legal, tax, or immigration advice. Always verify visa requirements with the{' '}
               <a
                 href="https://immi.homeaffairs.gov.au"
                 target="_blank"
@@ -68,7 +68,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 </Link>
               </div>
               <p className="text-xs text-muted-foreground/70">
-                &copy; {new Date().getFullYear()} Get Granted
+                &copy; {new Date().getFullYear()} ReGranted
               </p>
             </div>
           </div>

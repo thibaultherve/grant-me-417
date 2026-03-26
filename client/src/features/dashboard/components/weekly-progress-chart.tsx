@@ -4,7 +4,7 @@ import {
   Tooltip as UITooltip,
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
-import type { VisaOverview } from '@get-granted/shared';
+import type { VisaOverview } from '@regranted/shared';
 import { BarChart2, HelpCircle } from 'lucide-react';
 import {
   Bar,

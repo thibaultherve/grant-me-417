@@ -1,4 +1,4 @@
-import { HOUR_TO_DAY_THRESHOLDS } from '@get-granted/shared';
+import { HOUR_TO_DAY_THRESHOLDS } from '@regranted/shared';
 
 import type {
   MonthlyTrendChartPoint,
@@ -11,7 +11,7 @@ import type {
   VisaOverviewMonthlyTrend,
   VisaOverviewPace,
   VisaOverviewWeeklyProgress,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
 // ─── Pace Status ─────────────────────────────────────────────────────────────
 

@@ -17,7 +17,7 @@ import {
 } from 'react';
 
 import { useVisas } from '../api/use-visas';
-import type { Visa } from '@get-granted/shared';
+import type { Visa } from '@regranted/shared';
 
 interface VisaContextValue {
   currentVisa: Visa | null;

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import type { VisaType } from '@get-granted/shared';
+import type { VisaType } from '@regranted/shared';
 
 import { useVisaContext } from './use-visa-context';
 

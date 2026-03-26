@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { paths } from '@/config/paths';
 import { cn } from '@/lib/utils';
 
-import type { Employer, PostcodeBadgeData } from '@get-granted/shared';
+import type { Employer, PostcodeBadgeData } from '@regranted/shared';
 
 import { EligibilityStatusBadge } from './eligibility-status-badge';
 import { IndustryChip } from './industry-chip';

@@ -1,4 +1,4 @@
-import { HOUR_TO_DAY_THRESHOLDS, getDaysRequired } from '@get-granted/shared';
+import { HOUR_TO_DAY_THRESHOLDS, getDaysRequired } from '@regranted/shared';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client.js';
 import { getWeekForDate, getWeekRanges } from '../common/utils/date.js';

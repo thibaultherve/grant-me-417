@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { Employer } from '@get-granted/shared';
+import type { Employer } from '@regranted/shared';
 import { cn } from '@/lib/utils';
 
 interface EmployerSelectorProps {

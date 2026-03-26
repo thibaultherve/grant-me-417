@@ -1,7 +1,7 @@
 import type {
   Postcode as PostcodeResponse,
   SuburbWithPostcode,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 import { Inject, Injectable } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import type { Cache } from 'cache-manager';

@@ -21,21 +21,21 @@ export const TermsRoute = () => {
           <section>
             <h2 className="text-xl font-semibold mb-3">1. Introduction</h2>
             <p className="text-muted-foreground leading-relaxed">
-              These Terms of Service ("Terms") govern your use of Get Granted, a web application operated by Thibault Herv&eacute; ("we", "us", "our"), an individual based in France. By creating an account or using the Service, you agree to these Terms.
+              These Terms of Service ("Terms") govern your use of ReGranted, a web application operated by Thibault Herv&eacute; ("we", "us", "our"), an individual based in France. By creating an account or using the Service, you agree to these Terms.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold mb-3">2. Description of the Service</h2>
             <p className="text-muted-foreground leading-relaxed">
-              Get Granted is a <strong className="text-foreground">personal tracking tool</strong> that helps Working Holiday Visa (subclass 417) holders in Australia track their work days, hours, and progress toward visa eligibility requirements.
+              ReGranted is a <strong className="text-foreground">personal tracking tool</strong> that helps Working Holiday Visa (subclass 417) holders in Australia track their work days, hours, and progress toward visa eligibility requirements.
             </p>
             <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/50 p-4">
               <p className="text-sm text-amber-800 dark:text-amber-200 font-medium">
                 Important Disclaimer
               </p>
               <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-                Get Granted is an informational tracking tool only. It does <strong>not</strong> provide legal, tax, immigration, or professional advice. Visa rules and eligibility criteria may change at any time. Always verify your visa requirements directly with the <strong>Australian Department of Home Affairs</strong> (homeaffairs.gov.au) or a registered migration agent.
+                ReGranted is an informational tracking tool only. It does <strong>not</strong> provide legal, tax, immigration, or professional advice. Visa rules and eligibility criteria may change at any time. Always verify your visa requirements directly with the <strong>Australian Department of Home Affairs</strong> (homeaffairs.gov.au) or a registered migration agent.
               </p>
             </div>
           </section>

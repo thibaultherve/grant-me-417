@@ -4,9 +4,9 @@ export type {
   WeekVisaBreakdown,
   VisaPeriod,
   WeeklyHoursResponse,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
-import type { VisaType } from '@get-granted/shared';
+import type { VisaType } from '@regranted/shared';
 
 export interface DayBarInfo {
   date: string; // YYYY-MM-DD

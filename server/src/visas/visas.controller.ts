@@ -21,7 +21,7 @@ import {
   updateVisaSchema,
   type CreateVisaInput,
   type UpdateVisaInput,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
 @Controller('visas')
 @UseGuards(JwtAuthGuard)

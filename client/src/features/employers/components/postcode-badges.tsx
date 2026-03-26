@@ -9,7 +9,7 @@ import {
 
 import { cn } from '@/lib/utils';
 
-import type { Postcode, PostcodeBadgeData } from '@get-granted/shared';
+import type { Postcode, PostcodeBadgeData } from '@regranted/shared';
 
 // Badge colors and icons for each flag type
 const BADGE_CONFIG: Record<

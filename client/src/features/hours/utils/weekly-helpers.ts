@@ -1,6 +1,6 @@
 import { format, parseISO } from 'date-fns';
 
-import type { VisaPeriod, VisaType } from '@get-granted/shared';
+import type { VisaPeriod, VisaType } from '@regranted/shared';
 
 import type { DayBarInfo } from '../types/weekly';
 

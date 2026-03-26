@@ -1,4 +1,4 @@
-import type { IndustryTypeValue } from '@get-granted/shared';
+import type { IndustryTypeValue } from '@regranted/shared';
 
 export const INDUSTRY_OPTIONS = [
   {

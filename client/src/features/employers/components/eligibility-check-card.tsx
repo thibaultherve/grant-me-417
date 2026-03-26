@@ -9,7 +9,7 @@ import {
   SelectTrigger,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import type { IndustryType, PostcodeBadgeData } from '@get-granted/shared';
+import type { IndustryType, PostcodeBadgeData } from '@regranted/shared';
 
 import {
   EligibilityStatusBadge,

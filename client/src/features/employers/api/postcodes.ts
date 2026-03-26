@@ -1,6 +1,6 @@
 import { api } from '@/lib/api-client';
 
-import type { Postcode } from '@get-granted/shared';
+import type { Postcode } from '@regranted/shared';
 
 export const searchPostcodes = async (query: string): Promise<Postcode[]> => {
   if (!query || query.length === 0) {

@@ -19,7 +19,7 @@ import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe.js';
 import {
   saveWeekHoursSchema,
   type SaveWeekHoursInput,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
 @Controller('work-entries')
 @UseGuards(JwtAuthGuard)

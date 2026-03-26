@@ -19,7 +19,7 @@ import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { useEmployers } from '@/features/employers/api/use-employers';
-import type { Employer } from '@get-granted/shared';
+import type { Employer } from '@regranted/shared';
 import { cn } from '@/lib/utils';
 
 import { EmployerSelector } from '../inputs/employer-selector';

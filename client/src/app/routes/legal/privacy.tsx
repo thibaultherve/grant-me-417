@@ -21,7 +21,7 @@ export const PrivacyRoute = () => {
           <section>
             <h2 className="text-xl font-semibold mb-3">1. Introduction</h2>
             <p className="text-muted-foreground leading-relaxed">
-              Get Granted ("we", "us", "our") is a free web application operated by Thibault Herv&eacute;, an individual based in France. This Privacy Policy explains how we collect, use, store, and protect your personal data when you use our Service.
+              ReGranted ("we", "us", "our") is a free web application operated by Thibault Herv&eacute;, an individual based in France. This Privacy Policy explains how we collect, use, store, and protect your personal data when you use our Service.
             </p>
             <p className="text-muted-foreground leading-relaxed">
               We are committed to protecting your privacy in compliance with the European General Data Protection Regulation (GDPR), the Australian Privacy Act 1988, and other applicable data protection laws.

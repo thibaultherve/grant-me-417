@@ -2,7 +2,7 @@ import { Search, X, Loader2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
-import type { PostcodeBadgeData, SuburbWithPostcode } from '@get-granted/shared';
+import type { PostcodeBadgeData, SuburbWithPostcode } from '@regranted/shared';
 
 import { useSearchSuburbs, useGetSuburb } from '../api/use-suburbs';
 import { ZoneBadge, type ZoneKey } from './zone-badge';

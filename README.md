@@ -1,4 +1,4 @@
-# GET GRANTED 417
+# ReGranted
 
 A full-stack web application that helps **Working Holiday Visa (subclass 417)** holders in Australia track their specified work, manage employers, and know exactly where they stand toward earning their next visa.
 
@@ -69,7 +69,7 @@ A full-stack web application that helps **Working Holiday Visa (subclass 417)** 
 ## 🏗️ Architecture
 
 ```
-get-granted-417/
+regranted/
 ├── client/          # React SPA — UI, routing, state management
 ├── server/          # NestJS API — auth, business logic, data access
 ├── shared/          # Zod schemas, TypeScript types, WHV constants

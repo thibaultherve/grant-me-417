@@ -1,4 +1,4 @@
-import type { VisaOverview } from '@get-granted/shared';
+import type { VisaOverview } from '@regranted/shared';
 import { CalendarDays } from 'lucide-react';
 import { formatHours } from '../utils/dashboard-calculations';
 import { CardTooltip, StatCardWrapper } from './stat-card-wrapper';
