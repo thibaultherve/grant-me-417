@@ -61,6 +61,7 @@ export function WeekTotals({ totalHours, visaBreakdown, className }: WeekTotalsP
 interface MobileWeekStatsProps {
   totalHours: number;
   visaBreakdown: WeekVisaBreakdown[];
+  showDots?: boolean;
   className?: string;
 }
 
@@ -68,7 +69,7 @@ interface MobileWeekStatsProps {
  * Mobile: labeled stat columns — "Total" / "Eligible" / "Days" labels above values.
  * Design: 3 columns spread evenly with label (10px) + value (14px bold / 13px colored).
  */
-export function MobileWeekStats({ totalHours, visaBreakdown, className }: MobileWeekStatsProps) {
+export function MobileWeekStats({ totalHours, visaBreakdown, showDots = true, className }: MobileWeekStatsProps) {
   return (
     <div className={cn('flex items-start justify-between', className)}>
       {/* Total */}
@@ -88,6 +89,7 @@ export function MobileWeekStats({ totalHours, visaBreakdown, className }: Mobile
             getValue={(vb) => `${vb.eligibleHours}h`}
             getNumber={(vb) => vb.eligibleHours}
             size="mobile"
+            showDots={showDots}
           />
         </div>
       </div>
@@ -101,6 +103,7 @@ export function MobileWeekStats({ totalHours, visaBreakdown, className }: Mobile
             getValue={(vb) => `${vb.eligibleDays}d`}
             getNumber={(vb) => vb.eligibleDays}
             size="mobile"
+            showDots={showDots}
           />
         </div>
       </div>
@@ -114,11 +117,13 @@ export function VisaValues({
   getValue,
   getNumber,
   size = 'desktop',
+  showDots = true,
 }: {
   breakdown: WeekVisaBreakdown[];
   getValue: (vb: WeekVisaBreakdown) => string;
   getNumber?: (vb: WeekVisaBreakdown) => number;
   size?: 'desktop' | 'mobile';
+  showDots?: boolean;
 }) {
   if (breakdown.length === 0) {
     return <span className="text-xs text-muted-foreground/50">–</span>;
@@ -151,7 +156,9 @@ export function VisaValues({
             >
               {getValue(vb)}
             </span>
-            <span className={cn('absolute left-1/2 -translate-x-1/2 -bottom-1 h-[5px] w-[5px] rounded-full', VISA_DOT_COLORS[vb.visaType])} />
+            {showDots && (
+              <span className={cn('absolute left-1/2 -translate-x-1/2 -bottom-1 h-[5px] w-[5px] rounded-full', VISA_DOT_COLORS[vb.visaType])} />
+            )}
           </span>
         </span>
       ))}

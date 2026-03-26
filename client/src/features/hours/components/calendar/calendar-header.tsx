@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -10,6 +11,9 @@ import {
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { MONTH_NAMES } from '@/features/hours/utils/calendar-helpers';
+
+import type { Visa, VisaType } from '@get-granted/shared';
+import { getVisaBarColor } from '../../utils/weekly-helpers';
 
 export type CalendarHeaderProps = {
   /** Current year displayed */
@@ -24,14 +28,16 @@ export type CalendarHeaderProps = {
   onPreviousMonth: () => void;
   /** Callback to go to next month */
   onNextMonth: () => void;
+  /** User visas for year dots */
+  visas?: Visa[];
   /** Optional className */
   className?: string;
 };
 
-// Generate year options from 1926 to current year + 1
+// Generate year options: current year + 1 down to 2008 (WHV 417 era)
 const currentYear = new Date().getFullYear();
 const YEAR_OPTIONS = Array.from(
-  { length: currentYear - 1926 + 2 },
+  { length: currentYear - 2008 + 2 },
   (_, i) => currentYear + 1 - i
 );
 
@@ -46,8 +52,50 @@ export function CalendarHeader({
   onMonthChange,
   onPreviousMonth,
   onNextMonth,
+  visas = [],
   className,
 }: CalendarHeaderProps) {
+  // Map year → visa types active that year
+  const visasByYear = useMemo(() => {
+    const map = new Map<number, VisaType[]>();
+    for (const visa of visas) {
+      const startYear = new Date(visa.arrivalDate).getFullYear();
+      const endYear = new Date(visa.expiryDate).getFullYear();
+      for (let y = startYear; y <= endYear; y++) {
+        const existing = map.get(y);
+        if (existing) {
+          if (!existing.includes(visa.visaType)) existing.push(visa.visaType);
+        } else {
+          map.set(y, [visa.visaType]);
+        }
+      }
+    }
+    return map;
+  }, [visas]);
+
+  // Map month (1-12) → visa types active that month for the selected year
+  const visasByMonth = useMemo(() => {
+    const map = new Map<number, VisaType[]>();
+    for (const visa of visas) {
+      for (let m = 1; m <= 12; m++) {
+        // Month start/end as YYYY-MM-DD strings for easy comparison
+        const monthStart = `${year}-${String(m).padStart(2, '0')}-01`;
+        const lastDay = new Date(year, m, 0).getDate();
+        const monthEnd = `${year}-${String(m).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
+
+        if (visa.arrivalDate <= monthEnd && visa.expiryDate >= monthStart) {
+          const existing = map.get(m);
+          if (existing) {
+            if (!existing.includes(visa.visaType)) existing.push(visa.visaType);
+          } else {
+            map.set(m, [visa.visaType]);
+          }
+        }
+      }
+    }
+    return map;
+  }, [visas, year]);
+
   return (
     <div
       className={cn(
@@ -62,15 +110,30 @@ export function CalendarHeader({
           value={String(month)}
           onValueChange={(value) => onMonthChange(Number(value))}
         >
-          <SelectTrigger className="w-[130px]" aria-label="Select month">
+          <SelectTrigger className="w-40" aria-label="Select month">
             <SelectValue placeholder="Month" />
           </SelectTrigger>
           <SelectContent>
-            {MONTH_NAMES.map((monthName, index) => (
-              <SelectItem key={monthName} value={String(index + 1)}>
-                {monthName}
-              </SelectItem>
-            ))}
+            {MONTH_NAMES.map((monthName, index) => {
+              const monthVisas = visasByMonth.get(index + 1);
+              return (
+                <SelectItem key={monthName} value={String(index + 1)}>
+                  <span className="flex items-center gap-2">
+                    {monthName}
+                    {monthVisas && (
+                      <span className="flex items-center gap-0.5">
+                        {monthVisas.map((vt) => (
+                          <span
+                            key={vt}
+                            className={cn('h-[5px] w-[5px] rounded-full', getVisaBarColor(vt))}
+                          />
+                        ))}
+                      </span>
+                    )}
+                  </span>
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
 
@@ -79,15 +142,30 @@ export function CalendarHeader({
           value={String(year)}
           onValueChange={(value) => onYearChange(Number(value))}
         >
-          <SelectTrigger className="w-[100px]" aria-label="Select year">
+          <SelectTrigger className="w-[130px]" aria-label="Select year">
             <SelectValue placeholder="Year" />
           </SelectTrigger>
-          <SelectContent>
-            {YEAR_OPTIONS.map((yearOption) => (
-              <SelectItem key={yearOption} value={String(yearOption)}>
-                {yearOption}
-              </SelectItem>
-            ))}
+          <SelectContent className="max-h-[240px]">
+            {YEAR_OPTIONS.map((yearOption) => {
+              const yearVisas = visasByYear.get(yearOption);
+              return (
+                <SelectItem key={yearOption} value={String(yearOption)}>
+                  <span className="flex items-center gap-2">
+                    {yearOption}
+                    {yearVisas && (
+                      <span className="flex items-center gap-0.5">
+                        {yearVisas.map((vt) => (
+                          <span
+                            key={vt}
+                            className={cn('h-[5px] w-[5px] rounded-full', getVisaBarColor(vt))}
+                          />
+                        ))}
+                      </span>
+                    )}
+                  </span>
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
       </div>
