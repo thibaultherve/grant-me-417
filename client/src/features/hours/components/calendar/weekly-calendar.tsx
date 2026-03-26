@@ -1,7 +1,9 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { VisaLegend } from '@/components/visa-legend';
+
+import { useVisas } from '@/features/visas/api/use-visas';
 
 import { useWeeklyHours } from '../../api/use-hours';
 import { useWeekExpansion } from '../../hooks/use-week-expansion';
@@ -32,7 +34,17 @@ export function WeeklyCalendar({
   const [month, setMonth] = useState(initialMonth ?? now.getMonth() + 1);
 
   const { data, isLoading } = useWeeklyHours(year, month);
+  const { data: visas } = useVisas();
   const { isExpanded, toggleWeek } = useWeekExpansion();
+
+  const activeVisaTypes = useMemo(() => {
+    if (!data || data.weeks.length === 0) return [];
+    const rangeStart = data.weeks[0].weekStart;
+    const rangeEnd = data.weeks[data.weeks.length - 1].weekEnd;
+    return data.visas
+      .filter((v) => v.arrivalDate <= rangeEnd && (!v.expiryDate || v.expiryDate >= rangeStart))
+      .map((v) => v.visaType);
+  }, [data]);
 
   const handlePreviousMonth = useCallback(() => {
     if (month === 1) {
@@ -69,6 +81,7 @@ export function WeeklyCalendar({
         onMonthChange={handleMonthChange}
         onPreviousMonth={handlePreviousMonth}
         onNextMonth={handleNextMonth}
+        visas={visas}
       />
 
       {isLoading ? (
@@ -108,7 +121,7 @@ export function WeeklyCalendar({
         </>
       ) : null}
 
-      <VisaLegend className="justify-center" />
+      <VisaLegend visaTypes={activeVisaTypes} />
     </div>
   );
 }

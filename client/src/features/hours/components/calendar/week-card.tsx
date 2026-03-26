@@ -1,19 +1,24 @@
 import { memo } from 'react';
 import { useNavigate } from 'react-router';
-import { ChevronDown, ChevronUp, Pencil } from 'lucide-react';
+import { ChevronDown, Pencil } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 import type { WeekData, VisaPeriod } from '../../types/weekly';
-import { MobileWeekStats } from './week-totals';
+import { VisaValues } from './week-totals';
 import { EmployerHoursRowMobile } from './employer-hours-row';
 import {
   formatWeekLabel,
   buildDayBars,
+  getWeekVisaInfo,
+  getVisaBarColor,
   isInMonth,
+  VISA_TEXT_COLORS,
+  VISA_BADGE_BG,
 } from '../../utils/weekly-helpers';
 
-const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as const;
+const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] as const;
 
 interface WeekCardProps {
   week: WeekData;
@@ -24,14 +29,6 @@ interface WeekCardProps {
   month: number;
 }
 
-/**
- * Mobile week card matching Pencil design:
- * - Top: week label + pencil edit icon
- * - Stats: 3 labeled columns (Total / Eligible / Days)
- * - Daily hours grid (7 days + chevron) separated by top border
- * - Visa color strip
- * - Employer breakdown (expanded)
- */
 export const WeekCard = memo(function WeekCard({
   week,
   visas,
@@ -43,106 +40,182 @@ export const WeekCard = memo(function WeekCard({
   const navigate = useNavigate();
   const hasData = week.totalHours > 0;
   const dayBars = buildDayBars(week.dates, visas);
+  const { visaTypes, showPerDayDots } = getWeekVisaInfo(week.dates, visas);
 
   return (
     <div
       className={cn(
-        'rounded-lg border shadow-sm overflow-hidden',
-        isExpanded ? 'bg-[#F8F6FF]' : 'bg-card',
+        'rounded-lg border shadow-sm overflow-hidden border-l-[3px] transition-colors',
+        isExpanded
+          ? 'bg-[#F8F6FF] border-l-primary'
+          : hasData
+            ? 'bg-card border-l-transparent active:bg-[#F8F6FF]/50'
+            : 'bg-card border-l-transparent',
+        hasData && 'cursor-pointer',
       )}
+      onClick={hasData ? onToggle : undefined}
     >
-      {/* Top section: header + stats */}
-      <div className="px-3.5 pt-3 pb-2 space-y-2">
-        {/* Header: chevron + week label + edit button */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            {hasData ? (
-              <button
-                type="button"
-                onClick={onToggle}
-                aria-expanded={isExpanded}
-                aria-label={isExpanded ? 'Collapse week' : 'Expand week'}
-                className="p-0 bg-transparent border-none cursor-pointer shrink-0"
-              >
-                {isExpanded ? (
-                  <ChevronUp className="h-4 w-4 text-primary" />
-                ) : (
-                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                )}
-              </button>
-            ) : (
-              <span className="w-4 shrink-0" />
-            )}
-            <span className="text-[13px] font-semibold text-foreground">
-              {formatWeekLabel(week.weekStart, week.weekEnd)}
-            </span>
-          </div>
-          <button
-            type="button"
-            className="p-1.5 rounded-md hover:bg-muted/50"
-            onClick={() => navigate(`/hours/edit?week=${week.weekStart}`)}
+      {/* Header: week label + visa dots | Total · Eligible · Days | edit */}
+      <div className="flex items-center gap-1.5 px-2.5 py-2">
+        <ChevronDown
+          className={cn(
+            'h-3.5 w-3.5 shrink-0 transition-transform duration-200',
+            !hasData && 'invisible',
+            isExpanded ? 'rotate-180 text-primary' : 'text-muted-foreground',
+          )}
+        />
+        <span className={cn(
+          'text-[13px] text-foreground whitespace-nowrap',
+          isExpanded ? 'font-semibold' : 'font-medium',
+        )}>
+          {formatWeekLabel(week.weekStart, week.weekEnd)}
+        </span>
+        {visaTypes.length > 0 && (
+          <span className="flex items-center gap-0.5">
+            {visaTypes.map((vt) => (
+              <span
+                key={vt}
+                className={cn('h-[5px] w-[5px] rounded-full', getVisaBarColor(vt))}
+              />
+            ))}
+          </span>
+        )}
+
+        {/* Right side: labeled stats + edit */}
+        <span className="ml-auto flex items-center gap-5">
+          {hasData ? (
+            <>
+              <StatChip label="Total" value={`${week.totalHours}h`} bold />
+              <StatChip label="Eligible">
+                <VisaValues
+                  breakdown={week.visaBreakdown}
+                  getValue={(vb) => `${vb.eligibleHours}h`}
+                  getNumber={(vb) => vb.eligibleHours}
+                  size="mobile"
+                  showDots={showPerDayDots}
+                />
+              </StatChip>
+              <StatChip label="Days">
+                <VisaValues
+                  breakdown={week.visaBreakdown}
+                  getValue={(vb) => `${vb.eligibleDays}d`}
+                  getNumber={(vb) => vb.eligibleDays}
+                  size="mobile"
+                  showDots={showPerDayDots}
+                />
+              </StatChip>
+            </>
+          ) : (
+            <span className="text-[11px] text-muted-foreground/40">No hours logged</span>
+          )}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6 shrink-0"
+            onClick={(e) => { e.stopPropagation(); navigate(`/hours/edit?week=${week.weekStart}`); }}
             aria-label={`Edit week ${week.weekStart}`}
           >
-            <Pencil className="h-3 w-3 text-muted-foreground" />
-          </button>
-        </div>
-
-        {/* Stats row: Total / Eligible / Days as labeled columns */}
-        <MobileWeekStats
-          totalHours={week.totalHours}
-          visaBreakdown={week.visaBreakdown}
-        />
+            <Pencil className="h-3 w-3" />
+          </Button>
+        </span>
       </div>
 
-      {/* Daily hours grid + chevron — separated by top border */}
-      <div className="border-t px-3.5 pt-2.5 pb-2.5">
-        <div className="flex gap-0.5">
-          {/* 7 day columns */}
-          {week.dates.map((date, i) => (
-            <div
-              key={date}
-              className={cn(
-                'flex-1 flex flex-col items-center gap-0.5',
-                !isInMonth(date, year, month) && 'opacity-40',
-              )}
-            >
-              <span className="text-[10px] font-normal text-muted-foreground">
-                {DAY_LABELS[i]}
-              </span>
-              <span className="relative">
-                <span className={cn(
-                  'tabular-nums text-xs',
-                  week.dailyTotals[date] ? 'font-semibold text-foreground' : 'text-muted-foreground/50',
-                )}>
-                  {week.dailyTotals[date] ? String(week.dailyTotals[date]) : '–'}
-                </span>
-                {dayBars[i].visaType && (
-                  <span
-                    className={cn(
-                      'absolute left-1/2 -translate-x-1/2 -bottom-1 h-[5px] w-[5px] rounded-full',
-                      dayBars[i].color,
-                    )}
-                  />
-                )}
-              </span>
+      {/* Expanded: daily hours + employer breakdown */}
+      {isExpanded && hasData && (
+        <>
+          {/* Daily hours grid */}
+          <div className="border-t px-2.5 py-1">
+            <div className="flex">
+              {week.dates.map((date, i) => (
+                <div
+                  key={date}
+                  className={cn(
+                    'flex-1 flex flex-col items-center gap-px',
+                    !isInMonth(date, year, month) && 'opacity-40',
+                  )}
+                >
+                  <span className="text-[9px] font-medium text-muted-foreground/70">
+                    {DAY_LABELS[i]}
+                  </span>
+                  <span className="relative inline-flex justify-center">
+                    <span className={cn(
+                      'tabular-nums text-[11px]',
+                      week.dailyTotals[date] ? 'font-semibold text-foreground' : 'text-muted-foreground/40',
+                    )}>
+                      {week.dailyTotals[date] ? String(week.dailyTotals[date]) : '–'}
+                    </span>
+                    {dayBars[i].visaType && dayBars[i].boundary ? (
+                      <span
+                        className={cn(
+                          'absolute left-1/2 -translate-x-1/2 -bottom-2 rounded-full px-1 py-px text-[7px] font-semibold leading-tight whitespace-nowrap',
+                          VISA_BADGE_BG[dayBars[i].visaType!],
+                          VISA_TEXT_COLORS[dayBars[i].visaType!],
+                        )}
+                      >
+                        {dayBars[i].boundary}
+                      </span>
+                    ) : showPerDayDots && dayBars[i].visaType ? (
+                      <span
+                        className={cn(
+                          'absolute left-1/2 -translate-x-1/2 -bottom-0.5 h-1 w-1 rounded-full',
+                          dayBars[i].color,
+                        )}
+                      />
+                    ) : null}
+                  </span>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
 
-        </div>
-      </div>
-
-      {/* Employer breakdown (expanded) */}
-      {isExpanded && week.employers.length > 0 && (
-        <div className="border-t px-3.5 py-1">
-          {week.employers.map((employer) => (
-            <EmployerHoursRowMobile
-              key={employer.employerId}
-              employer={employer}
-              dates={week.dates}
-            />
-          ))}
-        </div>
+          {/* Employer breakdown */}
+          {week.employers.length > 0 && (
+            <div className="border-t px-2.5 py-0.5">
+              {week.employers.map((employer) => (
+                <EmployerHoursRowMobile
+                  key={employer.employerId}
+                  employer={employer}
+                  dates={week.dates}
+                />
+              ))}
+            </div>
+          )}
+        </>
       )}
+
     </div>
   );
 });
+
+/** Tiny labeled stat for the mobile header */
+function StatChip({
+  label,
+  value,
+  bold,
+  children,
+}: {
+  label: string;
+  value?: string;
+  bold?: boolean;
+  children?: React.ReactNode;
+}) {
+  return (
+    <span className="flex flex-col items-center">
+      <span className="text-[8px] leading-none text-muted-foreground/50 uppercase tracking-wider">
+        {label}
+      </span>
+      {value ? (
+        <span className={cn(
+          'tabular-nums text-[12px] leading-tight',
+          bold ? 'font-bold text-foreground' : 'font-semibold text-muted-foreground',
+        )}>
+          {value}
+        </span>
+      ) : (
+        <span className="flex items-center gap-0.5 leading-tight text-[12px]">
+          {children}
+        </span>
+      )}
+    </span>
+  );
+}

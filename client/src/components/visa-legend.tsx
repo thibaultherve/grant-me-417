@@ -1,26 +1,32 @@
+import type { VisaType } from '@get-granted/shared';
 import { cn } from '@/lib/utils';
 
-const LEGEND_ITEMS = [
-  { label: '1st Visa', color: 'bg-visa-1st-color' },
-  { label: '2nd Visa', color: 'bg-visa-2nd-color' },
-  { label: '3rd Visa', color: 'bg-visa-3rd-color' },
-  { label: 'No visa', color: 'bg-muted', border: true },
-] as const;
+const LEGEND_ITEMS: { visaType: VisaType; label: string; color: string }[] = [
+  { visaType: 'first_whv', label: '1st Visa', color: 'bg-visa-1st-color' },
+  { visaType: 'second_whv', label: '2nd Visa', color: 'bg-visa-2nd-color' },
+  { visaType: 'third_whv', label: '3rd Visa', color: 'bg-visa-3rd-color' },
+];
 
 interface VisaLegendProps {
+  visaTypes?: VisaType[];
   className?: string;
 }
 
-export function VisaLegend({ className }: VisaLegendProps) {
+export function VisaLegend({ visaTypes, className }: VisaLegendProps) {
+  const items = visaTypes
+    ? LEGEND_ITEMS.filter((item) => visaTypes.includes(item.visaType))
+    : LEGEND_ITEMS;
+
+  if (items.length === 0) return null;
+
   return (
     <div className={cn('flex items-center gap-4', className)}>
-      {LEGEND_ITEMS.map((item) => (
-        <div key={item.label} className="flex items-center gap-[5px]">
+      {items.map((item) => (
+        <div key={item.label} className="flex items-center gap-1.5">
           <div
             className={cn(
-              'h-[3px] w-[18px] rounded-sm',
+              'h-[5px] w-[5px] rounded-full',
               item.color,
-              'border' in item && item.border && 'border border-border',
             )}
           />
           <span className="text-[11px] font-medium text-muted-foreground">

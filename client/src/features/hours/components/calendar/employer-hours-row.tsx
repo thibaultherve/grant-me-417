@@ -17,8 +17,8 @@ interface EmployerHoursRowProps {
 export function EmployerHoursRow({ employer, dates, className }: EmployerHoursRowProps) {
   return (
     <tr className={cn('border-0 hover:bg-transparent', className)}>
-      {/* Employer info: icon + name + dot — with 3px left accent border + 16px padding */}
-      <td className="py-2 px-4 border-l-[3px] border-l-primary">
+      {/* Employer info: icon + name + dot — with left accent border */}
+      <td className="py-1 px-4 border-l-[3px] border-l-primary">
         <div className="flex items-center gap-1 min-w-0">
           <IndustryIcon industry={employer.industry} />
           <span className="text-[11px] font-medium text-muted-foreground truncate">
@@ -28,9 +28,12 @@ export function EmployerHoursRow({ employer, dates, className }: EmployerHoursRo
         </div>
       </td>
 
+      {/* Empty Visa column cell */}
+      <td />
+
       {/* Daily hours (Mon-Sun) */}
       {dates.map((date) => (
-        <td key={date} className="py-2 text-center">
+        <td key={date} className="py-1 text-center">
           <span
             className={cn(
               'tabular-nums text-[11px] text-center',
@@ -48,7 +51,7 @@ export function EmployerHoursRow({ employer, dates, className }: EmployerHoursRo
       <td className="w-4" />
 
       {/* Total */}
-      <td className="py-2 text-right">
+      <td className="py-1 text-right">
         <span className="tabular-nums text-[11px] font-semibold text-muted-foreground">
           {employer.totalHours > 0 ? `${employer.totalHours}h` : '–'}
         </span>
@@ -65,36 +68,33 @@ export function EmployerHoursRow({ employer, dates, className }: EmployerHoursRo
 /** Mobile variant of employer row */
 export function EmployerHoursRowMobile({ employer, dates }: EmployerHoursRowProps) {
   return (
-    <div className="flex flex-col gap-1 py-2">
-      {/* Header: icon + name + dot | total */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1 min-w-0">
+    <div className="py-1">
+      {/* Name + total | daily hours all on two tight lines */}
+      <div className="flex items-center justify-between leading-none">
+        <div className="flex items-center gap-0.5 min-w-0">
           <IndustryIcon industry={employer.industry} />
-          <span className="text-[11px] font-medium text-muted-foreground truncate">
+          <span className="text-[9px] font-medium text-muted-foreground truncate">
             {employer.employerName}
           </span>
           <EligibilityDot isEligible={employer.isEligible} />
         </div>
-        <span className="tabular-nums text-[11px] font-semibold text-muted-foreground shrink-0 ml-2">
+        <span className="tabular-nums text-[9px] font-semibold text-muted-foreground shrink-0">
           {employer.totalHours > 0 ? `${employer.totalHours}h` : '–'}
         </span>
       </div>
-
-      {/* Daily hours grid */}
-      <div className="grid grid-cols-7 gap-0.5">
+      <div className="grid grid-cols-7 leading-none mt-px">
         {dates.map((date) => (
-          <div key={date} className="text-center">
-            <span
-              className={cn(
-                'tabular-nums text-[11px]',
-                employer.dailyHours[date]
-                  ? 'font-normal text-muted-foreground'
-                  : 'text-border',
-              )}
-            >
-              {employer.dailyHours[date] ? String(employer.dailyHours[date]) : '–'}
-            </span>
-          </div>
+          <span
+            key={date}
+            className={cn(
+              'tabular-nums text-[9px] text-center',
+              employer.dailyHours[date]
+                ? 'text-muted-foreground'
+                : 'text-muted-foreground/25',
+            )}
+          >
+            {employer.dailyHours[date] ? String(employer.dailyHours[date]) : '–'}
+          </span>
         ))}
       </div>
     </div>

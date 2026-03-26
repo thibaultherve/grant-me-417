@@ -38,6 +38,9 @@ export function WeeklyTable({
             <th className="py-3 px-4 text-left text-[11px] font-semibold text-muted-foreground w-[90px]">
               Week
             </th>
+            <th className="py-3 text-center text-[11px] font-semibold text-muted-foreground w-10">
+              Visa
+            </th>
             {DAY_HEADERS.map((day) => (
               <th
                 key={day}
@@ -134,7 +137,7 @@ function WeekGroup({
       {/* Divider between weeks */}
       {!isLast && (
         <tr className={cn('border-0', isExpanded && 'bg-[#F8F6FF]')}>
-          <td colSpan={13} className={cn(
+          <td colSpan={14} className={cn(
             'p-0 border-l-[3px]',
             isExpanded ? 'border-l-primary' : 'border-l-transparent',
           )}>
