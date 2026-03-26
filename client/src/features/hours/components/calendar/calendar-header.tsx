@@ -96,82 +96,89 @@ export function CalendarHeader({
     return map;
   }, [visas, year]);
 
+  const now = new Date();
+  const currentYearNow = now.getFullYear();
+  const currentMonthNow = now.getMonth() + 1;
+  const isCurrentMonth = year === currentYearNow && month === currentMonthNow;
+  const isFutureBlocked = year > currentYearNow || (year === currentYearNow && month >= currentMonthNow);
+
   return (
     <div
       className={cn(
-        'flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between',
+        'flex items-center gap-2',
         className
       )}
     >
-      {/* Month/Year selectors */}
-      <div className="flex items-center gap-2">
-        {/* Month dropdown */}
-        <Select
-          value={String(month)}
-          onValueChange={(value) => onMonthChange(Number(value))}
-        >
-          <SelectTrigger className="w-40" aria-label="Select month">
-            <SelectValue placeholder="Month" />
-          </SelectTrigger>
-          <SelectContent>
-            {MONTH_NAMES.map((monthName, index) => {
-              const monthVisas = visasByMonth.get(index + 1);
-              return (
-                <SelectItem key={monthName} value={String(index + 1)}>
-                  <span className="flex items-center gap-2">
-                    {monthName}
-                    {monthVisas && (
-                      <span className="flex items-center gap-0.5">
-                        {monthVisas.map((vt) => (
-                          <span
-                            key={vt}
-                            className={cn('h-[5px] w-[5px] rounded-full', getVisaBarColor(vt))}
-                          />
-                        ))}
-                      </span>
-                    )}
-                  </span>
-                </SelectItem>
-              );
-            })}
-          </SelectContent>
-        </Select>
+      {/* Month dropdown */}
+      <Select
+        value={String(month)}
+        onValueChange={(value) => onMonthChange(Number(value))}
+      >
+        <SelectTrigger className="flex-1 min-w-0 sm:flex-none sm:w-40" aria-label="Select month">
+          <SelectValue placeholder="Month" />
+        </SelectTrigger>
+        <SelectContent>
+          {MONTH_NAMES.map((monthName, index) => {
+            const m = index + 1;
+            const monthVisas = visasByMonth.get(m);
+            const isFuture = year > currentYearNow || (year === currentYearNow && m > currentMonthNow);
+            if (isFuture) return null;
+            return (
+              <SelectItem key={monthName} value={String(m)}>
+                <span className="flex items-center gap-2">
+                  {monthName}
+                  {monthVisas && (
+                    <span className="flex items-center gap-0.5">
+                      {monthVisas.map((vt) => (
+                        <span
+                          key={vt}
+                          className={cn('h-[5px] w-[5px] rounded-full', getVisaBarColor(vt))}
+                        />
+                      ))}
+                    </span>
+                  )}
+                </span>
+              </SelectItem>
+            );
+          })}
+        </SelectContent>
+      </Select>
 
-        {/* Year dropdown */}
-        <Select
-          value={String(year)}
-          onValueChange={(value) => onYearChange(Number(value))}
-        >
-          <SelectTrigger className="w-[130px]" aria-label="Select year">
-            <SelectValue placeholder="Year" />
-          </SelectTrigger>
-          <SelectContent className="max-h-[240px]">
-            {YEAR_OPTIONS.map((yearOption) => {
-              const yearVisas = visasByYear.get(yearOption);
-              return (
-                <SelectItem key={yearOption} value={String(yearOption)}>
-                  <span className="flex items-center gap-2">
-                    {yearOption}
-                    {yearVisas && (
-                      <span className="flex items-center gap-0.5">
-                        {yearVisas.map((vt) => (
-                          <span
-                            key={vt}
-                            className={cn('h-[5px] w-[5px] rounded-full', getVisaBarColor(vt))}
-                          />
-                        ))}
-                      </span>
-                    )}
-                  </span>
-                </SelectItem>
-              );
-            })}
-          </SelectContent>
-        </Select>
-      </div>
+      {/* Year dropdown */}
+      <Select
+        value={String(year)}
+        onValueChange={(value) => onYearChange(Number(value))}
+      >
+        <SelectTrigger className="flex-1 min-w-0 sm:flex-none sm:w-[130px]" aria-label="Select year">
+          <SelectValue placeholder="Year" />
+        </SelectTrigger>
+        <SelectContent className="max-h-[240px]">
+          {YEAR_OPTIONS.map((yearOption) => {
+            if (yearOption > currentYearNow) return null;
+            const yearVisas = visasByYear.get(yearOption);
+            return (
+              <SelectItem key={yearOption} value={String(yearOption)}>
+                <span className="flex items-center gap-2">
+                  {yearOption}
+                  {yearVisas && (
+                    <span className="flex items-center gap-0.5">
+                      {yearVisas.map((vt) => (
+                        <span
+                          key={vt}
+                          className={cn('h-[5px] w-[5px] rounded-full', getVisaBarColor(vt))}
+                        />
+                      ))}
+                    </span>
+                  )}
+                </span>
+              </SelectItem>
+            );
+          })}
+        </SelectContent>
+      </Select>
 
       {/* Navigation arrows */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 shrink-0">
         <Button
           variant="outline"
           size="icon"
@@ -184,6 +191,7 @@ export function CalendarHeader({
           variant="outline"
           size="icon"
           onClick={onNextMonth}
+          disabled={isFutureBlocked}
           aria-label="Next month"
         >
           <ChevronRight className="h-4 w-4" />

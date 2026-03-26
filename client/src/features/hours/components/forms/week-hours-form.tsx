@@ -37,6 +37,8 @@ interface WeekHoursFormProps {
   onSuccess?: () => void;
   /** Callback when form is cancelled */
   onCancel?: () => void;
+  /** Initial week to pre-select */
+  initialWeek?: Date;
   /** Additional CSS classes */
   className?: string;
 }
@@ -46,6 +48,7 @@ export function WeekHoursForm({
   employerName,
   onSuccess,
   onCancel,
+  initialWeek,
   className,
 }: WeekHoursFormProps) {
   // Initialize form state hook
@@ -65,7 +68,7 @@ export function WeekHoursForm({
     isDirty,
     maxTotalHours,
     datesWithHours,
-  } = useWeekFormState(employerId);
+  } = useWeekFormState(employerId, initialWeek);
 
   /**
    * Handle form submission

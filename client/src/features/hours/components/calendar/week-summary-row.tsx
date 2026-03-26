@@ -83,6 +83,49 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
         </div>
       </td>
 
+      {/* Total Hours — center-aligned, muted */}
+      <td className="py-3 text-center w-[70px]">
+        {hasData && (
+          <span className="tabular-nums text-[13px] font-semibold text-muted-foreground">
+            {`${week.totalHours}h`}
+          </span>
+        )}
+      </td>
+
+      {/* Eligible Hours — center-aligned, per-visa colored text */}
+      <td className="py-3 text-center w-[75px]">
+        {hasData && (
+          <div className="flex items-center gap-0.5 justify-center">
+            <VisaValues
+              breakdown={week.visaBreakdown}
+              getValue={(vb) => `${vb.eligibleHours}h`}
+              getNumber={(vb) => vb.eligibleHours}
+              showDots={showPerDayDots}
+            />
+          </div>
+        )}
+      </td>
+
+      {/* Eligible Days — center-aligned, bold foreground */}
+      <td className="py-3 text-center w-[75px]">
+        {hasData && (
+          <div className="flex items-center gap-0.5 justify-center">
+            <VisaValues
+              breakdown={week.visaBreakdown}
+              getValue={(vb) => `${vb.eligibleDays}d`}
+              getNumber={(vb) => vb.eligibleDays}
+              showDots={showPerDayDots}
+              bold
+            />
+          </div>
+        )}
+      </td>
+
+      {/* Separator */}
+      <td className="w-4 py-3">
+        {hasData && <div className="h-3.5 w-px bg-border mx-auto" />}
+      </td>
+
       {/* Daily hours (Mon-Sun) or empty state */}
       {hasData ? (
         week.dates.map((date, i) => (
@@ -122,48 +165,6 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
         </td>
       )}
 
-      {/* Separator */}
-      <td className="w-4 py-3">
-        {hasData && <div className="h-3.5 w-px bg-border mx-auto" />}
-      </td>
-
-      {/* Total — 60px, right-aligned, bold */}
-      <td className="py-3 text-right w-[60px]">
-        {hasData && (
-          <span className="tabular-nums text-[13px] font-bold text-foreground">
-            {`${week.totalHours}h`}
-          </span>
-        )}
-      </td>
-
-      {/* Eligible hours — 65px, per-visa colored text */}
-      <td className="py-3 text-right w-[65px]">
-        {hasData && (
-          <div className="flex items-center gap-0.5 justify-end">
-            <VisaValues
-              breakdown={week.visaBreakdown}
-              getValue={(vb) => `${vb.eligibleHours}h`}
-              getNumber={(vb) => vb.eligibleHours}
-              showDots={showPerDayDots}
-            />
-          </div>
-        )}
-      </td>
-
-      {/* Eligible days — 50px, per-visa colored text */}
-      <td className="py-3 text-right w-[50px]">
-        {hasData && (
-          <div className="flex items-center gap-0.5 justify-end">
-            <VisaValues
-              breakdown={week.visaBreakdown}
-              getValue={(vb) => `${vb.eligibleDays}d`}
-              getNumber={(vb) => vb.eligibleDays}
-              showDots={showPerDayDots}
-            />
-          </div>
-        )}
-      </td>
-
       {/* Actions: edit button */}
       <td className="py-3 pr-4 w-14">
         <div className="flex items-center justify-end">
@@ -171,7 +172,7 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
             variant="ghost"
             size="icon"
             className="h-7 w-7"
-            onClick={(e) => { e.stopPropagation(); navigate(`/hours/edit?week=${week.weekStart}`); }}
+            onClick={(e) => { e.stopPropagation(); navigate(`/app/hours/edit?week=${week.weekStart}`); }}
             aria-label={`Edit week ${week.weekStart}`}
           >
             <Pencil className="h-3 w-3" />

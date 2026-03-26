@@ -47,7 +47,8 @@ export const paths = {
       getHref: () => '/app/hours',
       edit: {
         path: '/app/hours/edit',
-        getHref: () => '/app/hours/edit',
+        getHref: (week?: string) =>
+          `/app/hours/edit${week ? `?week=${week}` : ''}`,
       },
     },
     visas: {

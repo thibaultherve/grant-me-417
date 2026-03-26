@@ -19,9 +19,9 @@ export function EmployerHoursRow({ employer, dates, className }: EmployerHoursRo
     <tr className={cn('border-0 hover:bg-transparent', className)}>
       {/* Employer info: icon + name + dot — with left accent border */}
       <td className="py-1 px-4 border-l-[3px] border-l-primary">
-        <div className="flex items-center gap-1 min-w-0">
+        <div className="flex items-center gap-1.5 min-w-0">
           <IndustryIcon industry={employer.industry} />
-          <span className="text-[11px] font-medium text-muted-foreground truncate">
+          <span className="text-xs font-medium text-muted-foreground truncate">
             {employer.employerName}
           </span>
           <EligibilityDot isEligible={employer.isEligible} />
@@ -31,12 +31,26 @@ export function EmployerHoursRow({ employer, dates, className }: EmployerHoursRo
       {/* Empty Visa column cell */}
       <td />
 
+      {/* Total */}
+      <td className="py-1 text-center">
+        <span className="tabular-nums text-xs font-semibold text-muted-foreground">
+          {employer.totalHours > 0 ? `${employer.totalHours}h` : '–'}
+        </span>
+      </td>
+
+      {/* Empty cells for Eligible Hours + Eligible Days */}
+      <td />
+      <td />
+
+      {/* Spacer for separator column */}
+      <td className="w-4" />
+
       {/* Daily hours (Mon-Sun) */}
       {dates.map((date) => (
         <td key={date} className="py-1 text-center">
           <span
             className={cn(
-              'tabular-nums text-[11px] text-center',
+              'tabular-nums text-xs text-center',
               employer.dailyHours[date]
                 ? 'font-normal text-muted-foreground'
                 : 'text-border',
@@ -47,19 +61,7 @@ export function EmployerHoursRow({ employer, dates, className }: EmployerHoursRo
         </td>
       ))}
 
-      {/* Spacer for separator column */}
-      <td className="w-4" />
-
-      {/* Total */}
-      <td className="py-1 text-right">
-        <span className="tabular-nums text-[11px] font-semibold text-muted-foreground">
-          {employer.totalHours > 0 ? `${employer.totalHours}h` : '–'}
-        </span>
-      </td>
-
-      {/* Empty cells for Eligible + Days + Actions columns */}
-      <td />
-      <td />
+      {/* Empty cell for Actions column */}
       <td />
     </tr>
   );
@@ -113,9 +115,9 @@ function IndustryIcon({ industry }: { industry: string }) {
         'inline-flex items-center justify-center shrink-0 rounded-sm',
         config.iconBg,
       )}
-      style={{ width: 12, height: 12 }}
+      style={{ width: 16, height: 16 }}
     >
-      <Icon className="text-white" style={{ width: 7, height: 7 }} />
+      <Icon className="text-white" style={{ width: 9, height: 9 }} />
     </span>
   );
 }

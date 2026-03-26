@@ -21,6 +21,8 @@ interface WeeklyTableProps {
  * - Week rows: summary (collapsed) + employer breakdown (expanded)
  * - Custom expand state (no Radix Accordion — invalid inside <table>)
  */
+const today = new Date().toISOString().slice(0, 10);
+
 export function WeeklyTable({
   weeks,
   visas,
@@ -41,6 +43,19 @@ export function WeeklyTable({
             <th className="py-3 text-center text-[11px] font-semibold text-muted-foreground w-10">
               Visa
             </th>
+            <th className="py-3 text-center text-[11px] font-semibold text-muted-foreground w-[70px]">
+              Total Hours
+            </th>
+            <th className="py-3 text-center text-[11px] font-semibold text-muted-foreground w-[75px]">
+              Eligible Hours
+            </th>
+            <th className="py-3 text-center text-[11px] font-semibold text-foreground w-[75px]">
+              Eligible Days
+            </th>
+            {/* Separator */}
+            <th className="w-4">
+              <div className="h-3.5 w-px bg-border mx-auto" />
+            </th>
             {DAY_HEADERS.map((day) => (
               <th
                 key={day}
@@ -49,25 +64,12 @@ export function WeeklyTable({
                 {day}
               </th>
             ))}
-            {/* Separator — 1px × 14px line centered in 16px column */}
-            <th className="w-4">
-              <div className="h-3.5 w-px bg-border mx-auto" />
-            </th>
-            <th className="py-3 text-right text-[11px] font-semibold text-foreground w-[60px]">
-              Total
-            </th>
-            <th className="py-3 text-right text-[11px] font-semibold text-foreground w-[65px]">
-              Eligible
-            </th>
-            <th className="py-3 text-right text-[11px] font-semibold text-foreground w-[50px]">
-              Days
-            </th>
             <th className="py-3 pr-4 w-14" />
           </tr>
         </thead>
 
         <tbody>
-          {weeks.map((week, idx) => {
+          {weeks.filter((w) => w.weekStart <= today).map((week, idx, arr) => {
             const expanded = isExpanded(week.weekStart);
 
             return (
@@ -79,7 +81,7 @@ export function WeeklyTable({
                 onToggle={() => toggleWeek(week.weekStart)}
                 year={year}
                 month={month}
-                isLast={idx === weeks.length - 1}
+                isLast={idx === arr.length - 1}
               />
             );
           })}

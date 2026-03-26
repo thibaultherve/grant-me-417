@@ -85,8 +85,8 @@ export const WeekCard = memo(function WeekCard({
         <span className="ml-auto flex items-center gap-5">
           {hasData ? (
             <>
-              <StatChip label="Total" value={`${week.totalHours}h`} bold />
-              <StatChip label="Eligible">
+              <StatChip label="Total Hours" value={`${week.totalHours}h`} />
+              <StatChip label="Eligible Hours">
                 <VisaValues
                   breakdown={week.visaBreakdown}
                   getValue={(vb) => `${vb.eligibleHours}h`}
@@ -95,13 +95,14 @@ export const WeekCard = memo(function WeekCard({
                   showDots={showPerDayDots}
                 />
               </StatChip>
-              <StatChip label="Days">
+              <StatChip label="Eligible Days" bold>
                 <VisaValues
                   breakdown={week.visaBreakdown}
                   getValue={(vb) => `${vb.eligibleDays}d`}
                   getNumber={(vb) => vb.eligibleDays}
                   size="mobile"
                   showDots={showPerDayDots}
+                  bold
                 />
               </StatChip>
             </>
@@ -112,7 +113,7 @@ export const WeekCard = memo(function WeekCard({
             variant="ghost"
             size="icon"
             className="h-6 w-6 shrink-0"
-            onClick={(e) => { e.stopPropagation(); navigate(`/hours/edit?week=${week.weekStart}`); }}
+            onClick={(e) => { e.stopPropagation(); navigate(`/app/hours/edit?week=${week.weekStart}`); }}
             aria-label={`Edit week ${week.weekStart}`}
           >
             <Pencil className="h-3 w-3" />
@@ -124,7 +125,7 @@ export const WeekCard = memo(function WeekCard({
       {isExpanded && hasData && (
         <>
           {/* Daily hours grid */}
-          <div className="border-t px-2.5 py-1">
+          <div className="px-2.5 py-1">
             <div className="flex">
               {week.dates.map((date, i) => (
                 <div
@@ -170,7 +171,7 @@ export const WeekCard = memo(function WeekCard({
 
           {/* Employer breakdown */}
           {week.employers.length > 0 && (
-            <div className="border-t px-2.5 py-0.5">
+            <div className="px-2.5 py-0.5">
               {week.employers.map((employer) => (
                 <EmployerHoursRowMobile
                   key={employer.employerId}

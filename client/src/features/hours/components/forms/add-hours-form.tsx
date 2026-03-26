@@ -31,6 +31,8 @@ interface AddHoursFormProps {
   onSuccess?: () => void;
   /** Callback when form is cancelled */
   onCancel?: () => void;
+  /** Initial week to pre-select (from ?week= query param) */
+  initialWeek?: Date;
   /** Additional CSS classes */
   className?: string;
 }
@@ -51,6 +53,7 @@ const industryLabels: Record<string, string> = {
 export function AddHoursForm({
   onSuccess,
   onCancel,
+  initialWeek,
   className,
 }: AddHoursFormProps) {
   // State management
@@ -130,6 +133,7 @@ export function AddHoursForm({
             employerName={selectedEmployer.name}
             onSuccess={onSuccess}
             onCancel={onCancel}
+            initialWeek={initialWeek}
           />
         </div>
       )}

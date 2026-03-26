@@ -1,6 +1,8 @@
 import type { WeekData, VisaPeriod } from '../../types/weekly';
 import { WeekCard } from './week-card';
 
+const today = new Date().toISOString().slice(0, 10);
+
 interface WeeklyCardsProps {
   weeks: WeekData[];
   visas: VisaPeriod[];
@@ -23,7 +25,7 @@ export function WeeklyCards({
 }: WeeklyCardsProps) {
   return (
     <div className="space-y-3">
-      {weeks.map((week) => (
+      {weeks.filter((w) => w.weekStart <= today).map((week) => (
         <WeekCard
           key={week.weekStart}
           week={week}
