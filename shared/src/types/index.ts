@@ -32,8 +32,6 @@ export type {
 } from '../schemas/employer.js';
 
 export type {
-  WeekEntry,
-  SaveWeekHoursInput,
   WorkEntry,
   WorkEntryResponse,
   WorkEntryWithEmployer,

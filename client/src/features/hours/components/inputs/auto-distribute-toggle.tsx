@@ -1,35 +1,25 @@
 /**
  * Auto-Distribute Toggle Component
  *
- * A checkbox with a total hours input for auto-distributing hours across selected days.
+ * A switch toggle with a total hours input for auto-distributing hours across selected days.
  * When enabled, the total hours are evenly distributed across the selected days.
  * Shows max hours limit and warns when approaching capacity.
  *
- * @example
- * ```tsx
- * <AutoDistributeToggle
- *   enabled={autoDistribute}
- *   onToggle={(checked) => setAutoDistribute(checked)}
- *   totalHours="40"
- *   onTotalChange={(value) => setTotalHours(value)}
- *   totalError="Max 120h for 5 days"
- *   selectedDaysCount={5}
- *   maxTotalHours={120}
- * />
- * ```
+ * Design: Toggle switch "Auto" (mobile) / "Auto-distribute" (desktop)
+ * with inline Total input and Max hint.
  */
 
 import { AlertCircle } from 'lucide-react';
 
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 
 interface AutoDistributeToggleProps {
   /** Whether auto-distribute mode is enabled */
   enabled: boolean;
-  /** Callback when the checkbox is toggled */
+  /** Callback when the toggle is switched */
   onToggle: (enabled: boolean) => void;
   /** Total hours value (string to preserve user input format) */
   totalHours: string;
@@ -45,6 +35,8 @@ interface AutoDistributeToggleProps {
   disabled?: boolean;
   /** Additional CSS classes */
   className?: string;
+  /** Unique ID prefix for multiple instances on the same page */
+  idPrefix?: string;
 }
 
 export function AutoDistributeToggle({
@@ -57,7 +49,15 @@ export function AutoDistributeToggle({
   maxTotalHours,
   disabled = false,
   className,
+  idPrefix,
 }: AutoDistributeToggleProps) {
+  const switchId = idPrefix
+    ? `${idPrefix}-auto-distribute`
+    : 'auto-distribute';
+  const totalId = idPrefix ? `${idPrefix}-total-hours` : 'total-hours';
+  const errorId = idPrefix
+    ? `${idPrefix}-auto-distribute-error`
+    : 'auto-distribute-error';
   const hasError = Boolean(totalError);
 
   // Calculate hours per day dynamically
@@ -73,38 +73,31 @@ export function AutoDistributeToggle({
         className,
       )}
     >
-      {/* Checkbox with label */}
-      <div className="flex items-center gap-3">
-        <Checkbox
-          id="auto-distribute"
+      {/* Row: Switch + label + (when enabled) Total input + Max hint */}
+      <div className="flex flex-wrap items-center gap-3">
+        <Switch
+          id={switchId}
           checked={enabled}
-          onCheckedChange={(checked) => onToggle(checked === true)}
+          onCheckedChange={onToggle}
           disabled={disabled}
-          aria-describedby={hasError ? 'auto-distribute-error' : undefined}
+          aria-describedby={hasError ? errorId : undefined}
         />
         <Label
-          htmlFor="auto-distribute"
+          htmlFor={switchId}
           className={cn(
             'text-sm font-medium cursor-pointer',
             disabled && 'opacity-50 cursor-not-allowed',
           )}
         >
-          Auto-distribute to selected days
+          Auto-distribute
         </Label>
-      </div>
 
-      {/* Total hours input - only shown when enabled */}
-      {enabled && (
-        <div className="flex flex-col gap-2 pl-7">
-          <div className="flex items-center gap-3">
-            <Label
-              htmlFor="total-hours"
-              className="text-sm text-muted-foreground"
-            >
-              Total hours:
-            </Label>
+        {/* Total hours input - inline when enabled */}
+        {enabled && (
+          <>
+            <span className="text-sm text-muted-foreground">Total:</span>
             <Input
-              id="total-hours"
+              id={totalId}
               type="text"
               inputMode="decimal"
               value={totalHours}
@@ -112,37 +105,37 @@ export function AutoDistributeToggle({
               disabled={disabled}
               placeholder="40"
               aria-invalid={hasError}
-              aria-describedby={hasError ? 'auto-distribute-error' : undefined}
+              aria-describedby={hasError ? errorId : undefined}
               className={cn(
-                'h-8 w-20 text-center text-sm',
-                hasError && 'border-destructive focus-visible:ring-destructive',
+                'h-8 w-16 text-center text-sm',
+                hasError &&
+                  'border-destructive focus-visible:ring-destructive',
               )}
             />
             <span className="text-xs text-muted-foreground">
-              Max {maxTotalHours}h for {selectedDaysCount} selected day
-              {selectedDaysCount !== 1 ? 's' : ''}
-            </span>
-          </div>
-
-          {/* Max hours info */}
-          <div className="flex items-center gap-2 text-xs text-muted-foreground"></div>
-
-          {/* Warning when approaching limit */}
-          {isApproachingLimit && (
-            <div className="flex items-center gap-2 text-xs text-amber-600">
-              <AlertCircle className="h-3 w-3" />
-              <span>
-                Approaching maximum hours limit ({currentTotal}h /{' '}
-                {maxTotalHours}h)
+              <span className="sm:hidden">Max {maxTotalHours}h</span>
+              <span className="hidden sm:inline">
+                Max {maxTotalHours}h / {selectedDaysCount} day
+                {selectedDaysCount !== 1 ? 's' : ''}
               </span>
-            </div>
-          )}
+            </span>
+          </>
+        )}
+      </div>
+
+      {/* Warning when approaching limit */}
+      {enabled && isApproachingLimit && (
+        <div className="flex items-center gap-2 text-xs text-amber-600 pl-12">
+          <AlertCircle className="h-3 w-3 shrink-0" />
+          <span>
+            Approaching maximum hours limit ({currentTotal}h / {maxTotalHours}h)
+          </span>
         </div>
       )}
 
       {/* Error message */}
       {hasError && (
-        <p id="auto-distribute-error" className="text-xs text-destructive pl-7">
+        <p id={errorId} className="text-xs text-destructive pl-12">
           {totalError}
         </p>
       )}

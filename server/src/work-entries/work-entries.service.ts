@@ -2,16 +2,19 @@ import type {
   HoursList,
   IndustryType,
   MonthHours,
-  SaveWeekHoursInput,
+  SaveWeekBatch,
   VisaType,
+  WeekEmployerEntry,
+  WeekEntriesResponse,
   WeeklyEmployer,
   WeeklyHoursResponse,
   WorkEntryWithEmployer,
 } from '@regranted/shared';
+import { MAX_HOURS_PER_DAY } from '@regranted/shared';
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client.js';
 import { getWeekRanges } from '../common/utils/date.js';
@@ -241,7 +244,7 @@ export class WorkEntriesService {
         const hours = toNumber(entry.hours);
 
         // Daily totals
-        dailyTotals[dateKey] = (dailyTotals[dateKey] ?? 0) + hours;
+        dailyTotals[dateKey] = Math.round(((dailyTotals[dateKey] ?? 0) + hours) * 100) / 100;
         totalHours += hours;
 
         // Employer breakdown
@@ -258,8 +261,8 @@ export class WorkEntriesService {
           };
           employerMap.set(empId, emp);
         }
-        emp.dailyHours[dateKey] = (emp.dailyHours[dateKey] ?? 0) + hours;
-        emp.totalHours += hours;
+        emp.dailyHours[dateKey] = Math.round(((emp.dailyHours[dateKey] ?? 0) + hours) * 100) / 100;
+        emp.totalHours = Math.round((emp.totalHours + hours) * 100) / 100;
       }
 
       // Visa breakdown from pre-computed weekly progress
@@ -276,7 +279,7 @@ export class WorkEntriesService {
         weekStart: weekStartKey,
         weekEnd: weekEndKey,
         dates,
-        totalHours,
+        totalHours: Math.round(totalHours * 100) / 100,
         visaBreakdown,
         employers: Array.from(employerMap.values()),
         dailyTotals,
@@ -298,86 +301,181 @@ export class WorkEntriesService {
   }
 
   /**
-   * Smart upsert/delete for week hours.
-   * - hours > 0: upsert (create or update)
-   * - hours === 0 and exists in DB: delete
-   * Then recalculate visa progress for affected dates.
+   * Get all employers with their hours for a specific week.
+   * Returns every employer (even those with 0 hours) so the UI shows all cards.
    */
-  async saveWeekHours(
+  async getWeekEntries(
     userId: string,
-    input: SaveWeekHoursInput,
-  ): Promise<{ deleted: number; saved: number }> {
-    const { employerId, entries } = input;
+    weekStart: string,
+  ): Promise<WeekEntriesResponse> {
+    const monday = new Date(weekStart);
 
-    // Verify employer ownership
-    const employer = await this.prisma.employer.findUnique({
-      where: { id: employerId },
-    });
-
-    if (!employer) {
-      throw new NotFoundException('Employer not found');
-    }
-    if (employer.userId !== userId) {
-      throw new ForbiddenException('You do not own this employer');
+    // Validate weekStart is a Monday
+    if (monday.getUTCDay() !== 1) {
+      throw new BadRequestException('weekStart must be a Monday');
     }
 
-    const workDates = entries.map((e) => new Date(e.workDate));
+    const sunday = new Date(monday);
+    sunday.setUTCDate(sunday.getUTCDate() + 6);
 
-    // Find existing entries for these dates
-    const existing = await this.prisma.workEntry.findMany({
-      where: {
-        userId,
-        employerId,
-        workDate: { in: workDates },
-      },
-    });
-    const existingByDate = new Map(
-      existing.map((e) => [formatDate(e.workDate), e]),
-    );
-
-    const toUpsert = entries.filter((e) => e.hours > 0);
-    const toDelete = entries.filter(
-      (e) => e.hours === 0 && existingByDate.has(e.workDate),
-    );
-
-    // Delete entries with 0 hours that exist
-    if (toDelete.length > 0) {
-      await this.prisma.workEntry.deleteMany({
+    // 2 parallel queries: all employers + work entries for the week
+    const [employers, entries] = await Promise.all([
+      this.prisma.employer.findMany({
+        where: { userId },
+        select: { id: true, name: true, industry: true, isEligible: true },
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.workEntry.findMany({
         where: {
           userId,
-          employerId,
-          workDate: { in: toDelete.map((e) => new Date(e.workDate)) },
+          workDate: { gte: monday, lte: sunday },
         },
-      });
-    }
+        select: { employerId: true, workDate: true, hours: true },
+      }),
+    ]);
 
-    // Batch upsert entries with hours > 0 (single SQL query instead of N upserts)
-    if (toUpsert.length > 0) {
-      const valueFragments = toUpsert.map(
-        (entry) =>
-          Prisma.sql`(gen_random_uuid(), ${userId}::uuid, ${employerId}::uuid, ${new Date(entry.workDate)}::date, ${entry.hours}::decimal, NOW(), NOW())`,
-      );
-
-      await this.prisma.$executeRaw`
-        INSERT INTO work_entries (id, user_id, employer_id, work_date, hours, created_at, updated_at)
-        VALUES ${Prisma.join(valueFragments)}
-        ON CONFLICT (user_id, employer_id, work_date)
-        DO UPDATE SET hours = EXCLUDED.hours, updated_at = NOW()
-      `;
-    }
-
-    // Collect affected dates for batch progress recalculation
-    const affectedDates: Date[] = [];
+    // Group entries by employerId -> dateKey -> hours
+    const entryMap = new Map<string, Record<string, number>>();
     for (const entry of entries) {
-      if (entry.hours > 0 || existingByDate.has(entry.workDate)) {
-        affectedDates.push(new Date(entry.workDate));
+      const dateKey = formatDate(entry.workDate);
+      let employerHours = entryMap.get(entry.employerId);
+      if (!employerHours) {
+        employerHours = {};
+        entryMap.set(entry.employerId, employerHours);
+      }
+      employerHours[dateKey] = toNumber(entry.hours);
+    }
+
+    // Build response with all employers
+    const employerEntries: WeekEmployerEntry[] = employers.map((emp) => {
+      const hours = entryMap.get(emp.id) ?? {};
+      const total = Math.round(Object.values(hours).reduce((sum, h) => sum + h, 0) * 100) / 100;
+      return {
+        employerId: emp.id,
+        employerName: emp.name,
+        industry: emp.industry as IndustryType,
+        isEligible: emp.isEligible ?? false,
+        hours,
+        total,
+      };
+    });
+
+    return { weekStart, employers: employerEntries };
+  }
+
+  /**
+   * Batch save hours for multiple employers in a single week.
+   * Validates cross-employer 24h/day limit, then delete+create within a transaction.
+   */
+  async saveWeekBatch(
+    userId: string,
+    input: SaveWeekBatch,
+  ): Promise<WeekEntriesResponse> {
+    const { weekStart, entries } = input;
+    const monday = new Date(weekStart);
+
+    // Validate weekStart is a Monday
+    if (monday.getUTCDay() !== 1) {
+      throw new BadRequestException('weekStart must be a Monday');
+    }
+
+    const sunday = new Date(monday);
+    sunday.setUTCDate(sunday.getUTCDate() + 6);
+    const mondayKey = formatDate(monday);
+    const sundayKey = formatDate(sunday);
+
+    // Validate all employerIds belong to the user
+    const employerIds = entries.map((e) => e.employerId);
+    const employers = await this.prisma.employer.findMany({
+      where: { id: { in: employerIds }, userId },
+      select: { id: true },
+    });
+    const ownedIds = new Set(employers.map((e) => e.id));
+    for (const entry of entries) {
+      if (!ownedIds.has(entry.employerId)) {
+        throw new ForbiddenException(
+          `Employer ${entry.employerId} not found or not owned`,
+        );
       }
     }
 
-    // Batch recalculate visa progress (replaces N+1 loop)
+    // Validate all date keys fall within the week
+    for (const entry of entries) {
+      for (const dateKey of Object.keys(entry.hours)) {
+        if (dateKey < mondayKey || dateKey > sundayKey) {
+          throw new BadRequestException(
+            `Date ${dateKey} is outside the week ${weekStart}`,
+          );
+        }
+      }
+    }
+
+    // Cross-employer 24h/day validation
+    const dailyTotals: Record<string, number> = {};
+    for (const entry of entries) {
+      for (const [dateKey, hours] of Object.entries(entry.hours)) {
+        dailyTotals[dateKey] = (dailyTotals[dateKey] ?? 0) + hours;
+      }
+    }
+    const violations: string[] = [];
+    for (const [dateKey, total] of Object.entries(dailyTotals)) {
+      if (total > MAX_HOURS_PER_DAY) {
+        violations.push(`${dateKey}: ${total}h exceeds ${MAX_HOURS_PER_DAY}h`);
+      }
+    }
+    if (violations.length > 0) {
+      throw new BadRequestException(
+        `Daily hours exceed ${MAX_HOURS_PER_DAY}h limit: ${violations.join(', ')}`,
+      );
+    }
+
+    // Transaction: delete old entries + create new ones for each employer
+    await this.prisma.$transaction(async (tx) => {
+      for (const entry of entries) {
+        // Delete all existing entries for this employer in this week
+        await tx.workEntry.deleteMany({
+          where: {
+            userId,
+            employerId: entry.employerId,
+            workDate: { gte: monday, lte: sunday },
+          },
+        });
+
+        // Create new entries for days with hours > 0
+        const toCreate = Object.entries(entry.hours)
+          .filter(([, hours]) => hours > 0)
+          .map(([dateKey, hours]) => ({
+            userId,
+            employerId: entry.employerId,
+            workDate: new Date(dateKey),
+            hours,
+          }));
+
+        if (toCreate.length > 0) {
+          await tx.workEntry.createMany({ data: toCreate });
+        }
+      }
+    });
+
+    // Collect all affected dates for visa progress recalculation
+    const affectedDates: Date[] = [];
+    for (const entry of entries) {
+      for (const dateKey of Object.keys(entry.hours)) {
+        affectedDates.push(new Date(dateKey));
+      }
+    }
+    // Also include dates that may have had entries deleted (full week range)
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(monday);
+      d.setUTCDate(d.getUTCDate() + i);
+      affectedDates.push(d);
+    }
+
+    // Batch recalculate visa progress
     await this.visaProgress.refreshWeeksForDates(userId, affectedDates);
 
-    return { deleted: toDelete.length, saved: toUpsert.length };
+    // Return fresh data
+    return this.getWeekEntries(userId, weekStart);
   }
 
   // ─── Private Helpers ──────────────────────────────────────────────────────
