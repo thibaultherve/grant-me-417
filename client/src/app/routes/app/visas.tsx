@@ -20,7 +20,12 @@ export const VisasRoute = () => {
   usePageHeader({
     description: 'Manage your Working Holiday Visas (up to 3 visas)',
     action: () => (
-      <Button asChild size="lg" disabled={visas.length >= 3}>
+      <Button
+        asChild
+        size="lg"
+        className="w-full md:w-auto"
+        disabled={visas.length >= 3}
+      >
         <Link to={paths.app.visas.new.getHref()}>
           <Plus className="mr-2 h-4 w-4" />
           Add Visa

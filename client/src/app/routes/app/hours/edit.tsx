@@ -1,16 +1,20 @@
+import { parseISO } from 'date-fns';
 import { useEffect, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
-import { parseISO } from 'date-fns';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { paths } from '@/config/paths';
-import { AddHoursForm } from '@/features/hours/components/forms/add-hours-form';
+import { LogHoursPage } from '@/features/hours/components/log-hours-page';
 import { isWeekStarted } from '@/features/hours/utils/week-validation';
+import { usePageHeader } from '@/hooks/use-page-header';
 
 export function HoursEditRoute() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const weekParam = searchParams.get('week');
+
+  usePageHeader({
+    description: 'Log hours for each of your employers this week.',
+  });
 
   // Parse and validate the week parameter
   const initialWeek = useMemo(() => {
@@ -32,20 +36,5 @@ export function HoursEditRoute() {
     return null;
   }
 
-  const handleBack = () => {
-    navigate(paths.app.hours.getHref());
-  };
-
-  return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Log your work hours</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <AddHoursForm onCancel={handleBack} initialWeek={initialWeek} />
-        </CardContent>
-      </Card>
-    </div>
-  );
+  return <LogHoursPage initialWeek={initialWeek} />;
 }

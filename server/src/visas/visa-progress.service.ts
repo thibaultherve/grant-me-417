@@ -80,6 +80,8 @@ export class VisaProgressService {
       workedDates.add(entry.workDate.toISOString().split('T')[0]);
     }
 
+    totalHours = Math.round(totalHours * 100) / 100;
+    eligibleHours = Math.round(eligibleHours * 100) / 100;
     const eligibleDays = this.hoursToEligibleDays(eligibleHours);
     const daysWorked = workedDates.size;
 
@@ -289,6 +291,8 @@ export class VisaProgressService {
         workedDates.add(entry.workDate.toISOString().split('T')[0]);
       }
 
+      totalHours = Math.round(totalHours * 100) / 100;
+      eligibleHours = Math.round(eligibleHours * 100) / 100;
       const eligibleDays = this.hoursToEligibleDays(eligibleHours);
       const daysWorked = workedDates.size;
 
@@ -432,6 +436,8 @@ export class VisaProgressService {
           workedDates.add(entry.workDate.toISOString().split('T')[0]);
         }
 
+        totalHours = Math.round(totalHours * 100) / 100;
+        eligibleHours = Math.round(eligibleHours * 100) / 100;
         const eligibleDays = this.hoursToEligibleDays(eligibleHours);
         const daysWorked = workedDates.size;
 

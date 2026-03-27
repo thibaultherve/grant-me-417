@@ -32,5 +32,5 @@ export function toNumber(
   fallback = 0,
 ): number {
   if (value == null) return fallback;
-  return Number(value);
+  return Math.round(Number(value) * 100) / 100;
 }

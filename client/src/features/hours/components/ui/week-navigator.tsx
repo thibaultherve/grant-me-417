@@ -8,7 +8,7 @@
  * @example
  * ```tsx
  * <WeekNavigator
- *   weekRange="Mon 15 Apr - Sun 21 Apr 2024"
+ *   weekRange="Mon 15 Apr — Sun 21 Apr 2024"
  *   currentWeek={new Date('2024-04-15')}
  *   onPrevWeek={() => goPrevWeek()}
  *   onNextWeek={() => goNextWeek()}
@@ -32,8 +32,10 @@ import {
 import { cn } from '@/lib/utils';
 
 interface WeekNavigatorProps {
-  /** Formatted week range string (e.g., "Mon 15 Apr - Sun 21 Apr 2024") */
+  /** Formatted week range string (e.g., "Mon 15 Apr — Sun 21 Apr 2024") */
   weekRange: string;
+  /** Compact week range without year for mobile (e.g., "Mon 15 — Sun 21 Apr") */
+  compactWeekRange?: string;
   /** Current week date (Monday of the week) */
   currentWeek: Date;
   /** Callback when previous week button is clicked */
@@ -54,6 +56,7 @@ interface WeekNavigatorProps {
 
 export const WeekNavigator = memo(function WeekNavigator({
   weekRange,
+  compactWeekRange,
   currentWeek,
   onPrevWeek,
   onNextWeek,
@@ -98,20 +101,21 @@ export const WeekNavigator = memo(function WeekNavigator({
   return (
     <div
       className={cn(
-        'flex items-center justify-center gap-3 rounded-lg border bg-card p-3',
+        'flex items-center rounded-lg border bg-card p-3',
         className,
       )}
     >
-      {/* Previous week button - prominent style */}
+      {/* Previous week button — plain chevron, no outline */}
       <Button
-        variant="outline"
+        variant="ghost"
+        size="sm"
         onClick={onPrevWeek}
         disabled={!canGoPrev}
         aria-label="Go to previous week"
-        className="gap-1"
+        className="h-auto gap-1 px-2 py-1 text-muted-foreground hover:text-foreground"
       >
         <ChevronLeft className="h-4 w-4" />
-        <span className="text-sm">Prev</span>
+        <span className="hidden sm:inline text-sm">Prev</span>
       </Button>
 
       {/* Week range display with calendar popover */}
@@ -119,11 +123,18 @@ export const WeekNavigator = memo(function WeekNavigator({
         <PopoverTrigger asChild>
           <Button
             variant="ghost"
-            className="min-w-[240px] gap-2 font-medium hover:bg-accent"
+            className="mx-auto h-auto gap-2 px-2 py-1 font-medium hover:bg-accent text-sm"
             aria-label="Open calendar to select week"
           >
-            <CalendarIcon className="h-4 w-4" />
-            {weekRange}
+            <CalendarIcon className="h-4 w-4 shrink-0" />
+            {compactWeekRange ? (
+              <>
+                <span className="sm:hidden">{compactWeekRange}</span>
+                <span className="hidden sm:inline">{weekRange}</span>
+              </>
+            ) : (
+              weekRange
+            )}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="center">
@@ -137,15 +148,16 @@ export const WeekNavigator = memo(function WeekNavigator({
         </PopoverContent>
       </Popover>
 
-      {/* Next week button - prominent style */}
+      {/* Next week button — plain chevron, no outline */}
       <Button
-        variant="outline"
+        variant="ghost"
+        size="sm"
         onClick={onNextWeek}
         disabled={!canGoNext}
         aria-label="Go to next week"
-        className="gap-1"
+        className="h-auto gap-1 px-2 py-1 text-muted-foreground hover:text-foreground"
       >
-        <span className="text-sm">Next</span>
+        <span className="hidden sm:inline text-sm">Next</span>
         <ChevronRight className="h-4 w-4" />
       </Button>
     </div>
