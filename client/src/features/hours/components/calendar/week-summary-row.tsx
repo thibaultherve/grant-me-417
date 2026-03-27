@@ -56,7 +56,7 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
     >
       {/* Week label + chevron — with left accent border */}
       <td className={cn(
-        'py-3 px-4 text-[13px] text-foreground whitespace-nowrap w-[90px] border-l-[3px] transition-colors',
+        'pt-3 pb-1 px-4 text-[13px] text-foreground whitespace-nowrap w-[90px] border-l-[3px] transition-colors',
         isExpanded ? 'font-semibold border-l-primary' : hasData ? 'font-medium border-l-transparent group-hover:border-l-primary/40' : 'font-medium border-l-transparent',
       )}>
         <div className="flex items-center gap-1">
@@ -72,7 +72,7 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
       </td>
 
       {/* Visa dots column */}
-      <td className="py-3 w-10">
+      <td className="pt-3 pb-1 w-10">
         <div className="flex items-center justify-center gap-1">
           {visaTypes.map((vt) => (
             <span
@@ -84,7 +84,7 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
       </td>
 
       {/* Total Hours — center-aligned, muted */}
-      <td className="py-3 text-center w-[70px]">
+      <td className="pt-3 pb-1 text-center w-[70px]">
         {hasData && (
           <span className="tabular-nums text-[13px] font-semibold text-muted-foreground">
             {`${week.totalHours}h`}
@@ -93,7 +93,7 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
       </td>
 
       {/* Eligible Hours — center-aligned, per-visa colored text */}
-      <td className="py-3 text-center w-[75px]">
+      <td className="pt-3 pb-1 text-center w-[75px]">
         {hasData && (
           <div className="flex items-center gap-0.5 justify-center">
             <VisaValues
@@ -107,7 +107,7 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
       </td>
 
       {/* Eligible Days — center-aligned, bold foreground */}
-      <td className="py-3 text-center w-[75px]">
+      <td className="pt-3 pb-1 text-center w-[75px]">
         {hasData && (
           <div className="flex items-center gap-0.5 justify-center">
             <VisaValues
@@ -122,7 +122,7 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
       </td>
 
       {/* Separator */}
-      <td className="w-4 py-3">
+      <td className="w-4 pt-3 pb-1">
         {hasData && <div className="h-3.5 w-px bg-border mx-auto" />}
       </td>
 
@@ -132,7 +132,7 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
           <td
             key={date}
             className={cn(
-              'py-3 text-center',
+              'pt-3 pb-1 text-center',
               !isInMonth(date, year, month) && 'opacity-40',
             )}
           >
@@ -160,13 +160,13 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
           </td>
         ))
       ) : (
-        <td colSpan={7} className="py-3 text-center text-xs text-muted-foreground/50">
+        <td colSpan={7} className="pt-3 pb-1 text-center text-xs text-muted-foreground/50">
           No hours logged
         </td>
       )}
 
       {/* Actions: edit button */}
-      <td className="py-3 pr-4 w-14">
+      <td className="pt-3 pb-1 pr-4 w-14">
         <div className="flex items-center justify-end">
           <Button
             variant="ghost"
