@@ -125,12 +125,14 @@ function WeekGroup({
       {/* Employer breakdown (visible when expanded) */}
       {isExpanded && week.employers.length > 0 && (
         <>
-          {week.employers.map((employer) => (
+          {week.employers.map((employer, i) => (
             <EmployerHoursRow
               key={employer.employerId}
               employer={employer}
               dates={week.dates}
               className="bg-[#F8F6FF]"
+              isFirst={i === 0}
+              isLast={i === week.employers.length - 1}
             />
           ))}
         </>

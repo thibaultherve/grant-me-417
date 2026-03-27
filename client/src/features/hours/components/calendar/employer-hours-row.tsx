@@ -8,17 +8,26 @@ interface EmployerHoursRowProps {
   employer: WeeklyEmployer;
   dates: string[];
   className?: string;
+  isFirst?: boolean;
+  isLast?: boolean;
 }
 
 /**
  * Desktop employer row: small industry icon (12px) + employer name + eligibility dot + daily hours + total.
  * Matches design: minimal inline display, muted text, no full component badges.
  */
-export function EmployerHoursRow({ employer, dates, className }: EmployerHoursRowProps) {
+export function EmployerHoursRow({ employer, dates, className, isFirst, isLast }: EmployerHoursRowProps) {
+  // Design padding: container [4,16,10,16] + row [4,0]
+  // First row top: 4 (container) + 4 (row) = 8px, last row bottom: 4 (row) + 10 (container) = 14px
+  const vPad = cn(
+    isFirst ? 'pt-2' : 'pt-1',
+    isLast ? 'pb-3.5' : 'pb-1',
+  );
+
   return (
     <tr className={cn('border-0 hover:bg-transparent', className)}>
       {/* Employer info: icon + name + dot — with left accent border */}
-      <td className="py-1 px-4 border-l-[3px] border-l-primary">
+      <td className={cn(vPad, 'px-4 border-l-[3px] border-l-primary')}>
         <div className="flex items-center gap-1.5 min-w-0">
           <IndustryIcon industry={employer.industry} />
           <span className="text-xs font-medium text-muted-foreground truncate">
@@ -32,7 +41,7 @@ export function EmployerHoursRow({ employer, dates, className }: EmployerHoursRo
       <td />
 
       {/* Total */}
-      <td className="py-1 text-center">
+      <td className={cn(vPad, 'text-center')}>
         <span className="tabular-nums text-xs font-semibold text-muted-foreground">
           {employer.totalHours > 0 ? `${employer.totalHours}h` : '–'}
         </span>
@@ -47,7 +56,7 @@ export function EmployerHoursRow({ employer, dates, className }: EmployerHoursRo
 
       {/* Daily hours (Mon-Sun) */}
       {dates.map((date) => (
-        <td key={date} className="py-1 text-center">
+        <td key={date} className={cn(vPad, 'text-center')}>
           <span
             className={cn(
               'tabular-nums text-xs text-center',
