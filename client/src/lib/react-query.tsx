@@ -77,6 +77,7 @@ export const queryKeys = {
       ['hours', 'employer', employerId] as const,
     weekly: (year: number, month: number) =>
       ['hours', 'weekly', year, month] as const,
+    week: (weekStart: string) => ['hours', 'week', weekStart] as const,
   },
   visas: {
     all: ['visas'] as const,

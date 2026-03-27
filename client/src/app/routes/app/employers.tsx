@@ -17,7 +17,7 @@ export const EmployersRoute = () => {
   usePageHeader({
     description: 'Manage your work experience employers',
     action: () => (
-      <Button asChild size="lg">
+      <Button asChild size="lg" className="w-full md:w-auto">
         <Link to={paths.app.employers.new.getHref()}>
           <Plus className="mr-2 h-4 w-4" />
           Add Employer

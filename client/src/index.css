@@ -75,6 +75,9 @@
   --visa-1st-color: #10B981;
   --visa-2nd-color: #3B82F6;
   --visa-3rd-color: #F59E0B;
+  /* ── Employer card expanded colors ── */
+  --primary-light: #F8F6FF;
+  --primary-shadow: rgba(108, 71, 255, 0.09);
   /* ── Warning banner text colors ── */
   --warning-dark: #92400E;
   --danger-dark: #991B1B;
@@ -174,6 +177,9 @@
   --visa-1st-color: #10B981;
   --visa-2nd-color: #3B82F6;
   --visa-3rd-color: #F59E0B;
+  /* ── Employer card expanded colors (dark mode) ── */
+  --primary-light: oklch(0.28 0.06 277);
+  --primary-shadow: rgba(130, 100, 255, 0.12);
   /* ── Warning banner text colors (dark mode — lighter for readability) ── */
   --warning-dark: #FDE68A;
   --danger-dark: #FCA5A5;
@@ -272,6 +278,8 @@
   --color-visa-1st-color: var(--visa-1st-color);
   --color-visa-2nd-color: var(--visa-2nd-color);
   --color-visa-3rd-color: var(--visa-3rd-color);
+  /* ── Employer card expanded colors ── */
+  --color-primary-light: var(--primary-light);
   /* ── Warning banner text colors ── */
   --color-warning-dark: var(--warning-dark);
   --color-danger-dark: var(--danger-dark);
