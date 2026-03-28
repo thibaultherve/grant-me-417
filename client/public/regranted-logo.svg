@@ -1,35 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1A365D"/>
-      <stop offset="100%" stop-color="#0F2341"/>
+    <linearGradient id="bg" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#0F2341"/>
+      <stop offset="100%" stop-color="#1A365D"/>
     </linearGradient>
   </defs>
-
-  <!-- Background -->
-  <rect width="512" height="512" rx="80" fill="url(#bg)"/>
-  <rect width="512" height="512" rx="80" fill="none" stroke="#D4A853" stroke-width="4" opacity="0.25"/>
-
-  <!-- Top decorative line -->
-  <rect x="131" y="105" width="250" height="3" rx="1.5" fill="#D4A853" opacity="0.6"/>
-
-  <!-- Bottom decorative line -->
-  <rect x="131" y="390" width="250" height="3" rx="1.5" fill="#D4A853" opacity="0.6"/>
-
-  <!-- Outer emblem ring -->
-  <circle cx="256" cy="265" r="125" fill="none" stroke="#D4A853" stroke-width="4" opacity="0.8"/>
-
-  <!-- Inner emblem ring -->
-  <circle cx="256" cy="265" r="110" fill="none" stroke="#D4A853" stroke-width="2" opacity="0.35"/>
-
-  <!-- PASSPORT text -->
-  <text x="256" y="78" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700" fill="#D4A853" letter-spacing="10" opacity="0.8">PASSPORT</text>
-
-  <!-- G letter -->
-  <text x="256" y="302" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="250" font-weight="900" fill="#D4A853">G</text>
-
-  <!-- Biometric e-passport symbol -->
-  <rect x="216" y="415" width="80" height="50" rx="8" fill="none" stroke="#D4A853" stroke-width="3" opacity="0.7"/>
-  <circle cx="253" cy="440" r="15" fill="none" stroke="#D4A853" stroke-width="2.5" opacity="0.7"/>
-  <rect x="216" y="438.5" width="80" height="2.5" fill="#D4A853" opacity="0.7"/>
+  <rect width="32" height="32" rx="10" fill="url(#bg)"/>
+  <text x="16" y="22" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#D4A853">R</text>
 </svg>
