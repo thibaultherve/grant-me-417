@@ -75,16 +75,16 @@ export function Sidebar() {
       <div className="flex flex-col flex-1 overflow-hidden">
       {/* Header */}
       <div
-        className={`flex h-14 shrink-0 items-center ${isCollapsed ? 'justify-center px-2' : 'px-4 gap-2'}`}
+        className={`flex h-14 shrink-0 items-center ${isCollapsed ? 'justify-center px-2' : 'px-4'}`}
       >
-        {/* Logo icon */}
-        <img src="/regranted-logo.svg" alt="ReGranted" className="shrink-0 w-8 h-8 rounded-[10px]" />
-        {/* Brand name */}
-        {!isCollapsed && (
-          <span className="text-sm font-semibold text-sidebar-foreground leading-none whitespace-nowrap overflow-hidden transition-all duration-300">
-            ReGranted
-          </span>
-        )}
+        <Link to="/" className={`flex items-center ${isCollapsed ? '' : 'gap-2'}`}>
+          <img src="/regranted-logo.svg" alt="ReGranted" className="shrink-0 w-8 h-8 rounded-[10px]" />
+          {!isCollapsed && (
+            <span className="text-sm font-semibold text-sidebar-foreground leading-none whitespace-nowrap overflow-hidden transition-all duration-300">
+              ReGranted
+            </span>
+          )}
+        </Link>
       </div>
 
       {/* Navigation */}
