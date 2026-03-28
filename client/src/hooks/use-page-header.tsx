@@ -1,4 +1,4 @@
-import { createContext, useContext, useLayoutEffect, useRef, useState } from 'react';
+import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import type { ReactNode } from 'react';
 
@@ -19,8 +19,13 @@ const PageHeaderContext = createContext<PageHeaderContextValue>({
 export function PageHeaderProvider({ children }: { children: ReactNode }) {
   const [action, setAction] = useState<ReactNode>(null);
   const [description, setDescription] = useState<string | null>(null);
+
+  const value = useMemo(() => ({
+    action, description, setAction, setDescription,
+  }), [action, description, setAction, setDescription]);
+
   return (
-    <PageHeaderContext.Provider value={{ action, description, setAction, setDescription }}>
+    <PageHeaderContext.Provider value={value}>
       {children}
     </PageHeaderContext.Provider>
   );
@@ -48,8 +53,7 @@ export function usePageHeader({ action, description }: PageHeaderOptions) {
       setAction(null);
       setDescription(null);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setAction, setDescription]);
+  }, [setAction, setDescription, description]);
 }
 
 export function usePageHeaderSlot(): { action: ReactNode; description: string | null } {

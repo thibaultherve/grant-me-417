@@ -25,7 +25,7 @@ export function VisaLegend({ visaTypes, className }: VisaLegendProps) {
         <div key={item.label} className="flex items-center gap-1.5">
           <div
             className={cn(
-              'h-[5px] w-[5px] rounded-full',
+              'h-1.25 w-1.25 rounded-full',
               item.color,
             )}
           />

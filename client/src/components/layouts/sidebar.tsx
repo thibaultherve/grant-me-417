@@ -4,7 +4,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
-  Hexagon,
+
   LayoutDashboard,
   LogOut,
   Plane,
@@ -67,7 +67,7 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`group flex flex-col fixed inset-y-0 left-0 z-40 bg-[#f5f5f5] transition-[width] duration-300 ease-in-out w-0 md:border-r md:border-[#d1d4db] ${
+      className={`group flex flex-col fixed inset-y-0 left-0 z-40 bg-sidebar transition-[width] duration-300 ease-in-out w-0 md:border-r md:border-sidebar-border ${
         isCollapsed ? 'md:w-16' : 'md:w-64'
       }`}
     >
@@ -75,15 +75,13 @@ export function Sidebar() {
       <div className="flex flex-col flex-1 overflow-hidden">
       {/* Header */}
       <div
-        className={`flex h-14 flex-shrink-0 items-center ${isCollapsed ? 'justify-center px-2' : 'px-4 gap-2'}`}
+        className={`flex h-14 shrink-0 items-center ${isCollapsed ? 'justify-center px-2' : 'px-4 gap-2'}`}
       >
         {/* Logo icon */}
-        <div className="flex-shrink-0 w-8 h-8 rounded-[10px] bg-[#e1e7fd] flex items-center justify-center">
-          <Hexagon className="w-4 h-4 text-[#364050]" />
-        </div>
+        <img src="/regranted-logo.svg" alt="ReGranted" className="shrink-0 w-8 h-8 rounded-[10px]" />
         {/* Brand name */}
         {!isCollapsed && (
-          <span className="text-sm font-semibold text-[#1d293d] leading-none whitespace-nowrap overflow-hidden transition-all duration-300">
+          <span className="text-sm font-semibold text-sidebar-foreground leading-none whitespace-nowrap overflow-hidden transition-all duration-300">
             ReGranted
           </span>
         )}
@@ -103,15 +101,15 @@ export function Sidebar() {
                   isCollapsed ? 'justify-center px-0' : 'gap-3 px-3'
                 } ${
                   isActive
-                    ? 'bg-[#e1e7fd] text-[#1d293d] font-medium'
-                    : 'text-[#1d293d] hover:bg-[#e1e7fd]/60'
+                    ? 'bg-sidebar-accent text-sidebar-foreground font-medium'
+                    : 'text-sidebar-foreground hover:bg-sidebar-accent/60'
                 }`
               }
             >
               {({ isActive }) => (
                 <>
                   <Icon
-                    className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-[#1d293d]' : 'text-[#6c727e]'}`}
+                    className={`w-5 h-5 shrink-0 ${isActive ? 'text-sidebar-foreground' : 'text-muted-foreground'}`}
                   />
                   {!isCollapsed && (
                     <span className="text-sm leading-none whitespace-nowrap overflow-hidden transition-all duration-300">
@@ -126,16 +124,16 @@ export function Sidebar() {
       </nav>
 
       {/* Footer with profile dropdown */}
-      <div className="flex-shrink-0 p-2">
+      <div className="shrink-0 p-2">
         <DropdownMenu open={profileOpen} onOpenChange={setProfileOpen}>
           <DropdownMenuTrigger asChild>
             <button
               className={`w-full flex items-center rounded-lg transition-colors h-12 ${
                 isCollapsed ? 'justify-center px-0' : 'gap-2 px-2'
-              } ${profileOpen ? 'bg-[#e1e7fd]' : 'bg-[#f5f5f5] hover:bg-[#ebebeb]'}`}
+              } ${profileOpen ? 'bg-sidebar-accent' : 'bg-sidebar hover:bg-sidebar-hover'}`}
             >
               {/* Avatar */}
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#1d293d] flex items-center justify-center">
+              <div className="shrink-0 w-10 h-10 rounded-full bg-sidebar-foreground flex items-center justify-center">
                 <span className="text-sm font-semibold text-white">
                   {initials}
                 </span>
@@ -143,11 +141,11 @@ export function Sidebar() {
               {!isCollapsed && (
                 <>
                   <div className="flex-1 min-w-0 text-left">
-                    <p className="text-xs text-[#6c727e] truncate">
+                    <p className="text-xs text-muted-foreground truncate">
                       {user?.email}
                     </p>
                   </div>
-                  <ChevronsUpDown className="w-4 h-4 text-[#6c727e] flex-shrink-0" />
+                  <ChevronsUpDown className="w-4 h-4 text-muted-foreground shrink-0" />
                 </>
               )}
             </button>
@@ -157,7 +155,7 @@ export function Sidebar() {
             align="center"
             sideOffset={8}
             className={cn(
-              'min-w-48 rounded-[10px] border-[#d1d4db] bg-[#fafafa]',
+              'min-w-48 rounded-[10px] border-border bg-popover',
               isCollapsed
                 ? 'shadow-[4px_0_12px_-2px_rgba(0,0,0,0.10),2px_0_6px_-1px_rgba(0,0,0,0.06)]'
                 : 'shadow-[0_-4px_12px_-2px_rgba(0,0,0,0.10),0_-2px_6px_-1px_rgba(0,0,0,0.06)]',
@@ -186,13 +184,13 @@ export function Sidebar() {
       {/* Collapse toggle — outside overflow wrapper so it's never clipped */}
       <button
         onClick={toggle}
-        className="absolute top-1/2 -translate-y-1/2 -right-3 w-6 h-6 bg-white rounded-full hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 border border-[#d1d4db] cursor-pointer shadow-sm"
+        className="absolute top-1/2 -translate-y-1/2 -right-3 w-6 h-6 bg-white rounded-full hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 border border-sidebar-border cursor-pointer shadow-sm"
         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >
         {isCollapsed ? (
-          <ChevronRight className="w-3.5 h-3.5 text-[#6c727e]" />
+          <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
         ) : (
-          <ChevronLeft className="w-3.5 h-3.5 text-[#6c727e]" />
+          <ChevronLeft className="w-3.5 h-3.5 text-muted-foreground" />
         )}
       </button>
     </aside>

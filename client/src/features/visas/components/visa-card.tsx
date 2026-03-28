@@ -43,7 +43,7 @@ export function VisaCard({ visa, onDelete, onEdit, hideActions = false }: VisaCa
 
   const createdAgo = formatCreatedAgo(visa.createdAt);
 
-  const accentClass = isExpired ? 'bg-[#9CA3AF]' : 'bg-primary';
+  const accentClass = isExpired ? 'bg-disabled' : 'bg-primary';
 
   const timelineVariant = isExpired ? 'timeline-expired' : 'timeline-active';
   const progressVariant = isExpired

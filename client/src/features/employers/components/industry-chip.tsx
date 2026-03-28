@@ -91,7 +91,7 @@ export function IndustryChip({ industry, compact, className }: IndustryChipProps
   return (
     <div
       className={cn(
-        'inline-flex items-center gap-2 h-[30px] px-2.5 rounded-lg',
+        'inline-flex items-center gap-2 h-7.5 px-2.5 rounded-lg',
         className,
       )}
     >

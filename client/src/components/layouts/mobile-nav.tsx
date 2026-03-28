@@ -50,7 +50,7 @@ export function MobileNav() {
   });
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around bg-[#f5f5f5] border-t border-[#d1d4db] h-[72px] px-2 transition-transform duration-300 ease-in-out translate-y-0 md:translate-y-full md:pointer-events-none">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around bg-muted border-t border-border h-18 px-2 transition-transform duration-300 ease-in-out translate-y-0 md:translate-y-full md:pointer-events-none">
       {navItems.map((item) => {
         const Icon = item.icon;
         return (
@@ -59,7 +59,7 @@ export function MobileNav() {
             to={item.href}
             end={item.href === paths.app.dashboard.path}
             className={({ isActive }) =>
-              `flex flex-col items-center justify-center gap-0.5 w-[70px] h-14 ${
+              `flex flex-col items-center justify-center gap-0.5 w-17.5 h-14 ${
                 isActive ? '' : ''
               }`
             }
@@ -69,17 +69,17 @@ export function MobileNav() {
                 <div
                   className={`flex items-center justify-center rounded-2xl transition-colors ${
                     isActive
-                      ? 'bg-[#6468f0] w-14 h-8'
+                      ? 'bg-primary w-14 h-8'
                       : 'w-12 h-7'
                   }`}
                 >
                   <Icon
-                    className={`w-5 h-5 ${isActive ? 'text-white' : 'text-[#6c727e]'}`}
+                    className={`w-5 h-5 ${isActive ? 'text-white' : 'text-muted-foreground'}`}
                   />
                 </div>
                 <span
                   className={`text-[10px] leading-none ${
-                    isActive ? 'text-[#6468f0] font-semibold' : 'text-[#6c727e] font-normal'
+                    isActive ? 'text-primary font-semibold' : 'text-muted-foreground font-normal'
                   }`}
                 >
                   {item.name}
@@ -93,19 +93,19 @@ export function MobileNav() {
       {/* Profile tab */}
       <DropdownMenu open={profileOpen} onOpenChange={setProfileOpen}>
         <DropdownMenuTrigger asChild>
-          <button className="flex flex-col items-center justify-center gap-0.5 w-[70px] h-14">
+          <button className="flex flex-col items-center justify-center gap-0.5 w-17.5 h-14">
             <div
               className={`flex items-center justify-center rounded-2xl transition-colors ${
-                profileOpen ? 'bg-[#6468f0] w-14 h-8' : 'w-12 h-7'
+                profileOpen ? 'bg-primary w-14 h-8' : 'w-12 h-7'
               }`}
             >
               <UserRound
-                className={`w-5 h-5 ${profileOpen ? 'text-white' : 'text-[#6c727e]'}`}
+                className={`w-5 h-5 ${profileOpen ? 'text-white' : 'text-muted-foreground'}`}
               />
             </div>
             <span
               className={`flex items-center gap-0.5 text-[10px] leading-none ${
-                profileOpen ? 'text-[#6468f0] font-semibold' : 'text-[#6c727e] font-normal'
+                profileOpen ? 'text-primary font-semibold' : 'text-muted-foreground font-normal'
               }`}
             >
               Profile

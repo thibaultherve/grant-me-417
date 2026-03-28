@@ -146,7 +146,7 @@ export function EmployerCard({ employer, onDelete }: EmployerCardProps) {
                 Zones
               </span>
               {zones.length === 0 ? (
-                <div className="w-5 h-5 rounded bg-[#9CA3AF] flex items-center justify-center shadow-sm">
+                <div className="w-5 h-5 rounded bg-disabled flex items-center justify-center shadow-sm">
                   <Ban className="h-3.25 w-3.25 text-white" />
                 </div>
               ) : (

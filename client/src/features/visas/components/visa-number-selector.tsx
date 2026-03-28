@@ -11,9 +11,9 @@ interface VisaNumberSelectorProps {
 }
 
 const VISA_COLORS: Record<VisaType, { color: string; selectedBg: string }> = {
-  first_whv: { color: '#10b981', selectedBg: '#f0fdf4' },
-  second_whv: { color: '#3b82f6', selectedBg: '#eff6ff' },
-  third_whv: { color: '#f59e0b', selectedBg: '#fffbeb' },
+  first_whv: { color: 'var(--visa-1st-color)', selectedBg: 'var(--visa-1st-light)' },
+  second_whv: { color: 'var(--visa-2nd-color)', selectedBg: 'var(--visa-2nd-light)' },
+  third_whv: { color: 'var(--visa-3rd-color)', selectedBg: 'var(--visa-3rd-light)' },
 };
 
 export function VisaNumberSelector({ value, onChange, allVisaTypes }: VisaNumberSelectorProps) {
@@ -21,8 +21,7 @@ export function VisaNumberSelector({ value, onChange, allVisaTypes }: VisaNumber
     <div className="flex flex-col gap-1.5">
       {/* Label */}
       <span
-        className="font-medium"
-        style={{ fontSize: 12, color: '#6c727e' }}
+        className="font-medium text-xs text-muted-foreground"
       >
         Which visa are you adding?
       </span>
@@ -51,10 +50,10 @@ export function VisaNumberSelector({ value, onChange, allVisaTypes }: VisaNumber
                 className="flex-1 flex flex-col items-center gap-1.5 rounded-lg transition-colors"
                 style={{
                   padding: '12px 0',
-                  backgroundColor: isSelected ? selectedBg : '#f8f8f8',
+                  backgroundColor: isSelected ? selectedBg : 'var(--background)',
                   border: isSelected
                     ? `2px solid ${color}`
-                    : '1px solid #d1d4db',
+                    : '1px solid var(--border)',
                   cursor: isAvailable ? 'pointer' : 'not-allowed',
                   opacity: isAvailable ? 1 : 0.5,
                   outline: 'none',
@@ -80,7 +79,7 @@ export function VisaNumberSelector({ value, onChange, allVisaTypes }: VisaNumber
                   style={{
                     fontSize: 11,
                     fontWeight: isSelected ? 600 : 500,
-                    color: isSelected ? color : '#6c727e',
+                    color: isSelected ? color : 'var(--muted-foreground)',
                   }}
                 >
                   WHV 417

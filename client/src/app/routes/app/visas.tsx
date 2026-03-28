@@ -47,7 +47,7 @@ export const VisasRoute = () => {
       {visas.length === 0 && !isLoading && (
         <InfoCard variant="accent">
           <div className="flex items-start gap-4">
-            <Plane className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+            <Plane className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
             <div>
               <h3 className="font-semibold mb-1">Create your first visa</h3>
               <p className="text-sm text-muted-foreground">

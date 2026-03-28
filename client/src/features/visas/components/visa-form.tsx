@@ -253,8 +253,8 @@ export function VisaForm({
                   disabled={isBusy}
                   className="h-10"
                   style={{
-                    backgroundColor: '#f8f8f8',
-                    borderColor: '#d1d4db',
+                    backgroundColor: 'var(--background)',
+                    borderColor: 'var(--border)',
                     boxShadow: '0 1px 1.75px 0 rgba(0,0,0,0.05)',
                   }}
                 >
@@ -316,8 +316,8 @@ export function VisaForm({
                   disabled={isBusy}
                   className="h-10"
                   style={{
-                    backgroundColor: '#f8f8f8',
-                    borderColor: '#d1d4db',
+                    backgroundColor: 'var(--background)',
+                    borderColor: 'var(--border)',
                     boxShadow: '0 1px 1.75px 0 rgba(0,0,0,0.05)',
                   }}
                 >

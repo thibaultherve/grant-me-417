@@ -1,6 +1,7 @@
 import { Search, X, Loader2 } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useReducer, useRef } from 'react';
 
+import { useClickOutside } from '@/hooks/use-click-outside';
 import { cn } from '@/lib/utils';
 import type { PostcodeBadgeData, SuburbWithPostcode } from '@regranted/shared';
 
@@ -57,6 +58,62 @@ interface SuburbComboboxProps {
   disabled?: boolean;
 }
 
+type ComboboxState = {
+  open: boolean;
+  inputValue: string;
+  debouncedQuery: string;
+  activeIndex: number;
+  forceClear: boolean;
+};
+
+type ComboboxAction =
+  | { type: 'OPEN' }
+  | { type: 'CLOSE' }
+  | { type: 'SET_INPUT'; value: string }
+  | { type: 'SET_DEBOUNCED'; value: string }
+  | { type: 'SET_ACTIVE_INDEX'; index: number }
+  | { type: 'SELECT' }
+  | { type: 'CLEAR'; keepFocus?: boolean }
+  | { type: 'RESET' };
+
+function comboboxReducer(state: ComboboxState, action: ComboboxAction): ComboboxState {
+  switch (action.type) {
+    case 'OPEN':
+      return { ...state, open: true, activeIndex: -1 };
+    case 'CLOSE':
+      return { ...state, open: false, activeIndex: -1 };
+    case 'SET_INPUT':
+      return { ...state, inputValue: action.value, activeIndex: -1, open: true };
+    case 'SET_DEBOUNCED':
+      return { ...state, debouncedQuery: action.value };
+    case 'SET_ACTIVE_INDEX':
+      return { ...state, activeIndex: action.index };
+    case 'SELECT':
+      return { ...state, forceClear: false, activeIndex: -1, open: false };
+    case 'CLEAR':
+      return {
+        ...state,
+        forceClear: true,
+        inputValue: '',
+        debouncedQuery: '',
+        activeIndex: -1,
+        open: action.keepFocus ? state.open : false,
+      };
+    case 'RESET':
+      return { open: false, inputValue: '', debouncedQuery: '', activeIndex: -1, forceClear: false };
+    default:
+      return state;
+  }
+}
+
+const INITIAL_STATE: ComboboxState = {
+  open: false,
+  inputValue: '',
+  debouncedQuery: '',
+  activeIndex: -1,
+  forceClear: false,
+};
+
 export function SuburbCombobox({
   value,
   onValueChange,
@@ -65,80 +122,46 @@ export function SuburbCombobox({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = useState(false);
-  const [inputValue, setInputValue] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const [forceClear, setForceClear] = useState(false);
+  const [state, dispatch] = useReducer(comboboxReducer, INITIAL_STATE);
 
   const { data: selectedSuburb } = useGetSuburb(value);
-  const { data: suburbs = [], isLoading } = useSearchSuburbs(debouncedQuery);
+  const { data: suburbs = [], isLoading } = useSearchSuburbs(state.debouncedQuery);
 
   // Debounce search query (200ms)
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedQuery(inputValue), 200);
+    const timer = setTimeout(() => dispatch({ type: 'SET_DEBOUNCED', value: state.inputValue }), 200);
     return () => clearTimeout(timer);
-  }, [inputValue]);
+  }, [state.inputValue]);
 
   // Click outside → close dropdown
-  useEffect(() => {
-    const handleMouseDown = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleMouseDown);
-    return () => document.removeEventListener('mousedown', handleMouseDown);
-  }, []);
+  const handleClose = useCallback(() => dispatch({ type: 'CLOSE' }), []);
+  useClickOutside(containerRef, handleClose);
 
-  const hasValue = value !== undefined && selectedSuburb !== undefined && !forceClear;
+  const hasValue = value !== undefined && selectedSuburb !== undefined && !state.forceClear;
 
   const selectedActiveZones: ZoneKey[] = selectedSuburb?.postcodeData
     ? ZONE_FLAGS.filter((z) => selectedSuburb.postcodeData![z.flag]).map((z) => z.zone)
     : [];
 
   const handleFocus = () => {
-    setOpen(true);
-    setActiveIndex(-1);
-    // Restore last search query — do not overwrite with suburb name
+    dispatch({ type: 'OPEN' });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-    setActiveIndex(-1);
-    if (!open) setOpen(true);
+    dispatch({ type: 'SET_INPUT', value: e.target.value });
     // Clear selection when user starts typing
     if (value !== undefined) onValueChange(undefined);
   };
 
   const handleSelect = (suburb: SuburbWithPostcode) => {
-    setForceClear(false);
+    dispatch({ type: 'SELECT' });
     onValueChange(suburb.id);
-    // Keep inputValue as-is so re-opening restores the last search
-    setActiveIndex(-1);
-    setOpen(false);
   };
 
-  // Filled state: clears the selected suburb entirely
-  const handleClear = () => {
-    setForceClear(true); // immediate UI transition, no wait for parent re-render
+  const handleClear = (keepFocus?: boolean) => {
+    dispatch({ type: 'CLEAR', keepFocus });
     onValueChange(undefined);
-    setInputValue('');
-    setDebouncedQuery('');
-    setActiveIndex(-1);
-    setOpen(false);
-  };
-
-  // Search state: clears typed text + selected suburb if any, keeps dropdown open
-  const handleClearInput = () => {
-    if (value !== undefined) {
-      setForceClear(true);
-      onValueChange(undefined);
-    }
-    setInputValue('');
-    setDebouncedQuery('');
-    setActiveIndex(-1);
-    inputRef.current?.focus();
+    if (keepFocus) inputRef.current?.focus();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -146,26 +169,21 @@ export function SuburbCombobox({
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setActiveIndex((i) => {
-        const next = Math.min(i + 1, suburbs.length - 1);
-        scrollActiveIntoView(next);
-        return next;
-      });
+      const next = Math.min(state.activeIndex + 1, suburbs.length - 1);
+      dispatch({ type: 'SET_ACTIVE_INDEX', index: next });
+      scrollActiveIntoView(next);
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setActiveIndex((i) => {
-        const next = Math.max(i - 1, 0);
-        scrollActiveIntoView(next);
-        return next;
-      });
+      const next = Math.max(state.activeIndex - 1, 0);
+      dispatch({ type: 'SET_ACTIVE_INDEX', index: next });
+      scrollActiveIntoView(next);
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      if (activeIndex >= 0 && activeIndex < suburbs.length) {
-        handleSelect(suburbs[activeIndex]);
+      if (state.activeIndex >= 0 && state.activeIndex < suburbs.length) {
+        handleSelect(suburbs[state.activeIndex]);
       }
     } else if (e.key === 'Escape') {
-      setOpen(false);
-      setActiveIndex(-1);
+      dispatch({ type: 'CLOSE' });
     }
   };
 
@@ -175,12 +193,12 @@ export function SuburbCombobox({
     item?.scrollIntoView({ block: 'nearest' });
   };
 
-  const showDropdown = open && (isLoading || debouncedQuery.length > 0);
+  const showDropdown = state.open && (isLoading || state.debouncedQuery.length > 0);
 
   return (
     <div ref={containerRef} className="relative">
       {/* Filled state — suburb selected, dropdown closed */}
-      {hasValue && !open ? (
+      {hasValue && !state.open ? (
         <div
           className={cn(
             'flex items-center gap-2 px-3 py-2.5 rounded-lg border border-input bg-background cursor-pointer transition-colors',
@@ -216,7 +234,7 @@ export function SuburbCombobox({
         <div
           className={cn(
             'flex items-center gap-2 px-3 py-2.5 rounded-lg border bg-background cursor-text transition-colors',
-            open ? 'border-ring ring-1 ring-ring/20' : 'border-input',
+            state.open ? 'border-ring ring-1 ring-ring/20' : 'border-input',
             disabled && 'opacity-50 pointer-events-none',
           )}
           onClick={() => inputRef.current?.focus()}
@@ -225,7 +243,7 @@ export function SuburbCombobox({
 
           <input
             ref={inputRef}
-            value={inputValue}
+            value={state.inputValue}
             onChange={handleInputChange}
             onFocus={handleFocus}
             onKeyDown={handleKeyDown}
@@ -238,12 +256,12 @@ export function SuburbCombobox({
             <Loader2 className="w-4 h-4 text-muted-foreground animate-spin shrink-0" />
           )}
 
-          {inputValue.length > 0 && !isLoading && (
+          {state.inputValue.length > 0 && !isLoading && (
             <button
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                handleClearInput();
+                handleClear(true);
               }}
               className="text-muted-foreground hover:text-foreground shrink-0 transition-colors"
             >
@@ -254,7 +272,7 @@ export function SuburbCombobox({
       )}
 
       {/* Helper text — shown when closed and no suburb selected */}
-      {!open && !hasValue && (
+      {!state.open && !hasValue && (
         <p className="text-xs text-muted-foreground mt-1.5">
           Enter your work location to determine the eligibility
         </p>
@@ -280,7 +298,7 @@ export function SuburbCombobox({
           )}
 
           {/* Empty state */}
-          {!isLoading && debouncedQuery.length > 0 && suburbs.length === 0 && (
+          {!isLoading && state.debouncedQuery.length > 0 && suburbs.length === 0 && (
             <div className="py-6 text-center text-sm text-muted-foreground">
               No suburbs found.
             </div>
@@ -299,10 +317,10 @@ export function SuburbCombobox({
                     key={suburb.id}
                     type="button"
                     onClick={() => handleSelect(suburb)}
-                    onMouseEnter={() => setActiveIndex(index)}
+                    onMouseEnter={() => dispatch({ type: 'SET_ACTIVE_INDEX', index })}
                     className={cn(
                       'w-full flex items-center gap-2 px-3 py-2.5 text-left transition-colors',
-                      activeIndex === index ? 'bg-accent' : 'hover:bg-accent',
+                      state.activeIndex === index ? 'bg-accent' : 'hover:bg-accent',
                     )}
                   >
                     <span className="flex-1 text-[13px] font-semibold text-foreground truncate">

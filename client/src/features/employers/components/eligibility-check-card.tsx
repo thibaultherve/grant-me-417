@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { CircleHelp, TriangleAlert } from 'lucide-react';
 
@@ -91,20 +91,20 @@ function EligibilitySwitch({ mode, onChange }: EligibilitySwitchProps) {
       role="switch"
       aria-checked={isAuto}
       onClick={() => onChange(isAuto ? 'manual' : 'automatic')}
-      className="flex items-center gap-1.5 flex-shrink-0"
+      className="flex items-center gap-1.5 shrink-0"
     >
       {/* Track */}
       <div
         className={cn(
-          'relative w-8 h-[18px] rounded-full transition-colors flex-shrink-0',
+          'relative w-8 h-4.5 rounded-full transition-colors shrink-0',
           isAuto ? 'bg-primary' : 'bg-muted border border-border',
         )}
       >
         {/* Thumb */}
         <div
           className={cn(
-            'absolute top-[3px] w-3 h-3 rounded-full bg-white shadow-sm transition-transform duration-150',
-            isAuto ? 'translate-x-[17px]' : 'translate-x-[3px]',
+            'absolute top-0.75 w-3 h-3 rounded-full bg-white shadow-sm transition-transform duration-150',
+            isAuto ? 'translate-x-4.25' : 'translate-x-0.75',
           )}
         />
       </div>
@@ -221,9 +221,10 @@ export function EligibilityCheckCard({
 
   const [selectOpen, setSelectOpen] = useState(false);
 
-  useEffect(() => {
-    if (isManual) setSelectOpen(true);
-  }, [isManual]);
+  const handleModeChange = (newMode: 'automatic' | 'manual') => {
+    onModeChange(newMode);
+    if (newMode === 'manual') setSelectOpen(true);
+  };
 
   return (
     <div className="rounded-xl border border-border bg-card p-4 flex flex-col gap-3">
@@ -285,7 +286,7 @@ export function EligibilityCheckCard({
         </div>
 
         {/* Right: auto/manual switch */}
-        <EligibilitySwitch mode={mode} onChange={onModeChange} />
+        <EligibilitySwitch mode={mode} onChange={handleModeChange} />
       </div>
 
       {/* Warning banner (manual mode only) */}
@@ -298,7 +299,7 @@ export function EligibilityCheckCard({
         >
           <TriangleAlert
             className={cn(
-              'w-4 h-4 flex-shrink-0 mt-px',
+              'w-4 h-4 shrink-0 mt-px',
               isEligible ? 'text-warning-dark' : 'text-danger-dark',
             )}
           />

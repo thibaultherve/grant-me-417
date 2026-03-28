@@ -85,7 +85,7 @@ export function WeeklyProgressChart({
             </TooltipTrigger>
             <TooltipContent
               side="top"
-              className="w-60 bg-[#fafafa] border border-[#d1d4db] rounded-lg p-0 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04),0_8px_16px_-4px_rgba(0,0,0,0.08),0_16px_24px_-6px_rgba(0,0,0,0.04)]"
+              className="w-60 bg-popover border border-border rounded-lg p-0 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04),0_8px_16px_-4px_rgba(0,0,0,0.08),0_16px_24px_-6px_rgba(0,0,0,0.04)]"
             >
               <CardTooltip title="Weekly Progress">
                 <p className="mb-2">
