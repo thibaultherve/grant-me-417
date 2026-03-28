@@ -10,7 +10,7 @@ import { EligibleDaysCard } from '@/features/dashboard/components/eligible-days-
 import { EmployerBreakdownCard } from '@/features/dashboard/components/employer-breakdown-card';
 import { MonthlyTrendChart } from '@/features/dashboard/components/monthly-trend-chart';
 import { PaceTrackerCard } from '@/features/dashboard/components/pace-tracker-card';
-import { ThisWeekCard } from '@/features/dashboard/components/this-week-card';
+import { GoalDatePredictionCard } from '@/features/dashboard/components/goal-date-prediction-card';
 import { VisaTimelineCard } from '@/features/dashboard/components/visa-timeline-card';
 import { WeeklyProgressChart } from '@/features/dashboard/components/weekly-progress-chart';
 import { WorkDistributionCard } from '@/features/dashboard/components/work-distribution-card';
@@ -119,7 +119,7 @@ function DashboardWidgets({ visaId }: { visaId: string }) {
         <EligibleDaysCard visa={overview.visa} />
         <VisaTimelineCard visa={overview.visa} />
         <PaceTrackerCard pace={overview.pace} visaType={overview.visa.visaType} />
-        <ThisWeekCard thisWeek={overview.thisWeek} />
+        <GoalDatePredictionCard visa={overview.visa} pace={overview.pace} />
       </div>
 
       {/* Weekly Progress (full width) */}

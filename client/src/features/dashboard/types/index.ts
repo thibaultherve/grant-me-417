@@ -1,3 +1,5 @@
+// ─── Pace ────────────────────────────────────────────────────────────────────
+
 export type PaceStatus = 'good' | 'at-pace' | 'low' | 'no-data';
 
 export interface PaceStatusInfo {
@@ -19,4 +21,18 @@ export interface MonthlyTrendChartPoint {
   label: string;
   eligibleDays: number;
   idealPace: number;
+}
+
+// ─── Goal Date Prediction ────────────────────────────────────────────────────
+
+export type GoalPredictionStatus = 'on-track' | 'tight' | 'at-risk' | 'completed' | 'no-data' | 'no-goal';
+
+export interface GoalDatePrediction {
+  status: GoalPredictionStatus;
+  projectedDate: Date | null;
+  countdownDays: number;
+  countdownLabel: string;
+  timelineProgress: number;
+  subtextMessage: string;
+  goalLabel: string;
 }
