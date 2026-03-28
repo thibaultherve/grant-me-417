@@ -75,6 +75,9 @@
   --visa-1st-color: #10B981;
   --visa-2nd-color: #3B82F6;
   --visa-3rd-color: #F59E0B;
+  --visa-1st-light: #f0fdf4;
+  --visa-2nd-light: #eff6ff;
+  --visa-3rd-light: #fffbeb;
   /* ── Employer card expanded colors ── */
   --primary-light: #F8F6FF;
   --primary-shadow: rgba(108, 71, 255, 0.09);
@@ -92,6 +95,10 @@
   --state-vic: #1E3A5F;
   --state-wa: #FFD700;
   --state-wa-fg: #1e293b;
+  /* ── Disabled / neutral state ── */
+  --disabled: #9CA3AF;
+  /* ── Sidebar hover ── */
+  --sidebar-hover: #ebebeb;
 
   --shadow-2xs: 0px 4px 8px -1px oklch(0 0 0 / 0.05);
   --shadow-xs: 0px 4px 8px -1px oklch(0 0 0 / 0.05);
@@ -177,6 +184,9 @@
   --visa-1st-color: #10B981;
   --visa-2nd-color: #3B82F6;
   --visa-3rd-color: #F59E0B;
+  --visa-1st-light: #052e1c;
+  --visa-2nd-light: #1e3a5f;
+  --visa-3rd-light: #3d2900;
   /* ── Employer card expanded colors (dark mode) ── */
   --primary-light: oklch(0.28 0.06 277);
   --primary-shadow: rgba(130, 100, 255, 0.12);
@@ -194,6 +204,10 @@
   --state-vic: #1E3A5F;
   --state-wa: #FFD700;
   --state-wa-fg: #1e293b;
+  /* ── Disabled / neutral state (dark mode) ── */
+  --disabled: #6B7280;
+  /* ── Sidebar hover (dark mode) ── */
+  --sidebar-hover: #374151;
 
   --shadow-2xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
   --shadow-xs: 0 1px 3px 0px oklch(0 0 0 / 0.05);
@@ -278,6 +292,9 @@
   --color-visa-1st-color: var(--visa-1st-color);
   --color-visa-2nd-color: var(--visa-2nd-color);
   --color-visa-3rd-color: var(--visa-3rd-color);
+  --color-visa-1st-light: var(--visa-1st-light);
+  --color-visa-2nd-light: var(--visa-2nd-light);
+  --color-visa-3rd-light: var(--visa-3rd-light);
   /* ── Employer card expanded colors ── */
   --color-primary-light: var(--primary-light);
   /* ── Warning banner text colors ── */
@@ -294,6 +311,9 @@
   --color-state-vic: var(--state-vic);
   --color-state-wa: var(--state-wa);
   --color-state-wa-fg: var(--state-wa-fg);
+  /* ── Misc ── */
+  --color-disabled: var(--disabled);
+  --color-sidebar-hover: var(--sidebar-hover);
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
