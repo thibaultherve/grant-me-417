@@ -118,7 +118,7 @@ function DashboardWidgets({ visaId }: { visaId: string }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <EligibleDaysCard visa={overview.visa} />
         <VisaTimelineCard visa={overview.visa} />
-        <PaceTrackerCard pace={overview.pace} />
+        <PaceTrackerCard pace={overview.pace} visaType={overview.visa.visaType} />
         <ThisWeekCard thisWeek={overview.thisWeek} />
       </div>
 

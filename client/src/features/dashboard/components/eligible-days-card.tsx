@@ -1,12 +1,11 @@
-import type { VisaOverview } from '@regranted/shared';
-import { Award, CircleCheck, Target } from 'lucide-react';
+import { visaHasGoal, type VisaOverview } from '@regranted/shared';
+import { Award, CalendarCheck, CircleCheck, Target } from 'lucide-react';
 import { calcProgressPct } from '../utils/dashboard-calculations';
 import { CardTooltip, StatCardWrapper } from './stat-card-wrapper';
 
-const SHORT_VISA_LABELS: Record<string, string> = {
-  first_whv: '1st WHV',
-  second_whv: '2nd WHV',
-  third_whv: '3rd WHV',
+const NEXT_VISA_LABEL: Record<string, string> = {
+  first_whv: '2nd WHV',
+  second_whv: '3rd WHV',
 };
 
 interface EligibleDaysCardProps {
@@ -16,12 +15,13 @@ interface EligibleDaysCardProps {
 export function EligibleDaysCard({ visa }: EligibleDaysCardProps) {
   const { eligibleDays, daysRequired, daysRemaining, isEligible, visaType } =
     visa;
-  const pct = calcProgressPct(eligibleDays, daysRequired);
-  const completed = isEligible;
+  const hasGoal = visaHasGoal(visaType);
+  const pct = hasGoal ? calcProgressPct(eligibleDays, daysRequired) : 0;
+  const completed = hasGoal && isEligible;
 
   return (
     <StatCardWrapper
-      icon={CircleCheck}
+      icon={hasGoal ? CircleCheck : CalendarCheck}
       iconVariant={completed ? 'success' : 'info'}
       title="Eligible Days"
       tooltip={
@@ -66,7 +66,7 @@ export function EligibleDaysCard({ visa }: EligibleDaysCardProps) {
           </div>
         </CardTooltip>
       }
-      badge={completed ? 'completed' : `${pct}% complete`}
+      badge={hasGoal ? (completed ? 'completed' : `${pct}% complete`) : undefined}
       badgeVariant={completed ? 'success' : 'info'}
     >
       {/* Value row */}
@@ -75,27 +75,34 @@ export function EligibleDaysCard({ visa }: EligibleDaysCardProps) {
           {eligibleDays}
         </span>
         <span className="text-sm text-muted-foreground">
-          / {daysRequired} days
+          {hasGoal ? `/ ${daysRequired} days` : 'days earned'}
         </span>
       </div>
 
       {/* Bottom section — pushed to bottom */}
       <div className="flex flex-col gap-1.5 mt-auto">
-        <div className="h-2 w-full rounded-full bg-bar-track overflow-hidden">
-          <div
-            className={`h-full rounded-full transition-all ${completed ? 'bg-success' : 'bg-info'}`}
-            style={{ width: `${pct}%` }}
-          />
-        </div>
+        {hasGoal && (
+          <div className="h-2 w-full rounded-full bg-bar-track overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all ${completed ? 'bg-success' : 'bg-info'}`}
+              style={{ width: `${pct}%` }}
+            />
+          </div>
+        )}
         <div className="flex items-center justify-between">
           <span className="text-xs text-muted-foreground flex items-center gap-1">
             <Target className="w-3 h-3" />
-            {completed ? 'Goal reached!' : `${daysRemaining} remaining`}
+            {hasGoal
+              ? completed ? 'Goal reached!' : `${daysRemaining} remaining`
+              : 'No day requirement'
+            }
           </span>
-          <span className="text-xs text-muted-foreground flex items-center gap-1 font-semibold">
-            <Award className="w-3 h-3" />
-            {SHORT_VISA_LABELS[visaType] ?? visaType}
-          </span>
+          {NEXT_VISA_LABEL[visaType] && (
+            <span className="text-xs text-muted-foreground flex items-center gap-1 font-semibold">
+              <Award className="w-3 h-3" />
+              {NEXT_VISA_LABEL[visaType]}
+            </span>
+          )}
         </div>
       </div>
     </StatCardWrapper>

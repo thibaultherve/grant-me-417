@@ -116,16 +116,27 @@ export function buildWeeklyProgressChartData(
   const lastCumulative =
     actual.length > 0 ? actual[actual.length - 1].cumulativeEligibleDays : 0;
 
+  const lastDate = weeklyProgress.length > 0
+    ? new Date(weeklyProgress[weeklyProgress.length - 1].weekStartDate)
+    : new Date();
+
   const predictions: WeeklyProgressChartPoint[] = [];
   let cumulative = lastCumulative;
+  let weeksAfterGoal = 0;
   for (let i = 1; i <= weeksRemaining; i++) {
-    cumulative = Math.min(cumulative + currentPace, daysRequired);
+    cumulative = cumulative + currentPace;
+    const predDate = new Date(lastDate);
+    predDate.setDate(predDate.getDate() + i * 7);
     predictions.push({
-      label: `+${i}w`,
+      label: `W${getISOWeekNumber(predDate)}`,
       eligibleDays: 0,
       cumulativeEligibleDays: Math.round(cumulative),
       isPrediction: true,
     });
+    if (daysRequired > 0 && cumulative >= daysRequired) {
+      weeksAfterGoal++;
+      if (weeksAfterGoal >= 4) break;
+    }
   }
 
   return [...actual, ...predictions];
@@ -133,7 +144,14 @@ export function buildWeeklyProgressChartData(
 
 function formatWeekLabel(weekStartDate: string): string {
   const date = new Date(weekStartDate);
-  return MONTH_ABBR[date.getMonth()];
+  return `W${getISOWeekNumber(date)}`;
+}
+
+function getISOWeekNumber(date: Date): number {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
 }
 
 /**

@@ -4,7 +4,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import type { VisaOverview } from '@regranted/shared';
+import { INDUSTRY_LABELS, type VisaOverview, type IndustryTypeValue } from '@regranted/shared';
 import { cn } from '@/lib/utils';
 
 const CHART_COLORS = [
@@ -87,7 +87,7 @@ export function WorkDistributionCard({
           <div
             className={cn(
               'flex flex-col gap-3',
-              isScrollable && 'overflow-y-auto max-h-50 pr-1',
+              isScrollable && 'scrollbar-elegant max-h-44',
             )}
           >
             {workDistribution.map((d, i) => {
@@ -106,7 +106,7 @@ export function WorkDistributionCard({
                         style={{ backgroundColor: color }}
                       />
                       <span className="text-sm text-foreground truncate">
-                        {d.industry}
+                        {INDUSTRY_LABELS[d.industry as IndustryTypeValue] ?? d.industry}
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
@@ -130,7 +130,7 @@ export function WorkDistributionCard({
           </div>
 
           {isScrollable && (
-            <p className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1">
+            <p className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1 -mt-2">
               <span>↓</span> Scroll for more
             </p>
           )}
