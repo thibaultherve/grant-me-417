@@ -6,6 +6,7 @@ export {
   MAX_HOURS_PER_DAY,
   MAX_HOURS_PER_WEEK,
   ELIGIBLE_COUNTRIES_417,
+  visaHasGoal,
 } from './visa-rules.js';
 
 export {

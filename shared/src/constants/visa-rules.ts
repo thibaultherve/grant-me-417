@@ -6,6 +6,9 @@ export const VISA_DAYS_REQUIRED: Record<(typeof VISA_TYPES)[number], number> = {
   third_whv: 0,
 };
 
+export const visaHasGoal = (visaType: (typeof VISA_TYPES)[number]): boolean =>
+  VISA_DAYS_REQUIRED[visaType] > 0;
+
 /**
  * WHV 417 hour→day thresholds (evaluated in descending order).
  * Weekly hours worked determine how many eligible days are counted.
