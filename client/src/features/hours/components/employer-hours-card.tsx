@@ -1,9 +1,9 @@
 import { cn } from '@/lib/utils';
-import type { IndustryType } from '@regranted/shared';
 
 import type {
   CrossEmployerErrors,
   EmployerHoursState,
+  EmployerMeta,
   LogHoursActions,
 } from '../types/log-hours';
 import type { DayColumn as DayColumnType } from '../types/log-hours';
@@ -13,10 +13,7 @@ import { DayGrid } from './day-grid';
 import { EmployerCardHeader } from './employer-card-header';
 
 interface EmployerHoursCardProps {
-  employerId: string;
-  employerName: string;
-  industry: IndustryType;
-  isEligible: boolean;
+  employer: EmployerMeta;
   total: number;
   isExpanded: boolean;
   onToggleExpanded: () => void;
@@ -29,10 +26,7 @@ interface EmployerHoursCardProps {
 }
 
 export function EmployerHoursCard({
-  employerId,
-  employerName,
-  industry,
-  isEligible,
+  employer,
   total,
   isExpanded,
   onToggleExpanded,
@@ -60,15 +54,15 @@ export function EmployerHoursCard({
       <div className="flex">
         {/* Purple accent strip (expanded only) */}
         {isExpanded && (
-          <div className="w-[5px] shrink-0 rounded-l-xl bg-primary" />
+          <div className="w-1.25 shrink-0 rounded-l-xl bg-primary" />
         )}
 
         <div className="flex-1 min-w-0">
           {/* Header */}
           <EmployerCardHeader
-            employerName={employerName}
-            industry={industry}
-            isEligible={isEligible}
+            employerName={employer.name}
+            industry={employer.industry}
+            isEligible={employer.isEligible}
             total={total}
             isExpanded={isExpanded}
             onToggle={onToggleExpanded}
@@ -81,12 +75,12 @@ export function EmployerHoursCard({
               <DayGrid
                 dayColumns={dayColumns}
                 employerState={employerState}
-                employerId={employerId}
+                employerId={employer.id}
                 onDayHoursChange={(dateKey, value) =>
-                  actions.setDayHours(employerId, dateKey, value)
+                  actions.setDayHours(employer.id, dateKey, value)
                 }
                 onToggleDaySelected={(dateKey) =>
-                  actions.toggleDaySelected(employerId, dateKey)
+                  actions.toggleDaySelected(employer.id, dateKey)
                 }
                 fieldErrors={fieldErrors}
                 crossEmployerErrors={crossEmployerErrors}
@@ -96,15 +90,15 @@ export function EmployerHoursCard({
               {/* Auto-Distribute Toggle */}
               <AutoDistributeToggle
                 enabled={employerState.autoDistribute}
-                onToggle={() => actions.toggleAutoDistribute(employerId)}
-                totalHours={employerState.totalHours}
-                onTotalChange={(value) =>
-                  actions.setTotalHours(employerId, value)
-                }
+                onToggle={() => actions.toggleAutoDistribute(employer.id)}
+                total={{
+                  hours: employerState.totalHours,
+                  onChange: (value) =>
+                    actions.setTotalHours(employer.id, value),
+                  max: maxTotalHours,
+                }}
                 selectedDaysCount={selectedDaysCount}
-                maxTotalHours={maxTotalHours}
                 disabled={isSubmitting}
-                idPrefix={employerId}
               />
             </div>
           )}

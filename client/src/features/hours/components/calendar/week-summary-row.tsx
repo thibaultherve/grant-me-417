@@ -49,14 +49,14 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
     <tr
       className={cn(
         'border-0 group transition-colors',
-        isExpanded ? 'bg-[#F8F6FF]' : hasData && 'hover:bg-[#F8F6FF]/50',
+        isExpanded ? 'bg-primary-light' : hasData && 'hover:bg-primary-light/50',
         hasData && 'cursor-pointer',
       )}
       onClick={hasData ? onToggle : undefined}
     >
       {/* Week label + chevron — with left accent border */}
       <td className={cn(
-        'pt-3 pb-1 px-4 text-[13px] text-foreground whitespace-nowrap w-[90px] border-l-[3px] transition-colors',
+        'pt-3 pb-1 px-4 text-[13px] text-foreground whitespace-nowrap w-22.5 border-l-[3px] transition-colors',
         isExpanded ? 'font-semibold border-l-primary' : hasData ? 'font-medium border-l-transparent group-hover:border-l-primary/40' : 'font-medium border-l-transparent',
       )}>
         <div className="flex items-center gap-1">
@@ -77,14 +77,14 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
           {visaTypes.map((vt) => (
             <span
               key={vt}
-              className={cn('h-[5px] w-[5px] rounded-full', getVisaBarColor(vt))}
+              className={cn('h-1.25 w-1.25 rounded-full', getVisaBarColor(vt))}
             />
           ))}
         </div>
       </td>
 
       {/* Total Hours — center-aligned, muted */}
-      <td className="pt-3 pb-1 text-center w-[70px]">
+      <td className="pt-3 pb-1 text-center w-17.5">
         {hasData && (
           <span className="tabular-nums text-[13px] font-semibold text-muted-foreground">
             {`${week.totalHours}h`}
@@ -93,7 +93,7 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
       </td>
 
       {/* Eligible Hours — center-aligned, per-visa colored text */}
-      <td className="pt-3 pb-1 text-center w-[75px]">
+      <td className="pt-3 pb-1 text-center w-18.75">
         {hasData && (
           <div className="flex items-center gap-0.5 justify-center">
             <VisaValues
@@ -107,7 +107,7 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
       </td>
 
       {/* Eligible Days — center-aligned, bold foreground */}
-      <td className="pt-3 pb-1 text-center w-[75px]">
+      <td className="pt-3 pb-1 text-center w-18.75">
         {hasData && (
           <div className="flex items-center gap-0.5 justify-center">
             <VisaValues
@@ -151,7 +151,7 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
               ) : showPerDayDots && dayBars[i].visaType ? (
                 <span
                   className={cn(
-                    'absolute left-1/2 -translate-x-1/2 -bottom-1 h-[5px] w-[5px] rounded-full',
+                    'absolute left-1/2 -translate-x-1/2 -bottom-1 h-1.25 w-1.25 rounded-full',
                     dayBars[i].color,
                   )}
                 />

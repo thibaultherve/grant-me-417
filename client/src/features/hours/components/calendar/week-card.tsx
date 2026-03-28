@@ -47,9 +47,9 @@ export const WeekCard = memo(function WeekCard({
       className={cn(
         'rounded-lg border shadow-sm overflow-hidden border-l-[3px] transition-colors',
         isExpanded
-          ? 'bg-[#F8F6FF] border-l-primary'
+          ? 'bg-primary-light border-l-primary'
           : hasData
-            ? 'bg-card border-l-transparent active:bg-[#F8F6FF]/50'
+            ? 'bg-card border-l-transparent active:bg-primary-light/50'
             : 'bg-card border-l-transparent',
         hasData && 'cursor-pointer',
       )}
@@ -75,7 +75,7 @@ export const WeekCard = memo(function WeekCard({
             {visaTypes.map((vt) => (
               <span
                 key={vt}
-                className={cn('h-[5px] w-[5px] rounded-full', getVisaBarColor(vt))}
+                className={cn('h-1.25 w-1.25 rounded-full', getVisaBarColor(vt))}
               />
             ))}
           </span>

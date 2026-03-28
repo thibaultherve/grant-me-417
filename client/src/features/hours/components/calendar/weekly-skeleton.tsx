@@ -6,7 +6,7 @@ export function WeeklySkeleton() {
     <div className="space-y-0 rounded-lg border bg-card overflow-hidden">
       {/* Header row */}
       <div className="flex items-center gap-2 bg-muted/50 px-4 py-3 border-b">
-        <Skeleton className="h-3 w-[60px]" />
+        <Skeleton className="h-3 w-15" />
         {Array.from({ length: 7 }).map((_, i) => (
           <Skeleton key={i} className="h-3 w-8 mx-auto" />
         ))}
@@ -19,7 +19,7 @@ export function WeeklySkeleton() {
       {Array.from({ length: 4 }).map((_, weekIdx) => (
         <div key={weekIdx} className="border-b last:border-b-0">
           <div className="flex items-center gap-2 px-4 py-3">
-            <Skeleton className="h-4 w-[70px]" />
+            <Skeleton className="h-4 w-17.5" />
             {Array.from({ length: 7 }).map((_, i) => (
               <Skeleton key={i} className="h-4 w-6 mx-auto" />
             ))}
@@ -30,9 +30,9 @@ export function WeeklySkeleton() {
           </div>
           {/* Visa strip skeleton */}
           <div className="flex gap-0.5 px-4 pb-2">
-            <div className="w-[70px]" />
+            <div className="w-17.5" />
             {Array.from({ length: 7 }).map((_, i) => (
-              <Skeleton key={i} className="h-[3px] flex-1 rounded-sm" />
+              <Skeleton key={i} className="h-0.75 flex-1 rounded-sm" />
             ))}
           </div>
         </div>
@@ -48,7 +48,7 @@ export function WeeklySkeletonMobile() {
       {Array.from({ length: 4 }).map((_, weekIdx) => (
         <div key={weekIdx} className="rounded-lg border bg-card p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <Skeleton className="h-4 w-[80px]" />
+            <Skeleton className="h-4 w-20" />
             <Skeleton className="h-4 w-4" />
           </div>
           <div className="flex items-center gap-2">
@@ -61,7 +61,7 @@ export function WeeklySkeletonMobile() {
               <div key={i} className="flex flex-col items-center gap-1">
                 <Skeleton className="h-3 w-6" />
                 <Skeleton className="h-4 w-5" />
-                <Skeleton className="h-[3px] w-full rounded-sm" />
+                <Skeleton className="h-0.75 w-full rounded-sm" />
               </div>
             ))}
           </div>

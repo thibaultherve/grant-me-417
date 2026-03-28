@@ -10,6 +10,7 @@ import type { IndustryType } from '@regranted/shared';
 
 import { useExpansionState } from '../hooks/use-expansion-state';
 import { useLogHoursState } from '../hooks/use-log-hours-state';
+import type { EmployerMeta } from '../types/log-hours';
 import { getMondayOfWeek } from '../utils/date-helpers';
 import { isWeekStarted } from '../utils/week-validation';
 import { EmployerHoursCard } from './employer-hours-card';
@@ -34,13 +35,11 @@ export function LogHoursPage({ initialWeek }: LogHoursPageProps) {
 
   // Build employer metadata lookup from server data
   const employerMeta = useMemo(() => {
-    const meta: Record<
-      string,
-      { name: string; industry: IndustryType; isEligible: boolean }
-    > = {};
+    const meta: Record<string, EmployerMeta> = {};
     if (logHours.serverData) {
       for (const emp of logHours.serverData.employers) {
         meta[emp.employerId] = {
+          id: emp.employerId,
           name: emp.employerName,
           industry: emp.industry as IndustryType,
           isEligible: emp.isEligible,
@@ -174,14 +173,17 @@ export function LogHoursPage({ initialWeek }: LogHoursPageProps) {
           if (!empState) return null;
 
           const meta = employerMeta[employerId];
+          const employer: EmployerMeta = meta ?? {
+            id: employerId,
+            name: '',
+            industry: 'other' as IndustryType,
+            isEligible: false,
+          };
 
           return (
             <EmployerHoursCard
               key={employerId}
-              employerId={employerId}
-              employerName={meta?.name ?? ''}
-              industry={(meta?.industry ?? 'other') as IndustryType}
-              isEligible={meta?.isEligible ?? false}
+              employer={employer}
               total={logHours.employerTotals[employerId] ?? 0}
               isExpanded={expansion.isExpanded(employerId)}
               onToggleExpanded={() => expansion.toggle(employerId)}

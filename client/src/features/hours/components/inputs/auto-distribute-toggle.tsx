@@ -10,6 +10,7 @@
  */
 
 import { AlertCircle } from 'lucide-react';
+import { useId } from 'react';
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,54 +18,38 @@ import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 
 interface AutoDistributeToggleProps {
-  /** Whether auto-distribute mode is enabled */
   enabled: boolean;
-  /** Callback when the toggle is switched */
   onToggle: (enabled: boolean) => void;
-  /** Total hours value (string to preserve user input format) */
-  totalHours: string;
-  /** Callback when total hours value changes */
-  onTotalChange: (value: string) => void;
-  /** Validation error message for total hours */
-  totalError?: string;
-  /** Number of selected days for distribution */
+  total: {
+    hours: string;
+    onChange: (value: string) => void;
+    error?: string;
+    max: number;
+  };
   selectedDaysCount: number;
-  /** Maximum total hours allowed (24 × selectedDaysCount) */
-  maxTotalHours: number;
-  /** Whether the component is disabled */
   disabled?: boolean;
-  /** Additional CSS classes */
   className?: string;
-  /** Unique ID prefix for multiple instances on the same page */
-  idPrefix?: string;
 }
 
 export function AutoDistributeToggle({
   enabled,
   onToggle,
-  totalHours,
-  onTotalChange,
-  totalError,
+  total,
   selectedDaysCount,
-  maxTotalHours,
   disabled = false,
   className,
-  idPrefix,
 }: AutoDistributeToggleProps) {
-  const switchId = idPrefix
-    ? `${idPrefix}-auto-distribute`
-    : 'auto-distribute';
-  const totalId = idPrefix ? `${idPrefix}-total-hours` : 'total-hours';
-  const errorId = idPrefix
-    ? `${idPrefix}-auto-distribute-error`
-    : 'auto-distribute-error';
-  const hasError = Boolean(totalError);
+  const id = useId();
+  const switchId = `${id}-auto-distribute`;
+  const totalId = `${id}-total-hours`;
+  const errorId = `${id}-auto-distribute-error`;
+  const hasError = Boolean(total.error);
 
   // Calculate hours per day dynamically
-  const currentTotal = parseFloat(totalHours) || 0;
+  const currentTotal = parseFloat(total.hours) || 0;
 
   // Check if approaching limit (>90% of max)
-  const isApproachingLimit = currentTotal > maxTotalHours * 0.9 && !hasError;
+  const isApproachingLimit = currentTotal > total.max * 0.9 && !hasError;
 
   return (
     <div
@@ -100,8 +85,8 @@ export function AutoDistributeToggle({
               id={totalId}
               type="text"
               inputMode="decimal"
-              value={totalHours}
-              onChange={(e) => onTotalChange(e.target.value)}
+              value={total.hours}
+              onChange={(e) => total.onChange(e.target.value)}
               disabled={disabled}
               placeholder="40"
               aria-invalid={hasError}
@@ -113,9 +98,9 @@ export function AutoDistributeToggle({
               )}
             />
             <span className="text-xs text-muted-foreground">
-              <span className="sm:hidden">Max {maxTotalHours}h</span>
+              <span className="sm:hidden">Max {total.max}h</span>
               <span className="hidden sm:inline">
-                Max {maxTotalHours}h / {selectedDaysCount} day
+                Max {total.max}h / {selectedDaysCount} day
                 {selectedDaysCount !== 1 ? 's' : ''}
               </span>
             </span>
@@ -128,7 +113,7 @@ export function AutoDistributeToggle({
         <div className="flex items-center gap-2 text-xs text-amber-600 pl-12">
           <AlertCircle className="h-3 w-3 shrink-0" />
           <span>
-            Approaching maximum hours limit ({currentTotal}h / {maxTotalHours}h)
+            Approaching maximum hours limit ({currentTotal}h / {total.max}h)
           </span>
         </div>
       )}
@@ -136,7 +121,7 @@ export function AutoDistributeToggle({
       {/* Error message */}
       {hasError && (
         <p id={errorId} className="text-xs text-destructive pl-12">
-          {totalError}
+          {total.error}
         </p>
       )}
     </div>

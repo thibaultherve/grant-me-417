@@ -29,7 +29,7 @@ export function WeeklyCalendar({
   initialMonth,
   className,
 }: WeeklyCalendarProps) {
-  const now = new Date();
+  const now = useMemo(() => new Date(), []);
   const [year, setYear] = useState(initialYear ?? now.getFullYear());
   const [month, setMonth] = useState(initialMonth ?? now.getMonth() + 1);
 

@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
  * Supports multi-expand so users can compare multiple weeks simultaneously.
  */
 export function useWeekExpansion() {
-  const [expandedWeeks, setExpandedWeeks] = useState<Set<string>>(new Set());
+  const [expandedWeeks, setExpandedWeeks] = useState<Set<string>>(() => new Set());
 
   const toggleWeek = useCallback((weekStart: string) => {
     setExpandedWeeks((prev) => {

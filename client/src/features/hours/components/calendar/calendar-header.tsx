@@ -132,7 +132,7 @@ export function CalendarHeader({
                       {monthVisas.map((vt) => (
                         <span
                           key={vt}
-                          className={cn('h-[5px] w-[5px] rounded-full', getVisaBarColor(vt))}
+                          className={cn('h-1.25 w-1.25 rounded-full', getVisaBarColor(vt))}
                         />
                       ))}
                     </span>
@@ -149,10 +149,10 @@ export function CalendarHeader({
         value={String(year)}
         onValueChange={(value) => onYearChange(Number(value))}
       >
-        <SelectTrigger className="flex-1 min-w-0 sm:flex-none sm:w-[130px] bg-card dark:bg-card shadow-sm rounded-lg" aria-label="Select year">
+        <SelectTrigger className="flex-1 min-w-0 sm:flex-none sm:w-32.5 bg-card dark:bg-card shadow-sm rounded-lg" aria-label="Select year">
           <SelectValue placeholder="Year" />
         </SelectTrigger>
-        <SelectContent className="max-h-[240px]">
+        <SelectContent className="max-h-60">
           {YEAR_OPTIONS.map((yearOption) => {
             if (yearOption > currentYearNow) return null;
             const yearVisas = visasByYear.get(yearOption);
@@ -165,7 +165,7 @@ export function CalendarHeader({
                       {yearVisas.map((vt) => (
                         <span
                           key={vt}
-                          className={cn('h-[5px] w-[5px] rounded-full', getVisaBarColor(vt))}
+                          className={cn('h-1.25 w-1.25 rounded-full', getVisaBarColor(vt))}
                         />
                       ))}
                     </span>

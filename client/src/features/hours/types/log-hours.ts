@@ -1,4 +1,11 @@
-import type { WeekEntriesResponse } from '@regranted/shared';
+import type { IndustryType, WeekEntriesResponse } from '@regranted/shared';
+
+export interface EmployerMeta {
+  id: string;
+  name: string;
+  industry: IndustryType;
+  isEligible: boolean;
+}
 
 /**
  * Represents a single day column in the week hours grid.

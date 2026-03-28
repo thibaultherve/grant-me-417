@@ -37,19 +37,19 @@ export function WeeklyTable({
         {/* Column headers */}
         <thead>
           <tr className="bg-muted border-b">
-            <th className="py-3 px-4 text-left text-[11px] font-semibold text-muted-foreground w-[90px]">
+            <th className="py-3 px-4 text-left text-[11px] font-semibold text-muted-foreground w-22.5">
               Week
             </th>
             <th className="py-3 text-center text-[11px] font-semibold text-muted-foreground w-10">
               Visa
             </th>
-            <th className="py-3 text-center text-[11px] font-semibold text-muted-foreground w-[70px]">
+            <th className="py-3 text-center text-[11px] font-semibold text-muted-foreground w-17.5">
               Total Hours
             </th>
-            <th className="py-3 text-center text-[11px] font-semibold text-muted-foreground w-[75px]">
+            <th className="py-3 text-center text-[11px] font-semibold text-muted-foreground w-18.75">
               Eligible Hours
             </th>
-            <th className="py-3 text-center text-[11px] font-semibold text-foreground w-[75px]">
+            <th className="py-3 text-center text-[11px] font-semibold text-foreground w-18.75">
               Eligible Days
             </th>
             {/* Separator */}
@@ -130,7 +130,7 @@ function WeekGroup({
               key={employer.employerId}
               employer={employer}
               dates={week.dates}
-              className="bg-[#F8F6FF]"
+              className="bg-primary-light"
               isFirst={i === 0}
               isLast={i === week.employers.length - 1}
             />
@@ -140,7 +140,7 @@ function WeekGroup({
 
       {/* Divider between weeks */}
       {!isLast && (
-        <tr className={cn('border-0', isExpanded && 'bg-[#F8F6FF]')}>
+        <tr className={cn('border-0', isExpanded && 'bg-primary-light')}>
           <td colSpan={14} className={cn(
             'p-0 border-l-[3px]',
             isExpanded ? 'border-l-primary' : 'border-l-transparent',

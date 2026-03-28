@@ -33,12 +33,12 @@ export function WeekTotals({ totalHours, visaBreakdown, className }: WeekTotalsP
   return (
     <div className={cn('flex items-center gap-3', className)}>
       {/* Total hours — bold black */}
-      <span className="tabular-nums text-[13px] font-bold text-foreground min-w-[60px] text-right">
+      <span className="tabular-nums text-[13px] font-bold text-foreground min-w-15 text-right">
         {totalHours > 0 ? `${totalHours}h` : '–'}
       </span>
 
       {/* Eligible hours — colored text per visa */}
-      <div className="flex items-center gap-0.5 min-w-[65px] justify-end">
+      <div className="flex items-center gap-0.5 min-w-16.25 justify-end">
         <VisaValues
           breakdown={visaBreakdown}
           getValue={(vb) => `${vb.eligibleHours}h`}
@@ -47,7 +47,7 @@ export function WeekTotals({ totalHours, visaBreakdown, className }: WeekTotalsP
       </div>
 
       {/* Eligible days — colored text per visa */}
-      <div className="flex items-center gap-0.5 min-w-[50px] justify-end">
+      <div className="flex items-center gap-0.5 min-w-12.5 justify-end">
         <VisaValues
           breakdown={visaBreakdown}
           getValue={(vb) => `${vb.eligibleDays}d`}
@@ -160,7 +160,7 @@ export function VisaValues({
               {getValue(vb)}
             </span>
             {showDots && (
-              <span className={cn('absolute left-1/2 -translate-x-1/2 -bottom-1 h-[5px] w-[5px] rounded-full', VISA_DOT_COLORS[vb.visaType])} />
+              <span className={cn('absolute left-1/2 -translate-x-1/2 -bottom-1 h-1.25 w-1.25 rounded-full', VISA_DOT_COLORS[vb.visaType])} />
             )}
           </span>
         </span>
