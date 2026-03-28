@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './styles/utilities.css';
 
 :root {
   --background: oklch(0.98 0 0);
@@ -49,10 +50,17 @@
   --warning-light: #FEF3C7;
   --danger: #EF4444;
   --danger-light: #FEE2E2;
-  /* ── Bar chart tier colors ── */
+  /* ── Bar chart tier colors (1-7 days, lightest → darkest) ── */
   --bar-track: #e5e7eb;
   --bar-low: #a5b4fc;
   --bar-high: #3730a3;
+  --bar-1: #c7d2fe;
+  --bar-2: #a5b4fc;
+  --bar-3: #818cf8;
+  --bar-4: #6366f1;
+  --bar-5: #4f46e5;
+  --bar-6: #4338ca;
+  --bar-7: #3730a3;
   /* ── Zone / postcode badge colors ── */
   --badge-northern: #166534;
   --badge-remote: #B45309;
@@ -158,10 +166,17 @@
   --warning-light: #3d2900;
   --danger: #fca5a5;
   --danger-light: #3f0000;
-  /* ── Bar chart tier colors (dark mode) ── */
+  /* ── Bar chart tier colors (dark mode, 1-7 days) ── */
   --bar-track: #374151;
   --bar-low: #818cf8;
   --bar-high: #6366f1;
+  --bar-1: #4338ca;
+  --bar-2: #4f46e5;
+  --bar-3: #6366f1;
+  --bar-4: #818cf8;
+  --bar-5: #a5b4fc;
+  --bar-6: #c7d2fe;
+  --bar-7: #e0e7ff;
   /* ── Zone / postcode badge colors (dark mode — same hues, readable on dark cards) ── */
   --badge-northern: #166534;
   --badge-remote: #B45309;
@@ -270,6 +285,13 @@
   --color-bar-track: var(--bar-track);
   --color-bar-low: var(--bar-low);
   --color-bar-high: var(--bar-high);
+  --color-bar-1: var(--bar-1);
+  --color-bar-2: var(--bar-2);
+  --color-bar-3: var(--bar-3);
+  --color-bar-4: var(--bar-4);
+  --color-bar-5: var(--bar-5);
+  --color-bar-6: var(--bar-6);
+  --color-bar-7: var(--bar-7);
   /* ── Zone / postcode badge colors ── */
   --color-badge-northern: var(--badge-northern);
   --color-badge-remote: var(--badge-remote);

@@ -1,0 +1,35 @@
+/* ── Elegant overlay scrollbar ── */
+@utility scrollbar-elegant {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  margin-right: -6px;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+
+  &:hover {
+    scrollbar-color: oklch(0.55 0.02 264.41 / 0.35) transparent;
+  }
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 9999px;
+    transition: background-color 0.2s ease;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: oklch(0.55 0.02 264.41 / 0.35);
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background-color: oklch(0.55 0.02 264.41 / 0.55);
+  }
+}
