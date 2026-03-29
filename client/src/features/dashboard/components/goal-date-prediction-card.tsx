@@ -115,9 +115,9 @@ export function GoalDatePredictionCard({ visa, pace }: GoalDatePredictionCardPro
                   config.dateColorClass,
                 )}
               >
-                {prediction.status === 'completed'
-                  ? 'Goal Reached!'
-                  : formatDate(prediction.projectedDate!.toISOString().split('T')[0])}
+                {prediction.projectedDate
+                  ? formatDate(prediction.projectedDate.toISOString().split('T')[0])
+                  : 'Goal Reached!'}
               </span>
               <span className="text-[11px] font-medium text-muted-foreground">
                 {prediction.subtextMessage}
