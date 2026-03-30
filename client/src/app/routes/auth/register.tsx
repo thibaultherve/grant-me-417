@@ -39,10 +39,9 @@ export const RegisterRoute = () => {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const firstName = formData.get('firstName') as string;
-    const lastName = formData.get('lastName') as string;
 
     registerMutation.mutate(
-      { email, password, firstName, lastName },
+      { email, password, firstName },
       {
         onError: (err) => {
           toast.error(err.message || 'Failed to create account');
@@ -60,27 +59,15 @@ export const RegisterRoute = () => {
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName">First name</Label>
-                <Input
-                  id="firstName"
-                  name="firstName"
-                  placeholder="John"
-                  required
-                  disabled={registerMutation.isPending}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lastName">Last name</Label>
-                <Input
-                  id="lastName"
-                  name="lastName"
-                  placeholder="Doe"
-                  required
-                  disabled={registerMutation.isPending}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="firstName">First name</Label>
+              <Input
+                id="firstName"
+                name="firstName"
+                placeholder="John"
+                required
+                disabled={registerMutation.isPending}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>

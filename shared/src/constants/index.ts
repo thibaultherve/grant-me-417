@@ -7,7 +7,15 @@ export {
   MAX_HOURS_PER_DAY,
   MAX_HOURS_PER_WEEK,
   ELIGIBLE_COUNTRIES_417,
+  ELIGIBLE_COUNTRIES_462,
+  VISA_SCRAPE_URLS,
+  ZONE_TYPES,
+  type ZoneType,
+  ZONE_FLAG_MAP,
+  ELIGIBLE_ZONES,
+  checkIndustryEligibility,
   visaHasGoal,
+  getVisaTypeForNationality,
 } from './visa-rules.js';
 
 export {

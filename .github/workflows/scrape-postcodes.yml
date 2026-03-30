@@ -1,0 +1,73 @@
+name: Daily Postcode Scrape
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # 2:00 AM UTC daily
+  workflow_dispatch:
+    inputs:
+      visa:
+        description: 'Visa type to scrape (leave empty for both)'
+        required: false
+        type: choice
+        options:
+          - 'both'
+          - '417'
+          - '462'
+        default: 'both'
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm --filter @regranted/scraper prisma:generate
+
+      - name: Install Playwright Chromium
+        run: pnpm --filter @regranted/scraper exec playwright install --with-deps chromium
+
+      - name: Scrape visa 417
+        if: >-
+          github.event_name == 'schedule' ||
+          inputs.visa == 'both' ||
+          inputs.visa == '417'
+        run: pnpm --filter @regranted/scraper start --visa 417
+        env:
+          DATABASE_URL: ${{ secrets.SCRAPER_DATABASE_URL }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      - name: Scrape visa 462
+        if: >-
+          github.event_name == 'schedule' ||
+          inputs.visa == 'both' ||
+          inputs.visa == '462'
+        run: pnpm --filter @regranted/scraper start --visa 462
+        env:
+          DATABASE_URL: ${{ secrets.SCRAPER_DATABASE_URL }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      - name: Generate seed data
+        run: pnpm --filter @regranted/scraper seed
+        env:
+          DATABASE_URL: ${{ secrets.SCRAPER_DATABASE_URL }}
+
+      - name: Commit seed data if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add server/prisma/seed-data.json
+          git diff --staged --quiet || git commit -m "chore: update seed data from scrape"
+          git push
