@@ -4,6 +4,7 @@ import type {
   IndustryType,
   UpdateEmployerInput,
 } from '@regranted/shared';
+import { getVisaTypeForNationality } from '@regranted/shared';
 import {
   ForbiddenException,
   Injectable,
@@ -18,12 +19,8 @@ const EMPLOYER_INCLUDE = {
   suburb: {
     include: {
       postcodeRef: {
-        select: {
-          isRemoteVeryRemote: true,
-          isNorthernAustralia: true,
-          isRegionalAustralia: true,
-          isBushfireDeclared: true,
-          isNaturalDisasterDeclared: true,
+        include: {
+          eligibility: true,
         },
       },
     },
@@ -72,9 +69,11 @@ export class EmployersService {
 
     let isEligible: boolean;
     if (eligibilityMode === 'automatic') {
+      const visaType = await this.resolveUserVisaType(userId);
       const result = await this.checkEligibility(
         input.suburbId,
         input.industry,
+        visaType,
       );
       isEligible = result.isEligible;
     } else {
@@ -119,9 +118,11 @@ export class EmployersService {
 
     let newIsEligible: boolean;
     if (effectiveMode === 'automatic' && effectiveSuburbId) {
+      const visaType = await this.resolveUserVisaType(userId);
       const result = await this.checkEligibility(
         effectiveSuburbId,
         effectiveIndustry,
+        visaType,
       );
       newIsEligible = result.isEligible;
     } else if (effectiveMode === 'automatic') {
@@ -157,13 +158,21 @@ export class EmployersService {
   async checkEligibility(
     suburbId: number,
     industry: IndustryType,
+    visaType: string = '417',
   ): Promise<{ isEligible: boolean }> {
     const suburb = await this.prisma.suburb.findUnique({
       where: { id: suburbId },
-      include: { postcodeRef: true },
     });
 
-    if (!suburb?.postcodeRef) return { isEligible: false };
+    if (!suburb) return { isEligible: false };
+
+    const eligibility = await this.prisma.postcodeEligibility.findUnique({
+      where: {
+        postcode_visaType: { postcode: suburb.postcode, visaType },
+      },
+    });
+
+    if (!eligibility) return { isEligible: false };
 
     const {
       isNorthernAustralia,
@@ -171,18 +180,18 @@ export class EmployersService {
       isRegionalAustralia,
       isBushfireDeclared,
       isNaturalDisasterDeclared,
-    } = suburb.postcodeRef;
+    } = eligibility;
 
     const rules: Record<IndustryType, boolean> = {
       hospitality_and_tourism:
-        (isNorthernAustralia ?? false) || (isRemoteVeryRemote ?? false),
-      plant_and_animal_cultivation: isRegionalAustralia ?? false,
-      fishing_and_pearling: isRegionalAustralia ?? false,
-      tree_farming_and_felling: isRegionalAustralia ?? false,
-      mining: isRegionalAustralia ?? false,
-      construction: isRegionalAustralia ?? false,
-      bushfire_recovery_work: isBushfireDeclared ?? false,
-      weather_recovery_work: isNaturalDisasterDeclared ?? false,
+        isNorthernAustralia || isRemoteVeryRemote,
+      plant_and_animal_cultivation: isRegionalAustralia,
+      fishing_and_pearling: isRegionalAustralia,
+      tree_farming_and_felling: isRegionalAustralia,
+      mining: isRegionalAustralia,
+      construction: isRegionalAustralia,
+      bushfire_recovery_work: isBushfireDeclared,
+      weather_recovery_work: isNaturalDisasterDeclared,
       critical_covid19_work: true,
       other: false,
     };
@@ -207,8 +216,25 @@ export class EmployersService {
     return { message: 'Employer deleted successfully' };
   }
 
+  private async resolveUserVisaType(userId: string): Promise<string> {
+    const profile = await this.prisma.userProfile.findUnique({
+      where: { userId },
+      select: { nationality: true },
+    });
+
+    if (!profile?.nationality) return '417';
+
+    return getVisaTypeForNationality(profile.nationality) ?? '417';
+  }
+
   private mapToResponse(employer: EmployerWithSuburb): Employer {
     const suburb = employer.suburb;
+    // Find eligibility for 417 by default (display purposes)
+    const eligibility =
+      suburb?.postcodeRef?.eligibility?.find((e) => e.visaType === '417') ??
+      suburb?.postcodeRef?.eligibility?.[0] ??
+      null;
+
     return {
       id: employer.id,
       name: employer.name,
@@ -220,18 +246,13 @@ export class EmployersService {
             suburbName: suburb.suburbName,
             postcode: suburb.postcode,
             stateCode: suburb.stateCode,
-            postcodeData: suburb.postcodeRef
+            postcodeData: eligibility
               ? {
-                  isRemoteVeryRemote:
-                    suburb.postcodeRef.isRemoteVeryRemote ?? false,
-                  isNorthernAustralia:
-                    suburb.postcodeRef.isNorthernAustralia ?? false,
-                  isRegionalAustralia:
-                    suburb.postcodeRef.isRegionalAustralia ?? false,
-                  isBushfireDeclared:
-                    suburb.postcodeRef.isBushfireDeclared ?? false,
-                  isNaturalDisasterDeclared:
-                    suburb.postcodeRef.isNaturalDisasterDeclared ?? false,
+                  isRemoteVeryRemote: eligibility.isRemoteVeryRemote,
+                  isNorthernAustralia: eligibility.isNorthernAustralia,
+                  isRegionalAustralia: eligibility.isRegionalAustralia,
+                  isBushfireDeclared: eligibility.isBushfireDeclared,
+                  isNaturalDisasterDeclared: eligibility.isNaturalDisasterDeclared,
                 }
               : null,
           }
