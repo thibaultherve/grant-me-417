@@ -53,7 +53,6 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   RefreshToken: 'RefreshToken',
-  UserProfile: 'UserProfile',
   UserVisa: 'UserVisa',
   VisaWeeklyProgress: 'VisaWeeklyProgress',
   Employer: 'Employer',
@@ -86,7 +85,9 @@ export const UserScalarFieldEnum = {
   email: 'email',
   passwordHash: 'passwordHash',
   firstName: 'firstName',
-  lastName: 'lastName',
+  nationality: 'nationality',
+  whvType: 'whvType',
+  ukCitizenExemption: 'ukCitizenExemption',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -103,18 +104,6 @@ export const RefreshTokenScalarFieldEnum = {
 } as const
 
 export type RefreshTokenScalarFieldEnum = (typeof RefreshTokenScalarFieldEnum)[keyof typeof RefreshTokenScalarFieldEnum]
-
-
-export const UserProfileScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  nationality: 'nationality',
-  ukCitizenExemption: 'ukCitizenExemption',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type UserProfileScalarFieldEnum = (typeof UserProfileScalarFieldEnum)[keyof typeof UserProfileScalarFieldEnum]
 
 
 export const UserVisaScalarFieldEnum = {

@@ -386,7 +386,6 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   RefreshToken: 'RefreshToken',
-  UserProfile: 'UserProfile',
   UserVisa: 'UserVisa',
   VisaWeeklyProgress: 'VisaWeeklyProgress',
   Employer: 'Employer',
@@ -411,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "refreshToken" | "userProfile" | "userVisa" | "visaWeeklyProgress" | "employer" | "workEntry" | "postcode" | "postcodeEligibility" | "postcodeEligibilityHistory" | "suburb" | "scrapeRun"
+    modelProps: "user" | "refreshToken" | "userVisa" | "visaWeeklyProgress" | "employer" | "workEntry" | "postcode" | "postcodeEligibility" | "postcodeEligibilityHistory" | "suburb" | "scrapeRun"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -560,80 +559,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.RefreshTokenCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.RefreshTokenCountAggregateOutputType> | number
-        }
-      }
-    }
-    UserProfile: {
-      payload: Prisma.$UserProfilePayload<ExtArgs>
-      fields: Prisma.UserProfileFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.UserProfileFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.UserProfileFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>
-        }
-        findFirst: {
-          args: Prisma.UserProfileFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.UserProfileFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>
-        }
-        findMany: {
-          args: Prisma.UserProfileFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>[]
-        }
-        create: {
-          args: Prisma.UserProfileCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>
-        }
-        createMany: {
-          args: Prisma.UserProfileCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.UserProfileCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>[]
-        }
-        delete: {
-          args: Prisma.UserProfileDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>
-        }
-        update: {
-          args: Prisma.UserProfileUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>
-        }
-        deleteMany: {
-          args: Prisma.UserProfileDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.UserProfileUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.UserProfileUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>[]
-        }
-        upsert: {
-          args: Prisma.UserProfileUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>
-        }
-        aggregate: {
-          args: Prisma.UserProfileAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateUserProfile>
-        }
-        groupBy: {
-          args: Prisma.UserProfileGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.UserProfileGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.UserProfileCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.UserProfileCountAggregateOutputType> | number
         }
       }
     }
@@ -1347,7 +1272,9 @@ export const UserScalarFieldEnum = {
   email: 'email',
   passwordHash: 'passwordHash',
   firstName: 'firstName',
-  lastName: 'lastName',
+  nationality: 'nationality',
+  whvType: 'whvType',
+  ukCitizenExemption: 'ukCitizenExemption',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1364,18 +1291,6 @@ export const RefreshTokenScalarFieldEnum = {
 } as const
 
 export type RefreshTokenScalarFieldEnum = (typeof RefreshTokenScalarFieldEnum)[keyof typeof RefreshTokenScalarFieldEnum]
-
-
-export const UserProfileScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  nationality: 'nationality',
-  ukCitizenExemption: 'ukCitizenExemption',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type UserProfileScalarFieldEnum = (typeof UserProfileScalarFieldEnum)[keyof typeof UserProfileScalarFieldEnum]
 
 
 export const UserVisaScalarFieldEnum = {
@@ -1552,6 +1467,13 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -1562,13 +1484,6 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -1724,7 +1639,6 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   refreshToken?: Prisma.RefreshTokenOmit
-  userProfile?: Prisma.UserProfileOmit
   userVisa?: Prisma.UserVisaOmit
   visaWeeklyProgress?: Prisma.VisaWeeklyProgressOmit
   employer?: Prisma.EmployerOmit

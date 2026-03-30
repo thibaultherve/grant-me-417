@@ -52,11 +52,6 @@ export type User = Prisma.UserModel
  */
 export type RefreshToken = Prisma.RefreshTokenModel
 /**
- * Model UserProfile
- * 
- */
-export type UserProfile = Prisma.UserProfileModel
-/**
  * Model UserVisa
  * 
  */

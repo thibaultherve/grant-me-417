@@ -1,17 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import type { Prisma } from '../../generated/prisma/client.js';
+import type { User } from '../../generated/prisma/client.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type {
   UpdateProfileInput,
   UserProfile as UserProfileResponse,
 } from '@regranted/shared';
+import { getVisaTypeForNationality } from '@regranted/shared';
 import { formatTimestamp } from '../common/utils/format.js';
-
-const USER_INCLUDE = { profile: true } as const;
-
-type UserWithProfile = Prisma.UserGetPayload<{
-  include: typeof USER_INCLUDE;
-}>;
 
 @Injectable()
 export class UsersService {
@@ -20,7 +15,6 @@ export class UsersService {
   async getProfile(userId: string): Promise<UserProfileResponse> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      include: USER_INCLUDE,
     });
 
     if (!user) {
@@ -36,57 +30,45 @@ export class UsersService {
   ): Promise<UserProfileResponse> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      include: USER_INCLUDE,
     });
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    const { firstName, lastName, ...profileFields } = input;
+    // Derive whvType when nationality changes
+    const whvType =
+      input.nationality !== undefined
+        ? input.nationality
+          ? getVisaTypeForNationality(input.nationality)
+          : null
+        : undefined;
 
-    const hasUserFields = firstName !== undefined || lastName !== undefined;
-    const hasProfileFields = Object.keys(profileFields).length > 0;
-
-    await this.prisma.$transaction(async (tx) => {
-      if (hasUserFields) {
-        await tx.user.update({
-          where: { id: userId },
-          data: {
-            ...(firstName !== undefined && { firstName }),
-            ...(lastName !== undefined && { lastName }),
-          },
-        });
-      }
-
-      if (hasProfileFields) {
-        await tx.userProfile.update({
-          where: { userId },
-          data: {
-            ...(profileFields.nationality !== undefined && {
-              nationality: profileFields.nationality,
-            }),
-            ...(profileFields.ukCitizenExemption !== undefined && {
-              ukCitizenExemption: profileFields.ukCitizenExemption,
-            }),
-          },
-        });
-      }
+    const updated = await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        ...(input.firstName !== undefined && { firstName: input.firstName }),
+        ...(input.nationality !== undefined && {
+          nationality: input.nationality,
+          whvType,
+          ukCitizenExemption: input.nationality === 'GB',
+        }),
+      },
     });
 
-    return this.getProfile(userId);
+    return this.mapToResponse(updated);
   }
 
-  private mapToResponse(user: UserWithProfile): UserProfileResponse {
+  private mapToResponse(user: User): UserProfileResponse {
     return {
       id: user.id,
       email: user.email,
       firstName: user.firstName ?? '',
-      lastName: user.lastName ?? '',
-      nationality: user.profile?.nationality ?? null,
-      ukCitizenExemption: user.profile?.ukCitizenExemption ?? false,
+      nationality: user.nationality ?? null,
+      whvType: (user.whvType as '417' | '462') ?? null,
+      ukCitizenExemption: user.ukCitizenExemption ?? false,
       createdAt: formatTimestamp(user.createdAt),
-      updatedAt: formatTimestamp(user.profile?.updatedAt ?? user.updatedAt),
+      updatedAt: formatTimestamp(user.updatedAt),
     };
   }
 }

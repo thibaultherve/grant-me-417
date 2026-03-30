@@ -38,10 +38,6 @@ export class AuthService {
         email: input.email,
         passwordHash,
         firstName: input.firstName,
-        lastName: input.lastName,
-        profile: {
-          create: {},
-        },
       },
     });
 
@@ -164,13 +160,11 @@ export class AuthService {
     id: string;
     email: string;
     firstName: string | null;
-    lastName: string | null;
   }): AuthUser {
     return {
       id: user.id,
       email: user.email,
       firstName: user.firstName ?? '',
-      lastName: user.lastName ?? '',
     };
   }
 }

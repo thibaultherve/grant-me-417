@@ -4,7 +4,7 @@ import type {
   IndustryType,
   UpdateEmployerInput,
 } from '@regranted/shared';
-import { getVisaTypeForNationality } from '@regranted/shared';
+import { checkIndustryEligibility } from '@regranted/shared';
 import {
   ForbiddenException,
   Injectable,
@@ -174,29 +174,13 @@ export class EmployersService {
 
     if (!eligibility) return { isEligible: false };
 
-    const {
-      isNorthernAustralia,
-      isRemoteVeryRemote,
-      isRegionalAustralia,
-      isBushfireDeclared,
-      isNaturalDisasterDeclared,
-    } = eligibility;
+    const isEligible = checkIndustryEligibility(
+      industry,
+      visaType as '417' | '462',
+      eligibility,
+    );
 
-    const rules: Record<IndustryType, boolean> = {
-      hospitality_and_tourism:
-        isNorthernAustralia || isRemoteVeryRemote,
-      plant_and_animal_cultivation: isRegionalAustralia,
-      fishing_and_pearling: isRegionalAustralia,
-      tree_farming_and_felling: isRegionalAustralia,
-      mining: isRegionalAustralia,
-      construction: isRegionalAustralia,
-      bushfire_recovery_work: isBushfireDeclared,
-      weather_recovery_work: isNaturalDisasterDeclared,
-      critical_covid19_work: true,
-      other: false,
-    };
-
-    return { isEligible: rules[industry] ?? false };
+    return { isEligible };
   }
 
   async remove(userId: string, id: string): Promise<{ message: string }> {
@@ -217,14 +201,12 @@ export class EmployersService {
   }
 
   private async resolveUserVisaType(userId: string): Promise<string> {
-    const profile = await this.prisma.userProfile.findUnique({
-      where: { userId },
-      select: { nationality: true },
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { whvType: true },
     });
 
-    if (!profile?.nationality) return '417';
-
-    return getVisaTypeForNationality(profile.nationality) ?? '417';
+    return user?.whvType ?? '417';
   }
 
   private mapToResponse(employer: EmployerWithSuburb): Employer {

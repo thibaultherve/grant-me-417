@@ -34,20 +34,22 @@ enum IndustryType {
 // ─── Users ────────────────────────────────────
 
 model User {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email        String   @unique @db.VarChar(255)
-  passwordHash String   @map("password_hash") @db.VarChar(255)
-  firstName    String?  @map("first_name") @db.VarChar(100)
-  lastName     String?  @map("last_name") @db.VarChar(100)
-  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email              String   @unique @db.VarChar(255)
+  passwordHash       String   @map("password_hash") @db.VarChar(255)
+  firstName          String?  @map("first_name") @db.VarChar(100)
+  nationality        String?  @db.VarChar(2) // ISO 3166-1 alpha-2
+  whvType            String?  @map("whv_type") @db.VarChar(3) // '417' or '462', derived from nationality
+  ukCitizenExemption Boolean? @default(false) @map("uk_citizen_exemption")
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt          DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
 
-  profile       UserProfile?
   visas         UserVisa[]
   employers     Employer[]
   workEntries   WorkEntry[]
   refreshTokens RefreshToken[]
 
+  @@index([nationality], map: "idx_users_nationality")
   @@map("users")
 }
 
@@ -66,23 +68,6 @@ model RefreshToken {
   @@index([userId], map: "idx_refresh_tokens_user_id")
   @@index([expiresAt], map: "idx_refresh_tokens_expires_at")
   @@map("refresh_tokens")
-}
-
-// ─── User Profiles ───────────────────────────────────────────────────────────
-
-model UserProfile {
-  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId             String   @unique @map("user_id") @db.Uuid
-  nationality        String?  @db.VarChar(2) // ISO 3166-1 alpha-2, CHECK ^[A-Z]{2}$
-  ukCitizenExemption Boolean? @default(false) @map("uk_citizen_exemption")
-  createdAt          DateTime? @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt          DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId], map: "idx_user_profiles_user_id")
-  @@index([nationality], map: "idx_user_profiles_nationality")
-  @@map("user_profiles")
 }
 
 // ─── User Visas ──────────────────────────────────────────────────────────────

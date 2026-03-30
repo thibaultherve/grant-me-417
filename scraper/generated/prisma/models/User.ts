@@ -29,7 +29,9 @@ export type UserMinAggregateOutputType = {
   email: string | null
   passwordHash: string | null
   firstName: string | null
-  lastName: string | null
+  nationality: string | null
+  whvType: string | null
+  ukCitizenExemption: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -39,7 +41,9 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   passwordHash: string | null
   firstName: string | null
-  lastName: string | null
+  nationality: string | null
+  whvType: string | null
+  ukCitizenExemption: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -49,7 +53,9 @@ export type UserCountAggregateOutputType = {
   email: number
   passwordHash: number
   firstName: number
-  lastName: number
+  nationality: number
+  whvType: number
+  ukCitizenExemption: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -61,7 +67,9 @@ export type UserMinAggregateInputType = {
   email?: true
   passwordHash?: true
   firstName?: true
-  lastName?: true
+  nationality?: true
+  whvType?: true
+  ukCitizenExemption?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -71,7 +79,9 @@ export type UserMaxAggregateInputType = {
   email?: true
   passwordHash?: true
   firstName?: true
-  lastName?: true
+  nationality?: true
+  whvType?: true
+  ukCitizenExemption?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -81,7 +91,9 @@ export type UserCountAggregateInputType = {
   email?: true
   passwordHash?: true
   firstName?: true
-  lastName?: true
+  nationality?: true
+  whvType?: true
+  ukCitizenExemption?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -164,7 +176,9 @@ export type UserGroupByOutputType = {
   email: string
   passwordHash: string
   firstName: string | null
-  lastName: string | null
+  nationality: string | null
+  whvType: string | null
+  ukCitizenExemption: boolean | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -195,10 +209,11 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
   firstName?: Prisma.StringNullableFilter<"User"> | string | null
-  lastName?: Prisma.StringNullableFilter<"User"> | string | null
+  nationality?: Prisma.StringNullableFilter<"User"> | string | null
+  whvType?: Prisma.StringNullableFilter<"User"> | string | null
+  ukCitizenExemption?: Prisma.BoolNullableFilter<"User"> | boolean | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  profile?: Prisma.XOR<Prisma.UserProfileNullableScalarRelationFilter, Prisma.UserProfileWhereInput> | null
   visas?: Prisma.UserVisaListRelationFilter
   employers?: Prisma.EmployerListRelationFilter
   workEntries?: Prisma.WorkEntryListRelationFilter
@@ -210,10 +225,11 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   firstName?: Prisma.SortOrderInput | Prisma.SortOrder
-  lastName?: Prisma.SortOrderInput | Prisma.SortOrder
+  nationality?: Prisma.SortOrderInput | Prisma.SortOrder
+  whvType?: Prisma.SortOrderInput | Prisma.SortOrder
+  ukCitizenExemption?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  profile?: Prisma.UserProfileOrderByWithRelationInput
   visas?: Prisma.UserVisaOrderByRelationAggregateInput
   employers?: Prisma.EmployerOrderByRelationAggregateInput
   workEntries?: Prisma.WorkEntryOrderByRelationAggregateInput
@@ -228,10 +244,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   passwordHash?: Prisma.StringFilter<"User"> | string
   firstName?: Prisma.StringNullableFilter<"User"> | string | null
-  lastName?: Prisma.StringNullableFilter<"User"> | string | null
+  nationality?: Prisma.StringNullableFilter<"User"> | string | null
+  whvType?: Prisma.StringNullableFilter<"User"> | string | null
+  ukCitizenExemption?: Prisma.BoolNullableFilter<"User"> | boolean | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  profile?: Prisma.XOR<Prisma.UserProfileNullableScalarRelationFilter, Prisma.UserProfileWhereInput> | null
   visas?: Prisma.UserVisaListRelationFilter
   employers?: Prisma.EmployerListRelationFilter
   workEntries?: Prisma.WorkEntryListRelationFilter
@@ -243,7 +260,9 @@ export type UserOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   firstName?: Prisma.SortOrderInput | Prisma.SortOrder
-  lastName?: Prisma.SortOrderInput | Prisma.SortOrder
+  nationality?: Prisma.SortOrderInput | Prisma.SortOrder
+  whvType?: Prisma.SortOrderInput | Prisma.SortOrder
+  ukCitizenExemption?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -259,7 +278,9 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
   firstName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  lastName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  nationality?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  whvType?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  ukCitizenExemption?: Prisma.BoolNullableWithAggregatesFilter<"User"> | boolean | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -269,10 +290,11 @@ export type UserCreateInput = {
   email: string
   passwordHash: string
   firstName?: string | null
-  lastName?: string | null
+  nationality?: string | null
+  whvType?: string | null
+  ukCitizenExemption?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  profile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   visas?: Prisma.UserVisaCreateNestedManyWithoutUserInput
   employers?: Prisma.EmployerCreateNestedManyWithoutUserInput
   workEntries?: Prisma.WorkEntryCreateNestedManyWithoutUserInput
@@ -284,10 +306,11 @@ export type UserUncheckedCreateInput = {
   email: string
   passwordHash: string
   firstName?: string | null
-  lastName?: string | null
+  nationality?: string | null
+  whvType?: string | null
+  ukCitizenExemption?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  profile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   visas?: Prisma.UserVisaUncheckedCreateNestedManyWithoutUserInput
   employers?: Prisma.EmployerUncheckedCreateNestedManyWithoutUserInput
   workEntries?: Prisma.WorkEntryUncheckedCreateNestedManyWithoutUserInput
@@ -299,10 +322,11 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whvType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukCitizenExemption?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  profile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   visas?: Prisma.UserVisaUpdateManyWithoutUserNestedInput
   employers?: Prisma.EmployerUpdateManyWithoutUserNestedInput
   workEntries?: Prisma.WorkEntryUpdateManyWithoutUserNestedInput
@@ -314,10 +338,11 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whvType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukCitizenExemption?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  profile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   visas?: Prisma.UserVisaUncheckedUpdateManyWithoutUserNestedInput
   employers?: Prisma.EmployerUncheckedUpdateManyWithoutUserNestedInput
   workEntries?: Prisma.WorkEntryUncheckedUpdateManyWithoutUserNestedInput
@@ -329,7 +354,9 @@ export type UserCreateManyInput = {
   email: string
   passwordHash: string
   firstName?: string | null
-  lastName?: string | null
+  nationality?: string | null
+  whvType?: string | null
+  ukCitizenExemption?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -339,7 +366,9 @@ export type UserUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whvType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukCitizenExemption?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -349,7 +378,9 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whvType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukCitizenExemption?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -359,7 +390,9 @@ export type UserCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
-  lastName?: Prisma.SortOrder
+  nationality?: Prisma.SortOrder
+  whvType?: Prisma.SortOrder
+  ukCitizenExemption?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -369,7 +402,9 @@ export type UserMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
-  lastName?: Prisma.SortOrder
+  nationality?: Prisma.SortOrder
+  whvType?: Prisma.SortOrder
+  ukCitizenExemption?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -379,7 +414,9 @@ export type UserMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   firstName?: Prisma.SortOrder
-  lastName?: Prisma.SortOrder
+  nationality?: Prisma.SortOrder
+  whvType?: Prisma.SortOrder
+  ukCitizenExemption?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -395,6 +432,10 @@ export type StringFieldUpdateOperationsInput = {
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type NullableBoolFieldUpdateOperationsInput = {
+  set?: boolean | null
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -413,20 +454,6 @@ export type UserUpdateOneRequiredWithoutRefreshTokensNestedInput = {
   upsert?: Prisma.UserUpsertWithoutRefreshTokensInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRefreshTokensInput, Prisma.UserUpdateWithoutRefreshTokensInput>, Prisma.UserUncheckedUpdateWithoutRefreshTokensInput>
-}
-
-export type UserCreateNestedOneWithoutProfileInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutProfileInput, Prisma.UserUncheckedCreateWithoutProfileInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProfileInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutProfileNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutProfileInput, Prisma.UserUncheckedCreateWithoutProfileInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProfileInput
-  upsert?: Prisma.UserUpsertWithoutProfileInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProfileInput, Prisma.UserUpdateWithoutProfileInput>, Prisma.UserUncheckedUpdateWithoutProfileInput>
 }
 
 export type UserCreateNestedOneWithoutVisasInput = {
@@ -476,10 +503,11 @@ export type UserCreateWithoutRefreshTokensInput = {
   email: string
   passwordHash: string
   firstName?: string | null
-  lastName?: string | null
+  nationality?: string | null
+  whvType?: string | null
+  ukCitizenExemption?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  profile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   visas?: Prisma.UserVisaCreateNestedManyWithoutUserInput
   employers?: Prisma.EmployerCreateNestedManyWithoutUserInput
   workEntries?: Prisma.WorkEntryCreateNestedManyWithoutUserInput
@@ -490,10 +518,11 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   email: string
   passwordHash: string
   firstName?: string | null
-  lastName?: string | null
+  nationality?: string | null
+  whvType?: string | null
+  ukCitizenExemption?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  profile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   visas?: Prisma.UserVisaUncheckedCreateNestedManyWithoutUserInput
   employers?: Prisma.EmployerUncheckedCreateNestedManyWithoutUserInput
   workEntries?: Prisma.WorkEntryUncheckedCreateNestedManyWithoutUserInput
@@ -520,10 +549,11 @@ export type UserUpdateWithoutRefreshTokensInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whvType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukCitizenExemption?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  profile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   visas?: Prisma.UserVisaUpdateManyWithoutUserNestedInput
   employers?: Prisma.EmployerUpdateManyWithoutUserNestedInput
   workEntries?: Prisma.WorkEntryUpdateManyWithoutUserNestedInput
@@ -534,85 +564,14 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  profile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
-  visas?: Prisma.UserVisaUncheckedUpdateManyWithoutUserNestedInput
-  employers?: Prisma.EmployerUncheckedUpdateManyWithoutUserNestedInput
-  workEntries?: Prisma.WorkEntryUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutProfileInput = {
-  id?: string
-  email: string
-  passwordHash: string
-  firstName?: string | null
-  lastName?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  visas?: Prisma.UserVisaCreateNestedManyWithoutUserInput
-  employers?: Prisma.EmployerCreateNestedManyWithoutUserInput
-  workEntries?: Prisma.WorkEntryCreateNestedManyWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutProfileInput = {
-  id?: string
-  email: string
-  passwordHash: string
-  firstName?: string | null
-  lastName?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  visas?: Prisma.UserVisaUncheckedCreateNestedManyWithoutUserInput
-  employers?: Prisma.EmployerUncheckedCreateNestedManyWithoutUserInput
-  workEntries?: Prisma.WorkEntryUncheckedCreateNestedManyWithoutUserInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutProfileInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutProfileInput, Prisma.UserUncheckedCreateWithoutProfileInput>
-}
-
-export type UserUpsertWithoutProfileInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutProfileInput, Prisma.UserUncheckedUpdateWithoutProfileInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutProfileInput, Prisma.UserUncheckedCreateWithoutProfileInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutProfileInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutProfileInput, Prisma.UserUncheckedUpdateWithoutProfileInput>
-}
-
-export type UserUpdateWithoutProfileInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  visas?: Prisma.UserVisaUpdateManyWithoutUserNestedInput
-  employers?: Prisma.EmployerUpdateManyWithoutUserNestedInput
-  workEntries?: Prisma.WorkEntryUpdateManyWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutProfileInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whvType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukCitizenExemption?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   visas?: Prisma.UserVisaUncheckedUpdateManyWithoutUserNestedInput
   employers?: Prisma.EmployerUncheckedUpdateManyWithoutUserNestedInput
   workEntries?: Prisma.WorkEntryUncheckedUpdateManyWithoutUserNestedInput
-  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutVisasInput = {
@@ -620,10 +579,11 @@ export type UserCreateWithoutVisasInput = {
   email: string
   passwordHash: string
   firstName?: string | null
-  lastName?: string | null
+  nationality?: string | null
+  whvType?: string | null
+  ukCitizenExemption?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  profile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   employers?: Prisma.EmployerCreateNestedManyWithoutUserInput
   workEntries?: Prisma.WorkEntryCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
@@ -634,10 +594,11 @@ export type UserUncheckedCreateWithoutVisasInput = {
   email: string
   passwordHash: string
   firstName?: string | null
-  lastName?: string | null
+  nationality?: string | null
+  whvType?: string | null
+  ukCitizenExemption?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  profile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   employers?: Prisma.EmployerUncheckedCreateNestedManyWithoutUserInput
   workEntries?: Prisma.WorkEntryUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
@@ -664,10 +625,11 @@ export type UserUpdateWithoutVisasInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whvType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukCitizenExemption?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  profile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   employers?: Prisma.EmployerUpdateManyWithoutUserNestedInput
   workEntries?: Prisma.WorkEntryUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
@@ -678,10 +640,11 @@ export type UserUncheckedUpdateWithoutVisasInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whvType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukCitizenExemption?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  profile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   employers?: Prisma.EmployerUncheckedUpdateManyWithoutUserNestedInput
   workEntries?: Prisma.WorkEntryUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -692,10 +655,11 @@ export type UserCreateWithoutEmployersInput = {
   email: string
   passwordHash: string
   firstName?: string | null
-  lastName?: string | null
+  nationality?: string | null
+  whvType?: string | null
+  ukCitizenExemption?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  profile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   visas?: Prisma.UserVisaCreateNestedManyWithoutUserInput
   workEntries?: Prisma.WorkEntryCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
@@ -706,10 +670,11 @@ export type UserUncheckedCreateWithoutEmployersInput = {
   email: string
   passwordHash: string
   firstName?: string | null
-  lastName?: string | null
+  nationality?: string | null
+  whvType?: string | null
+  ukCitizenExemption?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  profile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   visas?: Prisma.UserVisaUncheckedCreateNestedManyWithoutUserInput
   workEntries?: Prisma.WorkEntryUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
@@ -736,10 +701,11 @@ export type UserUpdateWithoutEmployersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whvType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukCitizenExemption?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  profile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   visas?: Prisma.UserVisaUpdateManyWithoutUserNestedInput
   workEntries?: Prisma.WorkEntryUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
@@ -750,10 +716,11 @@ export type UserUncheckedUpdateWithoutEmployersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whvType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukCitizenExemption?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  profile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   visas?: Prisma.UserVisaUncheckedUpdateManyWithoutUserNestedInput
   workEntries?: Prisma.WorkEntryUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -764,10 +731,11 @@ export type UserCreateWithoutWorkEntriesInput = {
   email: string
   passwordHash: string
   firstName?: string | null
-  lastName?: string | null
+  nationality?: string | null
+  whvType?: string | null
+  ukCitizenExemption?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  profile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   visas?: Prisma.UserVisaCreateNestedManyWithoutUserInput
   employers?: Prisma.EmployerCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
@@ -778,10 +746,11 @@ export type UserUncheckedCreateWithoutWorkEntriesInput = {
   email: string
   passwordHash: string
   firstName?: string | null
-  lastName?: string | null
+  nationality?: string | null
+  whvType?: string | null
+  ukCitizenExemption?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  profile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   visas?: Prisma.UserVisaUncheckedCreateNestedManyWithoutUserInput
   employers?: Prisma.EmployerUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
@@ -808,10 +777,11 @@ export type UserUpdateWithoutWorkEntriesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whvType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukCitizenExemption?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  profile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   visas?: Prisma.UserVisaUpdateManyWithoutUserNestedInput
   employers?: Prisma.EmployerUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
@@ -822,10 +792,11 @@ export type UserUncheckedUpdateWithoutWorkEntriesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whvType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukCitizenExemption?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  profile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   visas?: Prisma.UserVisaUncheckedUpdateManyWithoutUserNestedInput
   employers?: Prisma.EmployerUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -894,10 +865,11 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   email?: boolean
   passwordHash?: boolean
   firstName?: boolean
-  lastName?: boolean
+  nationality?: boolean
+  whvType?: boolean
+  ukCitizenExemption?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  profile?: boolean | Prisma.User$profileArgs<ExtArgs>
   visas?: boolean | Prisma.User$visasArgs<ExtArgs>
   employers?: boolean | Prisma.User$employersArgs<ExtArgs>
   workEntries?: boolean | Prisma.User$workEntriesArgs<ExtArgs>
@@ -910,7 +882,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   passwordHash?: boolean
   firstName?: boolean
-  lastName?: boolean
+  nationality?: boolean
+  whvType?: boolean
+  ukCitizenExemption?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -920,7 +894,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   passwordHash?: boolean
   firstName?: boolean
-  lastName?: boolean
+  nationality?: boolean
+  whvType?: boolean
+  ukCitizenExemption?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -930,14 +906,15 @@ export type UserSelectScalar = {
   email?: boolean
   passwordHash?: boolean
   firstName?: boolean
-  lastName?: boolean
+  nationality?: boolean
+  whvType?: boolean
+  ukCitizenExemption?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "firstName" | "lastName" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "firstName" | "nationality" | "whvType" | "ukCitizenExemption" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  profile?: boolean | Prisma.User$profileArgs<ExtArgs>
   visas?: boolean | Prisma.User$visasArgs<ExtArgs>
   employers?: boolean | Prisma.User$employersArgs<ExtArgs>
   workEntries?: boolean | Prisma.User$workEntriesArgs<ExtArgs>
@@ -950,7 +927,6 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    profile: Prisma.$UserProfilePayload<ExtArgs> | null
     visas: Prisma.$UserVisaPayload<ExtArgs>[]
     employers: Prisma.$EmployerPayload<ExtArgs>[]
     workEntries: Prisma.$WorkEntryPayload<ExtArgs>[]
@@ -961,7 +937,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     email: string
     passwordHash: string
     firstName: string | null
-    lastName: string | null
+    nationality: string | null
+    whvType: string | null
+    ukCitizenExemption: boolean | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1358,7 +1336,6 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  profile<T extends Prisma.User$profileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$profileArgs<ExtArgs>>): Prisma.Prisma__UserProfileClient<runtime.Types.Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   visas<T extends Prisma.User$visasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$visasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserVisaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   employers<T extends Prisma.User$employersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$employersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   workEntries<T extends Prisma.User$workEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$workEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1396,7 +1373,9 @@ export interface UserFieldRefs {
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly firstName: Prisma.FieldRef<"User", 'String'>
-  readonly lastName: Prisma.FieldRef<"User", 'String'>
+  readonly nationality: Prisma.FieldRef<"User", 'String'>
+  readonly whvType: Prisma.FieldRef<"User", 'String'>
+  readonly ukCitizenExemption: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -1784,25 +1763,6 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
-}
-
-/**
- * User.profile
- */
-export type User$profileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the UserProfile
-   */
-  select?: Prisma.UserProfileSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the UserProfile
-   */
-  omit?: Prisma.UserProfileOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserProfileInclude<ExtArgs> | null
-  where?: Prisma.UserProfileWhereInput
 }
 
 /**
