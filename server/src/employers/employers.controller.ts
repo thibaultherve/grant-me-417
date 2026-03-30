@@ -22,7 +22,7 @@ import {
   type CreateEmployerInput,
   type UpdateEmployerInput,
   type CheckEligibilityInput,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
 @Controller('employers')
 @UseGuards(JwtAuthGuard)
@@ -46,7 +46,7 @@ export class EmployersController {
   async checkEligibility(
     @Body(new ZodValidationPipe(checkEligibilityInputSchema)) body: CheckEligibilityInput,
   ) {
-    return this.employersService.checkEligibility(body.suburbId, body.industry);
+    return this.employersService.checkEligibility(body.suburbId, body.industry, body.visaType);
   }
 
   @Post()

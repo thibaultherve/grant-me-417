@@ -1,6 +1,7 @@
-import { HOUR_TO_DAY_THRESHOLDS, getDaysRequired } from '@get-granted/shared';
+import { HOUR_TO_DAY_THRESHOLDS, getDaysRequired } from '@regranted/shared';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client.js';
+import { getWeekForDate, getWeekRanges } from '../common/utils/date.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 @Injectable()
@@ -79,6 +80,8 @@ export class VisaProgressService {
       workedDates.add(entry.workDate.toISOString().split('T')[0]);
     }
 
+    totalHours = Math.round(totalHours * 100) / 100;
+    eligibleHours = Math.round(eligibleHours * 100) / 100;
     const eligibleDays = this.hoursToEligibleDays(eligibleHours);
     const daysWorked = workedDates.size;
 
@@ -138,7 +141,7 @@ export class VisaProgressService {
 
     if (!visa || !visa.expiryDate) return;
 
-    const weeks = this.getWeekRanges(visa.arrivalDate, visa.expiryDate);
+    const weeks = getWeekRanges(visa.arrivalDate, visa.expiryDate);
 
     // Delete existing rows first (idempotent)
     await this.prisma.visaWeeklyProgress.deleteMany({
@@ -174,7 +177,7 @@ export class VisaProgressService {
     });
 
     for (const visa of visas) {
-      const { start, end } = this.getWeekForDate(workDate);
+      const { start, end } = getWeekForDate(workDate);
 
       const progress = await this.calculateWeeklyProgress(visa.id, start, end);
 
@@ -229,7 +232,7 @@ export class VisaProgressService {
 
     if (!visa || !visa.expiryDate) return;
 
-    const weeks = this.getWeekRanges(visa.arrivalDate, visa.expiryDate);
+    const weeks = getWeekRanges(visa.arrivalDate, visa.expiryDate);
 
     // Fetch ALL work entries for the visa period in a single query
     const allEntries = await this.prisma.workEntry.findMany({
@@ -251,7 +254,7 @@ export class VisaProgressService {
     const entriesByWeek = new Map<string, typeof allEntries>();
 
     for (const entry of allEntries) {
-      const { start } = this.getWeekForDate(entry.workDate);
+      const { start } = getWeekForDate(entry.workDate);
       const key = start.toISOString();
       const bucket = entriesByWeek.get(key);
       if (bucket) {
@@ -288,6 +291,8 @@ export class VisaProgressService {
         workedDates.add(entry.workDate.toISOString().split('T')[0]);
       }
 
+      totalHours = Math.round(totalHours * 100) / 100;
+      eligibleHours = Math.round(eligibleHours * 100) / 100;
       const eligibleDays = this.hoursToEligibleDays(eligibleHours);
       const daysWorked = workedDates.size;
 
@@ -335,7 +340,7 @@ export class VisaProgressService {
     // 1. Deduplicate into unique weeks
     const weekMap = new Map<string, { start: Date; end: Date }>();
     for (const date of affectedDates) {
-      const week = this.getWeekForDate(date);
+      const week = getWeekForDate(date);
       const key = week.start.toISOString();
       if (!weekMap.has(key)) {
         weekMap.set(key, week);
@@ -378,7 +383,7 @@ export class VisaProgressService {
     // 5. Group entries by week key
     const entriesByWeek = new Map<string, typeof allEntries>();
     for (const entry of allEntries) {
-      const { start } = this.getWeekForDate(entry.workDate);
+      const { start } = getWeekForDate(entry.workDate);
       const key = start.toISOString();
       const bucket = entriesByWeek.get(key);
       if (bucket) {
@@ -431,6 +436,8 @@ export class VisaProgressService {
           workedDates.add(entry.workDate.toISOString().split('T')[0]);
         }
 
+        totalHours = Math.round(totalHours * 100) / 100;
+        eligibleHours = Math.round(eligibleHours * 100) / 100;
         const eligibleDays = this.hoursToEligibleDays(eligibleHours);
         const daysWorked = workedDates.size;
 
@@ -510,51 +517,4 @@ export class VisaProgressService {
     return getDaysRequired(visaType);
   }
 
-  // ─── Private Helpers ──────────────────────────────────────────────────────
-
-  /**
-   * Generate Monday→Sunday week ranges covering a date span.
-   */
-  private getWeekRanges(
-    startDate: Date,
-    endDate: Date,
-  ): { start: Date; end: Date }[] {
-    const weeks: { start: Date; end: Date }[] = [];
-
-    // Find the Monday on or before startDate
-    const current = new Date(startDate);
-    const dayOfWeek = current.getUTCDay(); // 0=Sun, 1=Mon, ...
-    const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-    current.setUTCDate(current.getUTCDate() - daysToMonday);
-
-    while (current <= endDate) {
-      const weekStart = new Date(current);
-      const weekEnd = new Date(current);
-      weekEnd.setUTCDate(weekEnd.getUTCDate() + 6);
-
-      weeks.push({ start: weekStart, end: weekEnd });
-
-      current.setUTCDate(current.getUTCDate() + 7);
-    }
-
-    return weeks;
-  }
-
-  /**
-   * Get the Monday→Sunday range for a specific date.
-   */
-  private getWeekForDate(date: Date): { start: Date; end: Date } {
-    const d = new Date(date);
-    const dayOfWeek = d.getUTCDay();
-    const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-    const start = new Date(d);
-    start.setUTCDate(start.getUTCDate() - daysToMonday);
-    start.setUTCHours(0, 0, 0, 0);
-
-    const end = new Date(start);
-    end.setUTCDate(end.getUTCDate() + 6);
-    end.setUTCHours(0, 0, 0, 0);
-
-    return { start, end };
-  }
 }

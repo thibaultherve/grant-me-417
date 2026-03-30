@@ -30,7 +30,9 @@ import {
   SelectTrigger,
 } from '@/components/ui/select';
 
-import type { Employer, IndustryType } from '@get-granted/shared';
+import type { Employer, IndustryType } from '@regranted/shared';
+
+import { useUser } from '@/lib/auth';
 
 import { useCheckEligibility } from '../api/use-employers';
 import { useGetSuburb } from '../api/use-suburbs';
@@ -61,6 +63,8 @@ export function EmployerForm({
   isDeleting,
 }: EmployerFormProps) {
   const isEdit = mode === 'edit';
+  const { data: user } = useUser();
+  const visaType = user?.whvType ?? '417';
 
   const form = useForm<CreateEmployerFormData>({
     resolver: zodResolver(createEmployerSchema),
@@ -221,6 +225,7 @@ export function EmployerForm({
             isChecking={isChecking}
             selectedIndustry={industry ?? null}
             suburbFlags={suburbFlags}
+            visaType={visaType}
             onManualEligibilityChange={(eligible) =>
               form.setValue('isEligible', eligible)
             }

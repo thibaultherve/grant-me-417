@@ -35,6 +35,7 @@ export const updateEmployerSchema = z.object({
 export const checkEligibilityInputSchema = z.object({
   suburbId: z.number().int().positive(),
   industry: industryTypeSchema,
+  visaType: z.enum(['417', '462']).optional(),
 });
 
 export const checkEligibilityOutputSchema = z.object({

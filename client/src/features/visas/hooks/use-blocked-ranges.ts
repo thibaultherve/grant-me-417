@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import type { VisaType } from '@get-granted/shared';
+import type { VisaType } from '@regranted/shared';
 
 import { useVisaContext } from './use-visa-context';
 
@@ -13,14 +13,14 @@ export interface BlockedRange {
   reason: BlockedRangeReason;
 }
 
-/** Hex colors matching the ordinal badge colors */
+/** CSS variable colors matching the ordinal badge colors */
 const VISA_COLORS: Record<VisaType, string> = {
-  first_whv: '#10b981',
-  second_whv: '#3b82f6',
-  third_whv: '#f59e0b',
+  first_whv: 'var(--visa-1st-color)',
+  second_whv: 'var(--visa-2nd-color)',
+  third_whv: 'var(--visa-3rd-color)',
 };
 
-export const OVERLAP_ZONE_COLOR = '#9ca3af';
+export const OVERLAP_ZONE_COLOR = 'var(--disabled)';
 
 export function getBlockedRangeColor(visaType: VisaType): string {
   return VISA_COLORS[visaType];

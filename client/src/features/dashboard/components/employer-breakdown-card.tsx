@@ -4,7 +4,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import type { VisaOverview } from '@get-granted/shared';
+import type { VisaOverview } from '@regranted/shared';
 import { cn } from '@/lib/utils';
 
 const ELIGIBLE_COLORS = [
@@ -120,7 +120,7 @@ export function EmployerBreakdownCard({
           <div
             className={cn(
               'flex flex-col gap-3',
-              isScrollable && 'overflow-y-auto max-h-50 pr-1',
+              isScrollable && 'scrollbar-elegant max-h-44',
             )}
           >
             {employerBreakdown.map((e) => {
@@ -141,10 +141,10 @@ export function EmployerBreakdownCard({
                       </span>
                       <span
                         className={cn(
-                          'text-xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap shrink-0',
+                          'text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap shrink-0',
                           e.isEligible
                             ? 'bg-success-light text-success'
-                            : 'bg-muted text-muted-foreground',
+                            : 'bg-[#e4e8ef] text-muted-foreground',
                         )}
                       >
                         {e.isEligible ? 'Eligible' : 'Non-eligible'}
@@ -173,7 +173,7 @@ export function EmployerBreakdownCard({
           </div>
 
           {isScrollable && (
-            <p className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1">
+            <p className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1 -mt-2">
               <span>↓</span> Scroll for more
             </p>
           )}

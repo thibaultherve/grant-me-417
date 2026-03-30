@@ -28,7 +28,7 @@ export const WeeklyProgressChart = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-[300px] flex items-center justify-center">
+          <div className="h-75 flex items-center justify-center">
             <p className="text-muted-foreground">Loading chart...</p>
           </div>
         </CardContent>
@@ -46,7 +46,7 @@ export const WeeklyProgressChart = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-[300px] flex items-center justify-center">
+          <div className="h-75 flex items-center justify-center">
             <p className="text-muted-foreground">
               No weekly data available yet. Start logging your work hours!
             </p>
@@ -172,7 +172,7 @@ export const WeeklyProgressChart = () => {
 
                     {/* Tooltip */}
                     {isHovered && data.eligibleDays > 0 && (
-                      <div className="absolute bottom-full mb-2 bg-popover text-popover-foreground border rounded-md shadow-md p-3 space-y-1 z-10 min-w-[180px]">
+                      <div className="absolute bottom-full mb-2 bg-popover text-popover-foreground border rounded-md shadow-md p-3 space-y-1 z-10 min-w-45">
                         <p className="font-semibold text-xs">
                           {formatTooltipDate(data.fullDate)}
                         </p>

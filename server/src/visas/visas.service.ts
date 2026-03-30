@@ -16,8 +16,8 @@ import type {
   Visa,
   VisaType,
   WeeklyProgress,
-} from '@get-granted/shared';
-import { computeExpiryDate, getDaysRequired } from '@get-granted/shared';
+} from '@regranted/shared';
+import { computeExpiryDate, getDaysRequired } from '@regranted/shared';
 import {
   formatDateNullable,
   formatTimestamp,

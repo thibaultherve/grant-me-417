@@ -1,13 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import {
-  HOUR_TO_DAY_THRESHOLDS,
   type VisaOverview,
   type VisaOverviewMonthlyTrend,
   type VisaOverviewPace,
-  type VisaOverviewThisWeek,
   type VisaOverviewWeeklyProgress,
   type VisaType,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 import { Prisma } from '../../generated/prisma/client.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
@@ -30,17 +28,15 @@ export class VisaOverviewService {
     const arrivalDate = visa.arrivalDate;
     const expiryDate = visa.expiryDate;
 
-    // Q2-Q5 in parallel
-    const [weeklyRows, thisWeekEntries, workDistRows, employerRows] =
-      await Promise.all([
-        this.prisma.visaWeeklyProgress.findMany({
-          where: { userVisaId: visaId },
-          orderBy: { weekStartDate: 'asc' },
-        }),
-        this.fetchThisWeekEntries(userId, arrivalDate, expiryDate),
-        this.fetchWorkDistribution(userId, arrivalDate, expiryDate),
-        this.fetchEmployerBreakdown(userId, arrivalDate, expiryDate),
-      ]);
+    // Q2-Q4 in parallel
+    const [weeklyRows, workDistRows, employerRows] = await Promise.all([
+      this.prisma.visaWeeklyProgress.findMany({
+        where: { userVisaId: visaId },
+        orderBy: { weekStartDate: 'asc' },
+      }),
+      this.fetchWorkDistribution(userId, arrivalDate, expiryDate),
+      this.fetchEmployerBreakdown(userId, arrivalDate, expiryDate),
+    ]);
 
     return {
       visa: {
@@ -55,7 +51,6 @@ export class VisaOverviewService {
         isEligible: visa.isEligible ?? false,
       },
       pace: this.computePace(visa, arrivalDate, expiryDate),
-      thisWeek: this.computeThisWeek(thisWeekEntries),
       weeklyProgress: this.buildWeeklyProgress(weeklyRows),
       workDistribution: workDistRows.map((r) => ({
         industry: r.industry,
@@ -75,40 +70,6 @@ export class VisaOverviewService {
 
   private toDateStr(date: Date): string {
     return date.toISOString().split('T')[0];
-  }
-
-  private getWeekBounds(date: Date): { start: Date; end: Date } {
-    const d = new Date(date);
-    d.setUTCHours(0, 0, 0, 0);
-    const daysFromMonday = (d.getUTCDay() + 6) % 7;
-    const monday = new Date(d);
-    monday.setUTCDate(d.getUTCDate() - daysFromMonday);
-    const sunday = new Date(monday);
-    sunday.setUTCDate(monday.getUTCDate() + 6);
-    return { start: monday, end: sunday };
-  }
-
-  private hoursToEligibleDays(hours: number): number {
-    for (const threshold of HOUR_TO_DAY_THRESHOLDS) {
-      if (hours >= threshold.minHours) return threshold.eligibleDays;
-    }
-    return 0;
-  }
-
-  private getNextThreshold(
-    currentHours: number,
-  ): { hoursNeeded: number; eligibleDays: number } | null {
-    // HOUR_TO_DAY_THRESHOLDS is descending; iterate ascending for next threshold
-    for (let i = HOUR_TO_DAY_THRESHOLDS.length - 1; i >= 0; i--) {
-      const t = HOUR_TO_DAY_THRESHOLDS[i];
-      if (currentHours < t.minHours) {
-        return {
-          hoursNeeded: t.minHours - currentHours,
-          eligibleDays: t.eligibleDays,
-        };
-      }
-    }
-    return null; // already at max (>=30h)
   }
 
   // ─── In-memory computations ────────────────────────────────────────────────
@@ -151,53 +112,6 @@ export class VisaOverviewService {
     };
   }
 
-  private computeThisWeek(
-    entries: Array<{
-      workDate: Date;
-      hours: { toNumber(): number };
-      employer: { isEligible: boolean | null };
-    }>,
-  ): VisaOverviewThisWeek {
-    const today = new Date();
-    today.setUTCHours(0, 0, 0, 0);
-    const { start: weekStart, end: weekEnd } = this.getWeekBounds(today);
-
-    const dailyMap = new Map<string, number>();
-    let totalHours = 0;
-    let eligibleHours = 0;
-
-    for (const entry of entries) {
-      const dateStr = this.toDateStr(entry.workDate);
-      const hours = entry.hours.toNumber();
-      totalHours += hours;
-      if (entry.employer.isEligible) eligibleHours += hours;
-      dailyMap.set(dateStr, (dailyMap.get(dateStr) ?? 0) + hours);
-    }
-
-    const dailyHours = Array.from({ length: 7 }, (_, i) => {
-      const d = new Date(weekStart);
-      d.setUTCDate(weekStart.getUTCDate() + i);
-      const dateStr = this.toDateStr(d);
-      return { date: dateStr, dayOfWeek: i + 1, hours: dailyMap.get(dateStr) ?? 0 };
-    });
-
-    const nextThreshold = this.getNextThreshold(eligibleHours);
-    return {
-      weekStartDate: this.toDateStr(weekStart),
-      weekEndDate: this.toDateStr(weekEnd),
-      totalHours: round2(totalHours),
-      eligibleHours: round2(eligibleHours),
-      eligibleDays: this.hoursToEligibleDays(eligibleHours),
-      dailyHours,
-      nextThreshold: nextThreshold
-        ? {
-            hoursNeeded: round2(nextThreshold.hoursNeeded),
-            eligibleDays: nextThreshold.eligibleDays,
-          }
-        : null,
-    };
-  }
-
   private buildWeeklyProgress(
     rows: Array<{
       weekStartDate: Date;
@@ -233,30 +147,6 @@ export class VisaOverviewService {
   }
 
   // ─── DB queries ────────────────────────────────────────────────────────────
-
-  private async fetchThisWeekEntries(
-    userId: string,
-    arrivalDate: Date,
-    expiryDate: Date | null,
-  ) {
-    const today = new Date();
-    today.setUTCHours(0, 0, 0, 0);
-    const { start: weekStart, end: weekEnd } = this.getWeekBounds(today);
-
-    const effectiveStart = weekStart < arrivalDate ? arrivalDate : weekStart;
-    const effectiveEnd =
-      expiryDate && weekEnd > expiryDate ? expiryDate : weekEnd;
-
-    if (effectiveStart > effectiveEnd) return [];
-
-    return this.prisma.workEntry.findMany({
-      where: {
-        userId,
-        workDate: { gte: effectiveStart, lte: effectiveEnd },
-      },
-      include: { employer: { select: { isEligible: true } } },
-    });
-  }
 
   private async fetchWorkDistribution(
     userId: string,

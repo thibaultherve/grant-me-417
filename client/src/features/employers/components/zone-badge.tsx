@@ -68,7 +68,7 @@ export function ZoneBadge({ zone, size = 'md', className }: ZoneBadgeProps) {
     <div
       className={cn(
         'rounded-md flex items-center justify-center shadow-sm shrink-0',
-        size === 'sm' ? 'w-[22px] h-[22px]' : 'w-7 h-7',
+        size === 'sm' ? 'w-5.5 h-5.5' : 'w-7 h-7',
         config.bg,
         className,
       )}

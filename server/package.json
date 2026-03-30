@@ -1,7 +1,7 @@
 {
-  "name": "@get-granted/server",
+  "name": "@regranted/server",
   "version": "0.0.0",
-  "description": "GET GRANTED 417 - NestJS API Server",
+  "description": "ReGranted - NestJS API Server",
   "private": true,
   "scripts": {
     "build": "nest build",
@@ -27,7 +27,7 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@get-granted/shared": "workspace:*",
+    "@regranted/shared": "workspace:*",
     "@nestjs/cache-manager": "^3.1.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.3",

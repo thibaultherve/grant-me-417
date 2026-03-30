@@ -1,6 +1,6 @@
 import { Plane } from 'lucide-react';
 
-import type { Visa } from '@get-granted/shared';
+import type { Visa } from '@regranted/shared';
 
 import { VisaCard } from './visa-card';
 

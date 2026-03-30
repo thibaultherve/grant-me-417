@@ -29,6 +29,9 @@ dist-ssr
 .claude
 CLAUDE.md
 
+# Docs
+docs
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -43,3 +46,7 @@ CLAUDE.md
 # Server specific
 server/coverage
 server/generated
+server/prisma/seed-data.json
+
+# Scraper cache
+.date-cache-*.json

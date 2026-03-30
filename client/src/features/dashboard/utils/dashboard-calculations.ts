@@ -1,6 +1,7 @@
-import { HOUR_TO_DAY_THRESHOLDS } from '@get-granted/shared';
+import { GOAL_TIGHT_THRESHOLD_WEEKS } from '@regranted/shared';
 
 import type {
+  GoalDatePrediction,
   MonthlyTrendChartPoint,
   PaceStatus,
   PaceStatusInfo,
@@ -10,8 +11,9 @@ import type {
 import type {
   VisaOverviewMonthlyTrend,
   VisaOverviewPace,
+  VisaOverviewVisa,
   VisaOverviewWeeklyProgress,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
 // ─── Pace Status ─────────────────────────────────────────────────────────────
 
@@ -47,24 +49,122 @@ export function getPaceStatus(pace: VisaOverviewPace): PaceStatusInfo {
   return { status, delta, pct };
 }
 
-// ─── Next Threshold ───────────────────────────────────────────────────────────
+// ─── Goal Date Prediction ────────────────────────────────────────────────────
+
+const MS_PER_DAY = 86_400_000;
 
 /**
- * Returns the next threshold info given current eligible hours this week.
- * Returns null if already at max (30h).
+ * Projects when the user will reach their required eligible days
+ * based on current weekly pace.
  */
-export function getNextThreshold(
-  eligibleHours: number,
-): { hoursNeeded: number; eligibleDays: number } | null {
-  for (const threshold of HOUR_TO_DAY_THRESHOLDS) {
-    if (eligibleHours < threshold.minHours) {
-      return {
-        hoursNeeded: threshold.minHours - eligibleHours,
-        eligibleDays: threshold.eligibleDays,
-      };
-    }
+export function computeGoalDatePrediction(
+  visa: VisaOverviewVisa,
+  pace: VisaOverviewPace,
+): GoalDatePrediction {
+  const { daysRequired, eligibleDays, isEligible, expiryDate } = visa;
+  const { currentPace } = pace;
+
+  // Edge case: no goal (third_whv)
+  if (daysRequired === 0) {
+    return {
+      status: 'no-goal',
+      projectedDate: null,
+      countdownDays: 0,
+      countdownLabel: '',
+      timelineProgress: 0,
+      subtextMessage: 'This visa type has no specified work day requirement.',
+      goalLabel: '',
+    };
   }
-  return null;
+
+  // Edge case: completed
+  if (isEligible) {
+    return {
+      status: 'completed',
+      projectedDate: null,
+      countdownDays: eligibleDays,
+      countdownLabel: 'days earned',
+      timelineProgress: 1,
+      subtextMessage: `You've earned ${eligibleDays} eligible days — goal of ${daysRequired} achieved!`,
+      goalLabel: 'Goal reached',
+    };
+  }
+
+  // Edge case: no data
+  if (currentPace === 0) {
+    return {
+      status: 'no-data',
+      projectedDate: null,
+      countdownDays: 0,
+      countdownLabel: '',
+      timelineProgress: 0,
+      subtextMessage: 'Start logging eligible work to see your goal prediction.',
+      goalLabel: '',
+    };
+  }
+
+  // Projection
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  const expiry = new Date(expiryDate);
+  expiry.setUTCHours(0, 0, 0, 0);
+
+  const daysToGo = daysRequired - eligibleDays;
+  const weeksToGoal = daysToGo / currentPace;
+  const projectedDate = new Date(today.getTime() + weeksToGoal * 7 * MS_PER_DAY);
+
+  const daysUntilExpiry = Math.max(1, Math.round((expiry.getTime() - today.getTime()) / MS_PER_DAY));
+  const daysUntilGoal = Math.round((projectedDate.getTime() - today.getTime()) / MS_PER_DAY);
+
+  // Determine status
+  const weeksBeforeExpiry = (expiry.getTime() - projectedDate.getTime()) / (7 * MS_PER_DAY);
+  const isAfterExpiry = projectedDate > expiry;
+
+  let status: GoalDatePrediction['status'];
+  if (isAfterExpiry) {
+    status = 'at-risk';
+  } else if (weeksBeforeExpiry <= GOAL_TIGHT_THRESHOLD_WEEKS) {
+    status = 'tight';
+  } else {
+    status = 'on-track';
+  }
+
+  // Countdown
+  let countdownDays: number;
+  let countdownLabel: string;
+  if (isAfterExpiry) {
+    countdownDays = Math.round((projectedDate.getTime() - expiry.getTime()) / MS_PER_DAY);
+    countdownLabel = 'days over';
+  } else {
+    countdownDays = daysUntilGoal;
+    countdownLabel = 'days';
+  }
+
+  // Timeline progress: fraction of today→expiry
+  const timelineProgress = isAfterExpiry
+    ? 1
+    : Math.min(Math.max(daysUntilGoal / daysUntilExpiry, 0), 1);
+
+  // Goal label
+  const goalLabel = isAfterExpiry
+    ? 'Goal past expiry'
+    : `↑ Goal · ${formatShortDate(projectedDate.toISOString().split('T')[0])}`;
+
+  // Subtext
+  const weeksRounded = Math.round(weeksToGoal);
+  const subtextMessage = isAfterExpiry
+    ? `At current pace, you'll reach your goal ~${countdownDays} days after visa expiry.`
+    : `You'll reach your goal in ~${weeksRounded} week${weeksRounded !== 1 ? 's' : ''} at current pace.`;
+
+  return {
+    status,
+    projectedDate,
+    countdownDays,
+    countdownLabel,
+    timelineProgress,
+    subtextMessage,
+    goalLabel,
+  };
 }
 
 // ─── Formatters ───────────────────────────────────────────────────────────────
@@ -116,16 +216,27 @@ export function buildWeeklyProgressChartData(
   const lastCumulative =
     actual.length > 0 ? actual[actual.length - 1].cumulativeEligibleDays : 0;
 
+  const lastDate = weeklyProgress.length > 0
+    ? new Date(weeklyProgress[weeklyProgress.length - 1].weekStartDate)
+    : new Date();
+
   const predictions: WeeklyProgressChartPoint[] = [];
   let cumulative = lastCumulative;
+  let weeksAfterGoal = 0;
   for (let i = 1; i <= weeksRemaining; i++) {
-    cumulative = Math.min(cumulative + currentPace, daysRequired);
+    cumulative = cumulative + currentPace;
+    const predDate = new Date(lastDate);
+    predDate.setDate(predDate.getDate() + i * 7);
     predictions.push({
-      label: `+${i}w`,
+      label: `W${getISOWeekNumber(predDate)}`,
       eligibleDays: 0,
       cumulativeEligibleDays: Math.round(cumulative),
       isPrediction: true,
     });
+    if (daysRequired > 0 && cumulative >= daysRequired) {
+      weeksAfterGoal++;
+      if (weeksAfterGoal >= 4) break;
+    }
   }
 
   return [...actual, ...predictions];
@@ -133,7 +244,14 @@ export function buildWeeklyProgressChartData(
 
 function formatWeekLabel(weekStartDate: string): string {
   const date = new Date(weekStartDate);
-  return MONTH_ABBR[date.getMonth()];
+  return `W${getISOWeekNumber(date)}`;
+}
+
+function getISOWeekNumber(date: Date): number {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
 }
 
 /**

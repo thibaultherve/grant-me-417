@@ -1,8 +1,8 @@
-# GET GRANTED 417 Developer Guidelines
+# ReGranted Developer Guidelines
 
 ## Project Overview
 
-**GET GRANTED 417** - Monorepo (React + NestJS + PostgreSQL)
+**ReGranted** - Monorepo (React + NestJS + PostgreSQL)
 
 ### Stack
 

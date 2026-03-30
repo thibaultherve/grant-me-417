@@ -2,7 +2,6 @@
 export type {
   RegisterInput,
   LoginInput,
-  RefreshTokenInput,
   AuthTokens,
   AuthUser,
   LoginResponse,
@@ -20,6 +19,7 @@ export type {
   UpdateVisaInput,
   Visa,
   VisaResponse,
+  VisaPeriod,
   WeeklyProgress,
 } from '../schemas/visa.js';
 
@@ -32,8 +32,6 @@ export type {
 } from '../schemas/employer.js';
 
 export type {
-  WeekEntry,
-  SaveWeekHoursInput,
   WorkEntry,
   WorkEntryResponse,
   WorkEntryWithEmployer,
@@ -42,16 +40,19 @@ export type {
   DayHoursEntry,
   MonthHours,
   MonthHoursResponse,
+  WeeklyEmployer,
+  WeekVisaBreakdown,
+  WeekData,
+  WeeklyHoursResponse,
 } from '../schemas/work-entry.js';
 
 export type {
   Postcode,
   PostcodeBadgeData,
+  PostcodeEligibility,
+  PostcodeDirectoryEntry,
+  PostcodeHistoryEntry,
+  PostcodeDirectoryQuery,
   Suburb,
   SuburbWithPostcode,
 } from '../schemas/postcode.js';
-
-export type {
-  ChangelogResponse,
-  ChangelogsResponse,
-} from '../schemas/changelog.js';

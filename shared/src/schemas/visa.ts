@@ -50,6 +50,13 @@ export const weeklyProgressSchema = z.object({
   updatedAt: z.string(),
 });
 
+export const visaPeriodSchema = z.object({
+  id: z.string(),
+  visaType: visaTypeSchema,
+  arrivalDate: z.string(),
+  expiryDate: z.string(),
+});
+
 // --- Types ---
 
 export type CreateVisaInput = z.infer<typeof createVisaSchema>;
@@ -57,4 +64,5 @@ export type UpdateVisaInput = z.infer<typeof updateVisaSchema>;
 export type Visa = z.infer<typeof visaResponseSchema>;
 /** @deprecated Use `Visa` instead */
 export type VisaResponse = Visa;
+export type VisaPeriod = z.infer<typeof visaPeriodSchema>;
 export type WeeklyProgress = z.infer<typeof weeklyProgressSchema>;

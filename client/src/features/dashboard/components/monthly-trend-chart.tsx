@@ -14,7 +14,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import type { VisaOverview } from '@get-granted/shared';
+import type { VisaOverview } from '@regranted/shared';
 import { buildMonthlyTrendChartData } from '../utils/dashboard-calculations';
 import { cn } from '@/lib/utils';
 
@@ -29,12 +29,13 @@ export function MonthlyTrendChart({
   daysRequired,
   className,
 }: MonthlyTrendChartProps) {
+  const hasGoal = daysRequired > 0;
   const chartData = buildMonthlyTrendChartData(monthlyTrend, daysRequired);
 
   const yMax =
     chartData.length > 0
       ? Math.max(
-          ...chartData.map((d) => Math.max(d.eligibleDays, d.idealPace)),
+          ...chartData.map((d) => Math.max(d.eligibleDays, hasGoal ? d.idealPace : 0)),
         ) + 5
       : 30;
 
@@ -72,10 +73,12 @@ export function MonthlyTrendChart({
             <span className="inline-block w-3 h-3 rounded-sm bg-primary" />
             Eligible days
           </span>
-          <span className="flex items-center gap-1">
-            <span className="inline-block w-5 h-0.5 border-t-2 border-dashed border-muted-foreground/60" />
-            Ideal pace
-          </span>
+          {hasGoal && (
+            <span className="flex items-center gap-1">
+              <span className="inline-block w-5 h-0.5 border-t-2 border-dashed border-muted-foreground/60" />
+              Ideal pace
+            </span>
+          )}
         </div>
       </div>
 
@@ -125,16 +128,18 @@ export function MonthlyTrendChart({
               radius={[3, 3, 0, 0]}
               maxBarSize={40}
             />
-            <Line
-              type="monotone"
-              dataKey="idealPace"
-              name="Ideal pace"
-              stroke="var(--muted-foreground)"
-              strokeWidth={1.5}
-              strokeDasharray="4 3"
-              dot={false}
-              opacity={0.6}
-            />
+            {hasGoal && (
+              <Line
+                type="monotone"
+                dataKey="idealPace"
+                name="Ideal pace"
+                stroke="var(--muted-foreground)"
+                strokeWidth={1.5}
+                strokeDasharray="4 3"
+                dot={false}
+                opacity={0.6}
+              />
+            )}
           </ComposedChart>
         </ResponsiveContainer>
       )}

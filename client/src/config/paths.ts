@@ -3,6 +3,16 @@ export const paths = {
     path: '/',
     getHref: () => '/',
   },
+  legal: {
+    privacy: {
+      path: '/privacy',
+      getHref: () => '/privacy',
+    },
+    terms: {
+      path: '/terms',
+      getHref: () => '/terms',
+    },
+  },
   auth: {
     login: {
       path: '/auth/login',
@@ -37,7 +47,8 @@ export const paths = {
       getHref: () => '/app/hours',
       edit: {
         path: '/app/hours/edit',
-        getHref: () => '/app/hours/edit',
+        getHref: (week?: string) =>
+          `/app/hours/edit${week ? `?week=${week}` : ''}`,
       },
     },
     visas: {

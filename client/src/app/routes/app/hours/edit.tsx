@@ -1,27 +1,40 @@
-import { useNavigate } from 'react-router';
+import { parseISO } from 'date-fns';
+import { useEffect, useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { paths } from '@/config/paths';
-import { AddHoursForm } from '@/features/hours/components/forms/add-hours-form';
+import { LogHoursPage } from '@/features/hours/components/log-hours-page';
+import { isWeekStarted } from '@/features/hours/utils/week-validation';
+import { usePageHeader } from '@/hooks/use-page-header';
 
 export function HoursEditRoute() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const weekParam = searchParams.get('week');
 
-  const handleBack = () => {
-    navigate(paths.app.hours.getHref());
-  };
+  usePageHeader({
+    description: 'Log hours for each of your employers this week.',
+  });
 
-  return (
-    <div className="space-y-6">
-      {/* Form in Card */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Log your work hours</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <AddHoursForm onCancel={handleBack} />
-        </CardContent>
-      </Card>
-    </div>
-  );
+  // Parse and validate the week parameter
+  const initialWeek = useMemo(() => {
+    if (!weekParam) return undefined;
+    const parsed = parseISO(weekParam);
+    if (isNaN(parsed.getTime())) return undefined;
+    return parsed;
+  }, [weekParam]);
+
+  // Redirect if the week hasn't started yet
+  useEffect(() => {
+    if (initialWeek && !isWeekStarted(initialWeek)) {
+      navigate(paths.app.hours.getHref(), { replace: true });
+    }
+  }, [initialWeek, navigate]);
+
+  // Don't render while redirecting
+  if (initialWeek && !isWeekStarted(initialWeek)) {
+    return null;
+  }
+
+  return <LogHoursPage initialWeek={initialWeek} />;
 }

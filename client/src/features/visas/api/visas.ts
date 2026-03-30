@@ -6,7 +6,7 @@ import type {
   Visa,
   VisaType,
   WeeklyProgress,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
 export const getVisas = async (): Promise<Visa[]> => {
   return api.get('/visas');

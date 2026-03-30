@@ -10,7 +10,7 @@ import { EligibleDaysCard } from '@/features/dashboard/components/eligible-days-
 import { EmployerBreakdownCard } from '@/features/dashboard/components/employer-breakdown-card';
 import { MonthlyTrendChart } from '@/features/dashboard/components/monthly-trend-chart';
 import { PaceTrackerCard } from '@/features/dashboard/components/pace-tracker-card';
-import { ThisWeekCard } from '@/features/dashboard/components/this-week-card';
+import { GoalDatePredictionCard } from '@/features/dashboard/components/goal-date-prediction-card';
 import { VisaTimelineCard } from '@/features/dashboard/components/visa-timeline-card';
 import { WeeklyProgressChart } from '@/features/dashboard/components/weekly-progress-chart';
 import { WorkDistributionCard } from '@/features/dashboard/components/work-distribution-card';
@@ -72,7 +72,7 @@ function NoVisaState() {
     <Card className="border-primary/30 bg-primary/5">
       <CardContent className="p-8 flex flex-col items-center text-center gap-4">
         <div className="space-y-2">
-          <h2 className="text-xl font-semibold">Get started with Get Granted 417</h2>
+          <h2 className="text-xl font-semibold">Get started with ReGranted</h2>
           <p className="text-sm text-muted-foreground max-w-sm">
             Start tracking your specified work hours to qualify for your next Working
             Holiday Visa. Create your first visa to begin.
@@ -118,8 +118,8 @@ function DashboardWidgets({ visaId }: { visaId: string }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <EligibleDaysCard visa={overview.visa} />
         <VisaTimelineCard visa={overview.visa} />
-        <PaceTrackerCard pace={overview.pace} />
-        <ThisWeekCard thisWeek={overview.thisWeek} />
+        <PaceTrackerCard pace={overview.pace} visaType={overview.visa.visaType} />
+        <GoalDatePredictionCard visa={overview.visa} pace={overview.pace} />
       </div>
 
       {/* Weekly Progress (full width) */}

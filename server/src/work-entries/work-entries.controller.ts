@@ -2,7 +2,7 @@ import {
   BadRequestException,
   Controller,
   Get,
-  Post,
+  Put,
   Body,
   Param,
   Query,
@@ -17,9 +17,9 @@ import {
 } from '../common/decorators/current-user.decorator.js';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe.js';
 import {
-  saveWeekHoursSchema,
-  type SaveWeekHoursInput,
-} from '@get-granted/shared';
+  saveWeekBatchSchema,
+  type SaveWeekBatch,
+} from '@regranted/shared';
 
 @Controller('work-entries')
 @UseGuards(JwtAuthGuard)
@@ -52,12 +52,38 @@ export class WorkEntriesController {
     });
   }
 
-  @Post('week')
-  async saveWeekHours(
+  @Get('week')
+  async getWeekEntries(
     @CurrentUser() user: JwtPayload,
-    @Body(new ZodValidationPipe(saveWeekHoursSchema)) body: SaveWeekHoursInput,
+    @Query('weekStart') weekStart: string,
   ) {
-    return this.workEntriesService.saveWeekHours(user.sub, body);
+    if (!weekStart || !/^\d{4}-\d{2}-\d{2}$/.test(weekStart)) {
+      throw new BadRequestException('weekStart query param must be a valid ISO date (YYYY-MM-DD)');
+    }
+    return this.workEntriesService.getWeekEntries(user.sub, weekStart);
+  }
+
+  @Put('week')
+  async saveWeekBatch(
+    @CurrentUser() user: JwtPayload,
+    @Body(new ZodValidationPipe(saveWeekBatchSchema)) body: SaveWeekBatch,
+  ) {
+    return this.workEntriesService.saveWeekBatch(user.sub, body);
+  }
+
+  @Get('month/:year/:month/weekly')
+  async getWeeklyHours(
+    @CurrentUser() user: JwtPayload,
+    @Param('year', ParseIntPipe) year: number,
+    @Param('month', ParseIntPipe) month: number,
+  ) {
+    if (year < 2000 || year > 2100) {
+      throw new BadRequestException('year must be between 2000 and 2100');
+    }
+    if (month < 1 || month > 12) {
+      throw new BadRequestException('month must be between 1 and 12');
+    }
+    return this.workEntriesService.getWeeklyHours(user.sub, year, month);
   }
 
   @Get('month/:year/:month')

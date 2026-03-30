@@ -23,27 +23,6 @@ export const visaOverviewPaceSchema = z.object({
   requiredPace: z.number(),
 });
 
-export const visaOverviewThisWeekSchema = z.object({
-  weekStartDate: z.string(),
-  weekEndDate: z.string(),
-  totalHours: z.number(),
-  eligibleHours: z.number(),
-  eligibleDays: z.number().int(),
-  dailyHours: z.array(
-    z.object({
-      date: z.string(),
-      dayOfWeek: z.number().int(), // 1=Mon, 7=Sun
-      hours: z.number(),
-    }),
-  ),
-  nextThreshold: z
-    .object({
-      hoursNeeded: z.number(),
-      eligibleDays: z.number().int(),
-    })
-    .nullable(),
-});
-
 export const visaOverviewWeeklyProgressSchema = z.object({
   weekStartDate: z.string(),
   eligibleDays: z.number().int(),
@@ -73,7 +52,6 @@ export const visaOverviewMonthlyTrendSchema = z.object({
 export const visaOverviewResponseSchema = z.object({
   visa: visaOverviewVisaSchema,
   pace: visaOverviewPaceSchema,
-  thisWeek: visaOverviewThisWeekSchema,
   weeklyProgress: z.array(visaOverviewWeeklyProgressSchema),
   workDistribution: z.array(visaOverviewWorkDistributionSchema),
   employerBreakdown: z.array(visaOverviewEmployerBreakdownSchema),
@@ -84,7 +62,6 @@ export const visaOverviewResponseSchema = z.object({
 
 export type VisaOverviewVisa = z.infer<typeof visaOverviewVisaSchema>;
 export type VisaOverviewPace = z.infer<typeof visaOverviewPaceSchema>;
-export type VisaOverviewThisWeek = z.infer<typeof visaOverviewThisWeekSchema>;
 export type VisaOverviewWeeklyProgress = z.infer<typeof visaOverviewWeeklyProgressSchema>;
 export type VisaOverviewWorkDistribution = z.infer<typeof visaOverviewWorkDistributionSchema>;
 export type VisaOverviewEmployerBreakdown = z.infer<typeof visaOverviewEmployerBreakdownSchema>;

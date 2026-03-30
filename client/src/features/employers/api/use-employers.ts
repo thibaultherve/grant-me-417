@@ -17,7 +17,7 @@ import type {
   CheckEligibilityOutput,
   Employer,
   UpdateEmployerInput,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
 import {
   addEmployer,
@@ -180,8 +180,10 @@ export const useUpdateEmployer = () => {
 
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.employers.all });
-      // Recalcul visa progress si isEligible a changé
-      if (variables.input.isEligible !== undefined) {
+      // Recalcul visa progress si industry ou isEligible a changé
+      // (changer l'industry peut modifier l'éligibilité côté serveur,
+      // ce qui impacte workDistribution et employerBreakdown)
+      if (variables.input.industry !== undefined || variables.input.isEligible !== undefined) {
         queryClient.invalidateQueries({ queryKey: queryKeys.visas.all });
       }
     },

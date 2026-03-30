@@ -15,7 +15,7 @@ import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe.js';
 import {
   updateProfileSchema,
   type UpdateProfileInput,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)

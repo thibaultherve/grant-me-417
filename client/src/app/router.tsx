@@ -14,6 +14,20 @@ const createAppRouter = () =>
       },
     },
     {
+      path: paths.legal.privacy.path,
+      lazy: async () => {
+        const { PrivacyRoute } = await import('./routes/legal/privacy');
+        return { Component: PrivacyRoute };
+      },
+    },
+    {
+      path: paths.legal.terms.path,
+      lazy: async () => {
+        const { TermsRoute } = await import('./routes/legal/terms');
+        return { Component: TermsRoute };
+      },
+    },
+    {
       path: paths.auth.register.path,
       lazy: async () => {
         const { RegisterRoute } = await import('./routes/auth/register');

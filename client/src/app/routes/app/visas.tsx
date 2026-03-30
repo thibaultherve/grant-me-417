@@ -9,7 +9,7 @@ import { VisasList } from '@/features/visas/components/visas-list';
 import { useVisaContext } from '@/features/visas/hooks/use-visa-context';
 import { visaTypeToSlug } from '@/features/visas/utils/visa-helpers';
 import { usePageHeader } from '@/hooks/use-page-header';
-import type { Visa } from '@get-granted/shared';
+import type { Visa } from '@regranted/shared';
 
 export const VisasRoute = () => {
   const navigate = useNavigate();
@@ -20,7 +20,12 @@ export const VisasRoute = () => {
   usePageHeader({
     description: 'Manage your Working Holiday Visas (up to 3 visas)',
     action: () => (
-      <Button asChild size="lg" disabled={visas.length >= 3}>
+      <Button
+        asChild
+        size="lg"
+        className="w-full md:w-auto"
+        disabled={visas.length >= 3}
+      >
         <Link to={paths.app.visas.new.getHref()}>
           <Plus className="mr-2 h-4 w-4" />
           Add Visa
@@ -42,7 +47,7 @@ export const VisasRoute = () => {
       {visas.length === 0 && !isLoading && (
         <InfoCard variant="accent">
           <div className="flex items-start gap-4">
-            <Plane className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+            <Plane className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
             <div>
               <h3 className="font-semibold mb-1">Create your first visa</h3>
               <p className="text-sm text-muted-foreground">

@@ -10,14 +10,16 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useState,
   useEffect,
+  useMemo,
   type ReactNode,
 } from 'react';
 
 import { useVisas } from '../api/use-visas';
-import type { Visa } from '@get-granted/shared';
+import type { Visa } from '@regranted/shared';
 
 interface VisaContextValue {
   currentVisa: Visa | null;
@@ -52,25 +54,25 @@ export function VisaProvider({ children }: { children: ReactNode }) {
   }, [visas, isLoading]);
 
   // Sauvegarder en localStorage
-  const setCurrentVisa = (visa: Visa | null) => {
+  const setCurrentVisa = useCallback((visa: Visa | null) => {
     setCurrentVisaState(visa);
     if (visa) {
       localStorage.setItem('currentVisaId', visa.id);
     } else {
       localStorage.removeItem('currentVisaId');
     }
-  };
+  }, []);
+
+  const value = useMemo(() => ({
+    currentVisa,
+    setCurrentVisa,
+    visas,
+    isLoading,
+    error: error as Error | null,
+  }), [currentVisa, setCurrentVisa, visas, isLoading, error]);
 
   return (
-    <VisaContext.Provider
-      value={{
-        currentVisa,
-        setCurrentVisa,
-        visas,
-        isLoading,
-        error: error as Error | null,
-      }}
-    >
+    <VisaContext.Provider value={value}>
       {children}
     </VisaContext.Provider>
   );

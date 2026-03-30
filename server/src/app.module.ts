@@ -10,7 +10,6 @@ import { AuthModule } from './auth/auth.module.js';
 import { UsersModule } from './users/users.module.js';
 import { PostcodesModule } from './postcodes/postcodes.module.js';
 import { EmployersModule } from './employers/employers.module.js';
-import { ChangelogsModule } from './changelogs/changelogs.module.js';
 import { VisasModule } from './visas/visas.module.js';
 import { WorkEntriesModule } from './work-entries/work-entries.module.js';
 
@@ -18,13 +17,12 @@ import { WorkEntriesModule } from './work-entries/work-entries.module.js';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     CacheModule.register({ isGlobal: true, ttl: 5 * 60 * 1000 }),
-    ThrottlerModule.forRoot([{ ttl: 60000, limit: 10 }]),
+    ThrottlerModule.forRoot([{ ttl: 60000, limit: 100 }]),
     PrismaModule,
     AuthModule,
     UsersModule,
     PostcodesModule,
     EmployersModule,
-    ChangelogsModule,
     VisasModule,
     WorkEntriesModule,
   ],

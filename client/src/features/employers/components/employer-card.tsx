@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { paths } from '@/config/paths';
 import { cn } from '@/lib/utils';
 
-import type { Employer, PostcodeBadgeData } from '@get-granted/shared';
+import type { Employer, PostcodeBadgeData } from '@regranted/shared';
 
 import { EligibilityStatusBadge } from './eligibility-status-badge';
 import { IndustryChip } from './industry-chip';
@@ -146,7 +146,7 @@ export function EmployerCard({ employer, onDelete }: EmployerCardProps) {
                 Zones
               </span>
               {zones.length === 0 ? (
-                <div className="w-5 h-5 rounded bg-[#9CA3AF] flex items-center justify-center shadow-sm">
+                <div className="w-5 h-5 rounded bg-disabled flex items-center justify-center shadow-sm">
                   <Ban className="h-3.25 w-3.25 text-white" />
                 </div>
               ) : (

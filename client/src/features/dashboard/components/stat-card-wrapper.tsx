@@ -74,7 +74,7 @@ export function StatCardWrapper({
   return (
     <div
       className={cn(
-        'bg-card border border-border rounded-lg shadow-xs p-5 flex flex-col gap-3 h-[185px]',
+        'bg-card border border-border rounded-lg shadow-xs p-5 flex flex-col gap-3 h-46.25',
         className,
       )}
     >
@@ -84,7 +84,7 @@ export function StatCardWrapper({
           {/* Icon box */}
           <div
             className={cn(
-              'w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0',
+              'w-8 h-8 rounded-lg flex items-center justify-center shrink-0',
               iconBgClasses[iconVariant],
             )}
           >
@@ -102,7 +102,7 @@ export function StatCardWrapper({
             </TooltipTrigger>
             <TooltipContent
               side="top"
-              className="w-56 bg-[#fafafa] border border-[#d1d4db] rounded-lg p-0 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04),0_8px_16px_-4px_rgba(0,0,0,0.08),0_16px_24px_-6px_rgba(0,0,0,0.04)]"
+              className="w-56 bg-popover border border-border rounded-lg p-0 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04),0_8px_16px_-4px_rgba(0,0,0,0.08),0_16px_24px_-6px_rgba(0,0,0,0.04)]"
             >
               {tooltip}
             </TooltipContent>

@@ -49,13 +49,34 @@ export function getWeekRange(date: Date): string {
   const startYear = monday.getFullYear();
   const endYear = sunday.getFullYear();
 
-  // Same year: "Mon 19 Sep - Fri 5 Oct 2025"
+  // Same year: "Mon 19 Sep — Fri 5 Oct 2025"
   if (startYear === endYear) {
-    return `${format(monday, 'EEE d MMM')} - ${format(sunday, 'EEE d MMM yyyy')}`;
+    return `${format(monday, 'EEE d MMM')} — ${format(sunday, 'EEE d MMM yyyy')}`;
   }
 
-  // Different years: "Mon 30 Dec 2024 - Fri 5 Jan 2025"
-  return `${format(monday, 'EEE d MMM yyyy')} - ${format(sunday, 'EEE d MMM yyyy')}`;
+  // Different years: "Mon 30 Dec 2024 — Fri 5 Jan 2025"
+  return `${format(monday, 'EEE d MMM yyyy')} — ${format(sunday, 'EEE d MMM yyyy')}`;
+}
+
+/**
+ * Returns a compact week range string without the year, for mobile display.
+ * E.g., "Mon 9 — Sun 15 Mar"
+ *
+ * When both days share the same month, the start omits the month name.
+ */
+export function getCompactWeekRange(date: Date): string {
+  const monday = getMondayOfWeek(date);
+  const sunday = addDays(monday, 6);
+
+  const sameMonth = monday.getMonth() === sunday.getMonth();
+
+  if (sameMonth) {
+    // "Mon 9 — Sun 15 Mar"
+    return `${format(monday, 'EEE d')} — ${format(sunday, 'EEE d MMM')}`;
+  }
+
+  // "Mon 30 Dec — Sun 5 Jan"
+  return `${format(monday, 'EEE d MMM')} — ${format(sunday, 'EEE d MMM')}`;
 }
 
 /**

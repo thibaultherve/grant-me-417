@@ -3,7 +3,7 @@ import { z } from 'zod';
 import {
   createVisaSchema as baseCreateSchema,
   updateVisaSchema as baseUpdateSchema,
-} from '@get-granted/shared';
+} from '@regranted/shared';
 
 export const createVisaSchema = baseCreateSchema.extend({
   arrivalDate: z.string().min(1, 'Arrival date is required'),

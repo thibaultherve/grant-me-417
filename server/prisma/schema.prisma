@@ -8,6 +8,12 @@ generator client {
   moduleFormat = "cjs"
 }
 
+generator scraperClient {
+  provider     = "prisma-client"
+  output       = "../../scraper/generated/prisma"
+  moduleFormat = "esm"
+}
+
 // ─── Enums ───────────────────────────────────────────────────────────────────
 
 enum IndustryType {
@@ -28,20 +34,22 @@ enum IndustryType {
 // ─── Users ────────────────────────────────────
 
 model User {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email        String   @unique @db.VarChar(255)
-  passwordHash String   @map("password_hash") @db.VarChar(255)
-  firstName    String?  @map("first_name") @db.VarChar(100)
-  lastName     String?  @map("last_name") @db.VarChar(100)
-  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email              String   @unique @db.VarChar(255)
+  passwordHash       String   @map("password_hash") @db.VarChar(255)
+  firstName          String?  @map("first_name") @db.VarChar(100)
+  nationality        String?  @db.VarChar(2) // ISO 3166-1 alpha-2
+  whvType            String?  @map("whv_type") @db.VarChar(3) // '417' or '462', derived from nationality
+  ukCitizenExemption Boolean? @default(false) @map("uk_citizen_exemption")
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt          DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
 
-  profile       UserProfile?
   visas         UserVisa[]
   employers     Employer[]
   workEntries   WorkEntry[]
   refreshTokens RefreshToken[]
 
+  @@index([nationality], map: "idx_users_nationality")
   @@map("users")
 }
 
@@ -60,23 +68,6 @@ model RefreshToken {
   @@index([userId], map: "idx_refresh_tokens_user_id")
   @@index([expiresAt], map: "idx_refresh_tokens_expires_at")
   @@map("refresh_tokens")
-}
-
-// ─── User Profiles ───────────────────────────────────────────────────────────
-
-model UserProfile {
-  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId             String   @unique @map("user_id") @db.Uuid
-  nationality        String?  @db.VarChar(2) // ISO 3166-1 alpha-2, CHECK ^[A-Z]{2}$
-  ukCitizenExemption Boolean? @default(false) @map("uk_citizen_exemption")
-  createdAt          DateTime? @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt          DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId], map: "idx_user_profiles_user_id")
-  @@index([nationality], map: "idx_user_profiles_nationality")
-  @@map("user_profiles")
 }
 
 // ─── User Visas ──────────────────────────────────────────────────────────────
@@ -170,21 +161,60 @@ model WorkEntry {
   @@map("work_entries")
 }
 
-// ─── Reference Data: Postcodes ───────────────────────────────────────────────
+// ─── Reference Data: Postcodes (pure reference, no eligibility flags) ────────
 
 model Postcode {
-  postcode                 String   @id @db.VarChar // CHECK ^\d{4}$
-  isRemoteVeryRemote       Boolean? @default(false) @map("is_remote_very_remote")
-  isNorthernAustralia      Boolean? @default(false) @map("is_northern_australia")
-  isRegionalAustralia      Boolean? @default(false) @map("is_regional_australia")
-  isBushfireDeclared       Boolean? @default(false) @map("is_bushfire_declared")
-  isNaturalDisasterDeclared Boolean? @default(false) @map("is_natural_disaster_declared")
-  lastUpdated              DateTime? @default(now()) @map("last_updated") @db.Timestamptz
-  lastScraped              DateTime? @map("last_scraped") @db.Timestamptz
+  postcode    String    @id @db.VarChar(4) // CHECK ^\d{4}$
+  lastUpdated DateTime? @default(now()) @map("last_updated") @db.Timestamptz
 
-  suburbs Suburb[]
+  suburbs     Suburb[]
+  eligibility PostcodeEligibility[]
+  history     PostcodeEligibilityHistory[]
 
   @@map("postcodes")
+}
+
+// ─── Eligibility Data: Current State per Visa Type ───────────────────────────
+
+model PostcodeEligibility {
+  postcode                  String   @db.VarChar(4)
+  visaType                  String   @map("visa_type") @db.VarChar(3)
+  isRemoteVeryRemote        Boolean  @default(false) @map("is_remote_very_remote")
+  isNorthernAustralia       Boolean  @default(false) @map("is_northern_australia")
+  isRegionalAustralia       Boolean  @default(false) @map("is_regional_australia")
+  isBushfireDeclared        Boolean  @default(false) @map("is_bushfire_declared")
+  isNaturalDisasterDeclared Boolean  @default(false) @map("is_natural_disaster_declared")
+  lastScraped               DateTime? @map("last_scraped") @db.Timestamptz
+
+  postcodeRef Postcode @relation(fields: [postcode], references: [postcode])
+
+  @@id([postcode, visaType])
+  @@index([visaType], map: "idx_eligibility_visa")
+  @@map("postcode_eligibility")
+}
+
+// ─── Eligibility History: Event-Sourcing ─────────────────────────────────────
+
+model PostcodeEligibilityHistory {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  postcode      String   @db.VarChar(4)
+  visaType      String   @map("visa_type") @db.VarChar(3)
+  category      String   @db.Text
+  oldValue      Boolean  @map("old_value")
+  newValue      Boolean  @map("new_value")
+  effectiveDate DateTime @map("effective_date") @db.Date
+  detectedAt    DateTime @default(now()) @map("detected_at") @db.Timestamptz
+  scrapeRunId   String?  @map("scrape_run_id") @db.Uuid
+  sourceUrl     String   @map("source_url") @db.Text
+  sourceType    String   @default("live") @map("source_type") @db.Text
+
+  postcodeRef Postcode   @relation(fields: [postcode], references: [postcode])
+  scrapeRun   ScrapeRun? @relation(fields: [scrapeRunId], references: [id])
+
+  @@index([postcode, visaType, category, effectiveDate(sort: Desc)], map: "idx_history_point_in_time")
+  @@index([scrapeRunId], map: "idx_history_scrape_run")
+  @@index([effectiveDate(sort: Desc)], map: "idx_history_effective_date")
+  @@map("postcode_eligibility_history")
 }
 
 // ─── Reference Data: Suburbs ─────────────────────────────────────────────────
@@ -193,7 +223,7 @@ model Suburb {
   id         Int    @id @default(autoincrement())
   suburbName String @map("suburb_name") @db.VarChar
   postcode   String @db.VarChar
-  stateCode  String @map("state_code") @db.VarChar // CHECK IN ('NSW','VIC','QLD','SA','WA','TAS','NT','ACT','OT')
+  stateCode  String @map("state_code") @db.VarChar // CHECK IN ('NSW','VIC','QLD','SA','WA','TAS','NT','ACT','NI','OT')
 
   postcodeRef Postcode   @relation(fields: [postcode], references: [postcode])
   employers   Employer[]
@@ -211,33 +241,18 @@ model Suburb {
 model ScrapeRun {
   id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   runAt             DateTime? @default(now()) @map("run_at") @db.Timestamptz
+  visaType          String?   @map("visa_type") @db.VarChar(3)
   totalPostcodes    Int?      @map("total_postcodes")
   changesDetected   Int?      @default(0) @map("changes_detected")
   postcodesAffected Int?      @default(0) @map("postcodes_affected")
-  status            String?   @default("success") @db.VarChar // CHECK IN ('success','failed','partial')
+  status            String?   @default("success") @db.VarChar
   notes             String?   @db.Text
   pageModifiedDate  DateTime? @map("page_modified_date") @db.Date
+  sourceUrl         String?   @map("source_url") @db.Text
+  sourceType        String    @default("live") @map("source_type") @db.Text
 
-  changelog Changelog?
+  historyEntries PostcodeEligibilityHistory[]
 
   @@index([runAt(sort: Desc)], map: "idx_scrape_runs_date")
   @@map("scrape_runs")
-}
-
-// ─── System: Changelogs ──────────────────────────────────────────────────────
-
-model Changelog {
-  id              Int      @id @default(autoincrement())
-  scrapeRunId     String   @unique @map("scrape_run_id") @db.Uuid
-  changelogDate   DateTime @map("changelog_date") @db.Date
-  title           String   @db.VarChar
-  contentMarkdown String   @map("content_markdown") @db.Text
-  summary         Json?    @db.JsonB
-  createdAt       DateTime? @default(now()) @map("created_at") @db.Timestamptz
-
-  scrapeRun ScrapeRun @relation(fields: [scrapeRunId], references: [id])
-
-  @@index([scrapeRunId], map: "idx_changelogs_run")
-  @@index([changelogDate(sort: Desc)], map: "idx_changelogs_date")
-  @@map("changelogs")
 }

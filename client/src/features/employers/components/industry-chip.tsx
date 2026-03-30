@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import type { IndustryType } from '@get-granted/shared';
+import type { IndustryType } from '@regranted/shared';
 import { INDUSTRY_SHORT_LABELS } from '../constants';
 
 interface IndustryConfig {
@@ -23,7 +23,7 @@ interface IndustryConfig {
   iconBg: string;
 }
 
-const INDUSTRY_CONFIG: Record<IndustryType, IndustryConfig> = {
+export const INDUSTRY_CONFIG: Record<IndustryType, IndustryConfig> = {
   hospitality_and_tourism: {
     icon: Utensils,
     label: 'Hospitality & Tourism',
@@ -91,7 +91,7 @@ export function IndustryChip({ industry, compact, className }: IndustryChipProps
   return (
     <div
       className={cn(
-        'inline-flex items-center gap-2 h-[30px] px-2.5 rounded-lg',
+        'inline-flex items-center gap-2 h-7.5 px-2.5 rounded-lg',
         className,
       )}
     >
