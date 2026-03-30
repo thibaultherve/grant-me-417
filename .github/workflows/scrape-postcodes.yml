@@ -47,7 +47,7 @@ jobs:
           github.event_name == 'schedule' ||
           inputs.visa == 'both' ||
           inputs.visa == '417'
-        run: pnpm --filter @regranted/scraper start --visa 417
+        run: pnpm --filter @regranted/scraper scrape -- --visa 417
         env:
           DATABASE_URL: ${{ secrets.SCRAPER_DATABASE_URL }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
@@ -57,7 +57,7 @@ jobs:
           github.event_name == 'schedule' ||
           inputs.visa == 'both' ||
           inputs.visa == '462'
-        run: pnpm --filter @regranted/scraper start --visa 462
+        run: pnpm --filter @regranted/scraper scrape -- --visa 462
         env:
           DATABASE_URL: ${{ secrets.SCRAPER_DATABASE_URL }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
