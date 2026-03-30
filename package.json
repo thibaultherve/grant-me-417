@@ -2,6 +2,7 @@
   "name": "regranted",
   "private": true,
   "version": "0.0.0",
+  "packageManager": "pnpm@10.28.1",
   "scripts": {
     "dev:client": "pnpm --filter @regranted/client dev",
     "dev:server": "pnpm --filter @regranted/server start:dev",
