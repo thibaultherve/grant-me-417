@@ -46,3 +46,6 @@ docs
 # Server specific
 server/coverage
 server/generated
+
+# Scraper cache
+.date-cache-*.json
