@@ -56,3 +56,51 @@ export const ELIGIBLE_COUNTRIES_417 = [
   'TW', // Taiwan
   'GB', // United Kingdom
 ] as const;
+
+/**
+ * WHV 462 eligible countries (ISO 3166-1 alpha-2).
+ */
+export const ELIGIBLE_COUNTRIES_462 = [
+  'AR', // Argentina
+  'AT', // Austria
+  'CL', // Chile
+  'CN', // China
+  'CZ', // Czech Republic
+  'EC', // Ecuador
+  'GR', // Greece
+  'HU', // Hungary
+  'ID', // Indonesia
+  'IL', // Israel
+  'LU', // Luxembourg
+  'MY', // Malaysia
+  'PE', // Peru
+  'PL', // Poland
+  'PT', // Portugal
+  'SM', // San Marino
+  'SK', // Slovakia
+  'SI', // Slovenia
+  'ES', // Spain
+  'TH', // Thailand
+  'TR', // Turkey
+  'US', // United States
+  'UY', // Uruguay
+  'VN', // Vietnam
+] as const;
+
+/**
+ * Source URLs for postcode eligibility scraping per visa type.
+ */
+export const VISA_SCRAPE_URLS = {
+  '417': 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-417/specified-work',
+  '462': 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462/specified-462-work',
+} as const;
+
+/**
+ * Determine the WHV visa number (417 or 462) from a nationality code.
+ * Returns null if the country is not eligible for either visa.
+ */
+export function getVisaTypeForNationality(countryCode: string): '417' | '462' | null {
+  if ((ELIGIBLE_COUNTRIES_417 as readonly string[]).includes(countryCode)) return '417';
+  if ((ELIGIBLE_COUNTRIES_462 as readonly string[]).includes(countryCode)) return '462';
+  return null;
+}

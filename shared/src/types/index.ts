@@ -49,11 +49,10 @@ export type {
 export type {
   Postcode,
   PostcodeBadgeData,
+  PostcodeEligibility,
+  PostcodeDirectoryEntry,
+  PostcodeHistoryEntry,
+  PostcodeDirectoryQuery,
   Suburb,
   SuburbWithPostcode,
 } from '../schemas/postcode.js';
-
-export type {
-  ChangelogResponse,
-  ChangelogsResponse,
-} from '../schemas/changelog.js';
