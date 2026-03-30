@@ -226,8 +226,11 @@ function parseLegacyFormat(
 }
 
 /**
- * Scan all headings and tables in document order.
- * For each table, assign the most recent heading that matches a category.
+ * Scan all headings, paragraphs, and tables in document order.
+ * For each table, assign the most recent text element that matches a category.
+ *
+ * Includes `<p>` because older 462 pages use paragraph text (not headings)
+ * to introduce each category section between tables.
  */
 function buildTableCategoryMap(
   $: CheerioAPI,
@@ -235,11 +238,10 @@ function buildTableCategoryMap(
   const map = new Map<CheerioNode, Category>();
   let currentCategory: Category | null = null;
 
-  // Select all headings and tables in document order
-  $('h2, h3, h4, table').each((_i, el) => {
+  $('h2, h3, h4, p, table').each((_i, el) => {
     const tagName = el.type === 'tag' ? el.tagName?.toLowerCase() : '';
 
-    if (tagName === 'h2' || tagName === 'h3' || tagName === 'h4') {
+    if (tagName === 'h2' || tagName === 'h3' || tagName === 'h4' || tagName === 'p') {
       const text = $(el).text().trim();
       const category = identifyCategory(text);
       if (category) {

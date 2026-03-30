@@ -6,6 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "tsx src/index.ts",
+    "scrape": "tsx src/index.ts start",
+    "backfill": "tsx src/index.ts backfill",
     "seed": "tsx src/seed-generator.ts",
     "prisma:generate": "prisma generate"
   },
