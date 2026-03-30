@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import type { IndustryType, PostcodeBadgeData } from '@regranted/shared';
+import { ELIGIBLE_ZONES, ZONE_TYPES, ZONE_FLAG_MAP, type ZoneType } from '@regranted/shared';
 
 import {
   EligibilityStatusBadge,
@@ -20,38 +21,7 @@ import { ZoneBadge, type ZoneKey } from './zone-badge';
 
 // ── Zone / flag mapping ──────────────────────────────────────────────────────
 
-const ZONES: ZoneKey[] = [
-  'northern',
-  'remote',
-  'regional',
-  'bushfire',
-  'weather',
-  'anywhere',
-];
-
-const ZONE_FLAGS: Record<ZoneKey, keyof PostcodeBadgeData | null> = {
-  northern: 'isNorthernAustralia',
-  remote: 'isRemoteVeryRemote',
-  regional: 'isRegionalAustralia',
-  bushfire: 'isBushfireDeclared',
-  weather: 'isNaturalDisasterDeclared',
-  anywhere: null, // always eligible
-};
-
-// ── Industry → eligible zones mapping (WHV 417 rules) ──────────────────────
-
-const INDUSTRY_ZONES: Record<IndustryType, ZoneKey[]> = {
-  hospitality_and_tourism: ['northern', 'remote'],
-  plant_and_animal_cultivation: ['regional'],
-  fishing_and_pearling: ['regional'],
-  tree_farming_and_felling: ['regional'],
-  mining: ['regional'],
-  construction: ['regional'],
-  bushfire_recovery_work: ['bushfire'],
-  weather_recovery_work: ['weather'],
-  critical_covid19_work: ['anywhere'],
-  other: [],
-};
+const ZONES = ZONE_TYPES as readonly ZoneKey[];
 
 // Matrix row order matches Pencil design
 const INDUSTRY_ORDER: IndustryType[] = [
@@ -69,10 +39,10 @@ const INDUSTRY_ORDER: IndustryType[] = [
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function isZoneActive(zone: ZoneKey, suburbFlags: PostcodeBadgeData | null): boolean {
+function isZoneActive(zone: ZoneType, suburbFlags: PostcodeBadgeData | null): boolean {
   if (!suburbFlags) return false;
-  const flag = ZONE_FLAGS[zone];
-  return flag === null ? true : !!suburbFlags[flag];
+  const flag = ZONE_FLAG_MAP[zone];
+  return flag === null ? true : !!suburbFlags[flag as keyof PostcodeBadgeData];
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
@@ -144,6 +114,7 @@ interface MatrixRowProps {
   index: number;
   selectedIndustry: IndustryType | null;
   suburbFlags: PostcodeBadgeData | null;
+  visaType: '417' | '462';
 }
 
 function MatrixRow({
@@ -151,9 +122,10 @@ function MatrixRow({
   index,
   selectedIndustry,
   suburbFlags,
+  visaType,
 }: MatrixRowProps) {
   const isSelected = selectedIndustry === industry;
-  const eligibleZones = INDUSTRY_ZONES[industry];
+  const eligibleZones = ELIGIBLE_ZONES[visaType][industry];
 
   return (
     <div
@@ -204,6 +176,7 @@ interface EligibilityCheckCardProps {
   isChecking: boolean;
   selectedIndustry: IndustryType | null;
   suburbFlags: PostcodeBadgeData | null;
+  visaType: '417' | '462';
   onManualEligibilityChange: (eligible: boolean) => void;
 }
 
@@ -214,6 +187,7 @@ export function EligibilityCheckCard({
   isChecking,
   selectedIndustry,
   suburbFlags,
+  visaType,
   onManualEligibilityChange,
 }: EligibilityCheckCardProps) {
   const isManual = mode === 'manual';
@@ -237,7 +211,7 @@ export function EligibilityCheckCard({
           </span>
           <CircleHelp
             className="w-3.5 h-3.5 text-muted-foreground shrink-0"
-            aria-label="Based on WHV 417 visa rules: industry × work zone eligibility"
+            aria-label={`Based on WHV ${visaType} visa rules: industry × work zone eligibility`}
           />
         </div>
 
@@ -355,6 +329,7 @@ export function EligibilityCheckCard({
               index={index}
               selectedIndustry={selectedIndustry}
               suburbFlags={suburbFlags}
+              visaType={visaType}
             />
           ))}
         </div>

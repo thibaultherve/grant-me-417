@@ -23,9 +23,39 @@ interface SuburbRow {
   state_code: string;
 }
 
+interface ScrapeRunRow {
+  id: string;
+  run_at: string | null;
+  visa_type: string | null;
+  total_postcodes: number | null;
+  changes_detected: number | null;
+  postcodes_affected: number | null;
+  status: string | null;
+  notes: string | null;
+  page_modified_date: string | null;
+  source_url: string | null;
+  source_type: string;
+}
+
+interface HistoryRow {
+  id: string;
+  postcode: string;
+  visa_type: string;
+  category: string;
+  old_value: boolean;
+  new_value: boolean;
+  effective_date: string;
+  detected_at: string;
+  scrape_run_id: string | null;
+  source_url: string;
+  source_type: string;
+}
+
 interface SeedData {
   postcodes: PostcodeRow[];
   suburbs: SuburbRow[];
+  scrapeRuns?: ScrapeRunRow[];
+  history?: HistoryRow[];
 }
 
 async function main() {
@@ -148,6 +178,80 @@ async function main() {
     await client.query(
       `SELECT setval('suburbs_id_seq', (SELECT COALESCE(MAX(id), 0) FROM suburbs))`,
     );
+
+    // Insert scrape runs (must come before history due to FK)
+    const scrapeRuns = data.scrapeRuns ?? [];
+    const SR_BATCH = 500;
+    for (let i = 0; i < scrapeRuns.length; i += SR_BATCH) {
+      const batch = scrapeRuns.slice(i, i + SR_BATCH);
+      const values: unknown[] = [];
+      const placeholders = batch
+        .map((sr, idx) => {
+          const offset = idx * 11;
+          values.push(
+            sr.id,
+            sr.run_at,
+            sr.visa_type,
+            sr.total_postcodes,
+            sr.changes_detected,
+            sr.postcodes_affected,
+            sr.status,
+            sr.notes,
+            sr.page_modified_date,
+            sr.source_url,
+            sr.source_type,
+          );
+          return `($${offset + 1}::uuid, $${offset + 2}::timestamptz, $${offset + 3}, $${offset + 4}, $${offset + 5}, $${offset + 6}, $${offset + 7}, $${offset + 8}, $${offset + 9}::date, $${offset + 10}, $${offset + 11})`;
+        })
+        .join(', ');
+
+      await client.query(
+        `INSERT INTO scrape_runs (id, run_at, visa_type, total_postcodes, changes_detected, postcodes_affected, status, notes, page_modified_date, source_url, source_type)
+         VALUES ${placeholders}
+         ON CONFLICT (id) DO NOTHING`,
+        values,
+      );
+    }
+    if (scrapeRuns.length > 0) {
+      console.log(`  ✓ ${scrapeRuns.length} scrape runs inserted`);
+    }
+
+    // Insert eligibility history
+    const history = data.history ?? [];
+    const HI_BATCH = 500;
+    for (let i = 0; i < history.length; i += HI_BATCH) {
+      const batch = history.slice(i, i + HI_BATCH);
+      const values: unknown[] = [];
+      const placeholders = batch
+        .map((h, idx) => {
+          const offset = idx * 11;
+          values.push(
+            h.id,
+            h.postcode,
+            h.visa_type,
+            h.category,
+            h.old_value,
+            h.new_value,
+            h.effective_date,
+            h.detected_at,
+            h.scrape_run_id,
+            h.source_url,
+            h.source_type,
+          );
+          return `($${offset + 1}::uuid, $${offset + 2}, $${offset + 3}, $${offset + 4}, $${offset + 5}, $${offset + 6}, $${offset + 7}::date, $${offset + 8}::timestamptz, $${offset + 9}::uuid, $${offset + 10}, $${offset + 11})`;
+        })
+        .join(', ');
+
+      await client.query(
+        `INSERT INTO postcode_eligibility_history (id, postcode, visa_type, category, old_value, new_value, effective_date, detected_at, scrape_run_id, source_url, source_type)
+         VALUES ${placeholders}
+         ON CONFLICT (id) DO NOTHING`,
+        values,
+      );
+    }
+    if (history.length > 0) {
+      console.log(`  ✓ ${history.length} history entries inserted`);
+    }
 
     await client.query('COMMIT');
     console.log('Seed completed successfully!');
