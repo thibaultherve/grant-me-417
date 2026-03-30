@@ -1,3 +1,5 @@
+import type { IndustryTypeValue } from './industries.js';
+
 export const VISA_TYPES = ['first_whv', 'second_whv', 'third_whv'] as const;
 
 export const VISA_DAYS_REQUIRED: Record<(typeof VISA_TYPES)[number], number> = {
@@ -86,6 +88,85 @@ export const ELIGIBLE_COUNTRIES_462 = [
   'UY', // Uruguay
   'VN', // Vietnam
 ] as const;
+
+// ── Eligibility zones ────────────────────────────────────────────────────────
+
+export const ZONE_TYPES = ['northern', 'remote', 'regional', 'bushfire', 'weather', 'anywhere'] as const;
+export type ZoneType = (typeof ZONE_TYPES)[number];
+
+/**
+ * Maps each zone to the corresponding PostcodeBadgeData flag.
+ * `null` means the zone is always active (e.g. "anywhere in Australia").
+ */
+export const ZONE_FLAG_MAP: Record<ZoneType, string | null> = {
+  northern: 'isNorthernAustralia',
+  remote: 'isRemoteVeryRemote',
+  regional: 'isRegionalAustralia',
+  bushfire: 'isBushfireDeclared',
+  weather: 'isNaturalDisasterDeclared',
+  anywhere: null,
+};
+
+type IndustryZoneMap = Record<IndustryTypeValue, ZoneType[]>;
+
+/**
+ * Eligible zones per industry per visa type.
+ * Source: https://immi.homeaffairs.gov.au (417 + 462 specified work pages)
+ */
+export const ELIGIBLE_ZONES: Record<'417' | '462', IndustryZoneMap> = {
+  '417': {
+    hospitality_and_tourism: ['northern', 'remote'],
+    plant_and_animal_cultivation: ['regional'],
+    fishing_and_pearling: ['regional'],
+    tree_farming_and_felling: ['regional'],
+    mining: ['regional'],
+    construction: ['regional'],
+    bushfire_recovery_work: ['bushfire'],
+    weather_recovery_work: ['weather'],
+    critical_covid19_work: ['anywhere'],
+    other: [],
+  },
+  '462': {
+    hospitality_and_tourism: ['northern', 'remote'],
+    plant_and_animal_cultivation: ['northern', 'regional'],
+    fishing_and_pearling: ['northern'],
+    tree_farming_and_felling: ['northern'],
+    mining: [],
+    construction: ['northern', 'regional'],
+    bushfire_recovery_work: ['bushfire'],
+    weather_recovery_work: ['weather'],
+    critical_covid19_work: ['anywhere'],
+    other: [],
+  },
+};
+
+interface EligibilityFlags {
+  isNorthernAustralia: boolean;
+  isRemoteVeryRemote: boolean;
+  isRegionalAustralia: boolean;
+  isBushfireDeclared: boolean;
+  isNaturalDisasterDeclared: boolean;
+}
+
+/**
+ * Check if a given industry is eligible based on postcode zone flags and visa type.
+ */
+export function checkIndustryEligibility(
+  industry: IndustryTypeValue,
+  visaType: '417' | '462',
+  flags: EligibilityFlags,
+): boolean {
+  const zones = ELIGIBLE_ZONES[visaType]?.[industry];
+  if (!zones || zones.length === 0) return false;
+
+  return zones.some((zone) => {
+    const flag = ZONE_FLAG_MAP[zone];
+    if (flag === null) return true;
+    return !!flags[flag as keyof EligibilityFlags];
+  });
+}
+
+// ── Scrape URLs ──────────────────────────────────────────────────────────────
 
 /**
  * Source URLs for postcode eligibility scraping per visa type.
