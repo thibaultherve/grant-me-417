@@ -34,7 +34,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Generate Prisma client
-        run: pnpm --filter @regranted/scraper prisma:generate
+        run: pnpm --filter @regranted/scraper exec prisma generate --schema ../server/prisma/schema.prisma
 
       - name: Install Playwright Chromium
         run: pnpm --filter @regranted/scraper exec playwright install --with-deps chromium
