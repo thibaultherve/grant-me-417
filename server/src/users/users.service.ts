@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import type { User } from '../../generated/prisma/client.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type {
@@ -37,22 +37,20 @@ export class UsersService {
     }
 
     // Derive whvType when nationality changes
-    const whvType =
+    const nationalityData =
       input.nationality !== undefined
-        ? input.nationality
-          ? getVisaTypeForNationality(input.nationality)
-          : null
-        : undefined;
+        ? {
+            nationality: input.nationality,
+            whvType: getVisaTypeForNationality(input.nationality),
+            ukCitizenExemption: input.nationality === 'GB',
+          }
+        : {};
 
     const updated = await this.prisma.user.update({
       where: { id: userId },
       data: {
         ...(input.firstName !== undefined && { firstName: input.firstName }),
-        ...(input.nationality !== undefined && {
-          nationality: input.nationality,
-          whvType,
-          ukCitizenExemption: input.nationality === 'GB',
-        }),
+        ...nationalityData,
       },
     });
 
@@ -60,12 +58,18 @@ export class UsersService {
   }
 
   private mapToResponse(user: User): UserProfileResponse {
+    if (!user.nationality || !user.whvType) {
+      throw new BadRequestException(
+        'Profile incomplete: nationality is required. Please update your profile.',
+      );
+    }
+
     return {
       id: user.id,
       email: user.email,
       firstName: user.firstName ?? '',
-      nationality: user.nationality ?? null,
-      whvType: (user.whvType as '417' | '462') ?? null,
+      nationality: user.nationality as UserProfileResponse['nationality'],
+      whvType: user.whvType as '417' | '462',
       ukCitizenExemption: user.ukCitizenExemption ?? false,
       createdAt: formatTimestamp(user.createdAt),
       updatedAt: formatTimestamp(user.updatedAt),

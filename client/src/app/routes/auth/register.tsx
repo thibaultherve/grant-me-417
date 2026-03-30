@@ -14,13 +14,22 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { paths } from '@/config/paths';
 import { useRegister } from '@/lib/auth';
+import { ELIGIBLE_COUNTRIES_SORTED } from '@regranted/shared';
 
 export const RegisterRoute = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [nationality, setNationality] = useState('');
 
   const searchParams = new URLSearchParams(location.search);
   const redirectTo = searchParams.get('redirectTo') || paths.app.dashboard.path;
@@ -41,7 +50,7 @@ export const RegisterRoute = () => {
     const firstName = formData.get('firstName') as string;
 
     registerMutation.mutate(
-      { email, password, firstName },
+      { email, password, firstName, nationality },
       {
         onError: (err) => {
           toast.error(err.message || 'Failed to create account');
@@ -68,6 +77,26 @@ export const RegisterRoute = () => {
                 required
                 disabled={registerMutation.isPending}
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="nationality">Nationality</Label>
+              <Select
+                value={nationality}
+                onValueChange={setNationality}
+                disabled={registerMutation.isPending}
+              >
+                <SelectTrigger id="nationality" aria-label="Nationality" className="w-full">
+                  <SelectValue placeholder="Select your nationality" />
+                </SelectTrigger>
+                <SelectContent>
+                  {ELIGIBLE_COUNTRIES_SORTED.map(({ code, label }) => (
+                    <SelectItem key={code} value={code}>
+                      <span className={`fi fi-${code.toLowerCase()} mr-2`} />
+                      {label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -112,7 +141,7 @@ export const RegisterRoute = () => {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={registerMutation.isPending || !termsAccepted}>
+            <Button type="submit" className="w-full" disabled={registerMutation.isPending || !termsAccepted || !nationality}>
               {registerMutation.isPending ? 'Creating account...' : 'Create account'}
             </Button>
             <p className="text-center text-sm text-muted-foreground">

@@ -1,4 +1,5 @@
 import type { AuthUser, RegisterInput } from '@regranted/shared';
+import { getVisaTypeForNationality } from '@regranted/shared';
 import {
   ConflictException,
   Injectable,
@@ -33,11 +34,16 @@ export class AuthService {
     );
     const passwordHash = await bcrypt.hash(input.password, saltRounds);
 
+    const whvType = getVisaTypeForNationality(input.nationality);
+
     const user = await this.prisma.user.create({
       data: {
         email: input.email,
         passwordHash,
         firstName: input.firstName,
+        nationality: input.nationality,
+        whvType,
+        ukCitizenExemption: input.nationality === 'GB',
       },
     });
 

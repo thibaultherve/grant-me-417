@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ELIGIBLE_COUNTRIES } from '../constants/visa-rules.js';
 
 // --- Input schemas ---
 
@@ -6,6 +7,7 @@ export const registerSchema = z.object({
   email: z.email(),
   password: z.string().min(8).max(128),
   firstName: z.string().min(1).max(100).trim(),
+  nationality: z.enum(ELIGIBLE_COUNTRIES),
 });
 
 export const loginSchema = z.object({
