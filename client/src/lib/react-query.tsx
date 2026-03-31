@@ -87,4 +87,15 @@ export const queryKeys = {
       ['visas', visaId, 'weekly-progress'] as const,
     overview: (visaId: string) => ['visas', visaId, 'overview'] as const,
   },
+  directory: {
+    all: ['directory'] as const,
+    list: (params: Record<string, unknown>) =>
+      ['directory', 'list', params] as const,
+    listPrefix: ['directory', 'list'] as const,
+    detail: (postcode: string) => ['directory', 'detail', postcode] as const,
+    changes: (params: Record<string, unknown>) =>
+      ['directory', 'changes', params] as const,
+    lastUpdate: ['directory', 'last-update'] as const,
+    favorites: ['directory', 'favorites'] as const,
+  },
 } as const;

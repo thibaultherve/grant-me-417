@@ -2015,7 +2015,7 @@
                 "ygcnD": {
                   "width": "fit_content",
                   "height": "fill_container",
-                  "x": 0.5833333333333321
+                  "x": 0.5833333333333345
                 },
                 "XME3t": {
                   "width": "fit_content",
@@ -2035,7 +2035,7 @@
                 "CRNjs": {
                   "width": "fit_content",
                   "height": "fill_container",
-                  "x": 24.749999999999996
+                  "x": 24.750000000000004
                 },
                 "snN0m": {
                   "width": "fit_content",
@@ -2055,7 +2055,7 @@
                 "01P6o": {
                   "width": "fit_content",
                   "height": "fill_container",
-                  "x": 48.91666666666666
+                  "x": 48.91666666666668
                 },
                 "LwzXH": {
                   "width": "fit_content",
@@ -2075,7 +2075,7 @@
                 "IRgD9": {
                   "width": "fit_content",
                   "height": "fill_container",
-                  "x": 73.08333333333331
+                  "x": 73.08333333333336
                 },
                 "hNKwv": {
                   "width": "fit_content",
@@ -2095,7 +2095,7 @@
                 "cDram": {
                   "width": "fit_content",
                   "height": "fill_container",
-                  "x": 97.24999999999997
+                  "x": 97.25000000000003
                 },
                 "JxX8s": {
                   "width": "fit_content",
@@ -2115,7 +2115,7 @@
                 "bpl8S": {
                   "width": "fit_content",
                   "height": "fill_container",
-                  "x": 121.41666666666663
+                  "x": 121.4166666666667
                 },
                 "maGA4": {
                   "width": "fit_content",
@@ -2135,7 +2135,7 @@
                 "Ayi5h": {
                   "width": "fit_content",
                   "height": "fill_container",
-                  "x": 145.5833333333333
+                  "x": 145.58333333333334
                 },
                 "TmFfa": {
                   "width": "fit_content",
@@ -2155,7 +2155,7 @@
                 "wvlHU": {
                   "width": "fit_content",
                   "height": "fill_container",
-                  "x": 169.74999999999994
+                  "x": 169.75
                 },
                 "QJ6uo": {
                   "width": "fit_content",
@@ -2175,7 +2175,7 @@
                 "KQpWt": {
                   "width": "fit_content",
                   "height": "fill_container",
-                  "x": 193.9166666666666
+                  "x": 193.91666666666666
                 },
                 "Lq0AK": {
                   "width": "fit_content",
@@ -2195,7 +2195,7 @@
                 "hlkWw": {
                   "width": "fit_content",
                   "height": "fill_container",
-                  "x": 218.08333333333326
+                  "x": 218.08333333333331
                 },
                 "lBXB3": {
                   "width": "fit_content",
@@ -2215,7 +2215,7 @@
                 "iDVpL": {
                   "width": "fit_content",
                   "height": "fill_container",
-                  "x": 242.24999999999991
+                  "x": 242.24999999999997
                 },
                 "NOYNK": {
                   "width": "fit_content",
@@ -26131,7 +26131,7 @@
                           "width": "fill_container"
                         },
                         "DmQve/9K1Ks": {
-                          "x": 3.666666666666667,
+                          "x": 3.666666666666666,
                           "y": 6
                         },
                         "dXP3R": {
@@ -26139,7 +26139,7 @@
                           "x": 249.33333333333334
                         },
                         "dXP3R/lgUQT": {
-                          "x": 3.666666666666667,
+                          "x": 3.666666666666666,
                           "y": 6
                         },
                         "vprvK": {
@@ -26147,7 +26147,7 @@
                           "x": 278.6666666666667
                         },
                         "vprvK/xRF6f": {
-                          "x": 3.666666666666667,
+                          "x": 3.666666666666666,
                           "y": 6
                         },
                         "Mog0s": {
@@ -26155,7 +26155,7 @@
                           "x": 308
                         },
                         "Mog0s/uKn2Q": {
-                          "x": 3.666666666666667,
+                          "x": 3.666666666666666,
                           "y": 6
                         },
                         "Fr0FN": {
@@ -26163,7 +26163,7 @@
                           "x": 337.3333333333333
                         },
                         "Fr0FN/tjlaB": {
-                          "x": 3.666666666666667,
+                          "x": 3.666666666666666,
                           "y": 6
                         },
                         "kLKtf": {
@@ -26171,7 +26171,7 @@
                           "x": 366.66666666666663
                         },
                         "kLKtf/PViUr": {
-                          "x": 3.666666666666667,
+                          "x": 3.666666666666666,
                           "y": 6
                         },
                         "E8gar": {
@@ -27311,7 +27311,7 @@
                               "width": "fill_container"
                             },
                             "DmQve/9K1Ks": {
-                              "x": 3.666666666666667,
+                              "x": 3.666666666666666,
                               "y": 6
                             },
                             "dXP3R": {
@@ -27319,7 +27319,7 @@
                               "x": 249.33333333333334
                             },
                             "dXP3R/lgUQT": {
-                              "x": 3.666666666666667,
+                              "x": 3.666666666666666,
                               "y": 6
                             },
                             "vprvK": {
@@ -27327,7 +27327,7 @@
                               "x": 278.6666666666667
                             },
                             "vprvK/xRF6f": {
-                              "x": 3.666666666666667,
+                              "x": 3.666666666666666,
                               "y": 6
                             },
                             "Mog0s": {
@@ -27335,7 +27335,7 @@
                               "x": 308
                             },
                             "Mog0s/uKn2Q": {
-                              "x": 3.666666666666667,
+                              "x": 3.666666666666666,
                               "y": 6
                             },
                             "Fr0FN": {
@@ -27343,7 +27343,7 @@
                               "x": 337.3333333333333
                             },
                             "Fr0FN/tjlaB": {
-                              "x": 3.666666666666667,
+                              "x": 3.666666666666666,
                               "y": 6
                             },
                             "kLKtf": {
@@ -27351,7 +27351,7 @@
                               "x": 366.66666666666663
                             },
                             "kLKtf/PViUr": {
-                              "x": 3.666666666666667,
+                              "x": 3.666666666666666,
                               "y": 6
                             },
                             "E8gar": {
@@ -42931,7 +42931,7 @@
                       "height": "fit_content"
                     },
                     "XMveh": {
-                      "x": 35.66666666666667,
+                      "x": 35.666666666666664,
                       "y": 12
                     },
                     "Gvdxx": {
@@ -42939,7 +42939,7 @@
                       "y": 4.5
                     },
                     "gtekC": {
-                      "x": 27.666666666666668,
+                      "x": 27.666666666666664,
                       "y": 40
                     },
                     "Al0NJ": {
@@ -42948,7 +42948,7 @@
                       "x": 111.33333333333333
                     },
                     "0YXSx": {
-                      "x": 35.66666666666667,
+                      "x": 35.666666666666664,
                       "y": 12
                     },
                     "58BHn": {
@@ -42956,7 +42956,7 @@
                       "y": 4.5
                     },
                     "keNni": {
-                      "x": 27.666666666666668,
+                      "x": 27.666666666666664,
                       "y": 40
                     },
                     "l8M0L": {
@@ -42965,7 +42965,7 @@
                       "x": 222.66666666666666
                     },
                     "T0CIs": {
-                      "x": 35.66666666666667,
+                      "x": 35.666666666666664,
                       "y": 12
                     },
                     "AO8Ch": {
@@ -42973,7 +42973,7 @@
                       "y": 4.5
                     },
                     "lVWzm": {
-                      "x": 27.666666666666668,
+                      "x": 27.666666666666664,
                       "y": 40
                     }
                   }
@@ -78755,168 +78755,6 @@
               "fontFamily": "Inter",
               "fontSize": 10,
               "fontWeight": "500"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "frame",
-      "id": "ran5x",
-      "x": 3360,
-      "y": 1150,
-      "name": "Postcode Badge/Default/NSW",
-      "context": "Default postcode badge for card headers. Override StateBadge fill, state text, postcode text per instance. Clickable — navigates to Postcode Detail page.",
-      "reusable": true,
-      "height": "fit_content(22)",
-      "alignItems": "center",
-      "children": [
-        {
-          "type": "frame",
-          "id": "onyv7",
-          "name": "StateBadge",
-          "height": "fill_container",
-          "fill": "$--nsw-main-color",
-          "cornerRadius": [
-            4,
-            0,
-            0,
-            4
-          ],
-          "padding": [
-            0,
-            8
-          ],
-          "justifyContent": "center",
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "3Gkgr",
-              "name": "stateText",
-              "fill": "#FFFFFF",
-              "content": "NSW",
-              "fontFamily": "Inter",
-              "fontSize": 10,
-              "fontWeight": "700"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "TOny7",
-          "name": "PostcodeBadge",
-          "height": "fill_container",
-          "cornerRadius": [
-            0,
-            4,
-            4,
-            0
-          ],
-          "stroke": {
-            "align": "inside",
-            "thickness": 1,
-            "fill": "$--border"
-          },
-          "padding": [
-            0,
-            8,
-            0,
-            6
-          ],
-          "justifyContent": "center",
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "0ZzKP",
-              "name": "postcodeText",
-              "fill": "$--foreground",
-              "content": "2830",
-              "fontFamily": "Inter",
-              "fontSize": 14,
-              "fontWeight": "600"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "frame",
-      "id": "2ir3k",
-      "x": 3480,
-      "y": 1150,
-      "name": "Postcode Badge/Large/NSW",
-      "context": "Large postcode badge for page breadcrumbs. Override StateBadge fill, state text, postcode text per instance. Clickable — navigates to Postcode Detail page.",
-      "reusable": true,
-      "height": "fit_content(34)",
-      "alignItems": "center",
-      "children": [
-        {
-          "type": "frame",
-          "id": "TtoZX",
-          "name": "StateBadge",
-          "height": "fill_container",
-          "fill": "$--nsw-main-color",
-          "cornerRadius": [
-            4,
-            0,
-            0,
-            4
-          ],
-          "padding": [
-            0,
-            8
-          ],
-          "justifyContent": "center",
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "tSzMf",
-              "name": "stateText",
-              "fill": "#FFFFFF",
-              "content": "NSW",
-              "fontFamily": "Inter",
-              "fontSize": 12,
-              "fontWeight": "700"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "9FPTx",
-          "name": "PostcodeBadge",
-          "height": "fill_container",
-          "cornerRadius": [
-            0,
-            4,
-            4,
-            0
-          ],
-          "stroke": {
-            "align": "inside",
-            "thickness": 1,
-            "fill": "$--border"
-          },
-          "padding": [
-            0,
-            10,
-            0,
-            8
-          ],
-          "justifyContent": "center",
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "CSoR0",
-              "name": "postcodeText",
-              "fill": "$--foreground",
-              "content": "2830",
-              "fontFamily": "Inter",
-              "fontSize": 28,
-              "fontWeight": "700"
             }
           ]
         }
