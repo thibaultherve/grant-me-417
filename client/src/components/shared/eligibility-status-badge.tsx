@@ -2,7 +2,11 @@ import { Loader } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
-export type EligibilityStatus = 'no-status' | 'checking' | 'eligible' | 'not-eligible';
+export type EligibilityStatus =
+  | 'no-status'
+  | 'checking'
+  | 'eligible'
+  | 'not-eligible';
 
 interface EligibilityStatusBadgeProps {
   status: EligibilityStatus;
@@ -22,7 +26,7 @@ export function EligibilityStatusBadge({
     >
       {status === 'no-status' && (
         <>
-          <div className="w-2 h-2 rounded-full bg-muted-foreground flex-shrink-0" />
+          <div className="w-2 h-2 rounded-full bg-muted-foreground shrink-0" />
           <span className="text-[11px] font-medium text-muted-foreground">
             No Status
           </span>
@@ -31,7 +35,7 @@ export function EligibilityStatusBadge({
 
       {status === 'checking' && (
         <>
-          <Loader className="w-2.5 h-2.5 text-muted-foreground animate-spin flex-shrink-0" />
+          <Loader className="w-2.5 h-2.5 text-muted-foreground animate-spin shrink-0" />
           <span className="text-[11px] font-medium text-muted-foreground">
             Checking...
           </span>
@@ -40,14 +44,14 @@ export function EligibilityStatusBadge({
 
       {status === 'eligible' && (
         <>
-          <div className="w-2 h-2 rounded-full bg-success flex-shrink-0" />
+          <div className="w-2 h-2 rounded-full bg-success shrink-0" />
           <span className="text-[11px] font-medium text-success">Eligible</span>
         </>
       )}
 
       {status === 'not-eligible' && (
         <>
-          <div className="w-2 h-2 rounded-full bg-danger flex-shrink-0" />
+          <div className="w-2 h-2 rounded-full bg-danger shrink-0" />
           <span className="text-[11px] font-medium text-danger">
             Not Eligible
           </span>

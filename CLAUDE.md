@@ -54,12 +54,20 @@
 - Load all values from configuration files (`.env` for secrets)
 - Business logic must adapt automatically to configuration changes
 
-### 4. Clean Code & Maintenance
+### 4. Formatting, Linting & Type-checking
+
+- **ALWAYS** after creating or editing files, run these checks and fix any errors before considering the task done:
+  - **Client**: `cd client && npx eslint --fix <files> && npx tsc --noEmit`
+  - **Server**: `cd server && npx eslint --fix <files> && npx tsc --noEmit`
+- Do NOT rely on manual formatting — the project's Prettier config (printWidth, trailing commas, union type formatting, etc.) must be enforced via tooling
+- Fix all TypeScript errors (unused imports, type mismatches, missing types) — do NOT leave `TS6133`, `TS2322`, or any `TS*` errors behind
+
+### 5. Clean Code & Maintenance
 
 - **NEVER** leave unused code - ask for user approval before deletion
 - **DRY Principle** - duplication is a liability
 
-### 5. API & Error Handling
+### 6. API & Error Handling
 
 - **ALWAYS** handle all error cases in API responses
 - Never return 500 unless it's a genuine internal server error
@@ -67,7 +75,7 @@
 - Never expose internal errors in API responses
 - Use NestJS exception filters for consistent error response format
 
-### 6. Up-to-Date Information & Documentation
+### 7. Up-to-Date Information & Documentation
 
 **ALWAYS use current information for libraries, APIs, and best practices.**
 
@@ -87,14 +95,25 @@
 
 **NEVER assume library APIs haven't changed. Always verify.**
 
-### 7. Internationalization
+### 8. Tailwind CSS v4 Canonical Classes
 
-- **ALWAYS** use `react-i18next` for all user-facing text in the client
-- Define messages in `client/messages/{language}.json`
-- **NEVER** hardcode user-facing strings
-- Write code in English first, then translate
+**ALWAYS use Tailwind v4 canonical (short) class names**, not legacy aliases:
 
-### 8. UI Design Quality (Frontend)
+| Legacy (DO NOT use)         | Canonical (USE this)         |
+|-----------------------------|------------------------------|
+| `flex-shrink-0`             | `shrink-0`                   |
+| `flex-grow`                 | `grow`                       |
+| `overflow-ellipsis`         | `text-ellipsis`              |
+| `data-[placeholder]:...`   | `data-placeholder:...`       |
+| `data-[disabled]:...`      | `data-disabled:...`          |
+| `min-w-[8rem]`             | `min-w-32`                   |
+| `max-w-[280px]`            | `max-w-70`                   |
+| `h-[var(--custom)]`        | `h-(--custom)`               |
+| `min-w-[var(--custom)]`    | `min-w-(--custom)`           |
+
+When a Tailwind utility has a numeric equivalent (e.g., `[8rem]` = `32` in the default scale), prefer the numeric form. For CSS variables, use the `(--var)` syntax instead of `[var(--var)]`.
+
+### 9. UI Design Quality (Frontend)
 
 Pour toute creation de composant UI significatif (pages, modals, forms, dashboards, cards), utilise le skill `frontend-design:frontend-design` pour garantir un design distinctif et production-ready.
 

@@ -1,10 +1,10 @@
 import { Link } from 'react-router';
 
-import { cn } from '@/lib/utils';
 import { paths } from '@/config/paths';
+import { cn } from '@/lib/utils';
 
 // Static class strings required for Tailwind v4 detection at build time
-const STATE_CONFIG: Record<string, { bg: string; fg: string }> = {
+export const STATE_CONFIG: Record<string, { bg: string; fg: string }> = {
   ACT: { bg: 'bg-state-act', fg: 'text-white' },
   NSW: { bg: 'bg-state-nsw', fg: 'text-state-nsw-fg' },
   NT: { bg: 'bg-state-nt', fg: 'text-white' },
@@ -59,7 +59,8 @@ export function PostcodeLinkBadge({
       className={cn(
         'inline-flex items-stretch shrink-0 leading-none',
         sizeConfig.radius,
-        asLink && 'hover:opacity-90 hover:shadow-sm transition-all cursor-pointer',
+        asLink &&
+          'hover:opacity-90 hover:shadow-sm transition-all cursor-pointer',
         className,
       )}
     >
