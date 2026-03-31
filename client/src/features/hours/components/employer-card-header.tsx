@@ -7,8 +7,8 @@ import type { IndustryType } from '@regranted/shared';
 import {
   EligibilityStatusBadge,
   getEligibilityStatus,
-} from '@/features/employers/components/eligibility-status-badge';
-import { INDUSTRY_CONFIG } from '@/features/employers/components/industry-chip';
+} from '@/components/shared/eligibility-status-badge';
+import { INDUSTRY_CONFIG } from '@/components/shared/industry-chip';
 
 interface EmployerCardHeaderProps {
   employerName: string;

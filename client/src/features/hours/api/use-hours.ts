@@ -14,6 +14,9 @@ import type {
 import { handleError } from '@/lib/error-handler';
 import { queryKeys } from '@/lib/react-query';
 
+import { api } from '@/lib/api-client';
+import type { Visa } from '@regranted/shared';
+
 import {
   getEmployerHours,
   getHours,
@@ -22,6 +25,18 @@ import {
   saveWeekBatch,
   type GetHoursOptions,
 } from './hours';
+
+/**
+ * Hook to fetch user's visas (used by weekly calendar to display visa context).
+ * Defined here to avoid cross-feature import from visas feature.
+ */
+export const useVisas = () => {
+  return useQuery({
+    queryKey: queryKeys.visas.all,
+    queryFn: (): Promise<Visa[]> => api.get('/visas'),
+    staleTime: 10 * 60 * 1000,
+  });
+};
 
 /**
  * Hook pour récupérer les heures avec pagination/tri

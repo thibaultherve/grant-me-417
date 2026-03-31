@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { VisaLegend } from '@/components/visa-legend';
 
-import { useVisas } from '@/features/visas/api/use-visas';
+import { useVisas } from '../../api/use-hours';
 
 import { useWeeklyHours } from '../../api/use-hours';
 import { useWeekExpansion } from '../../hooks/use-week-expansion';
