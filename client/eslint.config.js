@@ -100,6 +100,21 @@ export default tseslint.config(
               from: './src/features',
               except: ['./progress'],
             },
+            {
+              target: './src/features/hours',
+              from: './src/features',
+              except: ['./hours'],
+            },
+            {
+              target: './src/features/dashboard',
+              from: './src/features',
+              except: ['./dashboard'],
+            },
+            {
+              target: './src/features/directory',
+              from: './src/features',
+              except: ['./directory'],
+            },
 
             // Enforce unidirectional codebase
             // src/features cannot import from src/app
@@ -155,11 +170,7 @@ export default tseslint.config(
       'linebreak-style': ['error', 'unix'],
 
       // Prettier rules
-      'prettier/prettier': [
-        'error',
-        {},
-        { usePrettierrc: true, endOfLine: 'auto' },
-      ],
+      'prettier/prettier': ['error', {}, { usePrettierrc: true }],
 
       // File naming conventions
       'check-file/filename-naming-convention': [

@@ -1,6 +1,6 @@
 import { Hourglass, PlaneLanding, PlaneTakeoff } from 'lucide-react';
 import type { VisaOverview } from '@regranted/shared';
-import { computeVisaTimeline } from '@/features/visas/utils/visa-helpers';
+import { computeVisaTimeline } from '@/utils/visa-helpers';
 import { formatDate } from '../utils/dashboard-calculations';
 import { StatCardWrapper, CardTooltip } from './stat-card-wrapper';
 
