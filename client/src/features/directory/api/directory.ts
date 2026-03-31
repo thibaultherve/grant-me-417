@@ -1,5 +1,3 @@
-import { api } from '@/lib/api-client';
-
 import type {
   FavoritePostcodeResponse,
   GlobalChangesResponse,
@@ -8,6 +6,8 @@ import type {
   PaginatedDirectoryResponse,
   PostcodeDetailResponse,
 } from '@regranted/shared';
+
+import { api } from '@/lib/api-client';
 
 export const getDirectory = async (
   params: PaginatedDirectoryQuery,
@@ -18,7 +18,8 @@ export const getDirectory = async (
   searchParams.set('limit', String(params.limit ?? 15));
   searchParams.set('sort', params.sort ?? 'asc');
   if (params.search) searchParams.set('search', params.search);
-  if (params.states?.length) searchParams.set('states', params.states.join(','));
+  if (params.states?.length)
+    searchParams.set('states', params.states.join(','));
   if (params.zones?.length) searchParams.set('zones', params.zones.join(','));
   if (params.favorites) searchParams.set('favorites', 'true');
   return api.get(`/postcodes/directory?${searchParams.toString()}`);
@@ -42,8 +43,10 @@ export const getGlobalChanges = async (params: {
   return api.get(`/postcodes/changes?${searchParams.toString()}`);
 };
 
-export const getLastUpdate = async (): Promise<LastUpdateResponse> => {
-  return api.get('/postcodes/last-update');
+export const getLastUpdate = async (
+  visaType: string,
+): Promise<LastUpdateResponse> => {
+  return api.get(`/postcodes/last-update?visaType=${visaType}`);
 };
 
 export const toggleFavoritePostcode = async (

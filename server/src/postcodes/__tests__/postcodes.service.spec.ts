@@ -25,6 +25,7 @@ const mockPrisma = {
   },
   postcodeEligibilityHistory: {
     findMany: jest.fn(),
+    findFirst: jest.fn(),
   },
   scrapeRun: {
     findFirst: jest.fn(),
@@ -661,23 +662,23 @@ describe('PostcodesService', () => {
 
   describe('getLastUpdateInfo', () => {
     it('should return last update date and source URL', async () => {
-      mockPrisma.scrapeRun.findFirst.mockResolvedValue({
-        runAt: new Date('2026-03-20T12:00:00Z'),
+      mockPrisma.postcodeEligibilityHistory.findFirst.mockResolvedValue({
+        effectiveDate: new Date('2026-03-20'),
         sourceUrl: 'https://immi.homeaffairs.gov.au',
       });
 
-      const result = await service.getLastUpdateInfo();
+      const result = await service.getLastUpdateInfo('417');
 
       expect(result).toEqual({
-        lastUpdateDate: '2026-03-20T12:00:00.000Z',
+        lastUpdateDate: '2026-03-20T00:00:00.000Z',
         sourceUrl: 'https://immi.homeaffairs.gov.au',
       });
     });
 
-    it('should return nulls when no scrape run with changes exists', async () => {
-      mockPrisma.scrapeRun.findFirst.mockResolvedValue(null);
+    it('should return nulls when no history entries exist', async () => {
+      mockPrisma.postcodeEligibilityHistory.findFirst.mockResolvedValue(null);
 
-      const result = await service.getLastUpdateInfo();
+      const result = await service.getLastUpdateInfo('417');
 
       expect(result).toEqual({
         lastUpdateDate: null,

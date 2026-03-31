@@ -37,7 +37,7 @@ export const DirectoryRoute = () => {
   } = useDirectoryFilters();
 
   const { data: directory, isLoading } = useDirectory(filters);
-  const { data: lastUpdate } = useLastUpdate();
+  const { data: lastUpdate } = useLastUpdate(filters.visaType);
   const toggleFavorite = useToggleFavorite();
 
   // Prefetch favorites for optimistic toggle
@@ -53,6 +53,32 @@ export const DirectoryRoute = () => {
       <div className="space-y-5">
         {/* Visa type tabs */}
         <VisaTypeTabs value={filters.visaType} onChange={setVisaType} />
+
+        {/* Source info */}
+        <div className="flex flex-col gap-0.5 text-xs text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <span>
+              Last update: {formatLastUpdate(lastUpdate?.lastUpdateDate)}
+            </span>
+            {lastUpdate?.sourceUrl && (
+              <>
+                <span>&middot;</span>
+                <a
+                  href={lastUpdate.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+                >
+                  Source
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </>
+            )}
+          </div>
+          <span className="text-[11px] text-muted-foreground/60">
+            No postcode eligibility changes detected after this date.
+          </span>
+        </div>
 
         {/* Filters */}
         <DirectoryFilters
@@ -83,26 +109,6 @@ export const DirectoryRoute = () => {
           visaType={filters.visaType}
         />
 
-        {/* Source row */}
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span>
-            Last update: {formatLastUpdate(lastUpdate?.lastUpdateDate)}
-          </span>
-          {lastUpdate?.sourceUrl && (
-            <>
-              <span>&middot;</span>
-              <a
-                href={lastUpdate.sourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
-              >
-                Source
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            </>
-          )}
-        </div>
       </div>
     </ErrorBoundary>
   );

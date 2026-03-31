@@ -165,6 +165,10 @@ export const globalChangesResponseSchema = createPaginatedSchema(
 
 // --- Last Update Info (new) ---
 
+export const lastUpdateQuerySchema = z.object({
+  visaType: z.enum(['417', '462']).default('417'),
+});
+
 export const lastUpdateResponseSchema = z.object({
   lastUpdateDate: z.string().nullable(),
   sourceUrl: z.string().nullable(),

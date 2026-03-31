@@ -12,6 +12,7 @@ import {
   postcodeDirectoryQuerySchema,
   paginatedDirectoryQuerySchema,
   globalChangesQuerySchema,
+  lastUpdateQuerySchema,
   postcodeParamSchema,
   searchQuerySchema,
   suburbIdParamSchema,
@@ -62,8 +63,13 @@ export class PostcodesController {
   }
 
   @Get('postcodes/last-update')
-  async getLastUpdate() {
-    return this.postcodesService.getLastUpdateInfo();
+  async getLastUpdate(
+    @Query(new ZodValidationPipe(lastUpdateQuerySchema))
+    query: {
+      visaType: string;
+    },
+  ) {
+    return this.postcodesService.getLastUpdateInfo(query.visaType);
   }
 
   @Get('postcodes/:postcode/history')

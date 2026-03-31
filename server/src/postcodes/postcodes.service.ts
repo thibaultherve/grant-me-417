@@ -377,16 +377,16 @@ export class PostcodesService {
 
   // ── Last Update Info ──────────────────────────────────────────────────────
 
-  async getLastUpdateInfo(): Promise<LastUpdateResponse> {
-    const lastRun = await this.prisma.scrapeRun.findFirst({
-      where: { changesDetected: { gt: 0 } },
-      orderBy: { runAt: 'desc' },
-      select: { runAt: true, sourceUrl: true },
+  async getLastUpdateInfo(visaType: string): Promise<LastUpdateResponse> {
+    const lastEntry = await this.prisma.postcodeEligibilityHistory.findFirst({
+      where: { visaType },
+      orderBy: { effectiveDate: 'desc' },
+      select: { effectiveDate: true, sourceUrl: true },
     });
 
     return {
-      lastUpdateDate: lastRun?.runAt?.toISOString() ?? null,
-      sourceUrl: lastRun?.sourceUrl ?? null,
+      lastUpdateDate: lastEntry?.effectiveDate?.toISOString() ?? null,
+      sourceUrl: lastEntry?.sourceUrl ?? null,
     };
   }
 

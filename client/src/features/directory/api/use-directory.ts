@@ -1,3 +1,7 @@
+import type {
+  PaginatedDirectoryItem,
+  PaginatedDirectoryResponse,
+} from '@regranted/shared';
 import {
   keepPreviousData,
   useMutation,
@@ -8,11 +12,6 @@ import { toast } from 'sonner';
 
 import { handleError } from '@/lib/error-handler';
 import { queryKeys } from '@/lib/react-query';
-
-import type {
-  PaginatedDirectoryItem,
-  PaginatedDirectoryResponse,
-} from '@regranted/shared';
 
 import type { DirectoryFiltersState } from '../types/directory';
 
@@ -63,10 +62,10 @@ export const useGlobalChanges = (params: {
   });
 };
 
-export const useLastUpdate = () => {
+export const useLastUpdate = (visaType: string) => {
   return useQuery({
-    queryKey: queryKeys.directory.lastUpdate,
-    queryFn: getLastUpdate,
+    queryKey: queryKeys.directory.lastUpdate(visaType),
+    queryFn: () => getLastUpdate(visaType),
     staleTime: 10 * 60 * 1000,
   });
 };
@@ -92,9 +91,10 @@ export const useToggleFavorite = () => {
       });
 
       // Snapshot all directory list caches for rollback
-      const previousQueries = queryClient.getQueriesData<PaginatedDirectoryResponse>({
-        queryKey: queryKeys.directory.listPrefix,
-      });
+      const previousQueries =
+        queryClient.getQueriesData<PaginatedDirectoryResponse>({
+          queryKey: queryKeys.directory.listPrefix,
+        });
 
       // Optimistic toggle on all directory list caches
       queryClient.setQueriesData<PaginatedDirectoryResponse>(
@@ -137,8 +137,12 @@ export const useToggleFavorite = () => {
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.directory.listPrefix });
-      queryClient.invalidateQueries({ queryKey: queryKeys.directory.favorites });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.directory.listPrefix,
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.directory.favorites,
+      });
     },
   });
 };

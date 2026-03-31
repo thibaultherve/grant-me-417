@@ -107,10 +107,10 @@ describe('PostcodesController', () => {
       };
       mockService.getLastUpdateInfo.mockResolvedValue(expected);
 
-      const result = await controller.getLastUpdate();
+      const result = await controller.getLastUpdate({ visaType: '417' });
 
       expect(result).toEqual(expected);
-      expect(mockService.getLastUpdateInfo).toHaveBeenCalled();
+      expect(mockService.getLastUpdateInfo).toHaveBeenCalledWith('417');
     });
   });
 
