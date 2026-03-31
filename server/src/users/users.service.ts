@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import type { User } from '../../generated/prisma/client.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type {
@@ -68,7 +72,7 @@ export class UsersService {
       id: user.id,
       email: user.email,
       firstName: user.firstName ?? '',
-      nationality: user.nationality as UserProfileResponse['nationality'],
+      nationality: user.nationality,
       whvType: user.whvType as '417' | '462',
       ukCitizenExemption: user.ukCitizenExemption ?? false,
       createdAt: formatTimestamp(user.createdAt),

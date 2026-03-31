@@ -55,4 +55,17 @@ export type {
   PostcodeDirectoryQuery,
   Suburb,
   SuburbWithPostcode,
+  PaginatedDirectoryQuery,
+  PaginatedDirectoryItem,
+  PaginatedDirectoryResponse,
+  PostcodeDetailResponse,
+  GlobalChangesQuery,
+  GlobalChangeEntry,
+  GlobalChangesResponse,
+  LastUpdateResponse,
 } from '../schemas/postcode.js';
+
+export type {
+  ToggleFavoritePostcodeInput,
+  FavoritePostcodeResponse,
+} from '../schemas/favorite.js';

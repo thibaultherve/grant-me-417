@@ -99,8 +99,7 @@ export class VisaOverviewService {
     );
     const weeksRemaining = Math.max(0, totalWeeks - weeksElapsed);
 
-    const currentPace =
-      weeksElapsed > 0 ? visa.eligibleDays / weeksElapsed : 0;
+    const currentPace = weeksElapsed > 0 ? visa.eligibleDays / weeksElapsed : 0;
     const requiredPace = visa.daysRequired / totalWeeks;
 
     return {

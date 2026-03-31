@@ -43,40 +43,78 @@ export class AuthController {
   @Post('register')
   @Throttle({ default: { ttl: 60000, limit: 5 } })
   @UsePipes(new ZodValidationPipe(registerSchema))
-  async register(@Body() body: RegisterInput, @Res({ passthrough: true }) res: Response) {
+  async register(
+    @Body() body: RegisterInput,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const result = await this.authService.register(body);
-    res.cookie(REFRESH_TOKEN_COOKIE, result.tokens.refreshToken, COOKIE_OPTIONS);
-    return { user: result.user, tokens: { accessToken: result.tokens.accessToken } };
+    res.cookie(
+      REFRESH_TOKEN_COOKIE,
+      result.tokens.refreshToken,
+      COOKIE_OPTIONS,
+    );
+    return {
+      user: result.user,
+      tokens: { accessToken: result.tokens.accessToken },
+    };
   }
 
   @Post('login')
   @Throttle({ default: { ttl: 60000, limit: 5 } })
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
-  async login(@Req() req: { user: AuthUser }, @Res({ passthrough: true }) res: Response) {
+  async login(
+    @Req() req: { user: AuthUser },
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const result = await this.authService.login(req.user);
-    res.cookie(REFRESH_TOKEN_COOKIE, result.tokens.refreshToken, COOKIE_OPTIONS);
-    return { user: result.user, tokens: { accessToken: result.tokens.accessToken } };
+    res.cookie(
+      REFRESH_TOKEN_COOKIE,
+      result.tokens.refreshToken,
+      COOKIE_OPTIONS,
+    );
+    return {
+      user: result.user,
+      tokens: { accessToken: result.tokens.accessToken },
+    };
   }
 
   @Post('refresh')
   @Throttle({ default: { ttl: 60000, limit: 5 } })
   @HttpCode(HttpStatus.OK)
-  async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    const refreshToken = req.cookies?.[REFRESH_TOKEN_COOKIE] as string | undefined;
+  async refresh(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const refreshToken = req.cookies?.[REFRESH_TOKEN_COOKIE] as
+      | string
+      | undefined;
     if (!refreshToken) {
       throw new UnauthorizedException('Missing refresh token');
     }
     const result = await this.authService.refreshTokens(refreshToken);
-    res.cookie(REFRESH_TOKEN_COOKIE, result.tokens.refreshToken, COOKIE_OPTIONS);
-    return { user: result.user, tokens: { accessToken: result.tokens.accessToken } };
+    res.cookie(
+      REFRESH_TOKEN_COOKIE,
+      result.tokens.refreshToken,
+      COOKIE_OPTIONS,
+    );
+    return {
+      user: result.user,
+      tokens: { accessToken: result.tokens.accessToken },
+    };
   }
 
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
-  async logout(@CurrentUser() user: JwtPayload, @Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    const refreshToken = req.cookies?.[REFRESH_TOKEN_COOKIE] as string | undefined;
+  async logout(
+    @CurrentUser() user: JwtPayload,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const refreshToken = req.cookies?.[REFRESH_TOKEN_COOKIE] as
+      | string
+      | undefined;
     await this.authService.logout(user.sub, refreshToken);
     res.clearCookie(REFRESH_TOKEN_COOKIE, { path: '/' });
     return { message: 'Logged out successfully' };

@@ -45,10 +45,7 @@ export class VisasController {
   }
 
   @Get(':id/overview')
-  async getOverview(
-    @CurrentUser() user: JwtPayload,
-    @Param('id') id: string,
-  ) {
+  async getOverview(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
     return this.visaOverviewService.getOverview(user.sub, id);
   }
 
@@ -78,10 +75,7 @@ export class VisasController {
   }
 
   @Delete(':id')
-  async remove(
-    @CurrentUser() user: JwtPayload,
-    @Param('id') id: string,
-  ) {
+  async remove(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
     return this.visasService.remove(user.sub, id);
   }
 }

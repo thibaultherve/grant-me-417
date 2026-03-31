@@ -12,6 +12,7 @@ import { PostcodesModule } from './postcodes/postcodes.module.js';
 import { EmployersModule } from './employers/employers.module.js';
 import { VisasModule } from './visas/visas.module.js';
 import { WorkEntriesModule } from './work-entries/work-entries.module.js';
+import { FavoritesModule } from './favorites/favorites.module.js';
 
 @Module({
   imports: [
@@ -25,11 +26,9 @@ import { WorkEntriesModule } from './work-entries/work-entries.module.js';
     EmployersModule,
     VisasModule,
     WorkEntriesModule,
+    FavoritesModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    { provide: APP_GUARD, useClass: ThrottlerGuard },
-  ],
+  providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
 export class AppModule {}

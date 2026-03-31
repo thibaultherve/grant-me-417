@@ -234,7 +234,8 @@ export class EmployersService {
                   isNorthernAustralia: eligibility.isNorthernAustralia,
                   isRegionalAustralia: eligibility.isRegionalAustralia,
                   isBushfireDeclared: eligibility.isBushfireDeclared,
-                  isNaturalDisasterDeclared: eligibility.isNaturalDisasterDeclared,
+                  isNaturalDisasterDeclared:
+                    eligibility.isNaturalDisasterDeclared,
                 }
               : null,
           }

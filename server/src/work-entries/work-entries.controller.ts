@@ -16,10 +16,7 @@ import {
   type JwtPayload,
 } from '../common/decorators/current-user.decorator.js';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe.js';
-import {
-  saveWeekBatchSchema,
-  type SaveWeekBatch,
-} from '@regranted/shared';
+import { saveWeekBatchSchema, type SaveWeekBatch } from '@regranted/shared';
 
 @Controller('work-entries')
 @UseGuards(JwtAuthGuard)
@@ -34,15 +31,28 @@ export class WorkEntriesController {
     @Query('sortField') sortField?: string,
     @Query('sortOrder') sortOrder?: string,
   ) {
-    const VALID_SORT_FIELDS = ['workDate', 'hours', 'employerName', 'industry', 'isEligible'];
+    const VALID_SORT_FIELDS = [
+      'workDate',
+      'hours',
+      'employerName',
+      'industry',
+      'isEligible',
+    ];
     const VALID_SORT_ORDERS = ['asc', 'desc'] as const;
 
     const safePage = Math.max(1, page ? parseInt(page, 10) : 1);
-    const safeLimit = Math.min(100, Math.max(1, limit ? parseInt(limit, 10) : 10));
-    const safeSortField = sortField && VALID_SORT_FIELDS.includes(sortField) ? sortField : undefined;
-    const safeSortOrder = sortOrder && VALID_SORT_ORDERS.includes(sortOrder as 'asc' | 'desc')
-      ? (sortOrder as 'asc' | 'desc')
-      : undefined;
+    const safeLimit = Math.min(
+      100,
+      Math.max(1, limit ? parseInt(limit, 10) : 10),
+    );
+    const safeSortField =
+      sortField && VALID_SORT_FIELDS.includes(sortField)
+        ? sortField
+        : undefined;
+    const safeSortOrder =
+      sortOrder && VALID_SORT_ORDERS.includes(sortOrder as 'asc' | 'desc')
+        ? (sortOrder as 'asc' | 'desc')
+        : undefined;
 
     return this.workEntriesService.findAll(user.sub, {
       page: safePage,
@@ -58,7 +68,9 @@ export class WorkEntriesController {
     @Query('weekStart') weekStart: string,
   ) {
     if (!weekStart || !/^\d{4}-\d{2}-\d{2}$/.test(weekStart)) {
-      throw new BadRequestException('weekStart query param must be a valid ISO date (YYYY-MM-DD)');
+      throw new BadRequestException(
+        'weekStart query param must be a valid ISO date (YYYY-MM-DD)',
+      );
     }
     return this.workEntriesService.getWeekEntries(user.sub, weekStart);
   }

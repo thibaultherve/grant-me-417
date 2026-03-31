@@ -66,9 +66,7 @@ export class VisasService {
     });
 
     if (existing) {
-      throw new ConflictException(
-        `You already have a ${input.visaType} visa`,
-      );
+      throw new ConflictException(`You already have a ${input.visaType} visa`);
     }
 
     // Validate no overlapping visa periods and correct ordering

@@ -507,7 +507,9 @@ export class VisaProgressService {
       where: { userId },
     });
 
-    await Promise.all(visas.map((visa) => this.refreshAllWeeksForVisa(visa.id)));
+    await Promise.all(
+      visas.map((visa) => this.refreshAllWeeksForVisa(visa.id)),
+    );
   }
 
   /**
@@ -516,5 +518,4 @@ export class VisaProgressService {
   getDaysRequired(visaType: string): number {
     return getDaysRequired(visaType);
   }
-
 }

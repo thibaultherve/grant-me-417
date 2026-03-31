@@ -5,4 +5,5 @@ export * from './visa.js';
 export * from './employer.js';
 export * from './work-entry.js';
 export * from './postcode.js';
+export * from './favorite.js';
 export * from './visa-overview.js';

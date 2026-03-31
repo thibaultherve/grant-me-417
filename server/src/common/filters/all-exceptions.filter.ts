@@ -24,7 +24,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       const body =
         typeof exceptionResponse === 'string'
           ? { statusCode: status, message: exceptionResponse }
-          : { statusCode: status, ...(exceptionResponse as object) };
+          : { statusCode: status, ...exceptionResponse };
 
       return response.status(status).json(body);
     }
