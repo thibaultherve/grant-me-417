@@ -13,13 +13,25 @@ import {
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import type { IndustryType } from '@regranted/shared';
-import { INDUSTRY_SHORT_LABELS } from '../constants';
+import type { IndustryType, IndustryTypeValue } from '@regranted/shared';
+
+const INDUSTRY_SHORT_LABELS: Record<IndustryTypeValue, string> = {
+  plant_and_animal_cultivation: 'Cultivation',
+  fishing_and_pearling: 'Fishing',
+  tree_farming_and_felling: 'Tree Farming',
+  mining: 'Mining',
+  construction: 'Construction',
+  hospitality_and_tourism: 'Hospitality',
+  bushfire_recovery_work: 'Bushfire',
+  weather_recovery_work: 'Weather',
+  critical_covid19_work: 'COVID-19',
+  other: 'Other',
+};
 
 interface IndustryConfig {
   icon: LucideIcon;
   label: string;
-  /** Tailwind bg class for the 20×20 icon square */
+  /** Tailwind bg class for the 20x20 icon square */
   iconBg: string;
 }
 

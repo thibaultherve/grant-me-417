@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import type { PostcodeBadgeData } from '@regranted/shared';
 
 export type ZoneKey =
   | 'northern'
@@ -78,3 +79,11 @@ export function ZoneBadge({ zone, size = 'md', className }: ZoneBadgeProps) {
     </div>
   );
 }
+
+export const ZONE_FLAGS: { flag: keyof PostcodeBadgeData; zone: ZoneKey }[] = [
+  { flag: 'isNorthernAustralia', zone: 'northern' },
+  { flag: 'isRemoteVeryRemote', zone: 'remote' },
+  { flag: 'isRegionalAustralia', zone: 'regional' },
+  { flag: 'isBushfireDeclared', zone: 'bushfire' },
+  { flag: 'isNaturalDisasterDeclared', zone: 'weather' },
+];
