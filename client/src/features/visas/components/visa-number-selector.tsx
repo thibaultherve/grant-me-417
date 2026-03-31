@@ -2,7 +2,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 
 import type { VisaType } from '@regranted/shared';
 import type { VisaTypeWithAvailability } from '../hooks/use-available-visas';
-import { getVisaOrdinal } from '../utils/visa-helpers';
+import { getVisaOrdinal } from '@/utils/visa-helpers';
 
 interface VisaNumberSelectorProps {
   value: VisaType | null;

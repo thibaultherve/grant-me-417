@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { useVisaContext } from '../hooks/use-visa-context';
-import { getVisaOrdinal } from '../utils/visa-helpers';
+import { getVisaOrdinal } from '@/utils/visa-helpers';
 import { OrdinalBadge } from './ordinal-badge';
 
 // trigger inner layout: [textBlock (vertical, gap=2px)] [chevron 16×16]

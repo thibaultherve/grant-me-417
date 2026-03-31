@@ -1,4 +1,4 @@
-import { getVisaBadgeColor, getVisaOrdinal } from '../utils/visa-helpers';
+import { getVisaBadgeColor, getVisaOrdinal } from '@/utils/visa-helpers';
 
 type VisaType = Parameters<typeof getVisaOrdinal>[0];
 

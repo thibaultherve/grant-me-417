@@ -16,7 +16,7 @@ import type {
   OrderingConstraint,
 } from '../hooks/use-blocked-ranges';
 import { OVERLAP_ZONE_COLOR } from '../hooks/use-blocked-ranges';
-import { getVisaOrdinal } from '../utils/visa-helpers';
+import { getVisaOrdinal } from '@/utils/visa-helpers';
 
 const VEVO_URL = 'https://online.immi.gov.au/evo/firstParty?actionType=query';
 

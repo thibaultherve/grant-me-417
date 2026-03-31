@@ -14,7 +14,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 import type { Visa } from '@regranted/shared';
-import { computeVisaTimeline, formatCreatedAgo } from '../utils/visa-helpers';
+import { computeVisaTimeline, formatCreatedAgo } from '@/utils/visa-helpers';
 import { OrdinalBadge } from './ordinal-badge';
 import { VisaProgressBar } from './visa-progress-bar';
 
