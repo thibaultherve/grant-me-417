@@ -17,30 +17,12 @@ import { Button } from '@/components/ui/button';
 import { paths } from '@/config/paths';
 import { cn } from '@/lib/utils';
 
-import type { Employer, PostcodeBadgeData } from '@regranted/shared';
+import type { Employer } from '@regranted/shared';
 
-import { EligibilityStatusBadge } from './eligibility-status-badge';
-import { IndustryChip } from './industry-chip';
-import { ZoneBadge, type ZoneKey } from './zone-badge';
-
-const STATE_CONFIG: Record<string, { bg: string; fg: string }> = {
-  ACT: { bg: 'bg-state-act', fg: 'text-white' },
-  NSW: { bg: 'bg-state-nsw', fg: 'text-state-nsw-fg' },
-  NT: { bg: 'bg-state-nt', fg: 'text-white' },
-  QLD: { bg: 'bg-state-qld', fg: 'text-white' },
-  SA: { bg: 'bg-state-sa', fg: 'text-white' },
-  TAS: { bg: 'bg-state-tas', fg: 'text-white' },
-  VIC: { bg: 'bg-state-vic', fg: 'text-white' },
-  WA: { bg: 'bg-state-wa', fg: 'text-state-wa-fg' },
-};
-
-const ZONE_FLAGS: { flag: keyof PostcodeBadgeData; zone: ZoneKey }[] = [
-  { flag: 'isNorthernAustralia', zone: 'northern' },
-  { flag: 'isRemoteVeryRemote', zone: 'remote' },
-  { flag: 'isRegionalAustralia', zone: 'regional' },
-  { flag: 'isBushfireDeclared', zone: 'bushfire' },
-  { flag: 'isNaturalDisasterDeclared', zone: 'weather' },
-];
+import { EligibilityStatusBadge } from '@/components/shared/eligibility-status-badge';
+import { IndustryChip } from '@/components/shared/industry-chip';
+import { PostcodeLinkBadge } from '@/components/shared/postcode-link-badge';
+import { ZoneBadge, ZONE_FLAGS, type ZoneKey } from '@/components/shared/zone-badge';
 
 interface EmployerCardProps {
   employer: Employer;
@@ -50,12 +32,6 @@ interface EmployerCardProps {
 export function EmployerCard({ employer, onDelete }: EmployerCardProps) {
   const navigate = useNavigate();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-
-  const stateConfig =
-    STATE_CONFIG[employer.suburb.stateCode] ?? {
-      bg: 'bg-muted',
-      fg: 'text-muted-foreground',
-    };
 
   const zones: ZoneKey[] = employer.suburb.postcodeData
     ? ZONE_FLAGS.filter(
@@ -119,14 +95,11 @@ export function EmployerCard({ employer, onDelete }: EmployerCardProps) {
                 <span className="text-[13px] font-medium text-foreground">
                   {employer.suburb.suburbName}
                 </span>
-                <span
-                  className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold ${stateConfig.bg} ${stateConfig.fg}`}
-                >
-                  {employer.suburb.stateCode}
-                </span>
-                <span className="inline-flex items-center px-1.5 py-0.5 rounded border border-border text-[10px] font-medium text-muted-foreground">
-                  {employer.suburb.postcode}
-                </span>
+                <PostcodeLinkBadge
+                  postcode={employer.suburb.postcode}
+                  stateCode={employer.suburb.stateCode}
+                  size="sm"
+                />
               </div>
             </div>
 

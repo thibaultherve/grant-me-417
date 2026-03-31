@@ -40,7 +40,7 @@ import { INDUSTRY_OPTIONS } from '../constants';
 import { createEmployerSchema, type CreateEmployerFormData } from '../schemas';
 
 import { EligibilityCheckCard } from './eligibility-check-card';
-import { IndustryChip } from './industry-chip';
+import { IndustryChip } from '@/components/shared/industry-chip';
 import { SuburbCombobox } from './suburb-combobox';
 
 interface EmployerFormProps {

@@ -15,9 +15,9 @@ import { ELIGIBLE_ZONES, ZONE_TYPES, ZONE_FLAG_MAP, type ZoneType } from '@regra
 import {
   EligibilityStatusBadge,
   getEligibilityStatus,
-} from './eligibility-status-badge';
-import { IndustryChip } from './industry-chip';
-import { ZoneBadge, type ZoneKey } from './zone-badge';
+} from '@/components/shared/eligibility-status-badge';
+import { IndustryChip } from '@/components/shared/industry-chip';
+import { ZoneBadge, type ZoneKey } from '@/components/shared/zone-badge';
 
 // ── Zone / flag mapping ──────────────────────────────────────────────────────
 

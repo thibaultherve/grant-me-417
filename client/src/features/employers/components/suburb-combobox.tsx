@@ -3,54 +3,11 @@ import { useCallback, useEffect, useReducer, useRef } from 'react';
 
 import { useClickOutside } from '@/hooks/use-click-outside';
 import { cn } from '@/lib/utils';
-import type { PostcodeBadgeData, SuburbWithPostcode } from '@regranted/shared';
+import type { SuburbWithPostcode } from '@regranted/shared';
 
 import { useSearchSuburbs, useGetSuburb } from '../api/use-suburbs';
-import { ZoneBadge, type ZoneKey } from './zone-badge';
-
-// Zone flag → ZoneKey mapping (only 5 zones shown in results — no "anywhere")
-const ZONE_FLAGS: { flag: keyof PostcodeBadgeData; zone: ZoneKey }[] = [
-  { flag: 'isNorthernAustralia', zone: 'northern' },
-  { flag: 'isRemoteVeryRemote', zone: 'remote' },
-  { flag: 'isRegionalAustralia', zone: 'regional' },
-  { flag: 'isBushfireDeclared', zone: 'bushfire' },
-  { flag: 'isNaturalDisasterDeclared', zone: 'weather' },
-];
-
-// Static class strings required for Tailwind v4 detection at build time
-const STATE_CONFIG: Record<string, { bg: string; fg: string }> = {
-  ACT: { bg: 'bg-state-act', fg: 'text-white' },
-  NSW: { bg: 'bg-state-nsw', fg: 'text-state-nsw-fg' },
-  NT: { bg: 'bg-state-nt', fg: 'text-white' },
-  QLD: { bg: 'bg-state-qld', fg: 'text-white' },
-  SA: { bg: 'bg-state-sa', fg: 'text-white' },
-  TAS: { bg: 'bg-state-tas', fg: 'text-white' },
-  VIC: { bg: 'bg-state-vic', fg: 'text-white' },
-  WA: { bg: 'bg-state-wa', fg: 'text-state-wa-fg' },
-};
-
-function StateBadge({ state }: { state: string }) {
-  const config = STATE_CONFIG[state] ?? { bg: 'bg-muted', fg: 'text-muted-foreground' };
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold shrink-0',
-        config.bg,
-        config.fg,
-      )}
-    >
-      {state}
-    </span>
-  );
-}
-
-function PostcodeBadge({ postcode }: { postcode: string }) {
-  return (
-    <span className="inline-flex items-center px-1.5 py-0.5 rounded border border-border text-[10px] font-medium text-muted-foreground shrink-0">
-      {postcode}
-    </span>
-  );
-}
+import { PostcodeLinkBadge } from '@/components/shared/postcode-link-badge';
+import { ZoneBadge, ZONE_FLAGS, type ZoneKey } from '@/components/shared/zone-badge';
 
 interface SuburbComboboxProps {
   value: number | undefined;
@@ -209,8 +166,11 @@ export function SuburbCombobox({
           <span className="flex-1 text-[13px] font-medium text-foreground truncate">
             {selectedSuburb.suburbName}
           </span>
-          <StateBadge state={selectedSuburb.stateCode} />
-          <PostcodeBadge postcode={selectedSuburb.postcode} />
+          <PostcodeLinkBadge
+            postcode={selectedSuburb.postcode}
+            stateCode={selectedSuburb.stateCode}
+            size="sm"
+          />
           {selectedActiveZones.length > 0 && (
             <div className="flex items-center gap-1 shrink-0">
               {selectedActiveZones.map((zone) => (
@@ -326,8 +286,12 @@ export function SuburbCombobox({
                     <span className="flex-1 text-[13px] font-semibold text-foreground truncate">
                       {suburb.suburbName}
                     </span>
-                    <StateBadge state={suburb.stateCode} />
-                    <PostcodeBadge postcode={suburb.postcode} />
+                    <PostcodeLinkBadge
+                      postcode={suburb.postcode}
+                      stateCode={suburb.stateCode}
+                      size="sm"
+                      asLink={false}
+                    />
                     {activeZones.length > 0 && (
                       <div className="flex items-center gap-1 shrink-0">
                         {activeZones.map((zone) => (
