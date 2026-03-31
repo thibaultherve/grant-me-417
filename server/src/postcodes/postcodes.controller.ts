@@ -82,7 +82,9 @@ export class PostcodesController {
   @Get('postcodes/:postcode')
   async getPostcodeDetail(
     @Param(new ZodValidationPipe(postcodeParamSchema))
-    params: { postcode: string },
+    params: {
+      postcode: string;
+    },
   ) {
     return this.postcodesService.getPostcodeDetail(params.postcode);
   }
