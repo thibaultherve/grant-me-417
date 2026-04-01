@@ -1,7 +1,7 @@
+import type { Browser, BrowserContext } from 'playwright';
 import { chromium } from 'playwright-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-import type { Browser, BrowserContext } from 'playwright';
-import { extractPageModifiedDate } from './parser.js';
+import { extractPageModifiedDate } from './parser';
 
 // Register stealth plugin to bypass Akamai bot detection
 chromium.use(StealthPlugin());
@@ -33,8 +33,9 @@ export async function fetchPage(url: string): Promise<FetchResult> {
     const page = await context.newPage();
 
     // Block non-essential resources for speed (keep CSS - needed for layout)
-    await page.route('**/*.{png,jpg,jpeg,gif,webp,svg,woff,woff2,ico}', (route) =>
-      route.abort(),
+    await page.route(
+      '**/*.{png,jpg,jpeg,gif,webp,svg,woff,woff2,ico}',
+      (route) => route.abort(),
     );
 
     // Navigate - use 'load' to ensure JS-rendered content is available

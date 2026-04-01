@@ -1,4 +1,4 @@
-import { CATEGORIES, type Category, type EligibilityFlags } from './config.js';
+import { CATEGORIES, type Category, type EligibilityFlags } from './config';
 
 export interface ChangeEntry {
   postcode: string;

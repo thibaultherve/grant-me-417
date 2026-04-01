@@ -5,20 +5,20 @@ import {
   VISA_CONFIGS,
   type EligibilityFlags,
   type VisaType,
-} from './config.js';
-import { sendNotification, type ScrapeResult } from './notify.js';
-import { extractEligibilityFromHtml } from './parser.js';
-import { disconnectPrisma, getPrismaClient } from './prisma.js';
-import { fetchPage, withRetry } from './scraper.js';
-import { generateSeedData } from './seed-generator.js';
+} from './config;
+import { sendNotification, type ScrapeResult } from './notify';
+import { extractEligibilityFromHtml } from './parser';
+import { disconnectPrisma, getPrismaClient } from './prisma';
+import { fetchPage, withRetry } from './scraper';
+import { generateSeedData } from './seed-generator';
 import {
   atomicUpdate,
   getCurrentEligibility,
   getLastEffectiveDate,
   loadBasePostcodesByState,
   saveFailedRun,
-} from './staging.js';
-import { validateScrapedData } from './validator.js';
+} from './staging;
+import { validateScrapedData } from './validator';
 import {
   closeSharedBrowser,
   createRateLimiter,
@@ -26,7 +26,7 @@ import {
   listSnapshots,
   timestampToDate,
   tryParseSnapshot,
-} from './wayback.js';
+} from './wayback;
 
 /** Quick hash of scraped data to detect identical postcodes+flags across snapshots. */
 function hashScrapedData(data: Map<string, EligibilityFlags>): string {
@@ -220,6 +220,94 @@ const SKIP_TIMESTAMPS_462 = new Set<string>([
   '20191002190757',
   '20191122210957',
   '20191228000336',
+  '20200107185152',
+  '20200319022729',
+  '20200413032513',
+  '20200511141818',
+  '20200513045933',
+  '20200616211715',
+  '20200921101916',
+  '20201111231021',
+  '20201213202716',
+  '20201218172850',
+  '20210224142714',
+  '20210301135313',
+  '20210311211821',
+  '20210316132814',
+  '20210410205004',
+  '20210508050240',
+  '20210620095936',
+  '20210814222730',
+  '20211017195247',
+  '20211028105342',
+  '20220122062116',
+  '20220307224604',
+  '20220322121218',
+  '20220322121221',
+  '20220322132722',
+  '20220326090225',
+  '20220515115829',
+  '20220622233124',
+  '20220705113820',
+  '20220710232005',
+  '20220712090138',
+  '20221101073041',
+  '20221111015229',
+  '20221111015242',
+  '20221123023512',
+  '20221123023532',
+  '20221130180249',
+  '20221220065651',
+  '20221221154327',
+  '20230118183240',
+  '20230213151408',
+  '20230222181227',
+  '20230228152858',
+  '20230324065517',
+  '20230326205012',
+  '20230330072024',
+  '20230605005915',
+  '20230925215310',
+  '20230929210924',
+  '20231004202218',
+  '20231004202237',
+  '20231116050844',
+  '20240118141540',
+  '20240124182453',
+  '20240321032200',
+  '20240331164833',
+  '20240424034716',
+  '20240717105818',
+  '20240915192909',
+  '20241001091807',
+  '20241006234054',
+  '20241022213919',
+  '20241104163055',
+  '20241126212644',
+  '20241213172231',
+  '20241218133551',
+  '20241231073359',
+  '20250111111450',
+  '20250123011729',
+  '20250226173331',
+  '20250304211214',
+  '20250319225817',
+  '20250319234313',
+  '20250413202658',
+  '20250604070035',
+  '20250608115519',
+  '20250622121739',
+  '20250704084051',
+  '20250707233555',
+  '20250719071248',
+  '20250824014924',
+  '20250920041436',
+  '20250920050509',
+  '20251009023323',
+  '20251011105134',
+  '20251020233425',
+  '20251229123040',
+  '20260117013326',
 ]);
 
 const SKIP_TIMESTAMPS: Record<string, Set<string>> = {

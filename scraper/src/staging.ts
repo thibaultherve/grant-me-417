@@ -1,6 +1,10 @@
-import type { EligibilityFlags } from './config.js';
-import { type ChangeEntry, buildHistoryRecords, countAffectedPostcodes } from './history.js';
-import type { PrismaClient } from './prisma.js';
+import type { EligibilityFlags } from './config';
+import {
+  type ChangeEntry,
+  buildHistoryRecords,
+  countAffectedPostcodes,
+} from './history;';
+import type { PrismaClient } from './prisma';
 
 export interface AtomicUpdateResult {
   changesDetected: number;
@@ -32,9 +36,10 @@ export async function atomicUpdate(
 ): Promise<AtomicUpdateResult> {
   // We need to use raw SQL for the staging table pattern since Prisma
   // doesn't support temp tables natively. Use $transaction with raw queries.
-  return await prisma.$transaction(async (tx) => {
-    // 1. Create temp staging table
-    await tx.$executeRawUnsafe(`
+  return await prisma.$transaction(
+    async (tx) => {
+      // 1. Create temp staging table
+      await tx.$executeRawUnsafe(`
       CREATE TEMP TABLE pe_staging (
         postcode VARCHAR(4) NOT NULL,
         is_remote_very_remote BOOLEAN NOT NULL DEFAULT false,
@@ -45,41 +50,41 @@ export async function atomicUpdate(
       ) ON COMMIT DROP
     `);
 
-    // 2. Insert scraped data into staging (batch for performance)
-    const entries = [...scrapedData.entries()];
-    const batchSize = 500;
+      // 2. Insert scraped data into staging (batch for performance)
+      const entries = [...scrapedData.entries()];
+      const batchSize = 500;
 
-    for (let i = 0; i < entries.length; i += batchSize) {
-      const batch = entries.slice(i, i + batchSize);
-      const values = batch
-        .map(
-          ([postcode, flags]) =>
-            `('${postcode}', ${flags.is_remote_very_remote}, ${flags.is_northern_australia}, ${flags.is_regional_australia}, ${flags.is_bushfire_declared}, ${flags.is_natural_disaster_declared})`,
-        )
-        .join(',\n');
+      for (let i = 0; i < entries.length; i += batchSize) {
+        const batch = entries.slice(i, i + batchSize);
+        const values = batch
+          .map(
+            ([postcode, flags]) =>
+              `('${postcode}', ${flags.is_remote_very_remote}, ${flags.is_northern_australia}, ${flags.is_regional_australia}, ${flags.is_bushfire_declared}, ${flags.is_natural_disaster_declared})`,
+          )
+          .join(',\n');
 
-      await tx.$executeRawUnsafe(`
+        await tx.$executeRawUnsafe(`
         INSERT INTO pe_staging (postcode, is_remote_very_remote, is_northern_australia, is_regional_australia, is_bushfire_declared, is_natural_disaster_declared)
         VALUES ${values}
       `);
-    }
+      }
 
-    // 3. Detect changes (staging vs production)
-    const changes = await tx.$queryRaw<
-      Array<{
-        postcode: string;
-        new_remote: boolean;
-        old_remote: boolean;
-        new_northern: boolean;
-        old_northern: boolean;
-        new_regional: boolean;
-        old_regional: boolean;
-        new_bushfire: boolean;
-        old_bushfire: boolean;
-        new_disaster: boolean;
-        old_disaster: boolean;
-      }>
-    >`
+      // 3. Detect changes (staging vs production)
+      const changes = await tx.$queryRaw<
+        Array<{
+          postcode: string;
+          new_remote: boolean;
+          old_remote: boolean;
+          new_northern: boolean;
+          old_northern: boolean;
+          new_regional: boolean;
+          old_regional: boolean;
+          new_bushfire: boolean;
+          old_bushfire: boolean;
+          new_disaster: boolean;
+          old_disaster: boolean;
+        }>
+      >`
       SELECT s.postcode,
              s.is_remote_very_remote AS new_remote, p.is_remote_very_remote AS old_remote,
              s.is_northern_australia AS new_northern, p.is_northern_australia AS old_northern,
@@ -95,94 +100,94 @@ export async function atomicUpdate(
          OR s.is_natural_disaster_declared != p.is_natural_disaster_declared
     `;
 
-    // Convert raw changes to ChangeEntry format
-    const changeEntries: ChangeEntry[] = [];
-    for (const row of changes) {
-      if (row.old_remote !== row.new_remote) {
-        changeEntries.push({
-          postcode: row.postcode,
-          category: 'is_remote_very_remote',
-          oldValue: row.old_remote,
-          newValue: row.new_remote,
-        });
+      // Convert raw changes to ChangeEntry format
+      const changeEntries: ChangeEntry[] = [];
+      for (const row of changes) {
+        if (row.old_remote !== row.new_remote) {
+          changeEntries.push({
+            postcode: row.postcode,
+            category: 'is_remote_very_remote',
+            oldValue: row.old_remote,
+            newValue: row.new_remote,
+          });
+        }
+        if (row.old_northern !== row.new_northern) {
+          changeEntries.push({
+            postcode: row.postcode,
+            category: 'is_northern_australia',
+            oldValue: row.old_northern,
+            newValue: row.new_northern,
+          });
+        }
+        if (row.old_regional !== row.new_regional) {
+          changeEntries.push({
+            postcode: row.postcode,
+            category: 'is_regional_australia',
+            oldValue: row.old_regional,
+            newValue: row.new_regional,
+          });
+        }
+        if (row.old_bushfire !== row.new_bushfire) {
+          changeEntries.push({
+            postcode: row.postcode,
+            category: 'is_bushfire_declared',
+            oldValue: row.old_bushfire,
+            newValue: row.new_bushfire,
+          });
+        }
+        if (row.old_disaster !== row.new_disaster) {
+          changeEntries.push({
+            postcode: row.postcode,
+            category: 'is_natural_disaster_declared',
+            oldValue: row.old_disaster,
+            newValue: row.new_disaster,
+          });
+        }
       }
-      if (row.old_northern !== row.new_northern) {
-        changeEntries.push({
-          postcode: row.postcode,
-          category: 'is_northern_australia',
-          oldValue: row.old_northern,
-          newValue: row.new_northern,
-        });
-      }
-      if (row.old_regional !== row.new_regional) {
-        changeEntries.push({
-          postcode: row.postcode,
-          category: 'is_regional_australia',
-          oldValue: row.old_regional,
-          newValue: row.new_regional,
-        });
-      }
-      if (row.old_bushfire !== row.new_bushfire) {
-        changeEntries.push({
-          postcode: row.postcode,
-          category: 'is_bushfire_declared',
-          oldValue: row.old_bushfire,
-          newValue: row.new_bushfire,
-        });
-      }
-      if (row.old_disaster !== row.new_disaster) {
-        changeEntries.push({
-          postcode: row.postcode,
-          category: 'is_natural_disaster_declared',
-          oldValue: row.old_disaster,
-          newValue: row.new_disaster,
-        });
-      }
-    }
 
-    // 4. Create scrape_run record first (history entries reference it)
-    const scrapeRun = await tx.scrapeRun.create({
-      data: {
-        visaType,
-        totalPostcodes,
-        changesDetected: changeEntries.length,
-        postcodesAffected: countAffectedPostcodes(changeEntries),
-        status: 'success',
-        pageModifiedDate: new Date(effectiveDate),
-        sourceUrl,
-        sourceType,
-      },
-    });
+      // 4. Create scrape_run record first (history entries reference it)
+      const scrapeRun = await tx.scrapeRun.create({
+        data: {
+          visaType,
+          totalPostcodes,
+          changesDetected: changeEntries.length,
+          postcodesAffected: countAffectedPostcodes(changeEntries),
+          status: 'success',
+          pageModifiedDate: new Date(effectiveDate),
+          sourceUrl,
+          sourceType,
+        },
+      });
 
-    // 5. Record history entries for each change (batched for performance)
-    if (changeEntries.length > 0) {
-      const historyRecords = buildHistoryRecords(
-        changeEntries,
-        visaType,
-        effectiveDate,
-        sourceUrl,
-        sourceType,
-      );
+      // 5. Record history entries for each change (batched for performance)
+      if (changeEntries.length > 0) {
+        const historyRecords = buildHistoryRecords(
+          changeEntries,
+          visaType,
+          effectiveDate,
+          sourceUrl,
+          sourceType,
+        );
 
-      const histBatchSize = 200;
-      for (let i = 0; i < historyRecords.length; i += histBatchSize) {
-        const batch = historyRecords.slice(i, i + histBatchSize);
-        const values = batch
-          .map(
-            (r) =>
-              `('${r.postcode}', '${r.visaType}', '${r.category}', ${r.oldValue}, ${r.newValue}, '${r.effectiveDate}'::date, NOW(), '${scrapeRun.id}'::uuid, '${r.sourceUrl}', '${r.sourceType}')`,
-          )
-          .join(',\n');
+        const histBatchSize = 200;
+        for (let i = 0; i < historyRecords.length; i += histBatchSize) {
+          const batch = historyRecords.slice(i, i + histBatchSize);
+          const values = batch
+            .map(
+              (r) =>
+                `('${r.postcode}', '${r.visaType}', '${r.category}', ${r.oldValue}, ${r.newValue}, '${r.effectiveDate}'::date, NOW(), '${scrapeRun.id}'::uuid, '${r.sourceUrl}', '${r.sourceType}')`,
+            )
+            .join(',\n');
 
-        await tx.$executeRawUnsafe(`
+          await tx.$executeRawUnsafe(`
           INSERT INTO postcode_eligibility_history (postcode, visa_type, category, old_value, new_value, effective_date, detected_at, scrape_run_id, source_url, source_type)
           VALUES ${values}
         `);
+        }
       }
-    }
 
-    // 6. Update production table from staging
-    await tx.$executeRaw`
+      // 6. Update production table from staging
+      await tx.$executeRaw`
       UPDATE postcode_eligibility p SET
         is_remote_very_remote = s.is_remote_very_remote,
         is_northern_australia = s.is_northern_australia,
@@ -194,8 +199,8 @@ export async function atomicUpdate(
       WHERE p.postcode = s.postcode AND p.visa_type = ${visaType}
     `;
 
-    // 7. Insert new postcodes that exist in staging but not in production
-    await tx.$executeRaw`
+      // 7. Insert new postcodes that exist in staging but not in production
+      await tx.$executeRaw`
       INSERT INTO postcode_eligibility (postcode, visa_type, is_remote_very_remote, is_northern_australia, is_regional_australia, is_bushfire_declared, is_natural_disaster_declared, last_scraped)
       SELECT s.postcode, ${visaType}, s.is_remote_very_remote, s.is_northern_australia, s.is_regional_australia, s.is_bushfire_declared, s.is_natural_disaster_declared, NOW()
       FROM pe_staging s
@@ -204,12 +209,14 @@ export async function atomicUpdate(
         AND EXISTS (SELECT 1 FROM postcodes pc WHERE pc.postcode = s.postcode)
     `;
 
-    return {
-      changesDetected: changeEntries.length,
-      postcodesAffected: countAffectedPostcodes(changeEntries),
-      scrapeRunId: scrapeRun.id,
-    };
-  }, { timeout: 60_000 });
+      return {
+        changesDetected: changeEntries.length,
+        postcodesAffected: countAffectedPostcodes(changeEntries),
+        scrapeRunId: scrapeRun.id,
+      };
+    },
+    { timeout: 60_000 },
+  );
 }
 
 /**

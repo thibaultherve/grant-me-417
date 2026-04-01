@@ -1,6 +1,11 @@
-import * as cheerio from 'cheerio';
 import type { Cheerio, CheerioAPI } from 'cheerio';
-import { resolveStateCode, type Category, type EligibilityFlags, emptyFlags } from './config.js';
+import * as cheerio from 'cheerio';
+import {
+  emptyFlags,
+  resolveStateCode,
+  type Category,
+  type EligibilityFlags,
+} from './config;';
 
 // Cheerio 1.2 doesn't export Element/AnyNode directly.
 // Infer the node type from what CheerioAPI returns.
@@ -39,12 +44,21 @@ export function parsePostcodeString(
   let text = postcodeText.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
 
   // "not classified" / "is not" → this row should produce no postcodes
-  if (text.toLowerCase().includes('not classified') || text.toLowerCase().includes('is not')) {
+  if (
+    text.toLowerCase().includes('not classified') ||
+    text.toLowerCase().includes('is not')
+  ) {
     return [];
   }
 
   // "All of X is classified as part of..." / "All postcodes" / "Entire Territory"
-  const allKeywords = ['all postcodes', 'all areas', 'all postcode', 'entire territory', 'all of '];
+  const allKeywords = [
+    'all postcodes',
+    'all areas',
+    'all postcode',
+    'entire territory',
+    'all of ',
+  ];
   if (allKeywords.some((kw) => text.toLowerCase().includes(kw))) {
     return expandAllPostcodes(stateName, basePostcodesByState);
   }
@@ -92,7 +106,9 @@ function expandAllPostcodes(
 ): string[] {
   const stateCode = resolveStateCode(stateName);
   if (!stateCode) {
-    console.warn(`Warning: Unknown state name '${stateName}', cannot expand "All postcodes"`);
+    console.warn(
+      `Warning: Unknown state name '${stateName}', cannot expand "All postcodes"`,
+    );
     return [];
   }
 
@@ -127,9 +143,18 @@ export function extractPageModifiedDate(html: string): string | null {
  */
 function parseDateString(dateText: string): string | null {
   const months: Record<string, string> = {
-    january: '01', february: '02', march: '03', april: '04',
-    may: '05', june: '06', july: '07', august: '08',
-    september: '09', october: '10', november: '11', december: '12',
+    january: '01',
+    february: '02',
+    march: '03',
+    april: '04',
+    may: '05',
+    june: '06',
+    july: '07',
+    august: '08',
+    september: '09',
+    october: '10',
+    november: '11',
+    december: '12',
   };
 
   // Format: "11 September 2025"
@@ -232,16 +257,19 @@ function parseLegacyFormat(
  * Includes `<p>` because older 462 pages use paragraph text (not headings)
  * to introduce each category section between tables.
  */
-function buildTableCategoryMap(
-  $: CheerioAPI,
-): Map<CheerioNode, Category> {
+function buildTableCategoryMap($: CheerioAPI): Map<CheerioNode, Category> {
   const map = new Map<CheerioNode, Category>();
   let currentCategory: Category | null = null;
 
   $('h2, h3, h4, p, table').each((_i, el) => {
     const tagName = el.type === 'tag' ? el.tagName?.toLowerCase() : '';
 
-    if (tagName === 'h2' || tagName === 'h3' || tagName === 'h4' || tagName === 'p') {
+    if (
+      tagName === 'h2' ||
+      tagName === 'h3' ||
+      tagName === 'h4' ||
+      tagName === 'p'
+    ) {
       const text = $(el).text().trim();
       const category = identifyCategory(text);
       if (category) {
@@ -266,9 +294,10 @@ function extractPostcodesFromTable(
   basePostcodesByState: Map<string, string[]>,
   result: Map<string, EligibilityFlags>,
 ): void {
-  const rows = $(table).find('tbody tr').length > 0
-    ? $(table).find('tbody tr')
-    : $(table).find('tr');
+  const rows =
+    $(table).find('tbody tr').length > 0
+      ? $(table).find('tbody tr')
+      : $(table).find('tr');
 
   rows.each((_j, row) => {
     const cells = $(row).find('td');
@@ -282,7 +311,11 @@ function extractPostcodesFromTable(
 
     // parsePostcodeString handles all edge cases:
     // "not classified" → [], "All of X" → expanded, "Note: ..." → stripped
-    const postcodes = parsePostcodeString(postcodesText, stateName, basePostcodesByState);
+    const postcodes = parsePostcodeString(
+      postcodesText,
+      stateName,
+      basePostcodesByState,
+    );
     for (const postcode of postcodes) {
       if (!result.has(postcode)) result.set(postcode, emptyFlags());
       result.get(postcode)![category] = true;

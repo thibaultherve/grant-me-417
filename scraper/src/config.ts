@@ -1,12 +1,10 @@
-import { VISA_SCRAPE_URLS } from '@regranted/shared';
-
 export const VISA_CONFIGS = {
   '417': {
-    url: VISA_SCRAPE_URLS['417'],
+    url: 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-417/specified-work',
     name: 'Working Holiday (417)',
   },
   '462': {
-    url: VISA_SCRAPE_URLS['462'],
+    url: 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462/specified-462-work',
     name: 'Work and Holiday (462)',
   },
 } as const;
