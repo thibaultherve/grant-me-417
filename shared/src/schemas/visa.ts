@@ -1,14 +1,18 @@
 import { z } from 'zod';
-import { VISA_TYPES } from '../constants/visa-rules.js';
 
 // --- Shared ---
 
-export const visaTypeSchema = z.enum(VISA_TYPES);
-export type VisaType = z.infer<typeof visaTypeSchema>;
+export const visaTypeSchema = z.enum(['first_whv', 'second_whv', 'third_whv']);
+export const visaSubclassEnum = z.enum(['417', '462']);
 
 // --- Input schemas ---
 
-const isoDateString = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'arrivalDate must be a valid ISO date (YYYY-MM-DD)');
+const isoDateString = z
+  .string()
+  .regex(
+    /^\d{4}-\d{2}-\d{2}$/,
+    'arrivalDate must be a valid ISO date (YYYY-MM-DD)',
+  );
 
 export const createVisaSchema = z.object({
   visaType: visaTypeSchema,
@@ -58,11 +62,10 @@ export const visaPeriodSchema = z.object({
 });
 
 // --- Types ---
-
+export type VisaType = z.infer<typeof visaTypeSchema>;
+export type VisaSubclass = z.infer<typeof visaSubclassEnum>;
 export type CreateVisaInput = z.infer<typeof createVisaSchema>;
 export type UpdateVisaInput = z.infer<typeof updateVisaSchema>;
 export type Visa = z.infer<typeof visaResponseSchema>;
-/** @deprecated Use `Visa` instead */
-export type VisaResponse = Visa;
 export type VisaPeriod = z.infer<typeof visaPeriodSchema>;
 export type WeeklyProgress = z.infer<typeof weeklyProgressSchema>;

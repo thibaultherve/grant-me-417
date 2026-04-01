@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ELIGIBLE_COUNTRIES } from '../constants/visa-rules.js';
+import { ELIGIBLE_COUNTRIES } from '../constants/countries';
 
 // --- Input schemas ---
 

@@ -15,5 +15,9 @@ export const favoritePostcodeResponseSchema = z.object({
 
 // --- Types ---
 
-export type ToggleFavoritePostcodeInput = z.infer<typeof toggleFavoritePostcodeSchema>;
-export type FavoritePostcodeResponse = z.infer<typeof favoritePostcodeResponseSchema>;
+export type ToggleFavoritePostcodeInput = z.infer<
+  typeof toggleFavoritePostcodeSchema
+>;
+export type FavoritePostcodeResponse = z.infer<
+  typeof favoritePostcodeResponseSchema
+>;
