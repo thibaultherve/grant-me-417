@@ -108,7 +108,6 @@ export const DirectoryRoute = () => {
           key={filters.visaType}
           visaType={filters.visaType}
         />
-
       </div>
     </ErrorBoundary>
   );

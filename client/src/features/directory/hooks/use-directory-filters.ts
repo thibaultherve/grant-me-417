@@ -1,7 +1,6 @@
+import type { ZoneType } from '@regranted/shared';
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router';
-
-import type { ZoneType } from '@regranted/shared';
 
 import type {
   AustralianStateCode,
@@ -31,14 +30,14 @@ function parseFiltersFromParams(
 
   return {
     search: searchParams.get('search') ?? DEFAULTS.search,
-    states: states ? (states.split(',').filter(Boolean) as AustralianStateCode[]) : DEFAULTS.states,
+    states: states
+      ? (states.split(',').filter(Boolean) as AustralianStateCode[])
+      : DEFAULTS.states,
     zones: zones
       ? (zones.split(',').filter(Boolean) as ZoneType[])
       : DEFAULTS.zones,
     visaType:
-      visaType === '417' || visaType === '462'
-        ? visaType
-        : DEFAULTS.visaType,
+      visaType === '417' || visaType === '462' ? visaType : DEFAULTS.visaType,
     favorites: searchParams.get('favorites') === 'true',
     page: page ? Math.max(1, parseInt(page, 10) || 1) : DEFAULTS.page,
     sort: sort === 'asc' || sort === 'desc' ? sort : DEFAULTS.sort,
@@ -51,8 +50,7 @@ function filtersToParams(filters: DirectoryFiltersState): URLSearchParams {
   if (filters.visaType !== DEFAULTS.visaType)
     params.set('visaType', filters.visaType);
   if (filters.search) params.set('search', filters.search);
-  if (filters.states.length > 0)
-    params.set('states', filters.states.join(','));
+  if (filters.states.length > 0) params.set('states', filters.states.join(','));
   if (filters.zones.length > 0) params.set('zones', filters.zones.join(','));
   if (filters.favorites) params.set('favorites', 'true');
   if (filters.page > 1) params.set('page', String(filters.page));
@@ -70,20 +68,27 @@ export function useDirectoryFilters() {
   );
 
   const setFilters = useCallback(
-    (updater: Partial<DirectoryFiltersState> | ((prev: DirectoryFiltersState) => Partial<DirectoryFiltersState>)) => {
-      setSearchParams((prev) => {
-        const currentFilters = parseFiltersFromParams(prev);
-        const updates =
-          typeof updater === 'function' ? updater(currentFilters) : updater;
-        const merged = { ...currentFilters, ...updates };
+    (
+      updater:
+        | Partial<DirectoryFiltersState>
+        | ((prev: DirectoryFiltersState) => Partial<DirectoryFiltersState>),
+    ) => {
+      setSearchParams(
+        (prev) => {
+          const currentFilters = parseFiltersFromParams(prev);
+          const updates =
+            typeof updater === 'function' ? updater(currentFilters) : updater;
+          const merged = { ...currentFilters, ...updates };
 
-        // Reset page to 1 when filters change (but not when page itself changes)
-        if (!('page' in updates)) {
-          merged.page = 1;
-        }
+          // Reset page to 1 when filters change (but not when page itself changes)
+          if (!('page' in updates)) {
+            merged.page = 1;
+          }
 
-        return filtersToParams(merged);
-      }, { replace: true });
+          return filtersToParams(merged);
+        },
+        { replace: true },
+      );
     },
     [setSearchParams],
   );

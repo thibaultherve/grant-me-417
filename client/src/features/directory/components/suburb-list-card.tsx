@@ -2,7 +2,7 @@ import type { PostcodeBadgeData } from '@regranted/shared';
 import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router';
 
-import { ZoneBadge, ZONE_FLAGS } from '@/components/shared/zone-badge';
+import { ZONE_FLAGS, ZoneBadge } from '@/components/shared/zone-badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { paths } from '@/config/paths';
 import { cn } from '@/lib/utils';

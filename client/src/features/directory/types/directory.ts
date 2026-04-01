@@ -1,9 +1,13 @@
-import type { IndustryTypeValue, ZoneType } from '@regranted/shared';
+import type {
+  IndustryTypeValue,
+  VisaSubclass,
+  ZoneType,
+} from '@regranted/shared';
 import { AUSTRALIAN_STATES } from '@regranted/shared';
 
 export type AustralianStateCode = (typeof AUSTRALIAN_STATES)[number];
 
-export type VisaTypeFilter = '417' | '462';
+export type VisaTypeFilter = VisaSubclass;
 
 export type SortDirection = 'asc' | 'desc';
 

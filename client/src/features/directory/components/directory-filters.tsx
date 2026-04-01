@@ -7,8 +7,8 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 import type {
-  DirectoryFiltersState,
   AustralianStateCode,
+  DirectoryFiltersState,
 } from '../types/directory';
 
 import { StateBadgeFilter } from './state-badge-filter';
