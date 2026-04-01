@@ -8,13 +8,13 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { EmployersService } from './employers.service.js';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
+import { EmployersService } from './employers.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import {
   CurrentUser,
   type JwtPayload,
-} from '../common/decorators/current-user.decorator.js';
-import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe.js';
+} from '../common/decorators/current-user.decorator';
+import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import {
   createEmployerSchema,
   updateEmployerSchema,

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { EmployersController } from './employers.controller.js';
-import { EmployersService } from './employers.service.js';
-import { VisasModule } from '../visas/visas.module.js';
+import { VisasModule } from '../visas/visas.module';
+import { EmployersController } from './employers.controller';
+import { EmployersService } from './employers.service';
 
 @Module({
   imports: [VisasModule],
