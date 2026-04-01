@@ -602,15 +602,67 @@ describe('PostcodesService', () => {
       });
     });
 
-    it('should return grouped changes with postcodes and pagination', async () => {
-      // Step 1: count query
-      mockPrisma.$queryRaw.mockResolvedValueOnce([{ count: BigInt(2) }]);
+    it('should return date-grouped changes with state counts and pagination', async () => {
+      // Step 1: count distinct dates
+      mockPrisma.$queryRaw.mockResolvedValueOnce([{ count: BigInt(1) }]);
 
-      // Step 2: data query
+      // Step 2: data query (aggregated by date/category/new_value/state_code)
       const date = new Date('2026-03-15');
       mockPrisma.$queryRaw.mockResolvedValueOnce([
         {
           effective_date: date,
+          category: 'is_regional_australia',
+          new_value: true,
+          state_code: 'NSW',
+          postcode_count: BigInt(2),
+        },
+        {
+          effective_date: date,
+          category: 'is_northern_australia',
+          new_value: false,
+          state_code: 'QLD',
+          postcode_count: BigInt(1),
+        },
+      ]);
+
+      const result = await service.getGlobalChanges('417', 1, 10);
+
+      expect(result.total).toBe(1);
+      expect(result.totalPages).toBe(1);
+      expect(result.data).toHaveLength(1);
+
+      const dateEntry = result.data[0];
+      expect(dateEntry.date).toBe('2026-03-15');
+      expect(dateEntry.changes).toHaveLength(2);
+
+      // First change: regional Added with 2 NSW postcodes
+      const regionalChange = dateEntry.changes.find(
+        (c) => c.zone === 'regional',
+      );
+      expect(regionalChange).toBeDefined();
+      expect(regionalChange!.action).toBe('Added');
+      expect(regionalChange!.stateCounts).toEqual([
+        { stateCode: 'NSW', count: 2 },
+      ]);
+
+      // Second change: northern Deleted with 1 QLD postcode
+      const northernChange = dateEntry.changes.find(
+        (c) => c.zone === 'northern',
+      );
+      expect(northernChange).toBeDefined();
+      expect(northernChange!.action).toBe('Deleted');
+      expect(northernChange!.stateCounts).toEqual([
+        { stateCode: 'QLD', count: 1 },
+      ]);
+    });
+  });
+
+  // ── getChangeDetail ──────────────────────────────────────────────────────
+
+  describe('getChangeDetail', () => {
+    it('should return grouped changes with postcodes for a specific date', async () => {
+      mockPrisma.$queryRaw.mockResolvedValueOnce([
+        {
           category: 'is_regional_australia',
           new_value: true,
           source_url: 'https://immi.homeaffairs.gov.au',
@@ -618,7 +670,6 @@ describe('PostcodesService', () => {
           state_code: 'NSW',
         },
         {
-          effective_date: date,
           category: 'is_regional_australia',
           new_value: true,
           source_url: 'https://immi.homeaffairs.gov.au',
@@ -626,7 +677,6 @@ describe('PostcodesService', () => {
           state_code: 'NSW',
         },
         {
-          effective_date: date,
           category: 'is_northern_australia',
           new_value: false,
           source_url: null,
@@ -635,26 +685,37 @@ describe('PostcodesService', () => {
         },
       ]);
 
-      const result = await service.getGlobalChanges('417', 1, 10);
+      const result = await service.getChangeDetail('2026-03-15', '417');
 
-      expect(result.total).toBe(2);
-      expect(result.totalPages).toBe(1);
-      expect(result.data).toHaveLength(2);
+      expect(result.date).toBe('2026-03-15');
+      expect(result.totalAffected).toBe(3);
+      expect(result.sourceUrl).toBe('https://immi.homeaffairs.gov.au');
+      expect(result.changes).toHaveLength(2);
 
-      // First group: regional Added with 2 postcodes
-      const regionalGroup = result.data.find((d) => d.zone === 'regional');
-      expect(regionalGroup).toBeDefined();
-      expect(regionalGroup!.action).toBe('Added');
-      expect(regionalGroup!.postcodes).toHaveLength(2);
-      expect(regionalGroup!.sourceUrl).toBe('https://immi.homeaffairs.gov.au');
+      const regionalChange = result.changes.find((c) => c.zone === 'regional');
+      expect(regionalChange).toBeDefined();
+      expect(regionalChange!.action).toBe('Added');
+      expect(regionalChange!.postcodes).toEqual([
+        { postcode: '2830', stateCode: 'NSW' },
+        { postcode: '2831', stateCode: 'NSW' },
+      ]);
 
-      // Second group: northern Deleted with 1 postcode
-      const northernGroup = result.data.find((d) => d.zone === 'northern');
-      expect(northernGroup).toBeDefined();
-      expect(northernGroup!.action).toBe('Deleted');
-      expect(northernGroup!.postcodes).toEqual([
+      const northernChange = result.changes.find((c) => c.zone === 'northern');
+      expect(northernChange).toBeDefined();
+      expect(northernChange!.action).toBe('Deleted');
+      expect(northernChange!.postcodes).toEqual([
         { postcode: '4000', stateCode: 'QLD' },
       ]);
+    });
+
+    it('should throw NotFoundException when no changes exist for the date', async () => {
+      mockPrisma.$queryRaw.mockResolvedValueOnce([]);
+
+      await expect(
+        service.getChangeDetail('2026-01-01', '417'),
+      ).rejects.toThrow(
+        'No changes found for date 2026-01-01 and visa type 417',
+      );
     });
   });
 

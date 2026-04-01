@@ -1,11 +1,13 @@
 import type {
   Postcode as PostcodeResponse,
+  PostcodeBadgeData,
   PostcodeHistoryEntry,
   SuburbWithPostcode,
   PaginatedDirectoryQuery,
   PaginatedDirectoryResponse,
   PostcodeDetailResponse,
   GlobalChangesResponse,
+  ChangeDetailResponse,
   LastUpdateResponse,
 } from '@regranted/shared';
 import { ZONE_FLAG_MAP } from '@regranted/shared';
@@ -15,9 +17,9 @@ import type { Cache } from 'cache-manager';
 import type {
   Postcode as PostcodeRecord,
   Prisma,
-} from '../../generated/prisma/client.js';
-import { PrismaService } from '../prisma/prisma.service.js';
-import { formatDate } from '../common/utils/format.js';
+} from '../../generated/prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
+import { formatDate } from '../common/utils/format';
 
 const SUBURB_INCLUDE = {
   postcodeRef: {
@@ -29,14 +31,15 @@ const SUBURB_INCLUDE = {
 
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
-/** Reverse map from snake_case DB column name → zone name (e.g. 'is_northern_australia' → 'northern') */
-const DB_CATEGORY_TO_ZONE: Record<string, string> = {
-  is_northern_australia: 'northern',
-  is_remote_very_remote: 'remote',
-  is_regional_australia: 'regional',
-  is_bushfire_declared: 'bushfire',
-  is_natural_disaster_declared: 'weather',
-};
+/** Reverse map from snake_case DB column name → zone name, derived from ZONE_FLAG_MAP */
+const DB_CATEGORY_TO_ZONE: Record<string, string> = Object.fromEntries(
+  Object.entries(ZONE_FLAG_MAP)
+    .filter((e): e is [string, string] => e[1] !== null)
+    .map(([zone, flag]) => [
+      flag.replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`),
+      zone,
+    ]),
+);
 
 type SuburbWithPostcodeRecord = Prisma.SuburbGetPayload<{
   include: typeof SUBURB_INCLUDE;
@@ -264,8 +267,8 @@ export class PostcodesService {
         postcode: s.postcode,
         stateCode: s.stateCode,
       })),
-      eligibility417: elig417 ? this.mapEligibilityFlags(elig417) : null,
-      eligibility462: elig462 ? this.mapEligibilityFlags(elig462) : null,
+      eligibility417: elig417 ? this.pickBadgeFlags(elig417) : null,
+      eligibility462: elig462 ? this.pickBadgeFlags(elig462) : null,
       history: result.history.map((h) => ({
         effectiveDate: formatDate(h.effectiveDate),
         category: h.category,
@@ -278,20 +281,18 @@ export class PostcodesService {
     return response;
   }
 
-  // ── Global Changes ────────────────────────────────────────────────────────
+  // ── Global Changes (sidebar format — date-grouped with state counts) ────
 
   async getGlobalChanges(
     visaType: string,
     page: number,
     limit: number,
   ): Promise<GlobalChangesResponse> {
-    // Step 1: Count distinct groups
+    // Step 1: Count distinct dates
     const countResult = await this.prisma.$queryRaw<[{ count: bigint }]>`
-      SELECT COUNT(*) as count FROM (
-        SELECT DISTINCT effective_date, category, new_value
-        FROM postcode_eligibility_history
-        WHERE visa_type = ${visaType}
-      ) g
+      SELECT COUNT(DISTINCT effective_date) as count
+      FROM postcode_eligibility_history
+      WHERE visa_type = ${visaType}
     `;
     const total = Number(countResult[0].count);
 
@@ -299,79 +300,176 @@ export class PostcodesService {
       return { data: [], total: 0, page, limit, totalPages: 0 };
     }
 
-    // Step 2: Get paginated groups with postcodes + state codes in one query
+    // Step 2: Get paginated dates with zone/action/state counts
     const rows = await this.prisma.$queryRaw<
       Array<{
         effective_date: Date;
         category: string;
         new_value: boolean;
-        source_url: string | null;
-        postcode: string;
-        state_code: string | null;
+        state_code: string;
+        postcode_count: bigint;
       }>
     >`
-      WITH groups AS (
-        SELECT
-          effective_date, category, new_value,
-          MIN(source_url) as source_url,
-          ROW_NUMBER() OVER (ORDER BY effective_date DESC, category, new_value DESC) as rn
+      WITH paginated_dates AS (
+        SELECT DISTINCT effective_date
         FROM postcode_eligibility_history
         WHERE visa_type = ${visaType}
-        GROUP BY effective_date, category, new_value
-      ),
-      paginated AS (
-        SELECT * FROM groups
-        WHERE rn > ${(page - 1) * limit} AND rn <= ${page * limit}
+        ORDER BY effective_date DESC
+        OFFSET ${(page - 1) * limit}
+        LIMIT ${limit}
       )
       SELECT
-        p.effective_date, p.category, p.new_value, p.source_url,
-        h.postcode,
-        (SELECT s.state_code FROM suburbs s WHERE s.postcode = h.postcode ORDER BY s.suburb_name LIMIT 1) as state_code
-      FROM paginated p
-      JOIN postcode_eligibility_history h
-        ON h.effective_date = p.effective_date
-        AND h.category = p.category
-        AND h.new_value = p.new_value
-        AND h.visa_type = ${visaType}
-      GROUP BY p.effective_date, p.category, p.new_value, p.source_url, h.postcode
-      ORDER BY p.effective_date DESC, p.category, h.postcode
+        h.effective_date,
+        h.category,
+        h.new_value,
+        COALESCE(
+          (SELECT s.state_code FROM suburbs s WHERE s.postcode = h.postcode ORDER BY s.suburb_name LIMIT 1),
+          ''
+        ) as state_code,
+        COUNT(DISTINCT h.postcode) as postcode_count
+      FROM postcode_eligibility_history h
+      JOIN paginated_dates pd ON pd.effective_date = h.effective_date
+      WHERE h.visa_type = ${visaType}
+      GROUP BY h.effective_date, h.category, h.new_value, state_code
+      ORDER BY h.effective_date DESC, h.category, h.new_value DESC, state_code
     `;
 
-    // Step 3: Group flat rows into nested response
-    const groupMap = new Map<
+    // Step 3: Group into date → changes → stateCounts
+    const dateMap = new Map<
       string,
       {
-        effectiveDate: string;
-        zone: string;
-        action: 'Added' | 'Deleted';
-        postcodes: Array<{ postcode: string; stateCode: string }>;
-        sourceUrl: string | null;
+        date: string;
+        changes: Map<
+          string,
+          {
+            zone: string;
+            action: 'Added' | 'Deleted';
+            stateCounts: Map<string, number>;
+          }
+        >;
       }
     >();
 
     for (const row of rows) {
-      const key = `${row.effective_date.toISOString()}|${row.category}|${row.new_value}`;
-      if (!groupMap.has(key)) {
-        groupMap.set(key, {
-          effectiveDate: formatDate(row.effective_date),
+      const dateKey = formatDate(row.effective_date);
+      if (!dateMap.has(dateKey)) {
+        dateMap.set(dateKey, { date: dateKey, changes: new Map() });
+      }
+      const dateEntry = dateMap.get(dateKey)!;
+
+      const changeKey = `${row.category}|${row.new_value}`;
+      if (!dateEntry.changes.has(changeKey)) {
+        dateEntry.changes.set(changeKey, {
           zone: this.categoryToZoneName(row.category),
           action: row.new_value ? 'Added' : 'Deleted',
-          postcodes: [],
-          sourceUrl: row.source_url,
+          stateCounts: new Map(),
         });
       }
-      groupMap.get(key)!.postcodes.push({
-        postcode: row.postcode,
-        stateCode: row.state_code ?? '',
-      });
+      const changeEntry = dateEntry.changes.get(changeKey)!;
+
+      const stateCode = row.state_code || '';
+      const existing = changeEntry.stateCounts.get(stateCode) ?? 0;
+      changeEntry.stateCounts.set(
+        stateCode,
+        existing + Number(row.postcode_count),
+      );
     }
 
+    // Step 4: Convert maps to arrays
+    const data = Array.from(dateMap.values()).map((dateEntry) => ({
+      date: dateEntry.date,
+      changes: Array.from(dateEntry.changes.values()).map((change) => ({
+        zone: change.zone,
+        action: change.action,
+        stateCounts: Array.from(change.stateCounts.entries()).map(
+          ([stateCode, count]) => ({ stateCode, count }),
+        ),
+      })),
+    }));
+
     return {
-      data: Array.from(groupMap.values()),
+      data,
       total,
       page,
       limit,
       totalPages: Math.ceil(total / limit),
+    };
+  }
+
+  // ── Change Detail (full postcodes for a specific date) ────────────────────
+
+  async getChangeDetail(
+    date: string,
+    visaType: string,
+  ): Promise<ChangeDetailResponse> {
+    const rows = await this.prisma.$queryRaw<
+      Array<{
+        category: string;
+        new_value: boolean;
+        source_url: string | null;
+        postcode: string;
+        state_code: string;
+      }>
+    >`
+      SELECT
+        h.category,
+        h.new_value,
+        h.source_url,
+        h.postcode,
+        COALESCE(
+          (SELECT s.state_code FROM suburbs s WHERE s.postcode = h.postcode ORDER BY s.suburb_name LIMIT 1),
+          ''
+        ) as state_code
+      FROM postcode_eligibility_history h
+      WHERE h.effective_date = ${new Date(date)}
+        AND h.visa_type = ${visaType}
+      ORDER BY h.category, h.new_value DESC, h.postcode
+    `;
+
+    if (rows.length === 0) {
+      throw new NotFoundException(
+        `No changes found for date ${date} and visa type ${visaType}`,
+      );
+    }
+
+    // Group by zone+action
+    const changeMap = new Map<
+      string,
+      {
+        zone: string;
+        action: 'Added' | 'Deleted';
+        postcodes: Array<{ postcode: string; stateCode: string }>;
+      }
+    >();
+
+    let sourceUrl: string | null = null;
+    const uniquePostcodes = new Set<string>();
+
+    for (const row of rows) {
+      if (!sourceUrl && row.source_url) {
+        sourceUrl = row.source_url;
+      }
+      uniquePostcodes.add(row.postcode);
+
+      const key = `${row.category}|${row.new_value}`;
+      if (!changeMap.has(key)) {
+        changeMap.set(key, {
+          zone: this.categoryToZoneName(row.category),
+          action: row.new_value ? 'Added' : 'Deleted',
+          postcodes: [],
+        });
+      }
+      changeMap.get(key)!.postcodes.push({
+        postcode: row.postcode,
+        stateCode: row.state_code,
+      });
+    }
+
+    return {
+      date,
+      totalAffected: uniquePostcodes.size,
+      sourceUrl,
+      changes: Array.from(changeMap.values()),
     };
   }
 
@@ -392,33 +490,7 @@ export class PostcodesService {
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 
-  private getActiveZones(elig: {
-    isNorthernAustralia: boolean;
-    isRemoteVeryRemote: boolean;
-    isRegionalAustralia: boolean;
-    isBushfireDeclared: boolean;
-    isNaturalDisasterDeclared: boolean;
-  }): string[] {
-    const zones: string[] = [];
-    if (elig.isNorthernAustralia) zones.push('northern');
-    if (elig.isRemoteVeryRemote) zones.push('remote');
-    if (elig.isRegionalAustralia) zones.push('regional');
-    if (elig.isBushfireDeclared) zones.push('bushfire');
-    if (elig.isNaturalDisasterDeclared) zones.push('weather');
-    return zones;
-  }
-
-  private categoryToZoneName(category: string): string {
-    return DB_CATEGORY_TO_ZONE[category] ?? category;
-  }
-
-  private mapEligibilityFlags(elig: {
-    isRemoteVeryRemote: boolean;
-    isNorthernAustralia: boolean;
-    isRegionalAustralia: boolean;
-    isBushfireDeclared: boolean;
-    isNaturalDisasterDeclared: boolean;
-  }) {
+  private pickBadgeFlags(elig: PostcodeBadgeData): PostcodeBadgeData {
     return {
       isRemoteVeryRemote: elig.isRemoteVeryRemote,
       isNorthernAustralia: elig.isNorthernAustralia,
@@ -426,6 +498,17 @@ export class PostcodesService {
       isBushfireDeclared: elig.isBushfireDeclared,
       isNaturalDisasterDeclared: elig.isNaturalDisasterDeclared,
     };
+  }
+
+  private getActiveZones(elig: PostcodeBadgeData): string[] {
+    return Object.entries(ZONE_FLAG_MAP)
+      .filter((e): e is [string, string] => e[1] !== null)
+      .filter(([, flag]) => elig[flag as keyof typeof elig])
+      .map(([zone]) => zone);
+  }
+
+  private categoryToZoneName(category: string): string {
+    return DB_CATEGORY_TO_ZONE[category] ?? category;
   }
 
   private mapPostcodeToResponse(p: PostcodeRecord): PostcodeResponse {
@@ -447,15 +530,7 @@ export class PostcodesService {
       suburbName: s.suburbName,
       postcode: s.postcode,
       stateCode: s.stateCode,
-      postcodeData: eligibility
-        ? {
-            isRemoteVeryRemote: eligibility.isRemoteVeryRemote,
-            isNorthernAustralia: eligibility.isNorthernAustralia,
-            isRegionalAustralia: eligibility.isRegionalAustralia,
-            isBushfireDeclared: eligibility.isBushfireDeclared,
-            isNaturalDisasterDeclared: eligibility.isNaturalDisasterDeclared,
-          }
-        : null,
+      postcodeData: eligibility ? this.pickBadgeFlags(eligibility) : null,
     };
   }
 }

@@ -1,8 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { FavoritesService } from '../favorites.service';
-import { PrismaService } from '../../prisma/prisma.service';
+import { Test, TestingModule } from '@nestjs/testing';
 import { Prisma } from '../../../generated/prisma/client';
+import { PrismaService } from '../../prisma/prisma.service';
+import { FavoritesService } from '../favorites.service';
 
 const mockPrisma = {
   postcode: {

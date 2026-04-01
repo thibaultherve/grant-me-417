@@ -6,28 +6,28 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { PostcodesService } from './postcodes.service.js';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
+import { PostcodesService } from './postcodes.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import {
-  postcodeDirectoryQuerySchema,
+  visaTypeQuerySchema,
   paginatedDirectoryQuerySchema,
   globalChangesQuerySchema,
+  changeDetailParamSchema,
+  changeDetailQuerySchema,
   lastUpdateQuerySchema,
   postcodeParamSchema,
   searchQuerySchema,
   suburbIdParamSchema,
   type PaginatedDirectoryQuery,
   type GlobalChangesQuery,
+  type ChangeDetailParam,
+  type ChangeDetailQuery,
 } from '@regranted/shared';
-import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe.js';
+import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import {
   CurrentUser,
   type JwtPayload,
-} from '../common/decorators/current-user.decorator.js';
-
-const visaTypeQuerySchema = postcodeDirectoryQuerySchema.pick({
-  visaType: true,
-});
+} from '../common/decorators/current-user.decorator';
 
 @Controller()
 @UseGuards(JwtAuthGuard)
@@ -60,6 +60,16 @@ export class PostcodesController {
       query.page,
       query.limit,
     );
+  }
+
+  @Get('postcodes/changes/:date')
+  async getChangeDetail(
+    @Param(new ZodValidationPipe(changeDetailParamSchema))
+    params: ChangeDetailParam,
+    @Query(new ZodValidationPipe(changeDetailQuerySchema))
+    query: ChangeDetailQuery,
+  ) {
+    return this.postcodesService.getChangeDetail(params.date, query.visaType);
   }
 
   @Get('postcodes/last-update')

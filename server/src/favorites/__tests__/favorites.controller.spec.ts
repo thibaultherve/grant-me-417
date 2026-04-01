@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Test, TestingModule } from '@nestjs/testing';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { FavoritesController } from '../favorites.controller';
 import { FavoritesService } from '../favorites.service';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 
 jest.mock('@regranted/shared');
 

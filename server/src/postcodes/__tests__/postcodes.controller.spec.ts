@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { PostcodesController } from '../postcodes.controller';
 import { PostcodesService } from '../postcodes.service';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 
 jest.mock('@regranted/shared');
 

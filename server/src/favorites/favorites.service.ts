@@ -1,12 +1,12 @@
-import type { FavoritePostcodeResponse } from '@regranted/shared';
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma } from '../../generated/prisma/client.js';
-import { formatTimestamp } from '../common/utils/format.js';
-import { PrismaService } from '../prisma/prisma.service.js';
+import type { FavoritePostcodeResponse } from '@regranted/shared';
+import { Prisma } from '../../generated/prisma/client';
+import { formatTimestamp } from '../common/utils/format';
+import { PrismaService } from '../prisma/prisma.service';
 
 const MAX_FAVORITES = 100;
 

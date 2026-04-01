@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { PostcodesController } from './postcodes.controller.js';
-import { PostcodesService } from './postcodes.service.js';
+import { PostcodesController } from './postcodes.controller';
+import { PostcodesService } from './postcodes.service';
 
 @Module({
   controllers: [PostcodesController],
