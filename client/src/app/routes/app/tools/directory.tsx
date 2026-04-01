@@ -31,6 +31,7 @@ export const DirectoryRoute = () => {
     toggleState,
     toggleZone,
     setVisaType,
+    toggleFavorites,
     setPage,
     toggleSort,
     resetFilters,
@@ -40,8 +41,7 @@ export const DirectoryRoute = () => {
   const { data: lastUpdate } = useLastUpdate(filters.visaType);
   const toggleFavorite = useToggleFavorite();
 
-  // Prefetch favorites for optimistic toggle
-  useFavoritePostcodes();
+  const { data: favorites } = useFavoritePostcodes();
 
   usePageHeader({
     description:
@@ -83,10 +83,11 @@ export const DirectoryRoute = () => {
         {/* Filters */}
         <DirectoryFilters
           filters={filters}
-          totalCount={directory?.total}
+          favoritesCount={favorites?.length}
           onSearchChange={setSearch}
           onToggleState={toggleState}
           onToggleZone={toggleZone}
+          onToggleFavorites={toggleFavorites}
           onResetFilters={resetFilters}
         />
 

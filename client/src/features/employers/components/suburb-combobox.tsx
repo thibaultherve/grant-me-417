@@ -1,6 +1,6 @@
 import type { SuburbWithPostcode } from '@regranted/shared';
 import { Loader2, Search, X } from 'lucide-react';
-import { useCallback, useEffect, useReducer, useRef } from 'react';
+import { useCallback, useReducer, useRef } from 'react';
 
 import { PostcodeLinkBadge } from '@/components/shared/postcode-link-badge';
 import {
@@ -9,6 +9,7 @@ import {
   type ZoneKey,
 } from '@/components/shared/zone-badge';
 import { useClickOutside } from '@/hooks/use-click-outside';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { cn } from '@/lib/utils';
 
 import { useGetSuburb, useSearchSuburbs } from '../api/use-suburbs';
@@ -22,7 +23,6 @@ interface SuburbComboboxProps {
 type ComboboxState = {
   open: boolean;
   inputValue: string;
-  debouncedQuery: string;
   activeIndex: number;
   forceClear: boolean;
 };
@@ -31,7 +31,6 @@ type ComboboxAction =
   | { type: 'OPEN' }
   | { type: 'CLOSE' }
   | { type: 'SET_INPUT'; value: string }
-  | { type: 'SET_DEBOUNCED'; value: string }
   | { type: 'SET_ACTIVE_INDEX'; index: number }
   | { type: 'SELECT' }
   | { type: 'CLEAR'; keepFocus?: boolean }
@@ -53,8 +52,6 @@ function comboboxReducer(
         activeIndex: -1,
         open: true,
       };
-    case 'SET_DEBOUNCED':
-      return { ...state, debouncedQuery: action.value };
     case 'SET_ACTIVE_INDEX':
       return { ...state, activeIndex: action.index };
     case 'SELECT':
@@ -64,7 +61,6 @@ function comboboxReducer(
         ...state,
         forceClear: true,
         inputValue: '',
-        debouncedQuery: '',
         activeIndex: -1,
         open: action.keepFocus ? state.open : false,
       };
@@ -72,7 +68,6 @@ function comboboxReducer(
       return {
         open: false,
         inputValue: '',
-        debouncedQuery: '',
         activeIndex: -1,
         forceClear: false,
       };
@@ -84,7 +79,6 @@ function comboboxReducer(
 const INITIAL_STATE: ComboboxState = {
   open: false,
   inputValue: '',
-  debouncedQuery: '',
   activeIndex: -1,
   forceClear: false,
 };
@@ -100,18 +94,8 @@ export function SuburbCombobox({
   const [state, dispatch] = useReducer(comboboxReducer, INITIAL_STATE);
 
   const { data: selectedSuburb } = useGetSuburb(value);
-  const { data: suburbs = [], isLoading } = useSearchSuburbs(
-    state.debouncedQuery,
-  );
-
-  // Debounce search query (200ms)
-  useEffect(() => {
-    const timer = setTimeout(
-      () => dispatch({ type: 'SET_DEBOUNCED', value: state.inputValue }),
-      200,
-    );
-    return () => clearTimeout(timer);
-  }, [state.inputValue]);
+  const debouncedQuery = useDebouncedValue(state.inputValue, 200);
+  const { data: suburbs = [], isLoading } = useSearchSuburbs(debouncedQuery);
 
   // Click outside → close dropdown
   const handleClose = useCallback(() => dispatch({ type: 'CLOSE' }), []);
@@ -176,8 +160,7 @@ export function SuburbCombobox({
     item?.scrollIntoView({ block: 'nearest' });
   };
 
-  const showDropdown =
-    state.open && (isLoading || state.debouncedQuery.length > 0);
+  const showDropdown = state.open && (isLoading || debouncedQuery.length > 0);
 
   return (
     <div ref={containerRef} className="relative">
@@ -301,13 +284,11 @@ export function SuburbCombobox({
           )}
 
           {/* Empty state */}
-          {!isLoading &&
-            state.debouncedQuery.length > 0 &&
-            suburbs.length === 0 && (
-              <div className="py-6 text-center text-sm text-muted-foreground">
-                No suburbs found.
-              </div>
-            )}
+          {!isLoading && debouncedQuery.length > 0 && suburbs.length === 0 && (
+            <div className="py-6 text-center text-sm text-muted-foreground">
+              No suburbs found.
+            </div>
+          )}
 
           {/* Result rows */}
           {!isLoading && suburbs.length > 0 && (
