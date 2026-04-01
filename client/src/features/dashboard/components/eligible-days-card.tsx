@@ -1,6 +1,8 @@
 import { visaHasGoal, type VisaOverview } from '@regranted/shared';
 import { Award, CalendarCheck, CircleCheck, Target } from 'lucide-react';
+
 import { calcProgressPct } from '../utils/dashboard-calculations';
+
 import { CardTooltip, StatCardWrapper } from './stat-card-wrapper';
 
 const NEXT_VISA_LABEL: Record<string, string> = {
@@ -66,7 +68,9 @@ export function EligibleDaysCard({ visa }: EligibleDaysCardProps) {
           </div>
         </CardTooltip>
       }
-      badge={hasGoal ? (completed ? 'completed' : `${pct}% complete`) : undefined}
+      badge={
+        hasGoal ? (completed ? 'completed' : `${pct}% complete`) : undefined
+      }
       badgeVariant={completed ? 'success' : 'info'}
     >
       {/* Value row */}
@@ -93,9 +97,10 @@ export function EligibleDaysCard({ visa }: EligibleDaysCardProps) {
           <span className="text-xs text-muted-foreground flex items-center gap-1">
             <Target className="w-3 h-3" />
             {hasGoal
-              ? completed ? 'Goal reached!' : `${daysRemaining} remaining`
-              : 'No day requirement'
-            }
+              ? completed
+                ? 'Goal reached!'
+                : `${daysRemaining} remaining`
+              : 'No day requirement'}
           </span>
           {NEXT_VISA_LABEL[visaType] && (
             <span className="text-xs text-muted-foreground flex items-center gap-1 font-semibold">

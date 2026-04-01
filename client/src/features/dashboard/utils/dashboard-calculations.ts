@@ -1,4 +1,10 @@
 import { GOAL_TIGHT_THRESHOLD_WEEKS } from '@regranted/shared';
+import type {
+  VisaOverviewMonthlyTrend,
+  VisaOverviewPace,
+  VisaOverviewVisa,
+  VisaOverviewWeeklyProgress,
+} from '@regranted/shared';
 
 import type {
   GoalDatePrediction,
@@ -7,13 +13,6 @@ import type {
   PaceStatusInfo,
   WeeklyProgressChartPoint,
 } from '../types';
-
-import type {
-  VisaOverviewMonthlyTrend,
-  VisaOverviewPace,
-  VisaOverviewVisa,
-  VisaOverviewWeeklyProgress,
-} from '@regranted/shared';
 
 // ─── Pace Status ─────────────────────────────────────────────────────────────
 
@@ -98,7 +97,8 @@ export function computeGoalDatePrediction(
       countdownDays: 0,
       countdownLabel: '',
       timelineProgress: 0,
-      subtextMessage: 'Start logging eligible work to see your goal prediction.',
+      subtextMessage:
+        'Start logging eligible work to see your goal prediction.',
       goalLabel: '',
     };
   }
@@ -111,13 +111,21 @@ export function computeGoalDatePrediction(
 
   const daysToGo = daysRequired - eligibleDays;
   const weeksToGoal = daysToGo / currentPace;
-  const projectedDate = new Date(today.getTime() + weeksToGoal * 7 * MS_PER_DAY);
+  const projectedDate = new Date(
+    today.getTime() + weeksToGoal * 7 * MS_PER_DAY,
+  );
 
-  const daysUntilExpiry = Math.max(1, Math.round((expiry.getTime() - today.getTime()) / MS_PER_DAY));
-  const daysUntilGoal = Math.round((projectedDate.getTime() - today.getTime()) / MS_PER_DAY);
+  const daysUntilExpiry = Math.max(
+    1,
+    Math.round((expiry.getTime() - today.getTime()) / MS_PER_DAY),
+  );
+  const daysUntilGoal = Math.round(
+    (projectedDate.getTime() - today.getTime()) / MS_PER_DAY,
+  );
 
   // Determine status
-  const weeksBeforeExpiry = (expiry.getTime() - projectedDate.getTime()) / (7 * MS_PER_DAY);
+  const weeksBeforeExpiry =
+    (expiry.getTime() - projectedDate.getTime()) / (7 * MS_PER_DAY);
   const isAfterExpiry = projectedDate > expiry;
 
   let status: GoalDatePrediction['status'];
@@ -133,7 +141,9 @@ export function computeGoalDatePrediction(
   let countdownDays: number;
   let countdownLabel: string;
   if (isAfterExpiry) {
-    countdownDays = Math.round((projectedDate.getTime() - expiry.getTime()) / MS_PER_DAY);
+    countdownDays = Math.round(
+      (projectedDate.getTime() - expiry.getTime()) / MS_PER_DAY,
+    );
     countdownLabel = 'days over';
   } else {
     countdownDays = daysUntilGoal;
@@ -184,17 +194,22 @@ export function formatShortDate(dateStr: string): string {
   });
 }
 
-export function formatHours(hours: number): string {
-  return `${hours % 1 === 0 ? hours.toFixed(0) : hours.toFixed(1)}h`;
-}
-
-export function formatPct(value: number): string {
-  return `${Math.round(value)}%`;
-}
-
 // ─── Chart Helpers ────────────────────────────────────────────────────────────
 
-const MONTH_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MONTH_ABBR = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
 
 /**
  * Builds chart data points for the Weekly Progress chart.
@@ -216,9 +231,10 @@ export function buildWeeklyProgressChartData(
   const lastCumulative =
     actual.length > 0 ? actual[actual.length - 1].cumulativeEligibleDays : 0;
 
-  const lastDate = weeklyProgress.length > 0
-    ? new Date(weeklyProgress[weeklyProgress.length - 1].weekStartDate)
-    : new Date();
+  const lastDate =
+    weeklyProgress.length > 0
+      ? new Date(weeklyProgress[weeklyProgress.length - 1].weekStartDate)
+      : new Date();
 
   const predictions: WeeklyProgressChartPoint[] = [];
   let cumulative = lastCumulative;
@@ -248,7 +264,9 @@ function formatWeekLabel(weekStartDate: string): string {
 }
 
 function getISOWeekNumber(date: Date): number {
-  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const d = new Date(
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+  );
   d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
   const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
   return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);

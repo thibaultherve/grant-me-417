@@ -8,9 +8,9 @@ import { paths } from '@/config/paths';
 import { useVisaOverview } from '@/features/dashboard/api/use-dashboard';
 import { EligibleDaysCard } from '@/features/dashboard/components/eligible-days-card';
 import { EmployerBreakdownCard } from '@/features/dashboard/components/employer-breakdown-card';
+import { GoalDatePredictionCard } from '@/features/dashboard/components/goal-date-prediction-card';
 import { MonthlyTrendChart } from '@/features/dashboard/components/monthly-trend-chart';
 import { PaceTrackerCard } from '@/features/dashboard/components/pace-tracker-card';
-import { GoalDatePredictionCard } from '@/features/dashboard/components/goal-date-prediction-card';
 import { VisaTimelineCard } from '@/features/dashboard/components/visa-timeline-card';
 import { WeeklyProgressChart } from '@/features/dashboard/components/weekly-progress-chart';
 import { WorkDistributionCard } from '@/features/dashboard/components/work-distribution-card';
@@ -74,8 +74,8 @@ function NoVisaState() {
         <div className="space-y-2">
           <h2 className="text-xl font-semibold">Get started with ReGranted</h2>
           <p className="text-sm text-muted-foreground max-w-sm">
-            Start tracking your specified work hours to qualify for your next Working
-            Holiday Visa. Create your first visa to begin.
+            Start tracking your specified work hours to qualify for your next
+            Working Holiday Visa. Create your first visa to begin.
           </p>
         </div>
         <Button asChild>
@@ -118,7 +118,10 @@ function DashboardWidgets({ visaId }: { visaId: string }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <EligibleDaysCard visa={overview.visa} />
         <VisaTimelineCard visa={overview.visa} />
-        <PaceTrackerCard pace={overview.pace} visaType={overview.visa.visaType} />
+        <PaceTrackerCard
+          pace={overview.pace}
+          visaType={overview.visa.visaType}
+        />
         <GoalDatePredictionCard visa={overview.visa} pace={overview.pace} />
       </div>
 

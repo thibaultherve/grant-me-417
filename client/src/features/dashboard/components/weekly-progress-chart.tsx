@@ -1,9 +1,3 @@
-import {
-  TooltipContent,
-  TooltipTrigger,
-  Tooltip as UITooltip,
-} from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
 import { visaHasGoal, type VisaOverview } from '@regranted/shared';
 import { BarChart2, HelpCircle } from 'lucide-react';
 import {
@@ -18,7 +12,16 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
+import {
+  TooltipContent,
+  TooltipTrigger,
+  Tooltip as UITooltip,
+} from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
+
 import { buildWeeklyProgressChartData } from '../utils/dashboard-calculations';
+
 import { CardTooltip } from './stat-card-wrapper';
 
 interface WeeklyProgressChartProps {
@@ -51,12 +54,18 @@ export function WeeklyProgressChart({
       eligibleDays: !p.isPrediction ? p.eligibleDays : undefined,
       cumulative: !p.isPrediction ? p.cumulativeEligibleDays : undefined,
       predictionLine:
-        hasGoal && (p.isPrediction || isLastActual) ? p.cumulativeEligibleDays : undefined,
+        hasGoal && (p.isPrediction || isLastActual)
+          ? p.cumulativeEligibleDays
+          : undefined,
     };
   });
 
-  const maxCumulative = Math.max(...chartData.map(d => d.cumulative ?? d.predictionLine ?? 0));
-  const yRightMax = hasGoal ? Math.max(maxCumulative + 10, daysRequired + 10) : undefined;
+  const maxCumulative = Math.max(
+    ...chartData.map((d) => d.cumulative ?? d.predictionLine ?? 0),
+  );
+  const yRightMax = hasGoal
+    ? Math.max(maxCumulative + 10, daysRequired + 10)
+    : undefined;
 
   return (
     <div
@@ -101,7 +110,10 @@ export function WeeklyProgressChart({
             <span className="flex items-center gap-1">
               <span
                 className="inline-block w-3 h-3 rounded-sm"
-                style={{ background: 'linear-gradient(to right, var(--bar-1), var(--bar-7))' }}
+                style={{
+                  background:
+                    'linear-gradient(to right, var(--bar-1), var(--bar-7))',
+                }}
               />
               Days/week
             </span>
@@ -167,7 +179,11 @@ export function WeeklyProgressChart({
             yAxisId="right"
             orientation="right"
             domain={[0, yRightMax ?? 'auto']}
-            ticks={hasGoal ? [0, Math.round(daysRequired / 2), daysRequired] : undefined}
+            ticks={
+              hasGoal
+                ? [0, Math.round(daysRequired / 2), daysRequired]
+                : undefined
+            }
             tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
             axisLine={false}
             tickLine={false}
@@ -192,11 +208,16 @@ export function WeeklyProgressChart({
             maxBarSize={20}
           >
             {chartData.map((entry, index) => {
-              const days = Math.min(Math.max(Math.round(entry.eligibleDays ?? 0), 1), 7);
+              const days = Math.min(
+                Math.max(Math.round(entry.eligibleDays ?? 0), 1),
+                7,
+              );
               return (
                 <Cell
                   key={index}
-                  fill={entry.eligibleDays ? `var(--bar-${days})` : 'transparent'}
+                  fill={
+                    entry.eligibleDays ? `var(--bar-${days})` : 'transparent'
+                  }
                 />
               );
             })}
