@@ -1,6 +1,5 @@
-import { z } from 'zod';
-
 import { createEmployerSchema as baseSchema } from '@regranted/shared';
+import { z } from 'zod';
 
 import { validateSuburbId } from '../api/suburbs';
 

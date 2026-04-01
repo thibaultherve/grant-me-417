@@ -1,16 +1,12 @@
-import { useState } from 'react';
-
-import { CircleHelp, TriangleAlert } from 'lucide-react';
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from '@/components/ui/select';
-import { cn } from '@/lib/utils';
 import type { IndustryType, PostcodeBadgeData } from '@regranted/shared';
-import { ELIGIBLE_ZONES, ZONE_TYPES, ZONE_FLAG_MAP, type ZoneType } from '@regranted/shared';
+import {
+  ELIGIBLE_ZONES,
+  ZONE_FLAG_MAP,
+  ZONE_TYPES,
+  type ZoneType,
+} from '@regranted/shared';
+import { CircleHelp, TriangleAlert } from 'lucide-react';
+import { useState } from 'react';
 
 import {
   EligibilityStatusBadge,
@@ -18,6 +14,13 @@ import {
 } from '@/components/shared/eligibility-status-badge';
 import { IndustryChip } from '@/components/shared/industry-chip';
 import { ZoneBadge, type ZoneKey } from '@/components/shared/zone-badge';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from '@/components/ui/select';
+import { cn } from '@/lib/utils';
 
 // ── Zone / flag mapping ──────────────────────────────────────────────────────
 
@@ -39,7 +42,10 @@ const INDUSTRY_ORDER: IndustryType[] = [
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function isZoneActive(zone: ZoneType, suburbFlags: PostcodeBadgeData | null): boolean {
+function isZoneActive(
+  zone: ZoneType,
+  suburbFlags: PostcodeBadgeData | null,
+): boolean {
   if (!suburbFlags) return false;
   const flag = ZONE_FLAG_MAP[zone];
   return flag === null ? true : !!suburbFlags[flag as keyof PostcodeBadgeData];
@@ -85,23 +91,43 @@ function EligibilitySwitch({ mode, onChange }: EligibilitySwitchProps) {
   );
 }
 
-function MatrixDot({ active, zoneActive }: { active: boolean; zoneActive: boolean }) {
+function MatrixDot({
+  active,
+  zoneActive,
+}: {
+  active: boolean;
+  zoneActive: boolean;
+}) {
   return (
     <div
       className={cn(
         'w-2.5 h-2.5 rounded-full shrink-0',
-        active ? 'bg-success' : zoneActive ? 'bg-muted-foreground/50' : 'bg-muted-foreground/20',
+        active
+          ? 'bg-success'
+          : zoneActive
+            ? 'bg-muted-foreground/50'
+            : 'bg-muted-foreground/20',
       )}
     />
   );
 }
 
-function MatrixCross({ active, zoneActive }: { active: boolean; zoneActive: boolean }) {
+function MatrixCross({
+  active,
+  zoneActive,
+}: {
+  active: boolean;
+  zoneActive: boolean;
+}) {
   return (
     <span
       className={cn(
         'font-bold text-sm leading-none',
-        active ? 'text-danger' : zoneActive ? 'text-muted-foreground/60' : 'text-muted-foreground/20',
+        active
+          ? 'text-danger'
+          : zoneActive
+            ? 'text-muted-foreground/60'
+            : 'text-muted-foreground/20',
       )}
     >
       ✖
@@ -155,9 +181,15 @@ function MatrixRow({
             className="flex-1 h-7 flex items-center justify-center"
           >
             {hasRule ? (
-              <MatrixDot active={isSelected && zoneActive} zoneActive={zoneActive} />
+              <MatrixDot
+                active={isSelected && zoneActive}
+                zoneActive={zoneActive}
+              />
             ) : (
-              <MatrixCross active={isSelected && zoneActive} zoneActive={zoneActive} />
+              <MatrixCross
+                active={isSelected && zoneActive}
+                zoneActive={zoneActive}
+              />
             )}
           </div>
         );
@@ -191,7 +223,10 @@ export function EligibilityCheckCard({
   onManualEligibilityChange,
 }: EligibilityCheckCardProps) {
   const isManual = mode === 'manual';
-  const status = getEligibilityStatus(isChecking, isManual ? isEligible : isEligible);
+  const status = getEligibilityStatus(
+    isChecking,
+    isManual ? isEligible : isEligible,
+  );
 
   const [selectOpen, setSelectOpen] = useState(false);
 
@@ -219,14 +254,22 @@ export function EligibilityCheckCard({
         <div className="flex-1 flex items-center justify-center">
           {isManual ? (
             <Select
-              value={isEligible === null ? undefined : isEligible ? 'eligible' : 'not-eligible'}
+              value={
+                isEligible === null
+                  ? undefined
+                  : isEligible
+                    ? 'eligible'
+                    : 'not-eligible'
+              }
               onValueChange={(v) => onManualEligibilityChange(v === 'eligible')}
               open={selectOpen}
               onOpenChange={setSelectOpen}
             >
               <SelectTrigger className="h-auto min-h-0 bg-transparent dark:bg-transparent border-0 shadow-none px-0 py-px gap-1 text-[11px] font-medium focus:ring-0 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:opacity-60">
                 {isEligible === null ? (
-                  <span className="text-muted-foreground">Select status...</span>
+                  <span className="text-muted-foreground">
+                    Select status...
+                  </span>
                 ) : isEligible ? (
                   <span className="flex items-center gap-1.5 text-success font-medium">
                     <span className="w-1.5 h-1.5 rounded-full bg-success inline-block shrink-0" />

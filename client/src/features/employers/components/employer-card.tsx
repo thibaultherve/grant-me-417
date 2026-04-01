@@ -1,8 +1,26 @@
+import type { Employer } from '@regranted/shared';
 import { formatDistanceToNow } from 'date-fns';
-import { Ban, Building2, CalendarDays, Factory, Globe, MapPin, Pencil, Trash2 } from 'lucide-react';
+import {
+  Ban,
+  Building2,
+  CalendarDays,
+  Factory,
+  Globe,
+  MapPin,
+  Pencil,
+  Trash2,
+} from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
+import { EligibilityStatusBadge } from '@/components/shared/eligibility-status-badge';
+import { IndustryChip } from '@/components/shared/industry-chip';
+import { PostcodeLinkBadge } from '@/components/shared/postcode-link-badge';
+import {
+  ZONE_FLAGS,
+  ZoneBadge,
+  type ZoneKey,
+} from '@/components/shared/zone-badge';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,13 +34,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { paths } from '@/config/paths';
 import { cn } from '@/lib/utils';
-
-import type { Employer } from '@regranted/shared';
-
-import { EligibilityStatusBadge } from '@/components/shared/eligibility-status-badge';
-import { IndustryChip } from '@/components/shared/industry-chip';
-import { PostcodeLinkBadge } from '@/components/shared/postcode-link-badge';
-import { ZoneBadge, ZONE_FLAGS, type ZoneKey } from '@/components/shared/zone-badge';
 
 interface EmployerCardProps {
   employer: Employer;
@@ -67,7 +78,10 @@ export function EmployerCard({ employer, onDelete }: EmployerCardProps) {
               </span>
             </div>
             <div className="flex items-center gap-1.5 shrink-0 ml-3">
-              <EligibilityStatusBadge status={eligibilityStatus} className="px-0 py-0" />
+              <EligibilityStatusBadge
+                status={eligibilityStatus}
+                className="px-0 py-0"
+              />
               <span className="text-[11px] font-light text-muted-foreground opacity-40">
                 |
               </span>
@@ -138,7 +152,10 @@ export function EmployerCard({ employer, onDelete }: EmployerCardProps) {
             <div className="flex items-center gap-1.25 md:gap-1.5">
               <CalendarDays className="h-3.25 w-3.25 md:h-3.5 md:w-3.5 text-muted-foreground" />
               <span className="text-[11px] md:text-xs font-normal text-muted-foreground">
-                Added {formatDistanceToNow(new Date(employer.createdAt), { addSuffix: true })}
+                Added{' '}
+                {formatDistanceToNow(new Date(employer.createdAt), {
+                  addSuffix: true,
+                })}
               </span>
             </div>
 
@@ -149,7 +166,9 @@ export function EmployerCard({ employer, onDelete }: EmployerCardProps) {
                 variant="outline"
                 size="icon"
                 className="md:hidden"
-                onClick={() => navigate(paths.app.employers.edit.getHref(employer.id))}
+                onClick={() =>
+                  navigate(paths.app.employers.edit.getHref(employer.id))
+                }
               >
                 <Pencil className="h-3.25 w-3.25" />
               </Button>
@@ -167,7 +186,9 @@ export function EmployerCard({ employer, onDelete }: EmployerCardProps) {
                 variant="outline"
                 size="sm"
                 className="hidden md:inline-flex"
-                onClick={() => navigate(paths.app.employers.edit.getHref(employer.id))}
+                onClick={() =>
+                  navigate(paths.app.employers.edit.getHref(employer.id))
+                }
               >
                 <Pencil className="h-3.25 w-3.25" />
                 Edit

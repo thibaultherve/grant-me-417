@@ -1,13 +1,17 @@
-import { Search, X, Loader2 } from 'lucide-react';
+import type { SuburbWithPostcode } from '@regranted/shared';
+import { Loader2, Search, X } from 'lucide-react';
 import { useCallback, useEffect, useReducer, useRef } from 'react';
 
+import { PostcodeLinkBadge } from '@/components/shared/postcode-link-badge';
+import {
+  ZONE_FLAGS,
+  ZoneBadge,
+  type ZoneKey,
+} from '@/components/shared/zone-badge';
 import { useClickOutside } from '@/hooks/use-click-outside';
 import { cn } from '@/lib/utils';
-import type { SuburbWithPostcode } from '@regranted/shared';
 
-import { useSearchSuburbs, useGetSuburb } from '../api/use-suburbs';
-import { PostcodeLinkBadge } from '@/components/shared/postcode-link-badge';
-import { ZoneBadge, ZONE_FLAGS, type ZoneKey } from '@/components/shared/zone-badge';
+import { useGetSuburb, useSearchSuburbs } from '../api/use-suburbs';
 
 interface SuburbComboboxProps {
   value: number | undefined;
@@ -33,14 +37,22 @@ type ComboboxAction =
   | { type: 'CLEAR'; keepFocus?: boolean }
   | { type: 'RESET' };
 
-function comboboxReducer(state: ComboboxState, action: ComboboxAction): ComboboxState {
+function comboboxReducer(
+  state: ComboboxState,
+  action: ComboboxAction,
+): ComboboxState {
   switch (action.type) {
     case 'OPEN':
       return { ...state, open: true, activeIndex: -1 };
     case 'CLOSE':
       return { ...state, open: false, activeIndex: -1 };
     case 'SET_INPUT':
-      return { ...state, inputValue: action.value, activeIndex: -1, open: true };
+      return {
+        ...state,
+        inputValue: action.value,
+        activeIndex: -1,
+        open: true,
+      };
     case 'SET_DEBOUNCED':
       return { ...state, debouncedQuery: action.value };
     case 'SET_ACTIVE_INDEX':
@@ -57,7 +69,13 @@ function comboboxReducer(state: ComboboxState, action: ComboboxAction): Combobox
         open: action.keepFocus ? state.open : false,
       };
     case 'RESET':
-      return { open: false, inputValue: '', debouncedQuery: '', activeIndex: -1, forceClear: false };
+      return {
+        open: false,
+        inputValue: '',
+        debouncedQuery: '',
+        activeIndex: -1,
+        forceClear: false,
+      };
     default:
       return state;
   }
@@ -82,11 +100,16 @@ export function SuburbCombobox({
   const [state, dispatch] = useReducer(comboboxReducer, INITIAL_STATE);
 
   const { data: selectedSuburb } = useGetSuburb(value);
-  const { data: suburbs = [], isLoading } = useSearchSuburbs(state.debouncedQuery);
+  const { data: suburbs = [], isLoading } = useSearchSuburbs(
+    state.debouncedQuery,
+  );
 
   // Debounce search query (200ms)
   useEffect(() => {
-    const timer = setTimeout(() => dispatch({ type: 'SET_DEBOUNCED', value: state.inputValue }), 200);
+    const timer = setTimeout(
+      () => dispatch({ type: 'SET_DEBOUNCED', value: state.inputValue }),
+      200,
+    );
     return () => clearTimeout(timer);
   }, [state.inputValue]);
 
@@ -94,10 +117,13 @@ export function SuburbCombobox({
   const handleClose = useCallback(() => dispatch({ type: 'CLOSE' }), []);
   useClickOutside(containerRef, handleClose);
 
-  const hasValue = value !== undefined && selectedSuburb !== undefined && !state.forceClear;
+  const hasValue =
+    value !== undefined && selectedSuburb !== undefined && !state.forceClear;
 
   const selectedActiveZones: ZoneKey[] = selectedSuburb?.postcodeData
-    ? ZONE_FLAGS.filter((z) => selectedSuburb.postcodeData![z.flag]).map((z) => z.zone)
+    ? ZONE_FLAGS.filter((z) => selectedSuburb.postcodeData![z.flag]).map(
+        (z) => z.zone,
+      )
     : [];
 
   const handleFocus = () => {
@@ -150,18 +176,27 @@ export function SuburbCombobox({
     item?.scrollIntoView({ block: 'nearest' });
   };
 
-  const showDropdown = state.open && (isLoading || state.debouncedQuery.length > 0);
+  const showDropdown =
+    state.open && (isLoading || state.debouncedQuery.length > 0);
 
   return (
     <div ref={containerRef} className="relative">
       {/* Filled state — suburb selected, dropdown closed */}
       {hasValue && !state.open ? (
         <div
+          role="button"
+          tabIndex={0}
           className={cn(
             'flex items-center gap-2 px-3 py-2.5 rounded-lg border border-input bg-background cursor-pointer transition-colors',
             disabled && 'opacity-50 pointer-events-none',
           )}
           onClick={handleFocus}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleFocus();
+            }
+          }}
         >
           <span className="flex-1 text-[13px] font-medium text-foreground truncate">
             {selectedSuburb.suburbName}
@@ -192,12 +227,20 @@ export function SuburbCombobox({
       ) : (
         /* Search input — default or open state */
         <div
+          role="button"
+          tabIndex={0}
           className={cn(
             'flex items-center gap-2 px-3 py-2.5 rounded-lg border bg-background cursor-text transition-colors',
             state.open ? 'border-ring ring-1 ring-ring/20' : 'border-input',
             disabled && 'opacity-50 pointer-events-none',
           )}
           onClick={() => inputRef.current?.focus()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              inputRef.current?.focus();
+            }
+          }}
         >
           <Search className="w-4 h-4 text-muted-foreground shrink-0" />
 
@@ -258,18 +301,22 @@ export function SuburbCombobox({
           )}
 
           {/* Empty state */}
-          {!isLoading && state.debouncedQuery.length > 0 && suburbs.length === 0 && (
-            <div className="py-6 text-center text-sm text-muted-foreground">
-              No suburbs found.
-            </div>
-          )}
+          {!isLoading &&
+            state.debouncedQuery.length > 0 &&
+            suburbs.length === 0 && (
+              <div className="py-6 text-center text-sm text-muted-foreground">
+                No suburbs found.
+              </div>
+            )}
 
           {/* Result rows */}
           {!isLoading && suburbs.length > 0 && (
             <div ref={listRef} className="max-h-64 overflow-y-auto">
               {suburbs.map((suburb, index) => {
                 const activeZones: ZoneKey[] = suburb.postcodeData
-                  ? ZONE_FLAGS.filter((z) => suburb.postcodeData![z.flag]).map((z) => z.zone)
+                  ? ZONE_FLAGS.filter((z) => suburb.postcodeData![z.flag]).map(
+                      (z) => z.zone,
+                    )
                   : [];
 
                 return (
@@ -277,10 +324,14 @@ export function SuburbCombobox({
                     key={suburb.id}
                     type="button"
                     onClick={() => handleSelect(suburb)}
-                    onMouseEnter={() => dispatch({ type: 'SET_ACTIVE_INDEX', index })}
+                    onMouseEnter={() =>
+                      dispatch({ type: 'SET_ACTIVE_INDEX', index })
+                    }
                     className={cn(
                       'w-full flex items-center gap-2 px-3 py-2.5 text-left transition-colors',
-                      state.activeIndex === index ? 'bg-accent' : 'hover:bg-accent',
+                      state.activeIndex === index
+                        ? 'bg-accent'
+                        : 'hover:bg-accent',
                     )}
                   >
                     <span className="flex-1 text-[13px] font-semibold text-foreground truncate">

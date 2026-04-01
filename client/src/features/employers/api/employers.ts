@@ -1,5 +1,3 @@
-import { api } from '@/lib/api-client';
-
 import type {
   CheckEligibilityInput,
   CheckEligibilityOutput,
@@ -7,6 +5,8 @@ import type {
   Employer,
   UpdateEmployerInput,
 } from '@regranted/shared';
+
+import { api } from '@/lib/api-client';
 
 export const getEmployers = async (): Promise<Employer[]> => {
   return api.get('/employers');

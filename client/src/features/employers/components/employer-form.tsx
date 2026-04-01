@@ -1,6 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { Employer, IndustryType } from '@regranted/shared';
 import { useForm } from 'react-hook-form';
 
+import { IndustryChip } from '@/components/shared/industry-chip';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,9 +31,6 @@ import {
   SelectItem,
   SelectTrigger,
 } from '@/components/ui/select';
-
-import type { Employer, IndustryType } from '@regranted/shared';
-
 import { useUser } from '@/lib/auth';
 
 import { useCheckEligibility } from '../api/use-employers';
@@ -40,7 +39,6 @@ import { INDUSTRY_OPTIONS } from '../constants';
 import { createEmployerSchema, type CreateEmployerFormData } from '../schemas';
 
 import { EligibilityCheckCard } from './eligibility-check-card';
-import { IndustryChip } from '@/components/shared/industry-chip';
 import { SuburbCombobox } from './suburb-combobox';
 
 interface EmployerFormProps {
