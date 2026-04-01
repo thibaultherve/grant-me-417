@@ -57,8 +57,9 @@
 ### 4. Formatting, Linting & Type-checking
 
 - **ALWAYS** after creating or editing files, run these checks and fix any errors before considering the task done:
-  - **Client**: `cd client && npx eslint --fix <files> && npx tsc --noEmit`
-  - **Server**: `cd server && npx eslint --fix <files> && npx tsc --noEmit`
+  1. **Dead code detection**: `npx knip` (from root) — fix unused files, exports, and dependencies before linting
+  2. **Client**: `cd client && npx eslint --fix <files> && npx tsc --noEmit`
+  3. **Server**: `cd server && npx eslint --fix <files> && npx tsc --noEmit`
 - Do NOT rely on manual formatting — the project's Prettier config (printWidth, trailing commas, union type formatting, etc.) must be enforced via tooling
 - Fix all TypeScript errors (unused imports, type mismatches, missing types) — do NOT leave `TS6133`, `TS2322`, or any `TS*` errors behind
 
