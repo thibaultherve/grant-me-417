@@ -1,3 +1,8 @@
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import type {
   HoursList,
   IndustryType,
@@ -11,20 +16,11 @@ import type {
   WorkEntryWithEmployer,
 } from '@regranted/shared';
 import { MAX_HOURS_PER_DAY } from '@regranted/shared';
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-} from '@nestjs/common';
-import { Prisma } from '../../generated/prisma/client.js';
-import { getWeekRanges } from '../common/utils/date.js';
-import {
-  formatDate,
-  formatTimestamp,
-  toNumber,
-} from '../common/utils/format.js';
-import { PrismaService } from '../prisma/prisma.service.js';
-import { VisaProgressService } from '../visas/visa-progress.service.js';
+import { Prisma } from '../../generated/prisma/client';
+import { getWeekRanges } from '../common/utils/date';
+import { formatDate, formatTimestamp, toNumber } from '../common/utils/format';
+import { PrismaService } from '../prisma/prisma.service';
+import { VisaProgressService } from '../visas/visa-progress.service';
 
 const ENTRY_EMPLOYER_INCLUDE = {
   employer: {

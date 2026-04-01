@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { VisasController } from './visas.controller.js';
-import { VisasService } from './visas.service.js';
-import { VisaProgressService } from './visa-progress.service.js';
-import { VisaOverviewService } from './visa-overview.service.js';
+import { VisaOverviewService } from './visa-overview.service';
+import { VisaProgressService } from './visa-progress.service';
+import { VisasController } from './visas.controller';
+import { VisasService } from './visas.service';
 
 @Module({
   controllers: [VisasController],

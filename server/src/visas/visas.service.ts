@@ -7,9 +7,9 @@ import {
 import type {
   UserVisa,
   VisaWeeklyProgress as WeeklyRecord,
-} from '../../generated/prisma/client.js';
-import { PrismaService } from '../prisma/prisma.service.js';
-import { VisaProgressService } from './visa-progress.service.js';
+} from '../../generated/prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
+import { VisaProgressService } from './visa-progress.service';
 import type {
   CreateVisaInput,
   UpdateVisaInput,
@@ -22,7 +22,7 @@ import {
   formatDateNullable,
   formatTimestamp,
   toNumber,
-} from '../common/utils/format.js';
+} from '../common/utils/format';
 
 @Injectable()
 export class VisasService {
@@ -37,7 +37,7 @@ export class VisasService {
       orderBy: { arrivalDate: 'asc' },
     });
 
-    return visas.map(this.mapToResponse);
+    return visas.map((v) => this.mapToResponse(v));
   }
 
   async findByType(userId: string, visaType: string): Promise<Visa> {
@@ -178,7 +178,7 @@ export class VisasService {
       orderBy: { weekStartDate: 'asc' },
     });
 
-    return rows.map(this.mapWeeklyToResponse);
+    return rows.map((r) => this.mapWeeklyToResponse(r));
   }
 
   // ─── Validation ─────────────────────────────────────────────────────────

@@ -9,13 +9,13 @@ import {
   UseGuards,
   ParseIntPipe,
 } from '@nestjs/common';
-import { WorkEntriesService } from './work-entries.service.js';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
+import { WorkEntriesService } from './work-entries.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import {
   CurrentUser,
   type JwtPayload,
-} from '../common/decorators/current-user.decorator.js';
-import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe.js';
+} from '../common/decorators/current-user.decorator';
+import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import { saveWeekBatchSchema, type SaveWeekBatch } from '@regranted/shared';
 
 @Controller('work-entries')

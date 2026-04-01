@@ -6,8 +6,8 @@ import {
   type VisaOverviewWeeklyProgress,
   type VisaType,
 } from '@regranted/shared';
-import { Prisma } from '../../generated/prisma/client.js';
-import { PrismaService } from '../prisma/prisma.service.js';
+import { Prisma } from '../../generated/prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
 
 const MS_PER_DAY = 86_400_000;
 const MS_PER_WEEK = 7 * MS_PER_DAY;

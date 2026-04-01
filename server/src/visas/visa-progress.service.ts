@@ -1,8 +1,8 @@
-import { HOUR_TO_DAY_THRESHOLDS, getDaysRequired } from '@regranted/shared';
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '../../generated/prisma/client.js';
-import { getWeekForDate, getWeekRanges } from '../common/utils/date.js';
-import { PrismaService } from '../prisma/prisma.service.js';
+import { HOUR_TO_DAY_THRESHOLDS, getDaysRequired } from '@regranted/shared';
+import { Prisma } from '../../generated/prisma/client';
+import { getWeekForDate, getWeekRanges } from '../common/utils/date';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class VisaProgressService {
