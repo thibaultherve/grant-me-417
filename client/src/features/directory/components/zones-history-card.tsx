@@ -12,6 +12,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
+import { formatShortDate } from '@/utils/date-format';
 
 import type { VisaTypeFilter } from '../types/directory';
 
@@ -26,14 +27,6 @@ function categoryToZone(category: string): ZoneKey | null {
     }
   }
   return null;
-}
-
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString('en-AU', {
-    month: 'short',
-    day: 'numeric',
-  });
 }
 
 interface ZonesHistoryCardProps {
@@ -93,7 +86,7 @@ export function ZonesHistoryCard({ history, visaType }: ZonesHistoryCardProps) {
                     className="h-7"
                   >
                     <TableCell className="px-3 text-[13px] text-muted-foreground">
-                      {formatDate(entry.effectiveDate)}
+                      {formatShortDate(entry.effectiveDate)}
                     </TableCell>
                     <TableCell className="px-3">
                       {zone ? (

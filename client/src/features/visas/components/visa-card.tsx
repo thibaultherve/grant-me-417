@@ -20,6 +20,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { formatDate } from '@/utils/date-format';
 import { computeVisaTimeline, formatCreatedAgo } from '@/utils/visa-helpers';
 
 import { OrdinalBadge } from './ordinal-badge';
@@ -30,14 +31,6 @@ interface VisaCardProps {
   onDelete?: (id: string) => void;
   onEdit?: (visa: Visa) => void;
   hideActions?: boolean;
-}
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('en-AU', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  });
 }
 
 export function VisaCard({

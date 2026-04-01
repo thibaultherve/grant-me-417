@@ -179,20 +179,7 @@ export function computeGoalDatePrediction(
 
 // ─── Formatters ───────────────────────────────────────────────────────────────
 
-export function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('en-AU', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  });
-}
-
-export function formatShortDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('en-AU', {
-    day: 'numeric',
-    month: 'short',
-  });
-}
+export { formatDate, formatShortDate } from '@/utils/date-format';
 
 // ─── Chart Helpers ────────────────────────────────────────────────────────────
 
