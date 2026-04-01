@@ -143,6 +143,14 @@ const createAppRouter = () =>
               },
             },
             {
+              path: 'changes/:date',
+              lazy: async () => {
+                const { ChangeDetailRoute } =
+                  await import('./routes/app/tools/directory/changes');
+                return { Component: ChangeDetailRoute };
+              },
+            },
+            {
               path: ':postcode',
               children: [
                 {

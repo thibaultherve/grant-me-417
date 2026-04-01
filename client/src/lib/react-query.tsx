@@ -99,5 +99,7 @@ export const queryKeys = {
     lastUpdate: (visaType: string) =>
       ['directory', 'last-update', visaType] as const,
     favorites: ['directory', 'favorites'] as const,
+    changeDetail: (date: string, visaType: string) =>
+      ['directory', 'change-detail', date, visaType] as const,
   },
 } as const;

@@ -1,4 +1,5 @@
 import type {
+  ChangeDetailResponse,
   FavoritePostcodeResponse,
   GlobalChangesResponse,
   LastUpdateResponse,
@@ -53,6 +54,13 @@ export const toggleFavoritePostcode = async (
   postcode: string,
 ): Promise<{ action: 'added' | 'removed' }> => {
   return api.post('/user/favorites/postcodes', { postcode });
+};
+
+export const getChangeDetail = async (
+  date: string,
+  visaType: string,
+): Promise<ChangeDetailResponse> => {
+  return api.get(`/postcodes/changes/${date}?visaType=${visaType}`);
 };
 
 export const getFavoritePostcodes = async (): Promise<

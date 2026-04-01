@@ -16,6 +16,7 @@ import { queryKeys } from '@/lib/react-query';
 import type { DirectoryFiltersState } from '../types/directory';
 
 import {
+  getChangeDetail,
   getDirectory,
   getFavoritePostcodes,
   getGlobalChanges,
@@ -59,6 +60,15 @@ export const useGlobalChanges = (params: {
     queryKey: queryKeys.directory.changes(params as Record<string, unknown>),
     queryFn: () => getGlobalChanges(params),
     placeholderData: keepPreviousData,
+  });
+};
+
+export const useChangeDetail = (date: string | undefined, visaType: string) => {
+  return useQuery({
+    queryKey: queryKeys.directory.changeDetail(date!, visaType),
+    queryFn: () => getChangeDetail(date!, visaType),
+    enabled: !!date,
+    staleTime: 5 * 60 * 1000,
   });
 };
 

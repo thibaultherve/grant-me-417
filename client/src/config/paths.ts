@@ -76,6 +76,10 @@ export const paths = {
               `/app/tools/directory/${postcode}/${suburbId}`,
           },
         },
+        changes: {
+          path: '/app/tools/directory/changes/:date',
+          getHref: (date: string) => `/app/tools/directory/changes/${date}`,
+        },
       },
     },
     profile: {
