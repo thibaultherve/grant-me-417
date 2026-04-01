@@ -15,7 +15,7 @@ export function ChangeDetailSummary({
   sourceUrl,
 }: ChangeDetailSummaryProps) {
   return (
-    <Card className="flex items-center gap-8 px-5 py-4">
+    <Card className="flex-row items-center gap-8 px-5 py-4">
       {/* Date block */}
       <div className="flex flex-col gap-1">
         <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">

@@ -1,5 +1,3 @@
-import { ExternalLink } from 'lucide-react';
-
 import { ErrorBoundary } from '@/components/shared/error-boundary';
 import {
   useDirectory,
@@ -13,7 +11,6 @@ import { DirectoryTable } from '@/features/directory/components/directory-table'
 import { VisaTypeTabs } from '@/features/directory/components/visa-type-tabs';
 import { useDirectoryFilters } from '@/features/directory/hooks/use-directory-filters';
 import { usePageHeader } from '@/hooks/use-page-header';
-import { formatDateSafe } from '@/utils/date-format';
 
 export const DirectoryRoute = () => {
   const {
@@ -58,28 +55,7 @@ export const DirectoryRoute = () => {
 
         {/* Directory table + Change history sidebar */}
         <div className="flex gap-5 items-start">
-          <div className="min-w-0 flex-1 space-y-2">
-            {/* Source info — right-aligned above table */}
-            <div className="flex items-center justify-end gap-2 text-xs text-muted-foreground">
-              <span>
-                Last update: {formatDateSafe(lastUpdate?.lastUpdateDate)}
-              </span>
-              {lastUpdate?.sourceUrl && (
-                <>
-                  <span>&middot;</span>
-                  <a
-                    href={lastUpdate.sourceUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
-                  >
-                    Source
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                </>
-              )}
-            </div>
-
+          <div className="min-w-0 flex-1">
             <DirectoryTable
               data={directory?.data ?? []}
               total={directory?.total ?? 0}
@@ -87,6 +63,8 @@ export const DirectoryRoute = () => {
               totalPages={directory?.totalPages ?? 0}
               sort={filters.sort}
               isLoading={isLoading}
+              lastUpdateDate={lastUpdate?.lastUpdateDate ?? undefined}
+              sourceUrl={lastUpdate?.sourceUrl ?? undefined}
               onToggleFavorite={(postcode) => toggleFavorite.mutate(postcode)}
               onPageChange={setPage}
               onToggleSort={toggleSort}

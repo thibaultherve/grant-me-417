@@ -1,5 +1,10 @@
 import type { PaginatedDirectoryItem } from '@regranted/shared';
-import { ArrowUpDown, BookOpen, ChevronRight } from 'lucide-react';
+import {
+  ArrowUpDown,
+  BookOpen,
+  ChevronRight,
+  ExternalLink,
+} from 'lucide-react';
 import { useNavigate } from 'react-router';
 
 import { PostcodeLinkBadge } from '@/components/shared/postcode-link-badge';
@@ -7,6 +12,7 @@ import { ZoneBadge, type ZoneKey } from '@/components/shared/zone-badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
+  CardAction,
   CardContent,
   CardFooter,
   CardHeader,
@@ -22,6 +28,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { paths } from '@/config/paths';
+import { formatDateSafe } from '@/utils/date-format';
 
 import type { SortDirection } from '../types/directory';
 
@@ -34,6 +41,8 @@ interface DirectoryTableProps {
   totalPages: number;
   sort: SortDirection;
   isLoading: boolean;
+  lastUpdateDate?: string;
+  sourceUrl?: string;
   onToggleFavorite: (postcode: string) => void;
   onPageChange: (page: number) => void;
   onToggleSort: () => void;
@@ -46,6 +55,8 @@ export function DirectoryTable({
   totalPages,
   sort,
   isLoading,
+  lastUpdateDate,
+  sourceUrl,
   onToggleFavorite,
   onPageChange,
   onToggleSort,
@@ -62,6 +73,27 @@ export function DirectoryTable({
           <BookOpen className="w-4 h-4 text-primary" />
           Eligibility Directory
         </CardTitle>
+        {lastUpdateDate && (
+          <CardAction>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span>Last update: {formatDateSafe(lastUpdateDate)}</span>
+              {sourceUrl && (
+                <>
+                  <span>&middot;</span>
+                  <a
+                    href={sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+                  >
+                    Source
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </>
+              )}
+            </div>
+          </CardAction>
+        )}
       </CardHeader>
 
       <CardContent className="p-0">
