@@ -1,7 +1,6 @@
-import { useCallback, useMemo } from 'react';
-
-import type { UseMutationResult } from '@tanstack/react-query';
 import type { SaveWeekBatch, WeekEntriesResponse } from '@regranted/shared';
+import type { UseMutationResult } from '@tanstack/react-query';
+import { useCallback, useMemo } from 'react';
 
 import type {
   EmployerHoursState,
@@ -224,8 +223,10 @@ export function useLogHoursActions(
   const resetAll = useCallback(() => {
     if (!serverData) return;
 
-    const { employers: newEmployers, initialEmployers } =
-      buildStateFromServer(serverData, dateKeys);
+    const { employers: newEmployers, initialEmployers } = buildStateFromServer(
+      serverData,
+      dateKeys,
+    );
 
     setState({
       employers: newEmployers,

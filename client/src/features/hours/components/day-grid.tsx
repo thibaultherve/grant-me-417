@@ -1,7 +1,11 @@
 import { cn } from '@/lib/utils';
 
-import type { CrossEmployerErrors, EmployerHoursState } from '../types/log-hours';
-import type { DayColumn as DayColumnType } from '../types/log-hours';
+import type {
+  CrossEmployerErrors,
+  DayColumn as DayColumnType,
+  EmployerHoursState,
+} from '../types/log-hours';
+
 import { DayColumn } from './day-column';
 
 interface DayGridProps {

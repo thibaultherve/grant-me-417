@@ -1,9 +1,9 @@
 export type {
+  VisaPeriod,
   WeekData,
   WeeklyEmployer,
-  WeekVisaBreakdown,
-  VisaPeriod,
   WeeklyHoursResponse,
+  WeekVisaBreakdown,
 } from '@regranted/shared';
 
 import type { VisaType } from '@regranted/shared';

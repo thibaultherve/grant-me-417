@@ -1,7 +1,8 @@
-import { cn } from '@/lib/utils';
-
 import type { VisaType } from '@regranted/shared';
 import { VISA_TYPES } from '@regranted/shared';
+
+import { cn } from '@/lib/utils';
+
 import type { WeekVisaBreakdown } from '../../types/weekly';
 
 /** Visa type → Tailwind bg color class for dots */
@@ -16,98 +17,6 @@ function sortBreakdown(breakdown: WeekVisaBreakdown[]): WeekVisaBreakdown[] {
   if (breakdown.length <= 1) return breakdown;
   return [...breakdown].sort(
     (a, b) => VISA_TYPES.indexOf(a.visaType) - VISA_TYPES.indexOf(b.visaType),
-  );
-}
-
-interface WeekTotalsProps {
-  totalHours: number;
-  visaBreakdown: WeekVisaBreakdown[];
-  className?: string;
-}
-
-/**
- * Desktop: renders total hours + per-visa eligible hours and days as plain colored text.
- * Design: "65h" bold | "39h-13h" green-blue text | "7d-2d" green-blue text
- */
-export function WeekTotals({ totalHours, visaBreakdown, className }: WeekTotalsProps) {
-  return (
-    <div className={cn('flex items-center gap-3', className)}>
-      {/* Total hours — bold black */}
-      <span className="tabular-nums text-[13px] font-bold text-foreground min-w-15 text-right">
-        {totalHours > 0 ? `${totalHours}h` : '–'}
-      </span>
-
-      {/* Eligible hours — colored text per visa */}
-      <div className="flex items-center gap-0.5 min-w-16.25 justify-end">
-        <VisaValues
-          breakdown={visaBreakdown}
-          getValue={(vb) => `${vb.eligibleHours}h`}
-          getNumber={(vb) => vb.eligibleHours}
-        />
-      </div>
-
-      {/* Eligible days — colored text per visa */}
-      <div className="flex items-center gap-0.5 min-w-12.5 justify-end">
-        <VisaValues
-          breakdown={visaBreakdown}
-          getValue={(vb) => `${vb.eligibleDays}d`}
-          getNumber={(vb) => vb.eligibleDays}
-        />
-      </div>
-    </div>
-  );
-}
-
-interface MobileWeekStatsProps {
-  totalHours: number;
-  visaBreakdown: WeekVisaBreakdown[];
-  showDots?: boolean;
-  className?: string;
-}
-
-/**
- * Mobile: labeled stat columns — "Total" / "Eligible" / "Days" labels above values.
- * Design: 3 columns spread evenly with label (10px) + value (14px bold / 13px colored).
- */
-export function MobileWeekStats({ totalHours, visaBreakdown, showDots = true, className }: MobileWeekStatsProps) {
-  return (
-    <div className={cn('flex items-start justify-between', className)}>
-      {/* Total */}
-      <div className="flex flex-col items-center gap-0.5">
-        <span className="text-[10px] font-medium text-muted-foreground">Total</span>
-        <span className="tabular-nums text-sm font-bold text-foreground">
-          {totalHours > 0 ? `${totalHours}h` : '–'}
-        </span>
-      </div>
-
-      {/* Eligible */}
-      <div className="flex flex-col items-center gap-0.5">
-        <span className="text-[10px] font-medium text-muted-foreground">Eligible</span>
-        <div className="flex items-center gap-0.5">
-          <VisaValues
-            breakdown={visaBreakdown}
-            getValue={(vb) => `${vb.eligibleHours}h`}
-            getNumber={(vb) => vb.eligibleHours}
-            size="mobile"
-            showDots={showDots}
-          />
-        </div>
-      </div>
-
-      {/* Days */}
-      <div className="flex flex-col items-center gap-0.5">
-        <span className="text-[10px] font-medium text-muted-foreground">Days</span>
-        <div className="flex items-center gap-0.5">
-          <VisaValues
-            breakdown={visaBreakdown}
-            getValue={(vb) => `${vb.eligibleDays}d`}
-            getNumber={(vb) => vb.eligibleDays}
-            size="mobile"
-            showDots={showDots}
-          />
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -138,9 +47,12 @@ export function VisaValues({
 
   const sorted = sortBreakdown(breakdown);
   // Design: single-visa uses 13px, multi-visa (split) uses 12px
-  const textSize = size === 'mobile'
-    ? 'text-[13px]'
-    : sorted.length > 1 ? 'text-xs' : 'text-[13px]';
+  const textSize =
+    size === 'mobile'
+      ? 'text-[13px]'
+      : sorted.length > 1
+        ? 'text-xs'
+        : 'text-[13px]';
 
   return (
     <>
@@ -153,14 +65,21 @@ export function VisaValues({
             <span
               className={cn(
                 'tabular-nums',
-                bold ? 'font-bold text-foreground' : 'font-semibold text-muted-foreground',
+                bold
+                  ? 'font-bold text-foreground'
+                  : 'font-semibold text-muted-foreground',
                 textSize,
               )}
             >
               {getValue(vb)}
             </span>
             {showDots && (
-              <span className={cn('absolute left-1/2 -translate-x-1/2 -bottom-1 h-1.25 w-1.25 rounded-full', VISA_DOT_COLORS[vb.visaType])} />
+              <span
+                className={cn(
+                  'absolute left-1/2 -translate-x-1/2 -bottom-1 h-1.25 w-1.25 rounded-full',
+                  VISA_DOT_COLORS[vb.visaType],
+                )}
+              />
             )}
           </span>
         </span>

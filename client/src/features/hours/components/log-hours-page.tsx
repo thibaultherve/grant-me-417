@@ -1,3 +1,4 @@
+import type { IndustryType } from '@regranted/shared';
 import { addDays, subDays } from 'date-fns';
 import { Loader2, Plus } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
@@ -6,13 +7,13 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { paths } from '@/config/paths';
-import type { IndustryType } from '@regranted/shared';
 
 import { useExpansionState } from '../hooks/use-expansion-state';
 import { useLogHoursState } from '../hooks/use-log-hours-state';
 import type { EmployerMeta } from '../types/log-hours';
 import { getMondayOfWeek } from '../utils/date-helpers';
 import { isWeekStarted } from '../utils/week-validation';
+
 import { EmployerHoursCard } from './employer-hours-card';
 import { WeekNavigator } from './ui/week-navigator';
 import { UnsavedChangesDialog } from './unsaved-changes-dialog';
@@ -203,11 +204,7 @@ export function LogHoursPage({ initialWeek }: LogHoursPageProps) {
         <Button variant="outline" size="lg" asChild>
           <Link to={paths.app.hours.getHref()}>Cancel</Link>
         </Button>
-        <Button
-          onClick={handleSave}
-          disabled={!logHours.canSubmit}
-          size="lg"
-        >
+        <Button onClick={handleSave} disabled={!logHours.canSubmit} size="lg">
           {logHours.isSubmitting && (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           )}

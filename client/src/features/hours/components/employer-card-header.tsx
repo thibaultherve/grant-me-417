@@ -1,14 +1,13 @@
+import type { IndustryType } from '@regranted/shared';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { memo } from 'react';
-
-import { cn } from '@/lib/utils';
-import type { IndustryType } from '@regranted/shared';
 
 import {
   EligibilityStatusBadge,
   getEligibilityStatus,
 } from '@/components/shared/eligibility-status-badge';
 import { INDUSTRY_CONFIG } from '@/components/shared/industry-chip';
+import { cn } from '@/lib/utils';
 
 interface EmployerCardHeaderProps {
   employerName: string;

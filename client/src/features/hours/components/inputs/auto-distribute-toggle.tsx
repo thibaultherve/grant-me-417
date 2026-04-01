@@ -93,8 +93,7 @@ export function AutoDistributeToggle({
               aria-describedby={hasError ? errorId : undefined}
               className={cn(
                 'h-8 w-16 text-center text-sm',
-                hasError &&
-                  'border-destructive focus-visible:ring-destructive',
+                hasError && 'border-destructive focus-visible:ring-destructive',
               )}
             />
             <span className="text-xs text-muted-foreground">

@@ -1,17 +1,16 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import { cn } from '@/lib/utils';
 import { VisaLegend } from '@/components/visa-legend';
+import { cn } from '@/lib/utils';
 
 import { useVisas } from '../../api/use-hours';
-
 import { useWeeklyHours } from '../../api/use-hours';
 import { useWeekExpansion } from '../../hooks/use-week-expansion';
 
 import { CalendarHeader } from './calendar-header';
-import { WeeklyTable } from './weekly-table';
 import { WeeklyCards } from './weekly-cards';
 import { WeeklySkeleton, WeeklySkeletonMobile } from './weekly-skeleton';
+import { WeeklyTable } from './weekly-table';
 
 export interface WeeklyCalendarProps {
   initialYear?: number;
@@ -42,7 +41,11 @@ export function WeeklyCalendar({
     const rangeStart = data.weeks[0].weekStart;
     const rangeEnd = data.weeks[data.weeks.length - 1].weekEnd;
     return data.visas
-      .filter((v) => v.arrivalDate <= rangeEnd && (!v.expiryDate || v.expiryDate >= rangeStart))
+      .filter(
+        (v) =>
+          v.arrivalDate <= rangeEnd &&
+          (!v.expiryDate || v.expiryDate >= rangeStart),
+      )
       .map((v) => v.visaType);
   }, [data]);
 
@@ -64,13 +67,16 @@ export function WeeklyCalendar({
     }
   }, [month]);
 
-  const handleYearChange = useCallback((newYear: number) => {
-    setYear(newYear);
-    const currentMonth = now.getMonth() + 1;
-    if (newYear === now.getFullYear()) {
-      setMonth((prev) => Math.min(prev, currentMonth));
-    }
-  }, [now]);
+  const handleYearChange = useCallback(
+    (newYear: number) => {
+      setYear(newYear);
+      const currentMonth = now.getMonth() + 1;
+      if (newYear === now.getFullYear()) {
+        setMonth((prev) => Math.min(prev, currentMonth));
+      }
+    },
+    [now],
+  );
 
   const handleMonthChange = useCallback((newMonth: number) => {
     setMonth(newMonth);

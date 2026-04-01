@@ -1,22 +1,23 @@
+import { ChevronDown, Pencil } from 'lucide-react';
 import { memo } from 'react';
 import { useNavigate } from 'react-router';
-import { ChevronDown, Pencil } from 'lucide-react';
 
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
-import type { WeekData, VisaPeriod } from '../../types/weekly';
+import type { VisaPeriod, WeekData } from '../../types/weekly';
+import {
+  buildDayBars,
+  formatWeekLabel,
+  getVisaBarColor,
+  getWeekVisaInfo,
+  isInMonth,
+  VISA_BADGE_BG,
+  VISA_TEXT_COLORS,
+} from '../../utils/weekly-helpers';
+
 import { HoursCell } from './hours-cell';
 import { VisaValues } from './week-totals';
-import {
-  formatWeekLabel,
-  buildDayBars,
-  getWeekVisaInfo,
-  getVisaBarColor,
-  isInMonth,
-  VISA_TEXT_COLORS,
-  VISA_BADGE_BG,
-} from '../../utils/weekly-helpers';
 
 interface WeekSummaryRowProps {
   week: WeekData;
@@ -49,16 +50,24 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
     <tr
       className={cn(
         'border-0 group transition-colors',
-        isExpanded ? 'bg-primary-light' : hasData && 'hover:bg-primary-light/50',
+        isExpanded
+          ? 'bg-primary-light'
+          : hasData && 'hover:bg-primary-light/50',
         hasData && 'cursor-pointer',
       )}
       onClick={hasData ? onToggle : undefined}
     >
       {/* Week label + chevron — with left accent border */}
-      <td className={cn(
-        'pt-3 pb-1 px-4 text-[13px] text-foreground whitespace-nowrap w-22.5 border-l-[3px] transition-colors',
-        isExpanded ? 'font-semibold border-l-primary' : hasData ? 'font-medium border-l-transparent group-hover:border-l-primary/40' : 'font-medium border-l-transparent',
-      )}>
+      <td
+        className={cn(
+          'pt-3 pb-1 px-4 text-[13px] text-foreground whitespace-nowrap w-22.5 border-l-[3px] transition-colors',
+          isExpanded
+            ? 'font-semibold border-l-primary'
+            : hasData
+              ? 'font-medium border-l-transparent group-hover:border-l-primary/40'
+              : 'font-medium border-l-transparent',
+        )}
+      >
         <div className="flex items-center gap-1">
           <ChevronDown
             className={cn(
@@ -160,7 +169,10 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
           </td>
         ))
       ) : (
-        <td colSpan={7} className="pt-3 pb-1 text-center text-xs text-muted-foreground/50">
+        <td
+          colSpan={7}
+          className="pt-3 pb-1 text-center text-xs text-muted-foreground/50"
+        >
           No hours logged
         </td>
       )}
@@ -172,7 +184,10 @@ export const WeekSummaryRow = memo(function WeekSummaryRow({
             variant="ghost"
             size="icon"
             className="h-7 w-7"
-            onClick={(e) => { e.stopPropagation(); navigate(`/app/hours/edit?week=${week.weekStart}`); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/app/hours/edit?week=${week.weekStart}`);
+            }}
             aria-label={`Edit week ${week.weekStart}`}
           >
             <Pencil className="h-3 w-3" />
