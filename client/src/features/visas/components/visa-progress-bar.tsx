@@ -17,10 +17,17 @@ const variantFillClass: Record<VisaProgressBarProps['variant'], string> = {
   'progress-expired': 'bg-muted-foreground',
 };
 
-export function VisaProgressBar({ percent, variant, className = '' }: VisaProgressBarProps) {
+export function VisaProgressBar({
+  percent,
+  variant,
+  className = '',
+}: VisaProgressBarProps) {
   const clampedPercent = Math.min(Math.max(percent, 0), 100);
   return (
-    <div className={`bg-secondary rounded-full overflow-hidden shrink-0 ${className}`} style={{ height: 6 }}>
+    <div
+      className={`bg-secondary rounded-full overflow-hidden shrink-0 ${className}`}
+      style={{ height: 6 }}
+    >
       <div
         className={`h-full rounded-full ${variantFillClass[variant]}`}
         style={{ width: `${clampedPercent}%` }}

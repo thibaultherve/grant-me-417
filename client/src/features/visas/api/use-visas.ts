@@ -1,22 +1,21 @@
+import { computeExpiryDate, getDaysRequired } from '@regranted/shared';
+import type {
+  CreateVisaInput,
+  UpdateVisaInput,
+  Visa,
+  VisaType,
+} from '@regranted/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-import {
-  computeExpiryDate,
-  getDaysRequired,
-} from '@regranted/shared';
-
 import { handleError } from '@/lib/error-handler';
 import { queryKeys } from '@/lib/react-query';
-
-import type { CreateVisaInput, UpdateVisaInput, Visa, VisaType } from '@regranted/shared';
 
 import {
   addVisa,
   deleteVisa,
   getVisaByType,
   getVisas,
-  getVisaWeeklyProgress,
   updateVisa,
 } from './visas';
 
@@ -183,14 +182,5 @@ export const useUpdateVisa = () => {
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.visas.all });
     },
-  });
-};
-
-export const useVisaWeeklyProgress = (visaId: string) => {
-  return useQuery({
-    queryKey: queryKeys.visas.weeklyProgress(visaId),
-    queryFn: () => getVisaWeeklyProgress(visaId),
-    enabled: !!visaId,
-    staleTime: 5 * 60 * 1000,
   });
 };

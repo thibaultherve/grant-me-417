@@ -1,6 +1,5 @@
-import { formatDistanceToNow } from 'date-fns';
-
 import type { VisaType } from '@regranted/shared';
+import { formatDistanceToNow } from 'date-fns';
 
 type VisaTypeSlug = 'first-whv' | 'second-whv' | 'third-whv';
 
@@ -22,18 +21,6 @@ export const getVisaBadgeColor = (type: VisaType): string => {
     third_whv: 'bg-warning',
   };
   return colors[type];
-};
-
-/**
- * Get human-readable label for a visa type
- */
-export const getVisaLabel = (type: VisaType): string => {
-  const labels: Record<VisaType, string> = {
-    first_whv: '1st WHV (417)',
-    second_whv: '2nd WHV (417)',
-    third_whv: '3rd WHV (417)',
-  };
-  return labels[type];
 };
 
 /**
@@ -75,7 +62,10 @@ export interface VisaTimeline {
  * Compute visa timeline data client-side from arrival/expiry dates.
  * All WHV 417 visas are exactly 365 days.
  */
-export function computeVisaTimeline(arrivalDate: string, expiryDate: string): VisaTimeline {
+export function computeVisaTimeline(
+  arrivalDate: string,
+  expiryDate: string,
+): VisaTimeline {
   const now = new Date();
   now.setHours(0, 0, 0, 0);
   const arrival = new Date(arrivalDate);
@@ -83,11 +73,21 @@ export function computeVisaTimeline(arrivalDate: string, expiryDate: string): Vi
   const expiry = new Date(expiryDate);
   expiry.setHours(0, 0, 0, 0);
 
-  const totalDays = Math.round((expiry.getTime() - arrival.getTime()) / MS_PER_DAY);
-  const daysRemaining = Math.round((expiry.getTime() - now.getTime()) / MS_PER_DAY);
+  const totalDays = Math.round(
+    (expiry.getTime() - arrival.getTime()) / MS_PER_DAY,
+  );
+  const daysRemaining = Math.round(
+    (expiry.getTime() - now.getTime()) / MS_PER_DAY,
+  );
   const isExpired = daysRemaining <= 0;
-  const daysElapsed = Math.max(0, Math.round((now.getTime() - arrival.getTime()) / MS_PER_DAY));
-  const percent = totalDays > 0 ? Math.min(Math.round((daysElapsed / totalDays) * 10000) / 100, 100) : 100;
+  const daysElapsed = Math.max(
+    0,
+    Math.round((now.getTime() - arrival.getTime()) / MS_PER_DAY),
+  );
+  const percent =
+    totalDays > 0
+      ? Math.min(Math.round((daysElapsed / totalDays) * 10000) / 100, 100)
+      : 100;
   const label = isExpired
     ? `${Math.abs(daysRemaining)} days ago`
     : `${daysRemaining} days left`;

@@ -7,9 +7,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { getVisaOrdinal } from '@/utils/visa-helpers';
 
 import { useVisaContext } from '../hooks/use-visa-context';
-import { getVisaOrdinal } from '@/utils/visa-helpers';
+
 import { OrdinalBadge } from './ordinal-badge';
 
 // trigger inner layout: [textBlock (vertical, gap=2px)] [chevron 16×16]
@@ -41,19 +42,28 @@ function TriggerContent({
             <>
               <OrdinalBadge visaType={visaType} />
               {/* visa name: 15px, weight=700, foreground, lineHeight=20px (= badge height) */}
-              <span className="text-foreground" style={{ fontSize: 15, fontWeight: 700, lineHeight: '20px' }}>
+              <span
+                className="text-foreground"
+                style={{ fontSize: 15, fontWeight: 700, lineHeight: '20px' }}
+              >
                 WHV 417
               </span>
             </>
           ) : (
-            <span className="text-foreground" style={{ fontSize: 15, fontWeight: 700, lineHeight: '20px' }}>
+            <span
+              className="text-foreground"
+              style={{ fontSize: 15, fontWeight: 700, lineHeight: '20px' }}
+            >
               {placeholder}
             </span>
           )}
         </div>
       </div>
       {/* chevron: 16×16, muted-foreground */}
-      <Chevron className="shrink-0 text-muted-foreground" style={{ width: 16, height: 16 }} />
+      <Chevron
+        className="shrink-0 text-muted-foreground"
+        style={{ width: 16, height: 16 }}
+      />
     </>
   );
 }
@@ -80,15 +90,29 @@ export function VisaSelector() {
         style={triggerStyle}
       >
         <div className="flex flex-col text-left" style={{ gap: 2 }}>
-          <span className="text-muted-foreground" style={{ fontSize: 11, fontWeight: 500, lineHeight: '13px' }}>
+          <span
+            className="text-muted-foreground"
+            style={{ fontSize: 11, fontWeight: 500, lineHeight: '13px' }}
+          >
             Current Visa
           </span>
           <div className="flex items-center" style={{ gap: 6 }}>
-            <div className="bg-muted animate-pulse rounded shrink-0" style={{ width: 28, height: 20 }} />
-            <span className="text-foreground" style={{ fontSize: 15, fontWeight: 700, lineHeight: '20px' }}>WHV 417</span>
+            <div
+              className="bg-muted animate-pulse rounded shrink-0"
+              style={{ width: 28, height: 20 }}
+            />
+            <span
+              className="text-foreground"
+              style={{ fontSize: 15, fontWeight: 700, lineHeight: '20px' }}
+            >
+              WHV 417
+            </span>
           </div>
         </div>
-        <ChevronDown className="shrink-0 text-muted-foreground" style={{ width: 16, height: 16 }} />
+        <ChevronDown
+          className="shrink-0 text-muted-foreground"
+          style={{ width: 16, height: 16 }}
+        />
       </div>
     );
   }
@@ -147,7 +171,10 @@ export function VisaSelector() {
               </span>
               {/* check: 16×16, text-primary if selected else invisible */}
               {isSelected ? (
-                <Check className="shrink-0 text-primary" style={{ width: 16, height: 16 }} />
+                <Check
+                  className="shrink-0 text-primary"
+                  style={{ width: 16, height: 16 }}
+                />
               ) : (
                 <span className="shrink-0" style={{ width: 16, height: 16 }} />
               )}

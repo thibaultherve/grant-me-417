@@ -1,3 +1,4 @@
+import type { VisaType } from '@regranted/shared';
 import { CalendarIcon, ExternalLink, Info } from 'lucide-react';
 import * as React from 'react';
 import { DayButton } from 'react-day-picker';
@@ -9,14 +10,13 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { getVisaOrdinal } from '@/utils/visa-helpers';
 
-import type { VisaType } from '@regranted/shared';
 import type {
   BlockedRange,
   OrderingConstraint,
 } from '../hooks/use-blocked-ranges';
 import { OVERLAP_ZONE_COLOR } from '../hooks/use-blocked-ranges';
-import { getVisaOrdinal } from '@/utils/visa-helpers';
 
 const VEVO_URL = 'https://online.immi.gov.au/evo/firstParty?actionType=query';
 
@@ -191,11 +191,12 @@ export function VisaDatePicker({
 
   // Disabled matchers: blocked ranges + ordering minDate/maxDate
   const disabledMatchers = React.useMemo(() => {
-    const matchers: Array<{ from: Date; to: Date } | { before: Date } | { after: Date }> =
-      blockedRanges.map((r) => ({
-        from: new Date(r.start),
-        to: new Date(r.end),
-      }));
+    const matchers: Array<
+      { from: Date; to: Date } | { before: Date } | { after: Date }
+    > = blockedRanges.map((r) => ({
+      from: new Date(r.start),
+      to: new Date(r.end),
+    }));
     if (minDate) {
       matchers.push({ before: minDate });
     }
@@ -214,11 +215,9 @@ export function VisaDatePicker({
   return (
     <div className="flex flex-col gap-1.5">
       {/* Label */}
-      <label
-        className="font-semibold uppercase text-[11px] tracking-[0.8px] text-muted-foreground"
-      >
+      <span className="font-semibold uppercase text-[11px] tracking-[0.8px] text-muted-foreground">
         Arrival Date in Australia
-      </label>
+      </span>
 
       {/* Popover trigger */}
       <Popover open={disabled ? false : open} onOpenChange={setOpen}>
@@ -228,15 +227,13 @@ export function VisaDatePicker({
             disabled={disabled}
             className={cn(
               'flex items-center gap-2 w-full rounded-md border border-border bg-background text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-3 py-2.5',
-              disabled
-                ? 'cursor-not-allowed opacity-50'
-                : 'hover:bg-accent',
+              disabled ? 'cursor-not-allowed opacity-50' : 'hover:bg-accent',
             )}
           >
-            <CalendarIcon
-              className="w-4 h-4 shrink-0 text-muted-foreground"
-            />
-            <span className={value ? 'text-foreground' : 'text-muted-foreground'}>
+            <CalendarIcon className="w-4 h-4 shrink-0 text-muted-foreground" />
+            <span
+              className={value ? 'text-foreground' : 'text-muted-foreground'}
+            >
               {value
                 ? formatDisplayDate(value)
                 : disabled
@@ -253,50 +250,47 @@ export function VisaDatePicker({
           <div className={cn('flex', hasLegend && 'flex-row')}>
             {/* Calendar */}
             <MinDateContext.Provider value={minDate}>
-            <MaxDateContext.Provider value={maxDate}>
-            <DayColorContext.Provider value={dayColorMap}>
-              <Calendar
-                mode="single"
-                selected={value}
-                onSelect={(date) => {
-                  onChange(date);
-                  if (date) setOpen(false);
-                }}
-                disabled={disabledMatchers}
-                captionLayout="dropdown"
-                weekStartsOn={1}
-                showOutsideDays={false}
-                fromYear={2010}
-                toYear={2040}
-                className="bg-popover"
-                components={{ DayButton: VisaDayButton }}
-              />
-            </DayColorContext.Provider>
-            </MaxDateContext.Provider>
+              <MaxDateContext.Provider value={maxDate}>
+                <DayColorContext.Provider value={dayColorMap}>
+                  <Calendar
+                    mode="single"
+                    selected={value}
+                    onSelect={(date) => {
+                      onChange(date);
+                      if (date) setOpen(false);
+                    }}
+                    disabled={disabledMatchers}
+                    captionLayout="dropdown"
+                    weekStartsOn={1}
+                    showOutsideDays={false}
+                    fromYear={2010}
+                    toYear={2040}
+                    className="bg-popover"
+                    components={{ DayButton: VisaDayButton }}
+                  />
+                </DayColorContext.Provider>
+              </MaxDateContext.Provider>
             </MinDateContext.Provider>
 
             {/* Legend (right side) */}
             {hasLegend && (
               <>
                 <div className="w-px bg-border" />
-                <div className="flex flex-col gap-1.5 px-3 pt-3 pb-3" style={{ minWidth: 200, maxWidth: 220 }}>
-                  <span
-                    className="font-semibold uppercase text-[10px] tracking-[0.6px] text-muted-foreground"
-                  >
+                <div
+                  className="flex flex-col gap-1.5 px-3 pt-3 pb-3"
+                  style={{ minWidth: 200, maxWidth: 220 }}
+                >
+                  <span className="font-semibold uppercase text-[10px] tracking-[0.6px] text-muted-foreground">
                     Dates Unavailable
                   </span>
 
                   {/* Ordering constraint (oldest) */}
                   {orderingConstraint && (
                     <div className="flex items-center gap-2">
-                      <span
-                        className="shrink-0 rounded-sm block w-6 h-1 bg-border"
-                      />
-                      <span
-                        className="text-[11px] font-medium text-foreground"
-                      >
-                        Before{' '}
-                        {getVisaOrdinal(orderingConstraint.visaType)} WHV 417 —{' '}
+                      <span className="shrink-0 rounded-sm block w-6 h-1 bg-border" />
+                      <span className="text-[11px] font-medium text-foreground">
+                        Before {getVisaOrdinal(orderingConstraint.visaType)} WHV
+                        417 —{' '}
                         {orderingConstraint.arrivalDate.toLocaleDateString(
                           'en-AU',
                           { day: 'numeric', month: 'short', year: 'numeric' },
@@ -320,11 +314,9 @@ export function VisaDatePicker({
                           display: 'block',
                         }}
                       />
-                      <span
-                        className="text-[11px] font-medium text-foreground"
-                      >
-                        Would overlap the{' '}
-                        {getVisaOrdinal(range.visaType)} WHV 417 — after{' '}
+                      <span className="text-[11px] font-medium text-foreground">
+                        Would overlap the {getVisaOrdinal(range.visaType)} WHV
+                        417 — after{' '}
                         {range.start.toLocaleDateString('en-AU', {
                           day: 'numeric',
                           month: 'short',
@@ -336,19 +328,21 @@ export function VisaDatePicker({
 
                   {/* Visa period entries (colored bars, most recent) */}
                   {visaPeriodRanges.map((range, i) => (
-                    <div key={`period-${i}`} className="flex items-center gap-2">
+                    <div
+                      key={`period-${i}`}
+                      className="flex items-center gap-2"
+                    >
                       <span
                         className="shrink-0 rounded-sm"
                         style={{
                           width: 24,
                           height: 4,
-                          backgroundColor: VISA_INDICATOR_COLORS[range.visaType],
+                          backgroundColor:
+                            VISA_INDICATOR_COLORS[range.visaType],
                           display: 'block',
                         }}
                       />
-                      <span
-                        className="text-[11px] font-medium text-foreground"
-                      >
+                      <span className="text-[11px] font-medium text-foreground">
                         {getVisaOrdinal(range.visaType)} WHV 417 —{' '}
                         {formatLegendDate(range.start, range.end)}
                       </span>
@@ -358,14 +352,10 @@ export function VisaDatePicker({
                   {/* Successor ordering constraint (newest) */}
                   {successorConstraint && (
                     <div className="flex items-center gap-2">
-                      <span
-                        className="shrink-0 rounded-sm block w-6 h-1 bg-border"
-                      />
-                      <span
-                        className="text-[11px] font-medium text-foreground"
-                      >
-                        After{' '}
-                        {getVisaOrdinal(successorConstraint.visaType)} WHV 417 —{' '}
+                      <span className="shrink-0 rounded-sm block w-6 h-1 bg-border" />
+                      <span className="text-[11px] font-medium text-foreground">
+                        After {getVisaOrdinal(successorConstraint.visaType)} WHV
+                        417 —{' '}
                         {successorConstraint.expiryDate.toLocaleDateString(
                           'en-AU',
                           { day: 'numeric', month: 'short', year: 'numeric' },
@@ -375,12 +365,10 @@ export function VisaDatePicker({
                   )}
 
                   <div className="flex items-start gap-1.5 mt-1">
-                    <Info
-                      className="w-3 h-3 shrink-0 mt-0.5 text-muted-foreground"
-                    />
+                    <Info className="w-3 h-3 shrink-0 mt-0.5 text-muted-foreground" />
                     <span className="text-[11px] text-muted-foreground">
-                      Your arrival date must be outside existing visa periods and
-                      respect visa ordering (1st before 2nd, 2nd before 3rd)
+                      Your arrival date must be outside existing visa periods
+                      and respect visa ordering (1st before 2nd, 2nd before 3rd)
                     </span>
                   </div>
                 </div>
@@ -392,41 +380,31 @@ export function VisaDatePicker({
 
       {/* Description + VEVO hint + VEVO link */}
       <div className="flex flex-col gap-1.5">
-          <p
-            className="text-[12px] leading-[1.43] text-muted-foreground"
-          >
-            The date your visa period starts — either when you arrived in
-            Australia, or when your new visa was granted if you were already in
-            the country.
-          </p>
+        <p className="text-[12px] leading-[1.43] text-muted-foreground">
+          The date your visa period starts — either when you arrived in
+          Australia, or when your new visa was granted if you were already in
+          the country.
+        </p>
 
-          <div className="flex items-start gap-1.5">
-            <Info
-              className="w-3 h-3 shrink-0 mt-0.5 text-muted-foreground"
-            />
-            <span
-              className="text-[11px] leading-[1.4] text-muted-foreground"
-            >
-              Not sure? Check your exact arrival date on VEVO.
-            </span>
-          </div>
-
-          <a
-            href={VEVO_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 hover:underline w-fit"
-          >
-            <ExternalLink
-              className="w-2.5 h-2.5 shrink-0 text-primary"
-            />
-            <span
-              className="text-[11px] font-medium text-primary"
-            >
-              Open VEVO — Visa holder enquiry
-            </span>
-          </a>
+        <div className="flex items-start gap-1.5">
+          <Info className="w-3 h-3 shrink-0 mt-0.5 text-muted-foreground" />
+          <span className="text-[11px] leading-[1.4] text-muted-foreground">
+            Not sure? Check your exact arrival date on VEVO.
+          </span>
         </div>
+
+        <a
+          href={VEVO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1 hover:underline w-fit"
+        >
+          <ExternalLink className="w-2.5 h-2.5 shrink-0 text-primary" />
+          <span className="text-[11px] font-medium text-primary">
+            Open VEVO — Visa holder enquiry
+          </span>
+        </a>
+      </div>
     </div>
   );
 }

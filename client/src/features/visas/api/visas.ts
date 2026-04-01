@@ -1,12 +1,11 @@
-import { api } from '@/lib/api-client';
-
 import type {
   CreateVisaInput,
   UpdateVisaInput,
   Visa,
   VisaType,
-  WeeklyProgress,
 } from '@regranted/shared';
+
+import { api } from '@/lib/api-client';
 
 export const getVisas = async (): Promise<Visa[]> => {
   return api.get('/visas');
@@ -20,9 +19,7 @@ export const deleteVisa = async (id: string): Promise<void> => {
   return api.delete(`/visas/${id}`);
 };
 
-export const getVisaByType = async (
-  type: VisaType,
-): Promise<Visa | null> => {
+export const getVisaByType = async (type: VisaType): Promise<Visa | null> => {
   try {
     return await api.get(`/visas/${type}`);
   } catch {
@@ -35,10 +32,4 @@ export const updateVisa = async (
   input: UpdateVisaInput,
 ): Promise<Visa> => {
   return api.patch(`/visas/${id}`, input);
-};
-
-export const getVisaWeeklyProgress = async (
-  visaId: string,
-): Promise<WeeklyProgress[]> => {
-  return api.get(`/visas/${visaId}/weekly-progress`);
 };

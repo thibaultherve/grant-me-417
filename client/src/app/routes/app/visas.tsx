@@ -1,3 +1,4 @@
+import type { Visa } from '@regranted/shared';
 import { Plane, Plus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 
@@ -7,9 +8,8 @@ import { paths } from '@/config/paths';
 import { useDeleteVisa } from '@/features/visas/api/use-visas';
 import { VisasList } from '@/features/visas/components/visas-list';
 import { useVisaContext } from '@/features/visas/hooks/use-visa-context';
-import { visaTypeToSlug } from '@/utils/visa-helpers';
 import { usePageHeader } from '@/hooks/use-page-header';
-import type { Visa } from '@regranted/shared';
+import { visaTypeToSlug } from '@/utils/visa-helpers';
 
 export const VisasRoute = () => {
   const navigate = useNavigate();

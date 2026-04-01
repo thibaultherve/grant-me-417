@@ -1,6 +1,5 @@
-import { useMemo } from 'react';
-
 import type { VisaType } from '@regranted/shared';
+import { useMemo } from 'react';
 
 import { useVisaContext } from './use-visa-context';
 
@@ -15,7 +14,8 @@ export function useAvailableVisas() {
   const { visas, isLoading, error } = useVisaContext();
 
   const allVisaTypes = useMemo((): VisaTypeWithAvailability[] => {
-    if (isLoading) return ALL_VISA_TYPES.map((type) => ({ type, isAvailable: false }));
+    if (isLoading)
+      return ALL_VISA_TYPES.map((type) => ({ type, isAvailable: false }));
 
     const existingVisaTypes = visas.map((visa) => visa.visaType);
 

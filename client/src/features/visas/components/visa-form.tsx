@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { Visa, VisaType } from '@regranted/shared';
 import { AlertCircle, CheckCircle, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -16,14 +17,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormMessage,
-} from '@/components/ui/form';
-
-import type { Visa, VisaType } from '@regranted/shared';
+import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 
 import { useAvailableVisas } from '../hooks/use-available-visas';
 import { useBlockedRanges } from '../hooks/use-blocked-ranges';
@@ -33,6 +27,7 @@ import {
   type CreateVisaFormData,
   type UpdateVisaFormData,
 } from '../schemas';
+
 import { VisaDatePicker } from './visa-date-picker';
 import { VisaNumberSelector } from './visa-number-selector';
 
@@ -95,7 +90,13 @@ export function VisaForm({
   const { allVisaTypes, loading, error, hasAvailableVisas } =
     useAvailableVisas();
 
-  const { blockedRanges, minDate, maxDate, orderingConstraint, successorConstraint } = useBlockedRanges(
+  const {
+    blockedRanges,
+    minDate,
+    maxDate,
+    orderingConstraint,
+    successorConstraint,
+  } = useBlockedRanges(
     mode === 'edit' && visa ? visa.id : undefined,
     selectedVisaType,
   );
@@ -296,11 +297,7 @@ export function VisaForm({
                   </AlertDialog>
                 )}
 
-                <Button
-                  type="submit"
-                  disabled={isBusy}
-                  className="h-10"
-                >
+                <Button type="submit" disabled={isBusy} className="h-10">
                   {isSubmitting ? 'Saving...' : 'Save'}
                 </Button>
               </div>

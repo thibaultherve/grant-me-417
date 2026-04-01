@@ -8,18 +8,18 @@
  * Les données sont gérées par React Query (useVisas hook)
  */
 
+import type { Visa } from '@regranted/shared';
 import {
   createContext,
   useCallback,
   useContext,
-  useState,
   useEffect,
   useMemo,
+  useState,
   type ReactNode,
 } from 'react';
 
 import { useVisas } from '../api/use-visas';
-import type { Visa } from '@regranted/shared';
 
 interface VisaContextValue {
   currentVisa: Visa | null;
@@ -63,19 +63,18 @@ export function VisaProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const value = useMemo(() => ({
-    currentVisa,
-    setCurrentVisa,
-    visas,
-    isLoading,
-    error: error as Error | null,
-  }), [currentVisa, setCurrentVisa, visas, isLoading, error]);
-
-  return (
-    <VisaContext.Provider value={value}>
-      {children}
-    </VisaContext.Provider>
+  const value = useMemo(
+    () => ({
+      currentVisa,
+      setCurrentVisa,
+      visas,
+      isLoading,
+      error: error as Error | null,
+    }),
+    [currentVisa, setCurrentVisa, visas, isLoading, error],
   );
+
+  return <VisaContext.Provider value={value}>{children}</VisaContext.Provider>;
 }
 
 export function useVisaContext() {
