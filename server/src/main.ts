@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
-import { AppModule } from './app.module.js';
-import { AllExceptionsFilter } from './common/filters/all-exceptions.filter.js';
-import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor.js';
+import helmet from 'helmet';
+import { AppModule } from './app.module';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 
 async function bootstrap() {
   const jwtSecret = process.env.JWT_SECRET;
@@ -32,4 +32,4 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+void bootstrap();

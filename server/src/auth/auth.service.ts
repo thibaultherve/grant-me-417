@@ -1,5 +1,3 @@
-import type { AuthUser, RegisterInput } from '@regranted/shared';
-import { getVisaTypeForNationality } from '@regranted/shared';
 import {
   ConflictException,
   Injectable,
@@ -7,9 +5,11 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import type { AuthUser, RegisterInput } from '@regranted/shared';
+import { getVisaTypeForNationality } from '@regranted/shared';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
-import { PrismaService } from '../prisma/prisma.service.js';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AuthService {

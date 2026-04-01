@@ -12,14 +12,14 @@ import {
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import type { Request, Response } from 'express';
-import { AuthService } from './auth.service.js';
-import { LocalAuthGuard } from './guards/local-auth.guard.js';
-import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
+import { AuthService } from './auth.service';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import {
   CurrentUser,
   type JwtPayload,
-} from '../common/decorators/current-user.decorator.js';
-import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe.js';
+} from '../common/decorators/current-user.decorator';
+import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import {
   registerSchema,
   type RegisterInput,
