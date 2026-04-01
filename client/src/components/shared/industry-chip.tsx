@@ -1,19 +1,19 @@
+import type { IndustryType, IndustryTypeValue } from '@regranted/shared';
 import {
-  Utensils,
-  Sprout,
-  Fish,
-  TreePine,
-  Pickaxe,
-  HardHat,
-  Flame,
-  Wind,
-  HeartPulse,
   Briefcase,
+  Fish,
+  Flame,
+  HardHat,
+  HeartPulse,
+  Pickaxe,
+  Sprout,
+  TreePine,
+  Utensils,
+  Wind,
   type LucideIcon,
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import type { IndustryType, IndustryTypeValue } from '@regranted/shared';
 
 const INDUSTRY_SHORT_LABELS: Record<IndustryTypeValue, string> = {
   plant_and_animal_cultivation: 'Cultivation',
@@ -95,7 +95,11 @@ interface IndustryChipProps {
   className?: string;
 }
 
-export function IndustryChip({ industry, compact, className }: IndustryChipProps) {
+export function IndustryChip({
+  industry,
+  compact,
+  className,
+}: IndustryChipProps) {
   const config = INDUSTRY_CONFIG[industry];
   const Icon = config.icon;
   const label = compact ? INDUSTRY_SHORT_LABELS[industry] : config.label;

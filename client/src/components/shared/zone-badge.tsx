@@ -1,15 +1,15 @@
+import type { PostcodeBadgeData } from '@regranted/shared';
 import {
-  TreePalm,
-  Sun,
   Fence,
   Flame,
-  Wind,
   Globe,
+  Sun,
+  TreePalm,
+  Wind,
   type LucideIcon,
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import type { PostcodeBadgeData } from '@regranted/shared';
 
 export type ZoneKey =
   | 'northern'
@@ -75,7 +75,9 @@ export function ZoneBadge({ zone, size = 'md', className }: ZoneBadgeProps) {
       )}
       title={config.label}
     >
-      <Icon className={cn('text-white', size === 'sm' ? 'w-3 h-3' : 'w-4 h-4')} />
+      <Icon
+        className={cn('text-white', size === 'sm' ? 'w-3 h-3' : 'w-4 h-4')}
+      />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import type { VisaType } from '@regranted/shared';
+
 import { cn } from '@/lib/utils';
 
 const LEGEND_ITEMS: { visaType: VisaType; label: string; color: string }[] = [
@@ -23,12 +24,7 @@ export function VisaLegend({ visaTypes, className }: VisaLegendProps) {
     <div className={cn('flex items-center gap-4', className)}>
       {items.map((item) => (
         <div key={item.label} className="flex items-center gap-1.5">
-          <div
-            className={cn(
-              'h-1.25 w-1.25 rounded-full',
-              item.color,
-            )}
-          />
+          <div className={cn('h-1.25 w-1.25 rounded-full', item.color)} />
           <span className="text-[11px] font-medium text-muted-foreground">
             {item.label}
           </span>
