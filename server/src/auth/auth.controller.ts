@@ -10,7 +10,7 @@ import {
   UsePipes,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Throttle } from '@nestjs/throttler';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 import type { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -36,7 +36,12 @@ const COOKIE_OPTIONS = {
   path: '/',
 };
 
+const isDev = process.env.NODE_ENV !== 'production';
+
+// In dev, SkipThrottle disables rate limiting at the class level.
+// In prod, per-endpoint @Throttle decorators override this and re-enable throttling.
 @Controller('auth')
+@SkipThrottle({ default: isDev })
 export class AuthController {
   constructor(private authService: AuthService) {}
 
@@ -80,7 +85,7 @@ export class AuthController {
   }
 
   @Post('refresh')
-  @Throttle({ default: { ttl: 60000, limit: 5 } })
+  @Throttle({ default: { ttl: 60000, limit: 30 } })
   @HttpCode(HttpStatus.OK)
   async refresh(
     @Req() req: Request,
