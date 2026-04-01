@@ -24,5 +24,3 @@ export const ProtectedAppRoot = () => {
     </ProtectedRoute>
   );
 };
-
-export default AppRoot;

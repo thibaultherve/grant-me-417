@@ -1,5 +1,11 @@
-import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
-
+import {
+  createContext,
+  useContext,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import type { ReactNode } from 'react';
 
 interface PageHeaderContextValue {
@@ -20,9 +26,15 @@ export function PageHeaderProvider({ children }: { children: ReactNode }) {
   const [action, setAction] = useState<ReactNode>(null);
   const [description, setDescription] = useState<string | null>(null);
 
-  const value = useMemo(() => ({
-    action, description, setAction, setDescription,
-  }), [action, description, setAction, setDescription]);
+  const value = useMemo(
+    () => ({
+      action,
+      description,
+      setAction,
+      setDescription,
+    }),
+    [action, description, setAction, setDescription],
+  );
 
   return (
     <PageHeaderContext.Provider value={value}>
@@ -56,7 +68,10 @@ export function usePageHeader({ action, description }: PageHeaderOptions) {
   }, [setAction, setDescription, description]);
 }
 
-export function usePageHeaderSlot(): { action: ReactNode; description: string | null } {
+export function usePageHeaderSlot(): {
+  action: ReactNode;
+  description: string | null;
+} {
   const { action, description } = useContext(PageHeaderContext);
   return { action, description };
 }
