@@ -1,71 +1,64 @@
 // Re-export all types inferred from Zod schemas
 export type {
-  RegisterInput,
-  LoginInput,
   AuthTokens,
   AuthUser,
+  LoginInput,
   LoginResponse,
+  RegisterInput,
   RegisterResponse,
-} from '../schemas/auth.js';
+} from '../schemas/auth';
+
+export type { UpdateProfileInput, UserProfile } from '../schemas/user';
 
 export type {
-  UserProfile,
-  UpdateProfileInput,
-} from '../schemas/user.js';
-
-export type {
-  VisaType,
   CreateVisaInput,
   UpdateVisaInput,
   Visa,
-  VisaResponse,
   VisaPeriod,
+  VisaSubclass,
+  VisaType,
   WeeklyProgress,
-} from '../schemas/visa.js';
+} from '../schemas/visa';
 
 export type {
-  IndustryType,
   CreateEmployerInput,
-  UpdateEmployerInput,
   Employer,
-  EmployerResponse,
-} from '../schemas/employer.js';
+  IndustryType,
+  UpdateEmployerInput,
+} from '../schemas/employer';
 
 export type {
-  WorkEntry,
-  WorkEntryResponse,
-  WorkEntryWithEmployer,
+  DayHoursEntry,
   HoursList,
   HoursResponse,
-  DayHoursEntry,
   MonthHours,
-  MonthHoursResponse,
-  WeeklyEmployer,
-  WeekVisaBreakdown,
   WeekData,
+  WeeklyEmployer,
   WeeklyHoursResponse,
-} from '../schemas/work-entry.js';
+  WeekVisaBreakdown,
+  WorkEntry,
+  WorkEntryWithEmployer,
+} from '../schemas/work-entry';
 
 export type {
-  Postcode,
-  PostcodeBadgeData,
-  PostcodeEligibility,
-  PostcodeDirectoryEntry,
-  PostcodeHistoryEntry,
-  PostcodeDirectoryQuery,
-  Suburb,
-  SuburbWithPostcode,
-  PaginatedDirectoryQuery,
-  PaginatedDirectoryItem,
-  PaginatedDirectoryResponse,
-  PostcodeDetailResponse,
-  GlobalChangesQuery,
+  ChangeDetailParam,
+  ChangeDetailQuery,
+  ChangeDetailResponse,
   GlobalChangeEntry,
+  GlobalChangesQuery,
   GlobalChangesResponse,
   LastUpdateResponse,
-} from '../schemas/postcode.js';
+  PaginatedDirectoryItem,
+  PaginatedDirectoryQuery,
+  PaginatedDirectoryResponse,
+  Postcode,
+  PostcodeBadgeData,
+  PostcodeDetailResponse,
+  PostcodeHistoryEntry,
+  SuburbWithPostcode,
+} from '../schemas/postcode';
 
 export type {
-  ToggleFavoritePostcodeInput,
   FavoritePostcodeResponse,
-} from '../schemas/favorite.js';
+  ToggleFavoritePostcodeInput,
+} from '../schemas/favorite';

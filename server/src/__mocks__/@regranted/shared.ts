@@ -4,7 +4,7 @@
  * Jest auto-resolves this file when any test calls:
  *   jest.mock('@regranted/shared')
  *
- * Keep ZONE_FLAG_MAP in sync with shared/src/constants/visa-rules.ts.
+ * Keep ZONE_FLAG_MAP in sync with shared/src/constants/visa.ts.
  */
 
 export const ZONE_FLAG_MAP = {
@@ -18,9 +18,7 @@ export const ZONE_FLAG_MAP = {
 
 // Zod schemas — replaced with plain objects since tests mock services
 export const toggleFavoritePostcodeSchema = {};
-export const postcodeDirectoryQuerySchema = {
-  pick: jest.fn().mockReturnValue({}),
-};
+export const visaTypeQuerySchema = {};
 export const paginatedDirectoryQuerySchema = {};
 export const globalChangesQuerySchema = {};
 export const postcodeParamSchema = {};
