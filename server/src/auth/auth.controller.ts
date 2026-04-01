@@ -14,11 +14,11 @@ import { SkipThrottle, Throttle } from '@nestjs/throttler';
 import type { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import {
   CurrentUser,
   type JwtPayload,
 } from '../common/decorators/current-user.decorator';
+import { Public } from '../common/decorators/public.decorator';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import {
   registerSchema,
@@ -45,6 +45,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Public()
   @Post('register')
   @Throttle({ default: { ttl: 60000, limit: 5 } })
   @UsePipes(new ZodValidationPipe(registerSchema))
@@ -64,6 +65,7 @@ export class AuthController {
     };
   }
 
+  @Public()
   @Post('login')
   @Throttle({ default: { ttl: 60000, limit: 5 } })
   @HttpCode(HttpStatus.OK)
@@ -84,6 +86,7 @@ export class AuthController {
     };
   }
 
+  @Public()
   @Post('refresh')
   @Throttle({ default: { ttl: 60000, limit: 30 } })
   @HttpCode(HttpStatus.OK)
@@ -111,7 +114,6 @@ export class AuthController {
 
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(JwtAuthGuard)
   async logout(
     @CurrentUser() user: JwtPayload,
     @Req() req: Request,

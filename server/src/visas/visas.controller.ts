@@ -6,11 +6,9 @@ import {
   Delete,
   Body,
   Param,
-  UseGuards,
 } from '@nestjs/common';
 import { VisasService } from './visas.service';
 import { VisaOverviewService } from './visa-overview.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import {
   CurrentUser,
   type JwtPayload,
@@ -24,7 +22,6 @@ import {
 } from '@regranted/shared';
 
 @Controller('visas')
-@UseGuards(JwtAuthGuard)
 export class VisasController {
   constructor(
     private visasService: VisasService,

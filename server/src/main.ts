@@ -30,6 +30,8 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
+  app.enableShutdownHooks();
+
   await app.listen(process.env.PORT ?? 3000);
 }
 void bootstrap();

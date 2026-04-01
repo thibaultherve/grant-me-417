@@ -6,11 +6,9 @@ import {
   Body,
   Param,
   Query,
-  UseGuards,
   ParseIntPipe,
 } from '@nestjs/common';
 import { WorkEntriesService } from './work-entries.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import {
   CurrentUser,
   type JwtPayload,
@@ -19,7 +17,6 @@ import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import { saveWeekBatchSchema, type SaveWeekBatch } from '@regranted/shared';
 
 @Controller('work-entries')
-@UseGuards(JwtAuthGuard)
 export class WorkEntriesController {
   constructor(private workEntriesService: WorkEntriesService) {}
 

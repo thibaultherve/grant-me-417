@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { FavoritesService } from './favorites.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import {
   CurrentUser,
   type JwtPayload,
@@ -13,7 +12,6 @@ import {
 } from '@regranted/shared';
 
 @Controller('user/favorites/postcodes')
-@UseGuards(JwtAuthGuard)
 export class FavoritesController {
   constructor(private favoritesService: FavoritesService) {}
 

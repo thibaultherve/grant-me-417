@@ -6,10 +6,8 @@ import {
   Delete,
   Body,
   Param,
-  UseGuards,
 } from '@nestjs/common';
 import { EmployersService } from './employers.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import {
   CurrentUser,
   type JwtPayload,
@@ -25,7 +23,6 @@ import {
 } from '@regranted/shared';
 
 @Controller('employers')
-@UseGuards(JwtAuthGuard)
 export class EmployersController {
   constructor(private employersService: EmployersService) {}
 

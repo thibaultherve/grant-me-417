@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { PostcodesController } from '../postcodes.controller';
 import { PostcodesService } from '../postcodes.service';
 
@@ -33,10 +32,9 @@ describe('PostcodesController', () => {
   });
 
   describe('guard metadata', () => {
-    it('should have JwtAuthGuard applied at controller level', () => {
+    it('should not have controller-level guards (JwtAuthGuard is global via APP_GUARD)', () => {
       const guards = Reflect.getMetadata('__guards__', PostcodesController);
-      expect(guards).toBeDefined();
-      expect(guards).toContainEqual(JwtAuthGuard);
+      expect(guards).toBeUndefined();
     });
   });
 

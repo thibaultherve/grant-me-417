@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Test, TestingModule } from '@nestjs/testing';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { FavoritesController } from '../favorites.controller';
 import { FavoritesService } from '../favorites.service';
 
@@ -26,10 +25,9 @@ describe('FavoritesController', () => {
   });
 
   describe('guard metadata', () => {
-    it('should have JwtAuthGuard applied at controller level', () => {
+    it('should not have controller-level guards (JwtAuthGuard is global via APP_GUARD)', () => {
       const guards = Reflect.getMetadata('__guards__', FavoritesController);
-      expect(guards).toBeDefined();
-      expect(guards).toContainEqual(JwtAuthGuard);
+      expect(guards).toBeUndefined();
     });
   });
 

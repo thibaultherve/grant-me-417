@@ -4,10 +4,8 @@ import {
   NotFoundException,
   Param,
   Query,
-  UseGuards,
 } from '@nestjs/common';
 import { PostcodesService } from './postcodes.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import {
   visaTypeQuerySchema,
   paginatedDirectoryQuerySchema,
@@ -30,7 +28,6 @@ import {
 } from '../common/decorators/current-user.decorator';
 
 @Controller()
-@UseGuards(JwtAuthGuard)
 export class PostcodesController {
   constructor(private postcodesService: PostcodesService) {}
 
