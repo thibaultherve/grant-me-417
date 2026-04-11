@@ -1,10 +1,9 @@
 import { AUSTRALIAN_STATES, ZONE_TYPES } from '@regranted/shared';
 import { Search, Star, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { ZoneBadge, type ZoneKey } from '@/components/shared/zone-badge';
 import { Input } from '@/components/ui/input';
-import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { cn } from '@/lib/utils';
 
 import type {
@@ -39,19 +38,28 @@ export function DirectoryFilters({
   onResetFilters,
 }: DirectoryFiltersProps) {
   const [localSearch, setLocalSearch] = useState(filters.search);
-  const debouncedSearch = useDebouncedValue(localSearch, 300);
+  const [lastPropSearch, setLastPropSearch] = useState(filters.search);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Sync local search when filters reset externally (e.g. Reset button)
-  useEffect(() => {
+  // Render-phase sync when the URL-driven filter changes externally
+  // (e.g. Reset button). React's official pattern for adjusting state on
+  // prop change — no useEffect needed.
+  if (filters.search !== lastPropSearch) {
+    setLastPropSearch(filters.search);
     setLocalSearch(filters.search);
-  }, [filters.search]);
-
-  // Push debounced value to URL params
-  useEffect(() => {
-    if (debouncedSearch !== filters.search) {
-      onSearchChange(debouncedSearch);
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
     }
-  }, [debouncedSearch, filters.search, onSearchChange]);
+  }
+
+  const handleSearchInput = (next: string) => {
+    setLocalSearch(next);
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    debounceTimerRef.current = setTimeout(() => {
+      onSearchChange(next);
+    }, 300);
+  };
 
   const hasActiveFilters =
     filters.search !== '' ||
@@ -67,7 +75,7 @@ export function DirectoryFilters({
         <Input
           placeholder="Search postcodes or suburbs..."
           value={localSearch}
-          onChange={(e) => setLocalSearch(e.target.value)}
+          onChange={(e) => handleSearchInput(e.target.value)}
           className="pl-8 h-8 text-[13px]"
         />
       </div>
