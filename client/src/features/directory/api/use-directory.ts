@@ -58,7 +58,7 @@ export const useGlobalChanges = (params: {
 }) => {
   return useQuery({
     queryKey: queryKeys.directory.changes(params as Record<string, unknown>),
-    queryFn: () => getGlobalChanges(params),
+    queryFn: () => getGlobalChanges({ ...params, limit: 5 }),
     placeholderData: keepPreviousData,
   });
 };

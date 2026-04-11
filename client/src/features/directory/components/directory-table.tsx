@@ -68,7 +68,7 @@ export function DirectoryTable({
 
   return (
     <Card className="py-0 gap-0">
-      <CardHeader className="px-4 py-3 border-b">
+      <CardHeader className="px-4 h-9 items-center border-b py-0! gap-0 grid-rows-none">
         <CardTitle className="flex items-center gap-2 text-sm">
           <BookOpen className="w-4 h-4 text-primary" />
           Eligibility Directory
@@ -99,7 +99,7 @@ export function DirectoryTable({
       <CardContent className="p-0">
         <Table>
           <TableHeader>
-            <TableRow className="bg-muted/50 hover:bg-muted/50">
+            <TableRow className="bg-muted/50 hover:bg-muted/50 [&_th]:h-7">
               <TableHead className="w-10 px-2" />
               <TableHead className="px-2">
                 <button

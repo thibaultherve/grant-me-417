@@ -21,7 +21,7 @@ export function VisaTypeTabs({
   return (
     <div
       className={cn(
-        'inline-flex items-center rounded-lg bg-muted p-0.5 gap-0.5',
+        'inline-flex items-center rounded-full border border-border bg-muted p-0.75 gap-0.5',
         className,
       )}
     >
@@ -31,7 +31,7 @@ export function VisaTypeTabs({
           type="button"
           onClick={() => onChange(tab.value)}
           className={cn(
-            'px-3 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer',
+            'px-3.5 py-1.5 text-xs font-semibold rounded-full transition-all cursor-pointer',
             value === tab.value
               ? 'bg-primary text-primary-foreground shadow-sm'
               : 'text-muted-foreground hover:text-foreground',

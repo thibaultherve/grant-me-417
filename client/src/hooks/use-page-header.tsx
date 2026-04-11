@@ -45,6 +45,8 @@ export function PageHeaderProvider({ children }: { children: ReactNode }) {
 
 interface PageHeaderOptions {
   action?: () => ReactNode;
+  /** When actionKey changes, the action render function is re-invoked. */
+  actionKey?: string;
   description?: string;
 }
 
@@ -52,7 +54,11 @@ interface PageHeaderOptions {
  * Hook for routes to inject an action and/or description into the layout header.
  * Render functions are captured in refs to avoid stale closures.
  */
-export function usePageHeader({ action, description }: PageHeaderOptions) {
+export function usePageHeader({
+  action,
+  actionKey,
+  description,
+}: PageHeaderOptions) {
   const { setAction, setDescription } = useContext(PageHeaderContext);
 
   const actionRef = useRef(action);
@@ -65,7 +71,7 @@ export function usePageHeader({ action, description }: PageHeaderOptions) {
       setAction(null);
       setDescription(null);
     };
-  }, [setAction, setDescription, description]);
+  }, [setAction, setDescription, description, actionKey]);
 }
 
 export function usePageHeaderSlot(): {

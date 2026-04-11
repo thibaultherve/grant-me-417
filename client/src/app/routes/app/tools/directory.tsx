@@ -34,14 +34,15 @@ export const DirectoryRoute = () => {
   usePageHeader({
     description:
       'Browse all Australian postcodes and their WHV eligibility zones.',
+    action: () => (
+      <VisaTypeTabs value={filters.visaType} onChange={setVisaType} />
+    ),
+    actionKey: filters.visaType,
   });
 
   return (
     <ErrorBoundary>
       <div className="space-y-5">
-        {/* Visa type tabs */}
-        <VisaTypeTabs value={filters.visaType} onChange={setVisaType} />
-
         {/* Filters */}
         <DirectoryFilters
           filters={filters}
@@ -54,7 +55,7 @@ export const DirectoryRoute = () => {
         />
 
         {/* Directory table + Change history sidebar */}
-        <div className="flex gap-5 items-start">
+        <div className="flex gap-2 items-start">
           <div className="min-w-0 flex-1">
             <DirectoryTable
               data={directory?.data ?? []}

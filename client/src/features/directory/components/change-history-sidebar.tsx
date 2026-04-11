@@ -43,9 +43,9 @@ export function ChangeHistorySidebar({ visaType }: ChangeHistorySidebarProps) {
   const totalPages = response?.totalPages ?? 0;
 
   return (
-    <Card className="w-80 py-0 gap-0 shrink-0 self-start">
+    <Card className="w-80 py-0 gap-0 shrink-0 sticky top-8 self-start max-h-[calc(100vh-6rem)] flex flex-col">
       {/* Header */}
-      <CardHeader className="px-3 py-0 h-9 flex items-center border-b">
+      <CardHeader className="px-3 h-9 shrink-0 items-center border-b py-0! gap-0">
         <CardTitle className="flex items-center gap-2 text-[13px] font-semibold">
           <History className="w-4 h-4 text-primary" />
           Change History
@@ -60,7 +60,7 @@ export function ChangeHistorySidebar({ visaType }: ChangeHistorySidebarProps) {
       </div>
 
       {/* Body */}
-      <CardContent className="p-0">
+      <CardContent className="p-0 overflow-y-auto min-h-0">
         {isLoading ? (
           <div className="space-y-0">
             {Array.from({ length: 4 }).map((_, i) => (
