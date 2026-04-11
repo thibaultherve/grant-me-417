@@ -48,6 +48,10 @@ export default tseslint.config(
           jsx: true,
         },
         tsconfigRootDir: import.meta.dirname,
+        // Enables type-aware linting (required by rules like
+        // @typescript-eslint/no-deprecated that read JSDoc @deprecated tags
+        // via the TypeChecker).
+        projectService: true,
       },
       globals: {
         ...globals.browser,
@@ -192,6 +196,10 @@ export default tseslint.config(
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
+      // Flags any usage of an API marked `@deprecated` in its JSDoc (including
+      // third-party .d.ts such as react-day-picker's fromYear/toYear). This is
+      // a type-aware rule — requires `parserOptions.projectService: true`.
+      '@typescript-eslint/no-deprecated': 'error',
 
       // General rules
       'linebreak-style': ['error', 'unix'],
@@ -226,6 +234,16 @@ export default tseslint.config(
         'warn',
         { max: 250, skipBlankLines: true, skipComments: true },
       ],
+    },
+  },
+
+  // shadcn UI primitives are vendored — we don't own the size budget for
+  // them. Disabling max-lines here keeps `npx shadcn add <component>`
+  // overwrites conflict-free.
+  {
+    files: ['src/components/ui/**/*.{ts,tsx}'],
+    rules: {
+      'max-lines': 'off',
     },
   },
 

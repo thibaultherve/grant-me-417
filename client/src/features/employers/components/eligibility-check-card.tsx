@@ -1,10 +1,4 @@
 import type { IndustryType, PostcodeBadgeData } from '@regranted/shared';
-import {
-  ELIGIBLE_ZONES,
-  ZONE_FLAG_MAP,
-  ZONE_TYPES,
-  type ZoneType,
-} from '@regranted/shared';
 import { CircleHelp, TriangleAlert } from 'lucide-react';
 import { useState } from 'react';
 
@@ -12,8 +6,7 @@ import {
   EligibilityStatusBadge,
   getEligibilityStatus,
 } from '@/components/shared/eligibility-status-badge';
-import { IndustryChip } from '@/components/shared/industry-chip';
-import { ZoneBadge, type ZoneKey } from '@/components/shared/zone-badge';
+import { ZoneBadge } from '@/components/shared/zone-badge';
 import {
   Select,
   SelectContent,
@@ -22,9 +15,7 @@ import {
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 
-// ── Zone / flag mapping ──────────────────────────────────────────────────────
-
-const ZONES = ZONE_TYPES as readonly ZoneKey[];
+import { isZoneActive, MatrixRow, ZONES } from './eligibility-matrix-row';
 
 // Matrix row order matches Pencil design
 const INDUSTRY_ORDER: IndustryType[] = [
@@ -39,17 +30,6 @@ const INDUSTRY_ORDER: IndustryType[] = [
   'critical_covid19_work',
   'other',
 ];
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
-
-function isZoneActive(
-  zone: ZoneType,
-  suburbFlags: PostcodeBadgeData | null,
-): boolean {
-  if (!suburbFlags) return false;
-  const flag = ZONE_FLAG_MAP[zone];
-  return flag === null ? true : !!suburbFlags[flag as keyof PostcodeBadgeData];
-}
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
@@ -91,113 +71,6 @@ function EligibilitySwitch({ mode, onChange }: EligibilitySwitchProps) {
   );
 }
 
-function MatrixDot({
-  active,
-  zoneActive,
-}: {
-  active: boolean;
-  zoneActive: boolean;
-}) {
-  return (
-    <div
-      className={cn(
-        'w-2.5 h-2.5 rounded-full shrink-0',
-        active
-          ? 'bg-success'
-          : zoneActive
-            ? 'bg-muted-foreground/50'
-            : 'bg-muted-foreground/20',
-      )}
-    />
-  );
-}
-
-function MatrixCross({
-  active,
-  zoneActive,
-}: {
-  active: boolean;
-  zoneActive: boolean;
-}) {
-  return (
-    <span
-      className={cn(
-        'font-bold text-sm leading-none',
-        active
-          ? 'text-danger'
-          : zoneActive
-            ? 'text-muted-foreground/60'
-            : 'text-muted-foreground/20',
-      )}
-    >
-      ✖
-    </span>
-  );
-}
-
-interface MatrixRowProps {
-  industry: IndustryType;
-  index: number;
-  selectedIndustry: IndustryType | null;
-  suburbFlags: PostcodeBadgeData | null;
-  visaType: '417' | '462';
-}
-
-function MatrixRow({
-  industry,
-  index,
-  selectedIndustry,
-  suburbFlags,
-  visaType,
-}: MatrixRowProps) {
-  const isSelected = selectedIndustry === industry;
-  const eligibleZones = ELIGIBLE_ZONES[visaType][industry];
-
-  return (
-    <div
-      className={cn(
-        'flex items-center gap-1.5 px-3 border-l-[3px]',
-        isSelected
-          ? 'border-l-primary'
-          : index % 2 === 0
-            ? 'bg-background border-l-transparent'
-            : 'bg-muted border-l-transparent',
-      )}
-    >
-      {/* Industry badge column — compact on mobile, full on sm+ */}
-      <div className="w-28 sm:w-50 shrink-0 py-1">
-        <IndustryChip industry={industry} className="sm:hidden" compact />
-        <IndustryChip industry={industry} className="hidden sm:inline-flex" />
-      </div>
-
-      {/* Zone cells */}
-      {ZONES.map((zone) => {
-        const hasRule = eligibleZones.includes(zone);
-        const zoneActive = isZoneActive(zone, suburbFlags);
-
-        return (
-          <div
-            key={zone}
-            className="flex-1 h-7 flex items-center justify-center"
-          >
-            {hasRule ? (
-              <MatrixDot
-                active={isSelected && zoneActive}
-                zoneActive={zoneActive}
-              />
-            ) : (
-              <MatrixCross
-                active={isSelected && zoneActive}
-                zoneActive={zoneActive}
-              />
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
 // ── Main component ────────────────────────────────────────────────────────────
 
 interface EligibilityCheckCardProps {
@@ -223,10 +96,7 @@ export function EligibilityCheckCard({
   onManualEligibilityChange,
 }: EligibilityCheckCardProps) {
   const isManual = mode === 'manual';
-  const status = getEligibilityStatus(
-    isChecking,
-    isManual ? isEligible : isEligible,
-  );
+  const status = getEligibilityStatus(isChecking, isManual ? null : isEligible);
 
   const [selectOpen, setSelectOpen] = useState(false);
 

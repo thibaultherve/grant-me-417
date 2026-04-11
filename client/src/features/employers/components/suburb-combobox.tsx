@@ -14,74 +14,16 @@ import { cn } from '@/lib/utils';
 
 import { useGetSuburb, useSearchSuburbs } from '../api/use-suburbs';
 
+import {
+  comboboxReducer,
+  INITIAL_COMBOBOX_STATE,
+} from './suburb-combobox-reducer';
+
 interface SuburbComboboxProps {
   value: number | undefined;
   onValueChange: (value: number | undefined) => void;
   disabled?: boolean;
 }
-
-type ComboboxState = {
-  open: boolean;
-  inputValue: string;
-  activeIndex: number;
-  forceClear: boolean;
-};
-
-type ComboboxAction =
-  | { type: 'OPEN' }
-  | { type: 'CLOSE' }
-  | { type: 'SET_INPUT'; value: string }
-  | { type: 'SET_ACTIVE_INDEX'; index: number }
-  | { type: 'SELECT' }
-  | { type: 'CLEAR'; keepFocus?: boolean }
-  | { type: 'RESET' };
-
-function comboboxReducer(
-  state: ComboboxState,
-  action: ComboboxAction,
-): ComboboxState {
-  switch (action.type) {
-    case 'OPEN':
-      return { ...state, open: true, activeIndex: -1 };
-    case 'CLOSE':
-      return { ...state, open: false, activeIndex: -1 };
-    case 'SET_INPUT':
-      return {
-        ...state,
-        inputValue: action.value,
-        activeIndex: -1,
-        open: true,
-      };
-    case 'SET_ACTIVE_INDEX':
-      return { ...state, activeIndex: action.index };
-    case 'SELECT':
-      return { ...state, forceClear: false, activeIndex: -1, open: false };
-    case 'CLEAR':
-      return {
-        ...state,
-        forceClear: true,
-        inputValue: '',
-        activeIndex: -1,
-        open: action.keepFocus ? state.open : false,
-      };
-    case 'RESET':
-      return {
-        open: false,
-        inputValue: '',
-        activeIndex: -1,
-        forceClear: false,
-      };
-    default:
-      return state;
-  }
-}
-
-const INITIAL_STATE: ComboboxState = {
-  open: false,
-  inputValue: '',
-  activeIndex: -1,
-  forceClear: false,
-};
 
 export function SuburbCombobox({
   value,
@@ -91,7 +33,7 @@ export function SuburbCombobox({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
-  const [state, dispatch] = useReducer(comboboxReducer, INITIAL_STATE);
+  const [state, dispatch] = useReducer(comboboxReducer, INITIAL_COMBOBOX_STATE);
 
   const { data: selectedSuburb } = useGetSuburb(value);
   const debouncedQuery = useDebouncedValue(state.inputValue, 200);
@@ -102,7 +44,7 @@ export function SuburbCombobox({
   useClickOutside(containerRef, handleClose);
 
   const hasValue =
-    value !== undefined && selectedSuburb !== undefined && !state.forceClear;
+    value !== undefined && selectedSuburb != null && !state.forceClear;
 
   const selectedActiveZones: ZoneKey[] = selectedSuburb?.postcodeData
     ? ZONE_FLAGS.filter((z) => selectedSuburb.postcodeData![z.flag]).map(
@@ -131,6 +73,14 @@ export function SuburbCombobox({
     if (keepFocus) inputRef.current?.focus();
   };
 
+  const showDropdown = state.open && (isLoading || debouncedQuery.length > 0);
+
+  const scrollActiveIntoView = (index: number) => {
+    if (!listRef.current) return;
+    const item = listRef.current.children[index] as HTMLElement | undefined;
+    item?.scrollIntoView({ block: 'nearest' });
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!showDropdown || suburbs.length === 0) return;
 
@@ -154,18 +104,10 @@ export function SuburbCombobox({
     }
   };
 
-  const scrollActiveIntoView = (index: number) => {
-    if (!listRef.current) return;
-    const item = listRef.current.children[index] as HTMLElement | undefined;
-    item?.scrollIntoView({ block: 'nearest' });
-  };
-
-  const showDropdown = state.open && (isLoading || debouncedQuery.length > 0);
-
   return (
     <div ref={containerRef} className="relative">
       {/* Filled state — suburb selected, dropdown closed */}
-      {hasValue && !state.open ? (
+      {hasValue && !state.open && selectedSuburb ? (
         <div
           role="button"
           tabIndex={0}

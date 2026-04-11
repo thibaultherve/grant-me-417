@@ -7,14 +7,15 @@ import type {
   LogHoursActions,
   LogHoursFormState,
 } from '../types/log-hours';
-import { validateHours } from '../utils/hours-validation';
+import { parseHoursValue } from '../utils/log-hours-helpers';
 import {
-  buildStateFromServer,
-  createDefaultEmployerState,
-  distributeHours,
-  parseHoursValue,
-} from '../utils/log-hours-helpers';
-import { MAX_HOURS_PER_WEEK } from '../utils/week-calculations';
+  applyResetAll,
+  applyResetEmployer,
+  applySetDayHours,
+  applySetTotalHours,
+  applyToggleAutoDistribute,
+  applyToggleDaySelected,
+} from '../utils/log-hours-reducers';
 
 export function useLogHoursActions(
   setState: React.Dispatch<React.SetStateAction<LogHoursFormState>>,
@@ -30,209 +31,40 @@ export function useLogHoursActions(
   employers: Record<string, EmployerHoursState>,
 ): LogHoursActions & { submit: () => Promise<boolean> } {
   const setDayHours = useCallback(
-    (employerId: string, dateKey: string, value: string) => {
-      setState((prev) => {
-        const empState = prev.employers[employerId];
-        if (!empState) return prev;
-
-        return {
-          ...prev,
-          employers: {
-            ...prev.employers,
-            [employerId]: {
-              ...empState,
-              hours: { ...empState.hours, [dateKey]: value },
-              // Disable auto-distribute when manually editing
-              autoDistribute: false,
-            },
-          },
-        };
-      });
-    },
+    (employerId: string, dateKey: string, value: string) =>
+      setState((prev) => applySetDayHours(prev, employerId, dateKey, value)),
     [setState],
   );
 
   const toggleAutoDistribute = useCallback(
-    (employerId: string) => {
-      setState((prev) => {
-        const empState = prev.employers[employerId];
-        if (!empState) return prev;
-
-        const newAutoDistribute = !empState.autoDistribute;
-
-        if (!newAutoDistribute) {
-          // Just disable, keep current values
-          return {
-            ...prev,
-            employers: {
-              ...prev.employers,
-              [employerId]: { ...empState, autoDistribute: false },
-            },
-          };
-        }
-
-        // Enable: if we have a valid total, distribute
-        const totalValidation = validateHours(
-          empState.totalHours,
-          MAX_HOURS_PER_WEEK,
-        );
-        if (totalValidation.isValid && totalValidation.decimalValue) {
-          const distributed = distributeHours(
-            totalValidation.decimalValue,
-            dateKeys,
-            empState.selectedDays,
-          );
-          if (distributed) {
-            return {
-              ...prev,
-              employers: {
-                ...prev.employers,
-                [employerId]: {
-                  ...empState,
-                  autoDistribute: true,
-                  hours: distributed,
-                },
-              },
-            };
-          }
-        }
-
-        return {
-          ...prev,
-          employers: {
-            ...prev.employers,
-            [employerId]: { ...empState, autoDistribute: true },
-          },
-        };
-      });
-    },
+    (employerId: string) =>
+      setState((prev) => applyToggleAutoDistribute(prev, employerId, dateKeys)),
     [dateKeys, setState],
   );
 
   const toggleDaySelected = useCallback(
-    (employerId: string, dateKey: string) => {
-      setState((prev) => {
-        const empState = prev.employers[employerId];
-        if (!empState) return prev;
-
-        const newSelected = {
-          ...empState.selectedDays,
-          [dateKey]: !empState.selectedDays[dateKey],
-        };
-
-        let newHours = empState.hours;
-
-        // If auto-distribute is active, redistribute with new selection
-        if (empState.autoDistribute && empState.totalHours) {
-          const totalValidation = validateHours(
-            empState.totalHours,
-            MAX_HOURS_PER_WEEK,
-          );
-          if (totalValidation.isValid && totalValidation.decimalValue) {
-            const distributed = distributeHours(
-              totalValidation.decimalValue,
-              dateKeys,
-              newSelected,
-            );
-            if (distributed) {
-              newHours = distributed;
-            }
-          }
-        }
-
-        return {
-          ...prev,
-          employers: {
-            ...prev.employers,
-            [employerId]: {
-              ...empState,
-              selectedDays: newSelected,
-              hours: newHours,
-            },
-          },
-        };
-      });
-    },
+    (employerId: string, dateKey: string) =>
+      setState((prev) =>
+        applyToggleDaySelected(prev, employerId, dateKey, dateKeys),
+      ),
     [dateKeys, setState],
   );
 
   const setTotalHours = useCallback(
-    (employerId: string, value: string) => {
-      setState((prev) => {
-        const empState = prev.employers[employerId];
-        if (!empState) return prev;
-
-        let newHours = empState.hours;
-
-        // If auto-distribute is on, redistribute
-        if (empState.autoDistribute) {
-          const validation = validateHours(value, MAX_HOURS_PER_WEEK);
-          if (validation.isValid && validation.decimalValue !== null) {
-            const distributed = distributeHours(
-              validation.decimalValue,
-              dateKeys,
-              empState.selectedDays,
-            );
-            if (distributed) {
-              newHours = distributed;
-            }
-          }
-        }
-
-        return {
-          ...prev,
-          employers: {
-            ...prev.employers,
-            [employerId]: {
-              ...empState,
-              totalHours: value,
-              hours: newHours,
-            },
-          },
-        };
-      });
-    },
+    (employerId: string, value: string) =>
+      setState((prev) => applySetTotalHours(prev, employerId, value, dateKeys)),
     [dateKeys, setState],
   );
 
   const resetEmployer = useCallback(
-    (employerId: string) => {
-      setState((prev) => {
-        const initial = prev.initialEmployers[employerId];
-        if (!initial) return prev;
-
-        const resetState = createDefaultEmployerState(dateKeys);
-        // Restore initial hours
-        for (const dateKey of dateKeys) {
-          const value = initial[dateKey] ?? 0;
-          resetState.hours[dateKey] = value > 0 ? value.toString() : '';
-        }
-
-        return {
-          ...prev,
-          employers: {
-            ...prev.employers,
-            [employerId]: resetState,
-          },
-        };
-      });
-    },
+    (employerId: string) =>
+      setState((prev) => applyResetEmployer(prev, employerId, dateKeys)),
     [dateKeys, setState],
   );
 
   const resetAll = useCallback(() => {
     if (!serverData) return;
-
-    const { employers: newEmployers, initialEmployers } = buildStateFromServer(
-      serverData,
-      dateKeys,
-    );
-
-    setState({
-      employers: newEmployers,
-      initialEmployers,
-      isSubmitting: false,
-    });
+    setState(applyResetAll(serverData, dateKeys));
   }, [serverData, dateKeys, setState]);
 
   const submit = useCallback(async (): Promise<boolean> => {
