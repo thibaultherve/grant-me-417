@@ -13,7 +13,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { paths } from '@/config/paths';
-import { useLogin } from '@/lib/auth';
+import { useLogin } from '@/features/auth/api/use-auth';
 
 export const LoginRoute = () => {
   const navigate = useNavigate();

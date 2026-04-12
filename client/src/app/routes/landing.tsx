@@ -4,7 +4,8 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { paths } from '@/config/paths';
-import { useLogout, useUser } from '@/lib/auth';
+import { useLogout } from '@/features/auth/api/use-auth';
+import { useUser } from '@/lib/auth';
 
 export const LandingPage = () => {
   const { data: user, isLoading } = useUser();

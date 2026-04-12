@@ -1,20 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Visa, VisaType } from '@regranted/shared';
-import { AlertCircle, CheckCircle, Trash2 } from 'lucide-react';
+import { AlertCircle, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
@@ -29,11 +18,11 @@ import {
 } from '../schemas';
 
 import { VisaDatePicker } from './visa-date-picker';
+import { VisaFormFooter } from './visa-form-footer';
 import { VisaNumberSelector } from './visa-number-selector';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-/** Convert a Date to YYYY-MM-DD string */
 function dateToIsoString(date: Date): string {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -41,7 +30,6 @@ function dateToIsoString(date: Date): string {
   return `${y}-${m}-${d}`;
 }
 
-/** Parse a YYYY-MM-DD string into a local Date (noon to avoid TZ issues) */
 function isoStringToDate(str: string): Date | undefined {
   if (!str) return undefined;
   const [y, m, d] = str.split('-').map(Number);
@@ -150,7 +138,6 @@ export function VisaForm({
 
   const isBusy = isSubmitting || isDeleting;
 
-  // ── Loading state (add mode only) ──────────────────────────────────────────
   if (mode === 'add' && loading) {
     return (
       <div className="flex items-center justify-center p-8">
@@ -159,7 +146,6 @@ export function VisaForm({
     );
   }
 
-  // ── Error state (add mode only) ────────────────────────────────────────────
   if (mode === 'add' && error) {
     return (
       <div className="text-center p-8">
@@ -174,7 +160,6 @@ export function VisaForm({
     );
   }
 
-  // ── No available visas (add mode only) ─────────────────────────────────────
   if (mode === 'add' && !hasAvailableVisas) {
     return (
       <div className="text-center p-8">
@@ -196,7 +181,6 @@ export function VisaForm({
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <Card className="rounded-xl border border-border">
           <CardContent className="flex flex-col gap-7 p-7 pb-6">
-            {/* ── Visa Number Selector (add mode only) ── */}
             {mode === 'add' && (
               <FormField
                 control={form.control}
@@ -214,7 +198,6 @@ export function VisaForm({
               />
             )}
 
-            {/* ── Date Picker ── */}
             <FormField
               control={form.control}
               name="arrivalDate"
@@ -237,98 +220,30 @@ export function VisaForm({
               )}
             />
 
-            {/* ── Form error ── */}
             {form.formState.errors.root && (
               <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md border border-destructive/20">
                 {form.formState.errors.root.message}
               </div>
             )}
 
-            {/* ── Footer: Edit mode ── */}
-            {mode === 'edit' && (
-              <div className="flex items-center justify-end gap-3 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={onCancel}
-                  disabled={isBusy}
-                  className="h-10"
-                  style={{
-                    backgroundColor: 'var(--background)',
-                    borderColor: 'var(--border)',
-                    boxShadow: '0 1px 1.75px 0 rgba(0,0,0,0.05)',
-                  }}
-                >
-                  Cancel
-                </Button>
-
-                {onDelete && visa && (
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        disabled={isBusy}
-                        className="h-10 gap-1.5"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        {isDeleting ? 'Deleting...' : 'Delete'}
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Delete Visa</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Are you sure you want to delete this WHV 417 visa? All
-                          associated work entries will remain, but visa tracking
-                          data will be lost. This action cannot be undone.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => onDelete(visa.id)}
-                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                        >
-                          Delete
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                )}
-
-                <Button type="submit" disabled={isBusy} className="h-10">
-                  {isSubmitting ? 'Saving...' : 'Save'}
-                </Button>
-              </div>
-            )}
-
-            {/* ── Footer: Add mode ── */}
-            {mode === 'add' && (
-              <div className="flex items-center justify-end gap-3 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={onCancel}
-                  disabled={isBusy}
-                  className="h-10"
-                  style={{
-                    backgroundColor: 'var(--background)',
-                    borderColor: 'var(--border)',
-                    boxShadow: '0 1px 1.75px 0 rgba(0,0,0,0.05)',
-                  }}
-                >
-                  Cancel
-                </Button>
-
-                <Button
-                  type="submit"
-                  disabled={isBusy || !selectedVisaType}
-                  className="h-10"
-                >
-                  {isSubmitting ? 'Adding...' : 'Add Visa'}
-                </Button>
-              </div>
+            {mode === 'edit' ? (
+              <VisaFormFooter
+                mode="edit"
+                isBusy={!!isBusy}
+                isSubmitting={isSubmitting}
+                isDeleting={isDeleting}
+                visaId={visa.id}
+                onCancel={onCancel}
+                onDelete={onDelete}
+              />
+            ) : (
+              <VisaFormFooter
+                mode="add"
+                isBusy={!!isBusy}
+                isSubmitting={isSubmitting}
+                canSubmit={!!selectedVisaType}
+                onCancel={onCancel}
+              />
             )}
           </CardContent>
         </Card>

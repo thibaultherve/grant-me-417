@@ -1,97 +1,24 @@
-import type {
-  AuthUser,
-  LoginInput,
-  LoginResponse,
-  RegisterInput,
-  RegisterResponse,
-  UserProfile,
-} from '@regranted/shared';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { UserProfile } from '@regranted/shared';
+import { useQuery } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router';
 
 import { paths } from '@/config/paths';
 
-import {
-  api,
-  clearAuthStorage,
-  isLoggedIn,
-  setAccessToken,
-  setLoggedIn,
-} from './api-client';
+import { api, isLoggedIn } from './api-client';
+import { queryKeys } from './react-query';
 
-// --- Auth API functions ---
+// --- User query (global state, SE6 compliant) ---
 
-const authApi = {
-  getMe: (): Promise<UserProfile> => api.get('/users/me'),
-  login: (data: LoginInput): Promise<LoginResponse> =>
-    api.post('/auth/login', data),
-  register: (data: RegisterInput): Promise<RegisterResponse> =>
-    api.post('/auth/register', data),
-  logout: (): Promise<void> => api.post('/auth/logout', {}),
-};
-
-// --- Query key ---
-
-const userQueryKey = ['authenticated-user'];
-
-// --- Auth hooks ---
-
-function handleAuthResponse(data: {
-  user: AuthUser;
-  tokens: { accessToken: string };
-}) {
-  setAccessToken(data.tokens.accessToken);
-  setLoggedIn(true);
-  return data.user;
-}
+const getMe = (): Promise<UserProfile> => api.get('/users/me');
 
 export const useUser = () => {
   return useQuery({
-    queryKey: userQueryKey,
-    queryFn: () => authApi.getMe(),
+    queryKey: queryKeys.auth.user,
+    queryFn: getMe,
     enabled: isLoggedIn(),
     staleTime: Infinity,
     retry: false,
-  });
-};
-
-export const useLogin = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: authApi.login,
-    onSuccess: (data) => {
-      const user = handleAuthResponse(data);
-      queryClient.setQueryData(userQueryKey, user);
-      onSuccess?.();
-    },
-  });
-};
-
-export const useRegister = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: authApi.register,
-    onSuccess: (data) => {
-      const user = handleAuthResponse(data);
-      queryClient.setQueryData(userQueryKey, user);
-      onSuccess?.();
-    },
-  });
-};
-
-export const useLogout = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: authApi.logout,
-    onSettled: () => {
-      clearAuthStorage();
-      queryClient.clear();
-      onSuccess?.();
-    },
   });
 };
 

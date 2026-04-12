@@ -20,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { paths } from '@/config/paths';
-import { useLogout } from '@/lib/auth';
+import { useLogout } from '@/features/auth/api/use-auth';
 
 const navItems = [
   { name: 'Dashboard', href: paths.app.dashboard.path, icon: LayoutDashboard },

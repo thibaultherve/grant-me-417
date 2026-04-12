@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router';
 
-import { DashboardLayout } from '@/components/layouts/dashboard-layout';
+import { DashboardLayout } from '@/app/layouts/dashboard-layout';
+import { ErrorBoundary } from '@/components/shared/error-boundary';
 import { VisaProvider } from '@/features/visas/hooks/use-visa-context';
 import { PageHeaderProvider } from '@/hooks/use-page-header';
 import { ProtectedRoute } from '@/lib/auth';
@@ -10,7 +11,9 @@ const AppRoot = () => {
     <VisaProvider>
       <PageHeaderProvider>
         <DashboardLayout>
-          <Outlet />
+          <ErrorBoundary>
+            <Outlet />
+          </ErrorBoundary>
         </DashboardLayout>
       </PageHeaderProvider>
     </VisaProvider>

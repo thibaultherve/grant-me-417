@@ -63,6 +63,9 @@ export const queryClient = new QueryClient({
  * ```
  */
 export const queryKeys = {
+  auth: {
+    user: ['authenticated-user'] as const,
+  },
   employers: {
     all: ['employers'] as const,
     detail: (id: string) => ['employers', id] as const,
@@ -87,6 +90,10 @@ export const queryKeys = {
     weeklyProgress: (visaId: string) =>
       ['visas', visaId, 'weekly-progress'] as const,
     overview: (visaId: string) => ['visas', visaId, 'overview'] as const,
+  },
+  suburbs: {
+    search: (query: string) => ['suburbs', 'search', query] as const,
+    detail: (id: number) => ['suburbs', id] as const,
   },
   directory: {
     all: ['directory'] as const,

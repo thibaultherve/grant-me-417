@@ -3,10 +3,8 @@ import { Link } from 'react-router';
 
 import { Button } from '@/components/ui/button';
 import { paths } from '@/config/paths';
-import {
-  useDeleteEmployer,
-  useEmployers,
-} from '@/features/employers/api/use-employers';
+import { useDeleteEmployer } from '@/features/employers/api/use-delete-employer';
+import { useEmployers } from '@/features/employers/api/use-get-employers';
 import { EmployersList } from '@/features/employers/components/employers-list';
 import { usePageHeader } from '@/hooks/use-page-header';
 

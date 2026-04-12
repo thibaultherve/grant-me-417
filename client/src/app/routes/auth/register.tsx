@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { paths } from '@/config/paths';
-import { useRegister } from '@/lib/auth';
+import { useRegister } from '@/features/auth/api/use-auth';
 
 export const RegisterRoute = () => {
   const navigate = useNavigate();

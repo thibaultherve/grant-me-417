@@ -33,7 +33,7 @@ import {
 } from '@/components/ui/select';
 import { useUser } from '@/lib/auth';
 
-import { useCheckEligibility } from '../api/use-employers';
+import { useCheckEligibility } from '../api/use-check-eligibility';
 import { useGetSuburb } from '../api/use-suburbs';
 import { INDUSTRY_OPTIONS } from '../constants';
 import { createEmployerSchema, type CreateEmployerFormData } from '../schemas';

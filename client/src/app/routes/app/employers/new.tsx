@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 
 import { Card, CardContent } from '@/components/ui/card';
 import { paths } from '@/config/paths';
-import { useAddEmployer } from '@/features/employers/api/use-employers';
+import { useAddEmployer } from '@/features/employers/api/use-add-employer';
 import { EmployerForm } from '@/features/employers/components/employer-form';
 import type { CreateEmployerFormData } from '@/features/employers/schemas';
 

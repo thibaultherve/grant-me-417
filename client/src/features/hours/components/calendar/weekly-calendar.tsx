@@ -1,11 +1,11 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import { VisaLegend } from '@/components/visa-legend';
 import { cn } from '@/lib/utils';
 
 import { useVisas } from '../../api/use-hours';
 import { useWeeklyHours } from '../../api/use-hours';
 import { useWeekExpansion } from '../../hooks/use-week-expansion';
+import { VisaLegend } from '../visa-legend';
 
 import { CalendarHeader } from './calendar-header';
 import { WeeklyCards } from './weekly-cards';

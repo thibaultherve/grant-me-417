@@ -22,8 +22,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { paths } from '@/config/paths';
+import { useLogout } from '@/features/auth/api/use-auth';
 import { useSidebar } from '@/hooks/use-sidebar';
-import { useLogout, useUser } from '@/lib/auth';
+import { useUser } from '@/lib/auth';
 import { cn } from '@/lib/utils';
 
 const navigation = [

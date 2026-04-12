@@ -4,11 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { paths } from '@/config/paths';
-import {
-  useDeleteEmployer,
-  useGetEmployer,
-  useUpdateEmployer,
-} from '@/features/employers/api/use-employers';
+import { useDeleteEmployer } from '@/features/employers/api/use-delete-employer';
+import { useGetEmployer } from '@/features/employers/api/use-get-employer';
+import { useUpdateEmployer } from '@/features/employers/api/use-update-employer';
 import { EmployerForm } from '@/features/employers/components/employer-form';
 import type { CreateEmployerFormData } from '@/features/employers/schemas';
 
