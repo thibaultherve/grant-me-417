@@ -1,6 +1,5 @@
-import { Building2 } from 'lucide-react';
-
 import type { Employer } from '@regranted/shared';
+import { Building2 } from 'lucide-react';
 
 import { EmployerCard } from './employer-card';
 

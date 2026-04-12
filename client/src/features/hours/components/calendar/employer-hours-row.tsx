@@ -1,6 +1,7 @@
-import { cn } from '@/lib/utils';
-import { INDUSTRY_CONFIG } from '@/features/employers/components/industry-chip';
 import type { IndustryType } from '@regranted/shared';
+
+import { INDUSTRY_CONFIG } from '@/components/shared/industry-chip';
+import { cn } from '@/lib/utils';
 
 import type { WeeklyEmployer } from '../../types/weekly';
 
@@ -16,13 +17,16 @@ interface EmployerHoursRowProps {
  * Desktop employer row: small industry icon (12px) + employer name + eligibility dot + daily hours + total.
  * Matches design: minimal inline display, muted text, no full component badges.
  */
-export function EmployerHoursRow({ employer, dates, className, isFirst, isLast }: EmployerHoursRowProps) {
+export function EmployerHoursRow({
+  employer,
+  dates,
+  className,
+  isFirst,
+  isLast,
+}: EmployerHoursRowProps) {
   // Design padding: container [4,16,10,16] + row [4,0]
   // First row top: 4 (container) + 4 (row) = 8px, last row bottom: 4 (row) + 10 (container) = 14px
-  const vPad = cn(
-    isFirst ? 'pt-2' : 'pt-1',
-    isLast ? 'pb-3.5' : 'pb-1',
-  );
+  const vPad = cn(isFirst ? 'pt-2' : 'pt-1', isLast ? 'pb-3.5' : 'pb-1');
 
   return (
     <tr className={cn('border-0 hover:bg-transparent', className)}>
@@ -65,7 +69,9 @@ export function EmployerHoursRow({ employer, dates, className, isFirst, isLast }
                 : 'text-border',
             )}
           >
-            {employer.dailyHours[date] ? String(employer.dailyHours[date]) : '–'}
+            {employer.dailyHours[date]
+              ? String(employer.dailyHours[date])
+              : '–'}
           </span>
         </td>
       ))}
@@ -77,7 +83,10 @@ export function EmployerHoursRow({ employer, dates, className, isFirst, isLast }
 }
 
 /** Mobile variant of employer row */
-export function EmployerHoursRowMobile({ employer, dates }: EmployerHoursRowProps) {
+export function EmployerHoursRowMobile({
+  employer,
+  dates,
+}: EmployerHoursRowProps) {
   return (
     <div className="py-1">
       {/* Name + total | daily hours all on two tight lines */}
@@ -104,7 +113,9 @@ export function EmployerHoursRowMobile({ employer, dates }: EmployerHoursRowProp
                 : 'text-muted-foreground/25',
             )}
           >
-            {employer.dailyHours[date] ? String(employer.dailyHours[date]) : '–'}
+            {employer.dailyHours[date]
+              ? String(employer.dailyHours[date])
+              : '–'}
           </span>
         ))}
       </div>

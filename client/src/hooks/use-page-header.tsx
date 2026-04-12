@@ -1,5 +1,11 @@
-import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
-
+import {
+  createContext,
+  useContext,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import type { ReactNode } from 'react';
 
 interface PageHeaderContextValue {
@@ -20,9 +26,15 @@ export function PageHeaderProvider({ children }: { children: ReactNode }) {
   const [action, setAction] = useState<ReactNode>(null);
   const [description, setDescription] = useState<string | null>(null);
 
-  const value = useMemo(() => ({
-    action, description, setAction, setDescription,
-  }), [action, description, setAction, setDescription]);
+  const value = useMemo(
+    () => ({
+      action,
+      description,
+      setAction,
+      setDescription,
+    }),
+    [action, description, setAction, setDescription],
+  );
 
   return (
     <PageHeaderContext.Provider value={value}>
@@ -33,6 +45,8 @@ export function PageHeaderProvider({ children }: { children: ReactNode }) {
 
 interface PageHeaderOptions {
   action?: () => ReactNode;
+  /** When actionKey changes, the action render function is re-invoked. */
+  actionKey?: string;
   description?: string;
 }
 
@@ -40,7 +54,11 @@ interface PageHeaderOptions {
  * Hook for routes to inject an action and/or description into the layout header.
  * Render functions are captured in refs to avoid stale closures.
  */
-export function usePageHeader({ action, description }: PageHeaderOptions) {
+export function usePageHeader({
+  action,
+  actionKey,
+  description,
+}: PageHeaderOptions) {
   const { setAction, setDescription } = useContext(PageHeaderContext);
 
   const actionRef = useRef(action);
@@ -53,10 +71,13 @@ export function usePageHeader({ action, description }: PageHeaderOptions) {
       setAction(null);
       setDescription(null);
     };
-  }, [setAction, setDescription, description]);
+  }, [setAction, setDescription, description, actionKey]);
 }
 
-export function usePageHeaderSlot(): { action: ReactNode; description: string | null } {
+export function usePageHeaderSlot(): {
+  action: ReactNode;
+  description: string | null;
+} {
   const { action, description } = useContext(PageHeaderContext);
   return { action, description };
 }

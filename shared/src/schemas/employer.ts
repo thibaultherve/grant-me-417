@@ -1,6 +1,7 @@
 import { z } from 'zod';
-import { INDUSTRY_TYPES } from '../constants/industries.js';
-import { suburbWithPostcodeSchema } from './postcode.js';
+import { INDUSTRY_TYPES } from '../constants/industries';
+import { suburbWithPostcodeSchema } from './postcode';
+import { visaSubclassEnum } from './visa';
 
 // --- Shared ---
 
@@ -35,7 +36,7 @@ export const updateEmployerSchema = z.object({
 export const checkEligibilityInputSchema = z.object({
   suburbId: z.number().int().positive(),
   industry: industryTypeSchema,
-  visaType: z.enum(['417', '462']).optional(),
+  visaType: visaSubclassEnum.optional(),
 });
 
 export const checkEligibilityOutputSchema = z.object({
@@ -62,7 +63,7 @@ export const employerResponseSchema = z.object({
 export type CreateEmployerInput = z.input<typeof createEmployerSchema>;
 export type UpdateEmployerInput = z.infer<typeof updateEmployerSchema>;
 export type CheckEligibilityInput = z.infer<typeof checkEligibilityInputSchema>;
-export type CheckEligibilityOutput = z.infer<typeof checkEligibilityOutputSchema>;
+export type CheckEligibilityOutput = z.infer<
+  typeof checkEligibilityOutputSchema
+>;
 export type Employer = z.infer<typeof employerResponseSchema>;
-/** @deprecated Use `Employer` instead */
-export type EmployerResponse = Employer;

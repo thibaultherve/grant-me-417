@@ -12,8 +12,8 @@ import {
 import { VisaCard } from '@/features/visas/components/visa-card';
 import { VisaForm } from '@/features/visas/components/visa-form';
 import type { UpdateVisaFormData } from '@/features/visas/schemas';
-import { slugToVisaType } from '@/features/visas/utils/visa-helpers';
 import { usePageHeader } from '@/hooks/use-page-header';
+import { slugToVisaType } from '@/utils/visa-helpers';
 
 export function VisaEditRoute() {
   const { type } = useParams<{ type: string }>();

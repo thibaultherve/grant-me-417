@@ -1,13 +1,18 @@
-import { VISA_DAYS_REQUIRED, type VISA_TYPES } from '../constants/visa-rules.js';
+import { VISA_DAYS_REQUIRED } from '../constants/visa-progress';
+import type { VISA_TYPES } from '../constants/visas';
 
 /**
  * Get the number of required days for a given visa type.
  */
 export function getDaysRequired(visaType: string): number {
-  return (
-    VISA_DAYS_REQUIRED[visaType as (typeof VISA_TYPES)[number]] ?? 0
-  );
+  return VISA_DAYS_REQUIRED[visaType as (typeof VISA_TYPES)[number]] ?? 0;
 }
+
+/**
+ * Whether a visa type has a day-count goal to reach.
+ */
+export const visaHasGoal = (visaType: (typeof VISA_TYPES)[number]): boolean =>
+  VISA_DAYS_REQUIRED[visaType] > 0;
 
 /**
  * Compute expiry date from arrival date: arrival + 1 year - 1 day.

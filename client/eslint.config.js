@@ -1,12 +1,15 @@
 import js from '@eslint/js';
 import prettierConfig from 'eslint-config-prettier';
+import boundaries from 'eslint-plugin-boundaries';
 import checkFile from 'eslint-plugin-check-file';
 import importPlugin from 'eslint-plugin-import';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import prettier from 'eslint-plugin-prettier';
+import projectStructure from 'eslint-plugin-project-structure';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
+import reactYouMightNotNeedAnEffect from 'eslint-plugin-react-you-might-not-need-an-effect';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -23,6 +26,7 @@ export default tseslint.config(
       js.configs.recommended,
       ...tseslint.configs.recommended,
       prettierConfig,
+      reactYouMightNotNeedAnEffect.configs.recommended,
     ],
     plugins: {
       react,
@@ -32,6 +36,8 @@ export default tseslint.config(
       import: importPlugin,
       'check-file': checkFile,
       prettier,
+      boundaries,
+      'project-structure': projectStructure.projectStructurePlugin,
     },
     languageOptions: {
       ecmaVersion: 'latest',
@@ -41,6 +47,11 @@ export default tseslint.config(
         ecmaFeatures: {
           jsx: true,
         },
+        tsconfigRootDir: import.meta.dirname,
+        // Enables type-aware linting (required by rules like
+        // @typescript-eslint/no-deprecated that read JSDoc @deprecated tags
+        // via the TypeChecker).
+        projectService: true,
       },
       globals: {
         ...globals.browser,
@@ -56,11 +67,40 @@ export default tseslint.config(
         typescript: true,
         node: true,
       },
+      // eslint-plugin-boundaries: declare the architectural elements.
+      // Order matters — more specific patterns must come before broader ones.
+      'boundaries/elements': [
+        {
+          type: 'app',
+          pattern: 'src/app/**/*',
+          mode: 'full',
+        },
+        {
+          type: 'feature',
+          pattern: 'src/features/*/**/*',
+          mode: 'full',
+          capture: ['feature'],
+        },
+        {
+          type: 'shared',
+          pattern:
+            'src/{components,hooks,lib,types,utils,contexts,config,assets}/**/*',
+          mode: 'full',
+        },
+      ],
+      'boundaries/ignore': [
+        '**/*.test.{ts,tsx}',
+        '**/*.spec.{ts,tsx}',
+        '**/*.stories.{ts,tsx}',
+      ],
+      'boundaries/include': ['src/**/*'],
     },
     rules: {
       // React rules
       'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off',
+      // R9 — Context.Provider value must have stable identity
+      'react/jsx-no-constructed-context-values': 'error',
 
       // React Hooks rules
       ...reactHooks.configs.recommended.rules,
@@ -69,60 +109,63 @@ export default tseslint.config(
       ...jsxA11y.configs.recommended.rules,
       'jsx-a11y/anchor-is-valid': 'off',
 
-      // Import rules
-      'import/no-restricted-paths': [
+      // -----------------------------------------------------------------
+      // Architecture — eslint-plugin-boundaries v6 (boundaries/dependencies)
+      // app     → app | feature | shared
+      // feature → same feature only (templated) | shared
+      // shared  → shared only
+      // -----------------------------------------------------------------
+      'boundaries/dependencies': [
         'error',
         {
-          zones: [
-            // Disables cross-feature imports
+          default: 'disallow',
+          rules: [
             {
-              target: './src/features/auth',
-              from: './src/features',
-              except: ['./auth'],
+              from: { type: 'app' },
+              allow: { to: { type: ['app', 'feature', 'shared'] } },
             },
             {
-              target: './src/features/employers',
-              from: './src/features',
-              except: ['./employers'],
+              from: { type: 'feature' },
+              allow: {
+                to: {
+                  type: 'feature',
+                  captured: { feature: '{{from.captured.feature}}' },
+                },
+              },
             },
             {
-              target: './src/features/work-entries',
-              from: './src/features',
-              except: ['./work-entries'],
+              from: { type: 'feature' },
+              allow: { to: { type: 'shared' } },
             },
             {
-              target: './src/features/visas',
-              from: './src/features',
-              except: ['./visas'],
-            },
-            {
-              target: './src/features/progress',
-              from: './src/features',
-              except: ['./progress'],
-            },
-
-            // Enforce unidirectional codebase
-            // src/features cannot import from src/app
-            {
-              target: './src/features',
-              from: './src/app',
-            },
-
-            // Shared modules cannot import from features or app
-            {
-              target: [
-                './src/components',
-                './src/hooks',
-                './src/lib',
-                './src/types',
-                './src/utils',
-                './src/contexts',
-              ],
-              from: ['./src/features', './src/app'],
+              from: { type: 'shared' },
+              allow: { to: { type: 'shared' } },
             },
           ],
         },
       ],
+      'boundaries/no-unknown': 'error',
+      'boundaries/no-unknown-files': 'off',
+
+      // -----------------------------------------------------------------
+      // Effect antipatterns — eslint-plugin-react-you-might-not-need-an-effect
+      // configs.recommended already registers the rule set via `extends`.
+      // We promote a couple to `error` explicitly.
+      // -----------------------------------------------------------------
+      'react-you-might-not-need-an-effect/no-derived-state': 'error',
+      'react-you-might-not-need-an-effect/no-adjust-state-on-prop-change':
+        'error',
+      'react-you-might-not-need-an-effect/no-reset-all-state-on-prop-change':
+        'error',
+      'react-you-might-not-need-an-effect/no-pass-live-state-to-parent':
+        'error',
+      'react-you-might-not-need-an-effect/no-pass-data-to-parent': 'warn',
+      'react-you-might-not-need-an-effect/no-empty-effect': 'error',
+      'react-you-might-not-need-an-effect/no-chain-state-updates': 'warn',
+      'react-you-might-not-need-an-effect/no-initialize-state': 'warn',
+      'react-you-might-not-need-an-effect/no-event-handler': 'warn',
+
+      // Import rules (kept from previous config, minus no-restricted-paths)
       'import/no-cycle': 'error',
       'import/order': [
         'error',
@@ -145,21 +188,30 @@ export default tseslint.config(
       'import/no-named-as-default': 'off',
 
       // TypeScript rules
-      '@typescript-eslint/no-unused-vars': ['error'],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_' },
+      ],
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
+      // Flags any usage of an API marked `@deprecated` in its JSDoc (including
+      // third-party .d.ts such as react-day-picker's fromYear/toYear). This is
+      // a type-aware rule — requires `parserOptions.projectService: true`.
+      '@typescript-eslint/no-deprecated': 'error',
 
       // General rules
       'linebreak-style': ['error', 'unix'],
 
-      // Prettier rules
-      'prettier/prettier': [
-        'error',
-        {},
-        { usePrettierrc: true, endOfLine: 'auto' },
+      // R8 — component files over 300 lines are too large (warn, not break)
+      'max-lines': [
+        'warn',
+        { max: 300, skipBlankLines: true, skipComments: true },
       ],
+
+      // Prettier rules
+      'prettier/prettier': ['error', {}, { usePrettierrc: true }],
 
       // File naming conventions
       'check-file/filename-naming-convention': [
@@ -174,6 +226,27 @@ export default tseslint.config(
     },
   },
 
+  // R7 — custom hook files are capped lower than components
+  {
+    files: ['**/hooks/use-*.{ts,tsx}', '**/use-*-state.ts', '**/use-*-actions.ts'],
+    rules: {
+      'max-lines': [
+        'warn',
+        { max: 250, skipBlankLines: true, skipComments: true },
+      ],
+    },
+  },
+
+  // shadcn UI primitives are vendored — we don't own the size budget for
+  // them. Disabling max-lines here keeps `npx shadcn add <component>`
+  // overwrites conflict-free.
+  {
+    files: ['src/components/ui/**/*.{ts,tsx}'],
+    rules: {
+      'max-lines': 'off',
+    },
+  },
+
   // Folder naming convention (excluding __tests__)
   {
     files: ['src/**/!(__tests__)/*'],
@@ -185,6 +258,118 @@ export default tseslint.config(
         'error',
         {
           '**/*': 'KEBAB_CASE',
+        },
+      ],
+    },
+  },
+
+  // -----------------------------------------------------------------
+  // eslint-plugin-project-structure — independent-modules
+  // Uses {family} template: "the common path between import and current file"
+  // For a file in src/features/X/**, {family} resolves to src/features/X,
+  // giving us automatic same-feature isolation.
+  // -----------------------------------------------------------------
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    plugins: {
+      'project-structure': projectStructure.projectStructurePlugin,
+    },
+    rules: {
+      'project-structure/independent-modules': [
+        'error',
+        {
+          pathAliases: {
+            baseUrl: '.',
+            paths: {
+              '@/*': ['./src/*'],
+            },
+          },
+          // In a pnpm monorepo, the plugin auto-detects projectRoot as the
+          // folder ABOVE node_modules — i.e. the monorepo root, not client/.
+          // packageRoot is resolved relative to that, so './client' pins it
+          // to client/node_modules where the actual deps live.
+          packageRoot: './client',
+          extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
+          modules: [
+            // NOTE: Feature-module isolation is enforced by
+            // boundaries/dependencies with captured element types — it handles
+            // cross-feature imports and same-feature allowance via
+            // `{{from.captured.feature}}`. We don't duplicate that here
+            // because independent-modules' {family_N} template compares raw
+            // import strings and trips on alias imports like
+            // `@/features/<same>/...` even though they're legitimate.
+            {
+              name: 'Shared module',
+              pattern: [
+                '**/src/components/**',
+                '**/src/hooks/**',
+                '**/src/lib/**',
+                '**/src/types/**',
+                '**/src/utils/**',
+                '**/src/contexts/**',
+                '**/src/config/**',
+              ],
+              allowExternalImports: true,
+              allowImportsFrom: [
+                // Same-boundary relative imports (siblings / sub-folders).
+                // The `pattern` above already gates this file into the shared
+                // zone, so a relative import can't escape the boundary.
+                './**',
+                '../**',
+                'src/components/**',
+                'src/hooks/**',
+                'src/lib/**',
+                'src/types/**',
+                'src/utils/**',
+                'src/contexts/**',
+                'src/config/**',
+                'src/assets/**',
+                '@/components/**',
+                '@/hooks/**',
+                '@/lib/**',
+                '@/types/**',
+                '@/utils/**',
+                '@/contexts/**',
+                '@/config/**',
+                '@/assets/**',
+                'src/*.{ts,tsx,css}',
+                '@/*.{ts,tsx,css}',
+              ],
+              errorMessage:
+                'Shared modules must not import from features/ or app/. If this file looks like domain code (auth, user, billing, …), move it to features/<domain>/.',
+            },
+            {
+              name: 'App module',
+              pattern: '**/src/app/**',
+              allowExternalImports: true,
+              allowImportsFrom: [
+                './**',
+                '../**',
+                '{family}/**',
+                '@/app/**',
+                'src/features/**',
+                '@/features/**',
+                'src/components/**',
+                'src/hooks/**',
+                'src/lib/**',
+                'src/types/**',
+                'src/utils/**',
+                'src/contexts/**',
+                'src/config/**',
+                'src/assets/**',
+                '@/components/**',
+                '@/hooks/**',
+                '@/lib/**',
+                '@/types/**',
+                '@/utils/**',
+                '@/contexts/**',
+                '@/config/**',
+                '@/assets/**',
+                'src/*.{ts,tsx,css}',
+                '@/*.{ts,tsx,css}',
+              ],
+            },
+          ],
         },
       ],
     },

@@ -2,11 +2,12 @@ import React from 'react';
 import { Link } from 'react-router';
 
 import { PageBreadcrumb } from '@/components/page-breadcrumb';
-import { usePageHeaderSlot } from '@/hooks/use-page-header';
 import { paths } from '@/config/paths';
+import { usePageHeaderSlot } from '@/hooks/use-page-header';
+import { useSidebar } from '@/hooks/use-sidebar';
+
 import { MobileNav } from './mobile-nav';
 import { Sidebar } from './sidebar';
-import { useSidebar } from '@/hooks/use-sidebar';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -14,7 +15,8 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const { isCollapsed } = useSidebar();
-  const { action: headerAction, description: headerDescription } = usePageHeaderSlot();
+  const { action: headerAction, description: headerDescription } =
+    usePageHeaderSlot();
 
   return (
     <div className="flex min-h-screen bg-background text-foreground">
@@ -34,7 +36,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 <div className="space-y-1">
                   <PageBreadcrumb />
                   {headerDescription && (
-                    <p className="text-sm text-muted-foreground">{headerDescription}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {headerDescription}
+                    </p>
                   )}
                 </div>
                 {headerAction && <div className="shrink-0">{headerAction}</div>}
@@ -48,7 +52,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         <footer className="border-t border-border/40 mt-auto">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-6">
             <p className="text-xs text-muted-foreground/70 mb-3">
-              ReGranted is a personal tracking tool. It does not provide legal, tax, or immigration advice. Always verify visa requirements with the{' '}
+              ReGranted is a personal tracking tool. It does not provide legal,
+              tax, or immigration advice. Always verify visa requirements with
+              the{' '}
               <a
                 href="https://immi.homeaffairs.gov.au"
                 target="_blank"
@@ -56,14 +62,21 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 className="underline hover:text-muted-foreground"
               >
                 Australian Department of Home Affairs
-              </a>.
+              </a>
+              .
             </p>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <Link to={paths.legal.privacy.getHref()} className="text-xs text-muted-foreground/70 hover:text-muted-foreground">
+                <Link
+                  to={paths.legal.privacy.getHref()}
+                  className="text-xs text-muted-foreground/70 hover:text-muted-foreground"
+                >
                   Privacy Policy
                 </Link>
-                <Link to={paths.legal.terms.getHref()} className="text-xs text-muted-foreground/70 hover:text-muted-foreground">
+                <Link
+                  to={paths.legal.terms.getHref()}
+                  className="text-xs text-muted-foreground/70 hover:text-muted-foreground"
+                >
                   Terms of Service
                 </Link>
               </div>

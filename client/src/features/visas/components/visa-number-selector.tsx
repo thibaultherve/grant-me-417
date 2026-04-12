@@ -1,8 +1,14 @@
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-
 import type { VisaType } from '@regranted/shared';
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { getVisaOrdinal } from '@/utils/visa-helpers';
+
 import type { VisaTypeWithAvailability } from '../hooks/use-available-visas';
-import { getVisaOrdinal } from '../utils/visa-helpers';
 
 interface VisaNumberSelectorProps {
   value: VisaType | null;
@@ -11,28 +17,35 @@ interface VisaNumberSelectorProps {
 }
 
 const VISA_COLORS: Record<VisaType, { color: string; selectedBg: string }> = {
-  first_whv: { color: 'var(--visa-1st-color)', selectedBg: 'var(--visa-1st-light)' },
-  second_whv: { color: 'var(--visa-2nd-color)', selectedBg: 'var(--visa-2nd-light)' },
-  third_whv: { color: 'var(--visa-3rd-color)', selectedBg: 'var(--visa-3rd-light)' },
+  first_whv: {
+    color: 'var(--visa-1st-color)',
+    selectedBg: 'var(--visa-1st-light)',
+  },
+  second_whv: {
+    color: 'var(--visa-2nd-color)',
+    selectedBg: 'var(--visa-2nd-light)',
+  },
+  third_whv: {
+    color: 'var(--visa-3rd-color)',
+    selectedBg: 'var(--visa-3rd-light)',
+  },
 };
 
-export function VisaNumberSelector({ value, onChange, allVisaTypes }: VisaNumberSelectorProps) {
+export function VisaNumberSelector({
+  value,
+  onChange,
+  allVisaTypes,
+}: VisaNumberSelectorProps) {
   return (
     <div className="flex flex-col gap-1.5">
       {/* Label */}
-      <span
-        className="font-medium text-xs text-muted-foreground"
-      >
+      <span className="font-medium text-xs text-muted-foreground">
         Which visa are you adding?
       </span>
 
       {/* Options */}
       <TooltipProvider>
-        <div
-          role="radiogroup"
-          aria-label="Visa number"
-          className="flex gap-2"
-        >
+        <div role="radiogroup" aria-label="Visa number" className="flex gap-2">
           {allVisaTypes.map(({ type, isAvailable }) => {
             const isSelected = value === type;
             const { color, selectedBg } = VISA_COLORS[type];
@@ -50,7 +63,9 @@ export function VisaNumberSelector({ value, onChange, allVisaTypes }: VisaNumber
                 className="flex-1 flex flex-col items-center gap-1.5 rounded-lg transition-colors"
                 style={{
                   padding: '12px 0',
-                  backgroundColor: isSelected ? selectedBg : 'var(--background)',
+                  backgroundColor: isSelected
+                    ? selectedBg
+                    : 'var(--background)',
                   border: isSelected
                     ? `2px solid ${color}`
                     : '1px solid var(--border)',

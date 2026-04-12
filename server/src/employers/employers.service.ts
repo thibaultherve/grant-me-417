@@ -1,3 +1,8 @@
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import type {
   CreateEmployerInput,
   Employer,
@@ -5,15 +10,10 @@ import type {
   UpdateEmployerInput,
 } from '@regranted/shared';
 import { checkIndustryEligibility } from '@regranted/shared';
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import type { Prisma } from '../../generated/prisma/client.js';
-import { formatTimestamp } from '../common/utils/format.js';
-import { PrismaService } from '../prisma/prisma.service.js';
-import { VisaProgressService } from '../visas/visa-progress.service.js';
+import type { Prisma } from '../../generated/prisma/client';
+import { formatTimestamp } from '../common/utils/format';
+import { PrismaService } from '../prisma/prisma.service';
+import { VisaProgressService } from '../visas/visa-progress.service';
 
 const EMPLOYER_INCLUDE = {
   suburb: {
@@ -234,7 +234,8 @@ export class EmployersService {
                   isNorthernAustralia: eligibility.isNorthernAustralia,
                   isRegionalAustralia: eligibility.isRegionalAustralia,
                   isBushfireDeclared: eligibility.isBushfireDeclared,
-                  isNaturalDisasterDeclared: eligibility.isNaturalDisasterDeclared,
+                  isNaturalDisasterDeclared:
+                    eligibility.isNaturalDisasterDeclared,
                 }
               : null,
           }

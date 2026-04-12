@@ -1,6 +1,5 @@
-import { Plane } from 'lucide-react';
-
 import type { Visa } from '@regranted/shared';
+import { Plane } from 'lucide-react';
 
 import { VisaCard } from './visa-card';
 
@@ -51,19 +50,19 @@ export function VisasList({
         </div>
       ) : (
         <>
-        <p className="text-sm text-muted-foreground mb-4">
-          {visas.length} visa{visas.length !== 1 ? 's' : ''}
-        </p>
-        <div className="grid gap-6 md:grid-cols-2">
-          {visas.map((visa) => (
-            <VisaCard
-              key={visa.id}
-              visa={visa}
-              onDelete={onDelete}
-              onEdit={onEdit}
-            />
-          ))}
-        </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            {visas.length} visa{visas.length !== 1 ? 's' : ''}
+          </p>
+          <div className="grid gap-6 md:grid-cols-2">
+            {visas.map((visa) => (
+              <VisaCard
+                key={visa.id}
+                visa={visa}
+                onDelete={onDelete}
+                onEdit={onEdit}
+              />
+            ))}
+          </div>
         </>
       )}
     </>

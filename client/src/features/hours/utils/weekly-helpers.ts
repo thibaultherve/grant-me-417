@@ -1,6 +1,5 @@
-import { format, parseISO } from 'date-fns';
-
 import type { VisaPeriod, VisaType } from '@regranted/shared';
+import { format, parseISO } from 'date-fns';
 
 import type { DayBarInfo } from '../types/weekly';
 
@@ -102,7 +101,9 @@ export function getWeekVisaInfo(
 ): { visaTypes: VisaType[]; showPerDayDots: boolean } {
   const dayBars = buildDayBars(dates, visas);
   const uniqueTypes = [
-    ...new Set(dayBars.map((d) => d.visaType).filter((t): t is VisaType => t !== null)),
+    ...new Set(
+      dayBars.map((d) => d.visaType).filter((t): t is VisaType => t !== null),
+    ),
   ];
   const showPerDayDots = uniqueTypes.length > 1;
   return { visaTypes: uniqueTypes, showPerDayDots };
@@ -121,7 +122,11 @@ export function formatDayHours(hours: number | undefined): string {
  * Check if a date falls within the currently displayed month.
  * Used to gray out out-of-month days in boundary weeks.
  */
-export function isInMonth(dateKey: string, year: number, month: number): boolean {
+export function isInMonth(
+  dateKey: string,
+  year: number,
+  month: number,
+): boolean {
   const date = parseISO(dateKey);
   return date.getFullYear() === year && date.getMonth() + 1 === month;
 }

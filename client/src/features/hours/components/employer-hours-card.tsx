@@ -2,15 +2,16 @@ import { cn } from '@/lib/utils';
 
 import type {
   CrossEmployerErrors,
+  DayColumn as DayColumnType,
   EmployerHoursState,
   EmployerMeta,
   LogHoursActions,
 } from '../types/log-hours';
-import type { DayColumn as DayColumnType } from '../types/log-hours';
 import { MAX_HOURS_PER_DAY } from '../utils/week-calculations';
-import { AutoDistributeToggle } from './inputs/auto-distribute-toggle';
+
 import { DayGrid } from './day-grid';
 import { EmployerCardHeader } from './employer-card-header';
+import { AutoDistributeToggle } from './inputs/auto-distribute-toggle';
 
 interface EmployerHoursCardProps {
   employer: EmployerMeta;
@@ -37,9 +38,9 @@ export function EmployerHoursCard({
   crossEmployerErrors,
   isSubmitting,
 }: EmployerHoursCardProps) {
-  const selectedDaysCount = Object.values(
-    employerState.selectedDays,
-  ).filter(Boolean).length;
+  const selectedDaysCount = Object.values(employerState.selectedDays).filter(
+    Boolean,
+  ).length;
   const maxTotalHours = selectedDaysCount * MAX_HOURS_PER_DAY;
 
   return (

@@ -132,6 +132,48 @@ const createAppRouter = () =>
           ],
         },
         {
+          path: paths.app.tools.directory.path,
+          children: [
+            {
+              index: true,
+              lazy: async () => {
+                const { DirectoryRoute } =
+                  await import('./routes/app/tools/directory');
+                return { Component: DirectoryRoute };
+              },
+            },
+            {
+              path: 'changes/:date',
+              lazy: async () => {
+                const { ChangeDetailRoute } =
+                  await import('./routes/app/tools/directory/changes');
+                return { Component: ChangeDetailRoute };
+              },
+            },
+            {
+              path: ':postcode',
+              children: [
+                {
+                  index: true,
+                  lazy: async () => {
+                    const { PostcodeDetailRoute } =
+                      await import('./routes/app/tools/directory/postcode');
+                    return { Component: PostcodeDetailRoute };
+                  },
+                },
+                {
+                  path: ':suburbId',
+                  lazy: async () => {
+                    const { PostcodeDetailRoute } =
+                      await import('./routes/app/tools/directory/postcode');
+                    return { Component: PostcodeDetailRoute };
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
           path: paths.app.profile.path,
           lazy: async () => {
             const { ProfileRoute } = await import('./routes/app/profile');

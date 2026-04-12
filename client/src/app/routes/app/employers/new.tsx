@@ -2,9 +2,8 @@ import { useNavigate } from 'react-router';
 
 import { Card, CardContent } from '@/components/ui/card';
 import { paths } from '@/config/paths';
-import { EmployerForm } from '@/features/employers/components/employer-form';
 import { useAddEmployer } from '@/features/employers/api/use-employers';
-
+import { EmployerForm } from '@/features/employers/components/employer-form';
 import type { CreateEmployerFormData } from '@/features/employers/schemas';
 
 export function EmployerNewRoute() {

@@ -1,17 +1,20 @@
-import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
-import { ConfigModule } from '@nestjs/config';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { CacheModule } from '@nestjs/cache-manager';
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
-import { PrismaModule } from './prisma/prisma.module.js';
-import { AuthModule } from './auth/auth.module.js';
-import { UsersModule } from './users/users.module.js';
-import { PostcodesModule } from './postcodes/postcodes.module.js';
-import { EmployersModule } from './employers/employers.module.js';
-import { VisasModule } from './visas/visas.module.js';
-import { WorkEntriesModule } from './work-entries/work-entries.module.js';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { EmployersModule } from './employers/employers.module';
+import { FavoritesModule } from './favorites/favorites.module';
+import { PostcodesModule } from './postcodes/postcodes.module';
+import { PrismaModule } from './prisma/prisma.module';
+import { UsersModule } from './users/users.module';
+import { VisasModule } from './visas/visas.module';
+import { WorkEntriesModule } from './work-entries/work-entries.module';
 
 @Module({
   imports: [
@@ -25,11 +28,17 @@ import { WorkEntriesModule } from './work-entries/work-entries.module.js';
     EmployersModule,
     VisasModule,
     WorkEntriesModule,
+    FavoritesModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: ThrottlerGuard },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestContextMiddleware).forRoutes('*');
+  }
+}

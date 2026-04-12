@@ -17,7 +17,9 @@ export function HoursCell({ hours, isOutOfMonth, className }: HoursCellProps) {
     <span
       className={cn(
         'tabular-nums text-center text-[13px]',
-        isEmpty ? 'font-normal text-muted-foreground' : 'font-medium text-foreground',
+        isEmpty
+          ? 'font-normal text-muted-foreground'
+          : 'font-medium text-foreground',
         isOutOfMonth && 'opacity-40',
         className,
       )}

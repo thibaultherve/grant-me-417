@@ -1,11 +1,11 @@
+import type { WeekEntriesResponse } from '@regranted/shared';
 import { format } from 'date-fns';
 
-import type { WeekEntriesResponse } from '@regranted/shared';
-
 import type { DayColumn, EmployerHoursState } from '../types/log-hours';
+
 import { formatDateKey, getWeekDates } from './date-helpers';
 import { validateHours } from './hours-validation';
-import { MAX_HOURS_PER_DAY, MAX_HOURS_PER_WEEK } from './week-calculations';
+import { MAX_HOURS_PER_DAY } from './week-calculations';
 
 /** Parse a string hours input to a number, defaulting to 0 */
 export function parseHoursValue(value: string): number {

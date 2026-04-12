@@ -33,7 +33,9 @@ function persist() {
 
 // ── Viewport-based auto-collapse via matchMedia ────────────────────────────
 if (typeof window !== 'undefined') {
-  const mq = window.matchMedia(`(max-width: ${AUTO_COLLAPSE_BREAKPOINT - 1}px)`);
+  const mq = window.matchMedia(
+    `(max-width: ${AUTO_COLLAPSE_BREAKPOINT - 1}px)`,
+  );
 
   // Set initial state based on viewport
   if (mq.matches && !isCollapsed) {

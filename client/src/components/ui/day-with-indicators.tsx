@@ -12,7 +12,10 @@ interface DayWithIndicatorsProps {
  * underline indicator bars. Designed to be reusable across features (visa
  * calendar, hours calendar, etc.).
  */
-export function DayWithIndicators({ indicators, children }: DayWithIndicatorsProps) {
+export function DayWithIndicators({
+  indicators,
+  children,
+}: DayWithIndicatorsProps) {
   return (
     <div className="flex flex-col items-center gap-0.5">
       {children}
@@ -22,7 +25,12 @@ export function DayWithIndicators({ indicators, children }: DayWithIndicatorsPro
             <span
               key={i}
               className="rounded-full"
-              style={{ width: 16, height: 3, backgroundColor: indicator.color, display: 'block' }}
+              style={{
+                width: 16,
+                height: 3,
+                backgroundColor: indicator.color,
+                display: 'block',
+              }}
             />
           ))}
         </div>

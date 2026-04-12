@@ -1,5 +1,5 @@
 import { chromium, type Browser, type BrowserContext } from 'playwright';
-import { extractPageModifiedDate, extractEligibilityFromHtml } from './parser.js';
+import { extractEligibilityFromHtml, extractPageModifiedDate } from './parser';
 
 export interface WaybackSnapshot {
   timestamp: string; // "20200315120000"
@@ -43,7 +43,9 @@ export async function listSnapshots(
   }
 
   const data = (await response.json()) as string[][];
-  console.log(`  [cdx] fetch+parse=${Date.now() - t0}ms, rows=${data.length - 1}`);
+  console.log(
+    `  [cdx] fetch+parse=${Date.now() - t0}ms, rows=${data.length - 1}`,
+  );
   if (data.length < 2) return [];
 
   const [_header, ...rows] = data;
@@ -110,14 +112,20 @@ export async function fetchSnapshotSmart(
   const tPage = Date.now();
 
   try {
-    await page.goto(waybackUrl, { waitUntil: 'domcontentloaded', timeout: 60_000 });
+    await page.goto(waybackUrl, {
+      waitUntil: 'domcontentloaded',
+      timeout: 60_000,
+    });
     const tGoto = Date.now();
 
     // Phase 1: wait for date span to be populated by JS
     let dateFound = false;
     try {
       // Match "15 November 2018" or "15/11/2018 11:28"
-      await page.locator('span#pageModified').filter({ hasText: /\d{1,2}[\s/]\w+[\s/]\d{4}/ }).waitFor({ timeout: 8_000 });
+      await page
+        .locator('span#pageModified')
+        .filter({ hasText: /\d{1,2}[\s/]\w+[\s/]\d{4}/ })
+        .waitFor({ timeout: 8_000 });
       dateFound = true;
     } catch {
       // Date span not found
@@ -138,7 +146,10 @@ export async function fetchSnapshotSmart(
 
     // Phase 2: date changed — wait for tables to render
     try {
-      await page.locator('table caption, table th').first().waitFor({ timeout: 30_000 });
+      await page
+        .locator('table caption, table th')
+        .first()
+        .waitFor({ timeout: 30_000 });
     } catch {
       // No tables found
     }
@@ -176,7 +187,9 @@ export async function fetchSnapshotSmart(
 /**
  * Fetch a single Wayback Machine snapshot using Playwright (full wait).
  */
-export async function fetchSnapshot(snapshot: WaybackSnapshot): Promise<WaybackFetchResult> {
+export async function fetchSnapshot(
+  snapshot: WaybackSnapshot,
+): Promise<WaybackFetchResult> {
   const waybackUrl = `https://web.archive.org/web/${snapshot.timestamp}/${snapshot.url}`;
 
   const context = await getSharedBrowser();
@@ -186,7 +199,10 @@ export async function fetchSnapshot(snapshot: WaybackSnapshot): Promise<WaybackF
     await page.goto(waybackUrl, { waitUntil: 'load', timeout: 60_000 });
 
     try {
-      await page.locator('table caption, table th').first().waitFor({ timeout: 30_000 });
+      await page
+        .locator('table caption, table th')
+        .first()
+        .waitFor({ timeout: 30_000 });
     } catch {
       // No tables found
     }

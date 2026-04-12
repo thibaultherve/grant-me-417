@@ -1,22 +1,24 @@
-import { TrendingUp, HelpCircle } from 'lucide-react';
+import type { VisaOverview } from '@regranted/shared';
+import { HelpCircle, TrendingUp } from 'lucide-react';
 import {
-  ComposedChart,
   Bar,
+  CartesianGrid,
+  ComposedChart,
   Line,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
 } from 'recharts';
+
 import {
-  Tooltip as UITooltip,
   TooltipContent,
   TooltipTrigger,
+  Tooltip as UITooltip,
 } from '@/components/ui/tooltip';
-import type { VisaOverview } from '@regranted/shared';
-import { buildMonthlyTrendChartData } from '../utils/dashboard-calculations';
 import { cn } from '@/lib/utils';
+
+import { buildMonthlyTrendChartData } from '../utils/dashboard-calculations';
 
 interface MonthlyTrendChartProps {
   monthlyTrend: VisaOverview['monthlyTrend'];
@@ -35,7 +37,9 @@ export function MonthlyTrendChart({
   const yMax =
     chartData.length > 0
       ? Math.max(
-          ...chartData.map((d) => Math.max(d.eligibleDays, hasGoal ? d.idealPace : 0)),
+          ...chartData.map((d) =>
+            Math.max(d.eligibleDays, hasGoal ? d.idealPace : 0),
+          ),
         ) + 5
       : 30;
 
@@ -62,7 +66,8 @@ export function MonthlyTrendChart({
               </button>
             </TooltipTrigger>
             <TooltipContent side="top" className="max-w-xs">
-              Monthly eligible days compared to the ideal pace needed to reach your goal.
+              Monthly eligible days compared to the ideal pace needed to reach
+              your goal.
             </TooltipContent>
           </UITooltip>
         </div>

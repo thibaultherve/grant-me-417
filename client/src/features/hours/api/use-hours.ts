@@ -5,23 +5,27 @@
  * Gère pagination, tri, ajout, suppression
  */
 
+import type { SaveWeekBatch, WeekEntriesResponse } from '@regranted/shared';
+import type { Visa } from '@regranted/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type {
-  SaveWeekBatch,
-  WeekEntriesResponse,
-} from '@regranted/shared';
 
+import { api } from '@/lib/api-client';
 import { handleError } from '@/lib/error-handler';
 import { queryKeys } from '@/lib/react-query';
 
-import {
-  getEmployerHours,
-  getHours,
-  getWeekEntries,
-  getWeeklyHours,
-  saveWeekBatch,
-  type GetHoursOptions,
-} from './hours';
+import { getWeekEntries, getWeeklyHours, saveWeekBatch } from './hours';
+
+/**
+ * Hook to fetch user's visas (used by weekly calendar to display visa context).
+ * Defined here to avoid cross-feature import from visas feature.
+ */
+export const useVisas = () => {
+  return useQuery({
+    queryKey: queryKeys.visas.all,
+    queryFn: (): Promise<Visa[]> => api.get('/visas'),
+    staleTime: 10 * 60 * 1000,
+  });
+};
 
 /**
  * Hook pour récupérer les heures avec pagination/tri
@@ -31,27 +35,6 @@ import {
  * - Placeholder data (garde les anciennes données pendant refetch)
  * - Refetch automatique au window focus
  */
-export const useHours = (options: GetHoursOptions = {}) => {
-  return useQuery({
-    queryKey: queryKeys.hours.list(options),
-    queryFn: () => getHours(options),
-    placeholderData: (prev) => prev, // Garde les données précédentes pendant le fetch
-  });
-};
-
-/**
- * Hook pour récupérer toutes les heures d'un employeur
- * Utilisé pour les badges du calendrier
- */
-export const useEmployerHours = (employerId: string) => {
-  return useQuery({
-    queryKey: queryKeys.hours.byEmployer(employerId),
-    queryFn: () => getEmployerHours(employerId),
-    enabled: !!employerId,
-    staleTime: 2 * 60 * 1000, // 2 minutes (données plus volatiles)
-  });
-};
-
 /**
  * Hook pour récupérer les heures hebdomadaires d'un mois
  * Données groupées par semaine avec breakdown employeur et visa
@@ -131,4 +114,3 @@ export const useSaveWeekBatch = () => {
     },
   });
 };
-

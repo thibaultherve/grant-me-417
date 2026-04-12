@@ -1,8 +1,15 @@
-import { Flag } from 'lucide-react';
 import type { VisaOverview } from '@regranted/shared';
+import { Flag } from 'lucide-react';
+
 import { cn } from '@/lib/utils';
+
 import type { GoalPredictionStatus } from '../types';
-import { computeGoalDatePrediction, formatDate, formatShortDate } from '../utils/dashboard-calculations';
+import {
+  computeGoalDatePrediction,
+  formatDate,
+  formatShortDate,
+} from '../utils/dashboard-calculations';
+
 import type { BadgeVariant, IconVariant } from './stat-card-wrapper';
 import { CardTooltip, StatCardWrapper } from './stat-card-wrapper';
 
@@ -82,11 +89,15 @@ const borderColorMap: Record<GoalPredictionStatus, string> = {
   'no-goal': 'var(--color-muted-foreground)',
 };
 
-export function GoalDatePredictionCard({ visa, pace }: GoalDatePredictionCardProps) {
+export function GoalDatePredictionCard({
+  visa,
+  pace,
+}: GoalDatePredictionCardProps) {
   const prediction = computeGoalDatePrediction(visa, pace);
   const config = STATUS_CONFIG[prediction.status];
 
-  const isEdgeState = prediction.status === 'no-goal' || prediction.status === 'no-data';
+  const isEdgeState =
+    prediction.status === 'no-goal' || prediction.status === 'no-data';
 
   return (
     <StatCardWrapper
@@ -95,7 +106,8 @@ export function GoalDatePredictionCard({ visa, pace }: GoalDatePredictionCardPro
       title="Goal Date Prediction"
       tooltip={
         <CardTooltip title="Goal Date Prediction">
-          Shows your projected date to reach the required eligible days based on your current weekly pace.
+          Shows your projected date to reach the required eligible days based on
+          your current weekly pace.
         </CardTooltip>
       }
       badge={config.badgeText}
@@ -103,7 +115,9 @@ export function GoalDatePredictionCard({ visa, pace }: GoalDatePredictionCardPro
     >
       {isEdgeState ? (
         /* ─── Edge states: No Goal / No Data ─── */
-        <p className="text-sm text-muted-foreground">{prediction.subtextMessage}</p>
+        <p className="text-sm text-muted-foreground">
+          {prediction.subtextMessage}
+        </p>
       ) : (
         <>
           {/* ─── Date section ─── */}
@@ -116,7 +130,9 @@ export function GoalDatePredictionCard({ visa, pace }: GoalDatePredictionCardPro
                 )}
               >
                 {prediction.projectedDate
-                  ? formatDate(prediction.projectedDate.toISOString().split('T')[0])
+                  ? formatDate(
+                      prediction.projectedDate.toISOString().split('T')[0],
+                    )
                   : 'Goal Reached!'}
               </span>
               <span className="text-[11px] font-medium text-muted-foreground">
@@ -127,9 +143,16 @@ export function GoalDatePredictionCard({ visa, pace }: GoalDatePredictionCardPro
             {/* Countdown pill */}
             <div
               className="flex flex-col items-center justify-center gap-0.5 rounded-lg py-2 px-4 shrink-0"
-              style={{ border: `1.5px solid ${borderColorMap[prediction.status]}` }}
+              style={{
+                border: `1.5px solid ${borderColorMap[prediction.status]}`,
+              }}
             >
-              <span className={cn('text-[22px] font-bold leading-none', config.colorClass)}>
+              <span
+                className={cn(
+                  'text-[22px] font-bold leading-none',
+                  config.colorClass,
+                )}
+              >
                 {prediction.countdownDays}
               </span>
               <span className="text-[9px] font-semibold text-muted-foreground leading-none">
@@ -143,7 +166,10 @@ export function GoalDatePredictionCard({ visa, pace }: GoalDatePredictionCardPro
             {/* Bar */}
             <div className="relative h-2 w-full rounded-full bg-secondary overflow-hidden">
               <div
-                className={cn('absolute inset-y-0 left-0 rounded-full', config.barBgClass)}
+                className={cn(
+                  'absolute inset-y-0 left-0 rounded-full',
+                  config.barBgClass,
+                )}
                 style={{
                   width: `${Math.round(prediction.timelineProgress * 100)}%`,
                   transition: 'width 0.3s ease',
@@ -158,9 +184,7 @@ export function GoalDatePredictionCard({ visa, pace }: GoalDatePredictionCardPro
               <span className={cn('font-semibold', config.colorClass)}>
                 {prediction.goalLabel}
               </span>
-              <span>
-                Visa expiry · {formatShortDate(visa.expiryDate)}
-              </span>
+              <span>Visa expiry · {formatShortDate(visa.expiryDate)}</span>
             </div>
           </div>
         </>

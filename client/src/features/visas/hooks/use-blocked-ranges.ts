@@ -1,6 +1,5 @@
-import { useMemo } from 'react';
-
 import type { VisaType } from '@regranted/shared';
+import { useMemo } from 'react';
 
 import { useVisaContext } from './use-visa-context';
 
@@ -13,18 +12,7 @@ export interface BlockedRange {
   reason: BlockedRangeReason;
 }
 
-/** CSS variable colors matching the ordinal badge colors */
-const VISA_COLORS: Record<VisaType, string> = {
-  first_whv: 'var(--visa-1st-color)',
-  second_whv: 'var(--visa-2nd-color)',
-  third_whv: 'var(--visa-3rd-color)',
-};
-
 export const OVERLAP_ZONE_COLOR = 'var(--disabled)';
-
-export function getBlockedRangeColor(visaType: VisaType): string {
-  return VISA_COLORS[visaType];
-}
 
 const VISA_ORDER: Record<VisaType, number> = {
   first_whv: 1,
@@ -109,7 +97,11 @@ export function useBlockedRanges(
             minDate = minCandidate;
             const arrivalDate = new Date(visa.arrivalDate);
             arrivalDate.setHours(0, 0, 0, 0);
-            orderingConstraint = { visaType: visa.visaType, arrivalDate, expiryDate };
+            orderingConstraint = {
+              visaType: visa.visaType,
+              arrivalDate,
+              expiryDate,
+            };
           }
         } else if (visaOrder > currentOrder) {
           if (
@@ -164,10 +156,20 @@ export function useBlockedRanges(
         legendArrival.setHours(0, 0, 0, 0);
         const legendExpiry = new Date(legendVisa.expiryDate);
         legendExpiry.setHours(0, 0, 0, 0);
-        successorConstraint = { visaType: legendVisa.visaType, arrivalDate: legendArrival, expiryDate: legendExpiry };
+        successorConstraint = {
+          visaType: legendVisa.visaType,
+          arrivalDate: legendArrival,
+          expiryDate: legendExpiry,
+        };
       }
     }
 
-    return { blockedRanges: ranges, minDate, maxDate, orderingConstraint, successorConstraint };
+    return {
+      blockedRanges: ranges,
+      minDate,
+      maxDate,
+      orderingConstraint,
+      successorConstraint,
+    };
   }, [visas, excludeVisaId, currentVisaType]);
 }

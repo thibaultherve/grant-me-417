@@ -63,6 +63,25 @@ export const paths = {
         getHref: (type: string) => `/app/visas/${type}/edit`,
       },
     },
+    tools: {
+      directory: {
+        path: '/app/tools/directory',
+        getHref: () => '/app/tools/directory',
+        postcode: {
+          path: '/app/tools/directory/:postcode',
+          getHref: (postcode: string) => `/app/tools/directory/${postcode}`,
+          suburb: {
+            path: '/app/tools/directory/:postcode/:suburbId',
+            getHref: (postcode: string, suburbId: string) =>
+              `/app/tools/directory/${postcode}/${suburbId}`,
+          },
+        },
+        changes: {
+          path: '/app/tools/directory/changes/:date',
+          getHref: (date: string) => `/app/tools/directory/changes/${date}`,
+        },
+      },
+    },
     profile: {
       path: '/app/profile',
       getHref: () => '/app/profile',

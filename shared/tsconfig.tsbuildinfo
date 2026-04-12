@@ -1,0 +1,22 @@
+{
+  "root": [
+    "./src/index.ts",
+    "./src/constants/index.ts",
+    "./src/constants/industries.ts",
+    "./src/constants/visa.ts",
+    "./src/schemas/auth.ts",
+    "./src/schemas/common.ts",
+    "./src/schemas/employer.ts",
+    "./src/schemas/favorite.ts",
+    "./src/schemas/index.ts",
+    "./src/schemas/postcode.ts",
+    "./src/schemas/user.ts",
+    "./src/schemas/visa-overview.ts",
+    "./src/schemas/visa.ts",
+    "./src/schemas/work-entry.ts",
+    "./src/types/index.ts",
+    "./src/utils/index.ts",
+    "./src/utils/visa-calculations.ts"
+  ],
+  "version": "5.8.3"
+}

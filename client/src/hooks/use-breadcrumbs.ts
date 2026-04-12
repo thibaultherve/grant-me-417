@@ -53,6 +53,9 @@ const routeConfig: Record<string, RouteConfig> = {
   [paths.app.profile.path]: {
     label: 'Profile',
   },
+  [paths.app.tools.directory.path]: {
+    label: 'Directory',
+  },
 };
 
 /**

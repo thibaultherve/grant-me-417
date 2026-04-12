@@ -68,9 +68,7 @@ export function MobileNav() {
               <>
                 <div
                   className={`flex items-center justify-center rounded-2xl transition-colors ${
-                    isActive
-                      ? 'bg-primary w-14 h-8'
-                      : 'w-12 h-7'
+                    isActive ? 'bg-primary w-14 h-8' : 'w-12 h-7'
                   }`}
                 >
                   <Icon
@@ -79,7 +77,9 @@ export function MobileNav() {
                 </div>
                 <span
                   className={`text-[10px] leading-none ${
-                    isActive ? 'text-primary font-semibold' : 'text-muted-foreground font-normal'
+                    isActive
+                      ? 'text-primary font-semibold'
+                      : 'text-muted-foreground font-normal'
                   }`}
                 >
                   {item.name}
@@ -105,7 +105,9 @@ export function MobileNav() {
             </div>
             <span
               className={`flex items-center gap-0.5 text-[10px] leading-none ${
-                profileOpen ? 'text-primary font-semibold' : 'text-muted-foreground font-normal'
+                profileOpen
+                  ? 'text-primary font-semibold'
+                  : 'text-muted-foreground font-normal'
               }`}
             >
               Profile
@@ -113,7 +115,12 @@ export function MobileNav() {
             </span>
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent side="top" align="center" sideOffset={8} className="min-w-48">
+        <DropdownMenuContent
+          side="top"
+          align="center"
+          sideOffset={8}
+          className="min-w-48"
+        >
           <DropdownMenuItem asChild>
             <a href={paths.app.profile.path} className="cursor-pointer">
               <Settings className="mr-2 h-4 w-4" />

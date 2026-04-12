@@ -6,16 +6,14 @@ import {
   Delete,
   Body,
   Param,
-  UseGuards,
 } from '@nestjs/common';
-import { VisasService } from './visas.service.js';
-import { VisaOverviewService } from './visa-overview.service.js';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
+import { VisasService } from './visas.service';
+import { VisaOverviewService } from './visa-overview.service';
 import {
   CurrentUser,
   type JwtPayload,
-} from '../common/decorators/current-user.decorator.js';
-import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe.js';
+} from '../common/decorators/current-user.decorator';
+import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import {
   createVisaSchema,
   updateVisaSchema,
@@ -24,7 +22,6 @@ import {
 } from '@regranted/shared';
 
 @Controller('visas')
-@UseGuards(JwtAuthGuard)
 export class VisasController {
   constructor(
     private visasService: VisasService,
@@ -45,10 +42,7 @@ export class VisasController {
   }
 
   @Get(':id/overview')
-  async getOverview(
-    @CurrentUser() user: JwtPayload,
-    @Param('id') id: string,
-  ) {
+  async getOverview(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
     return this.visaOverviewService.getOverview(user.sub, id);
   }
 
@@ -78,10 +72,7 @@ export class VisasController {
   }
 
   @Delete(':id')
-  async remove(
-    @CurrentUser() user: JwtPayload,
-    @Param('id') id: string,
-  ) {
+  async remove(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
     return this.visasService.remove(user.sub, id);
   }
 }

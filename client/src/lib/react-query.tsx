@@ -33,7 +33,8 @@ const queryConfig = {
     retry: 1,
 
     // Durée avant retry (exponentielle)
-    retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    retryDelay: (attemptIndex: number) =>
+      Math.min(1000 * 2 ** attemptIndex, 30000),
   },
   mutations: {
     // Pas de retry automatique pour les mutations (POST, PUT, DELETE)
@@ -86,5 +87,19 @@ export const queryKeys = {
     weeklyProgress: (visaId: string) =>
       ['visas', visaId, 'weekly-progress'] as const,
     overview: (visaId: string) => ['visas', visaId, 'overview'] as const,
+  },
+  directory: {
+    all: ['directory'] as const,
+    list: (params: Record<string, unknown>) =>
+      ['directory', 'list', params] as const,
+    listPrefix: ['directory', 'list'] as const,
+    detail: (postcode: string) => ['directory', 'detail', postcode] as const,
+    changes: (params: Record<string, unknown>) =>
+      ['directory', 'changes', params] as const,
+    lastUpdate: (visaType: string) =>
+      ['directory', 'last-update', visaType] as const,
+    favorites: ['directory', 'favorites'] as const,
+    changeDetail: (date: string, visaType: string) =>
+      ['directory', 'change-detail', date, visaType] as const,
   },
 } as const;

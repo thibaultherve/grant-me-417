@@ -1,9 +1,15 @@
-import { visaHasGoal, type VisaOverview, type VisaType } from '@regranted/shared';
+import {
+  visaHasGoal,
+  type VisaOverview,
+  type VisaType,
+} from '@regranted/shared';
 import { Equal, Minus, Target, TrendingDown, TrendingUp } from 'lucide-react';
+
 import {
   calcProgressPct,
   getPaceStatus,
 } from '../utils/dashboard-calculations';
+
 import type { BadgeVariant, IconVariant } from './stat-card-wrapper';
 import { CardTooltip, StatCardWrapper } from './stat-card-wrapper';
 
@@ -72,7 +78,15 @@ export function PaceTrackerCard({ pace, visaType }: PaceTrackerCardProps) {
         <CardTooltip title="Pace Tracker">
           {hasGoal ? (
             <>
-              <p className="mb-2">The <span className="font-medium text-foreground">pace status</span> is based on the % difference between <span className="font-medium text-foreground">your pace</span> and the <span className="font-medium text-foreground">target pace</span>:</p>
+              <p className="mb-2">
+                The{' '}
+                <span className="font-medium text-foreground">pace status</span>{' '}
+                is based on the % difference between{' '}
+                <span className="font-medium text-foreground">your pace</span>{' '}
+                and the{' '}
+                <span className="font-medium text-foreground">target pace</span>
+                :
+              </p>
               <div className="flex flex-col gap-0.5 border-t border-border pt-2 mb-2">
                 <ul className="flex flex-col gap-0.5">
                   <li>
@@ -80,12 +94,12 @@ export function PaceTrackerCard({ pace, visaType }: PaceTrackerCardProps) {
                     more than 5% below
                   </li>
                   <li>
-                    <span className="font-medium text-info">At Pace</span> — within
-                    ±5%
+                    <span className="font-medium text-info">At Pace</span> —
+                    within ±5%
                   </li>
                   <li>
-                    <span className="font-medium text-success">Good Pace</span> —
-                    more than 5% above
+                    <span className="font-medium text-success">Good Pace</span>{' '}
+                    — more than 5% above
                   </li>
                 </ul>
               </div>
@@ -115,7 +129,10 @@ export function PaceTrackerCard({ pace, visaType }: PaceTrackerCardProps) {
               </div>
             </>
           ) : (
-            <p>Your average eligible days earned per week since arrival. No day requirement for this visa.</p>
+            <p>
+              Your average eligible days earned per week since arrival. No day
+              requirement for this visa.
+            </p>
           )}
         </CardTooltip>
       }
@@ -136,7 +153,9 @@ export function PaceTrackerCard({ pace, visaType }: PaceTrackerCardProps) {
             <div className="flex flex-col gap-1">
               <div className="flex items-center justify-between">
                 <span className="text-xs leading-none text-muted-foreground flex items-center gap-1">
-                  <Target className={`w-3 h-3 shrink-0 ${config.statusColor}`} />
+                  <Target
+                    className={`w-3 h-3 shrink-0 ${config.statusColor}`}
+                  />
                   Your pace
                 </span>
                 <span className="text-xs leading-none font-semibold text-foreground">

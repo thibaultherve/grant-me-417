@@ -1,5 +1,6 @@
-import { HelpCircle } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
+
 import {
   Tooltip,
   TooltipContent,
@@ -55,8 +56,12 @@ export function CardTooltip({
 }) {
   return (
     <div className="flex flex-col gap-1.5 py-3 px-4">
-      <p className="text-[13px] font-bold leading-[1.4] text-foreground">{title}</p>
-      <div className="text-xs leading-normal text-muted-foreground text-justify">{children}</div>
+      <p className="text-[13px] font-bold leading-[1.4] text-foreground">
+        {title}
+      </p>
+      <div className="text-xs leading-normal text-muted-foreground text-justify">
+        {children}
+      </div>
     </div>
   );
 }

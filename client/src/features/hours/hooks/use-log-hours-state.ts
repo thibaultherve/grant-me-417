@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useSaveWeekBatch, useWeekEntries } from '../api/use-hours';
 import type { LogHoursFormState, LogHoursReturn } from '../types/log-hours';
@@ -12,6 +12,7 @@ import {
   buildStateFromServer,
   createDayColumns,
 } from '../utils/log-hours-helpers';
+
 import { useLogHoursActions } from './use-log-hours-actions';
 import { useLogHoursValidation } from './use-log-hours-validation';
 
@@ -42,8 +43,11 @@ export function useLogHoursState(currentWeek: Date): LogHoursReturn {
     isSubmitting: false,
   });
 
-  // Track which weekStart we last synced from server to avoid re-sync loops
-  const lastSyncedWeek = useRef<string | null>(null);
+  // Track which weekStart we last synced from server. Kept in state so we
+  // can trigger a render-phase resync when the week changes AND new server
+  // data is available — React's official pattern for adjusting state on
+  // prop change (no useEffect needed).
+  const [syncedWeek, setSyncedWeek] = useState<string | null>(null);
 
   // ── Day columns for current week ──
   const dayColumns = useMemo(() => createDayColumns(monday), [monday]);
@@ -54,28 +58,19 @@ export function useLogHoursState(currentWeek: Date): LogHoursReturn {
   const weekRange = useMemo(() => getWeekRange(monday), [monday]);
   const compactWeekRange = useMemo(() => getCompactWeekRange(monday), [monday]);
 
-  // ── Sync from server ──
-  useEffect(() => {
-    if (!serverData) return;
-    if (lastSyncedWeek.current === weekStartKey) return;
-
+  // ── Render-phase sync from server ──
+  if (serverData && syncedWeek !== weekStartKey) {
     const { employers, initialEmployers } = buildStateFromServer(
       serverData,
       dateKeys,
     );
-
     setState({
       employers,
       initialEmployers,
       isSubmitting: false,
     });
-    lastSyncedWeek.current = weekStartKey;
-  }, [serverData, weekStartKey, dateKeys]);
-
-  // Reset sync tracker when week changes so next server data triggers sync
-  useEffect(() => {
-    lastSyncedWeek.current = null;
-  }, [weekStartKey]);
+    setSyncedWeek(weekStartKey);
+  }
 
   // ── Validation ──
   const {

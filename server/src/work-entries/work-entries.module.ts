@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { WorkEntriesController } from './work-entries.controller.js';
-import { WorkEntriesService } from './work-entries.service.js';
-import { VisasModule } from '../visas/visas.module.js';
+import { VisasModule } from '../visas/visas.module';
+import { WorkEntriesController } from './work-entries.controller';
+import { WorkEntriesService } from './work-entries.service';
 
 @Module({
   imports: [VisasModule],

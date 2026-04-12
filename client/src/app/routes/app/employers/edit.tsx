@@ -5,12 +5,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { paths } from '@/config/paths';
 import {
+  useDeleteEmployer,
   useGetEmployer,
   useUpdateEmployer,
-  useDeleteEmployer,
 } from '@/features/employers/api/use-employers';
 import { EmployerForm } from '@/features/employers/components/employer-form';
-
 import type { CreateEmployerFormData } from '@/features/employers/schemas';
 
 export function EmployerEditRoute() {
@@ -18,8 +17,10 @@ export function EmployerEditRoute() {
   const navigate = useNavigate();
 
   const { data: employer, isLoading, error } = useGetEmployer(id);
-  const { mutateAsync: updateEmployer, isPending: isUpdating } = useUpdateEmployer();
-  const { mutateAsync: deleteEmployer, isPending: isDeleting } = useDeleteEmployer();
+  const { mutateAsync: updateEmployer, isPending: isUpdating } =
+    useUpdateEmployer();
+  const { mutateAsync: deleteEmployer, isPending: isDeleting } =
+    useDeleteEmployer();
 
   const handleSubmit = async (data: CreateEmployerFormData) => {
     if (!id) return;

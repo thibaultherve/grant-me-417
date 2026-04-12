@@ -1,9 +1,3 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { ReactNode } from 'react';
-import { Navigate, useLocation } from 'react-router';
-
-import { paths } from '@/config/paths';
-
 import type {
   AuthUser,
   LoginInput,
@@ -12,6 +6,11 @@ import type {
   RegisterResponse,
   UserProfile,
 } from '@regranted/shared';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { ReactNode } from 'react';
+import { Navigate, useLocation } from 'react-router';
+
+import { paths } from '@/config/paths';
 
 import {
   api,
@@ -38,7 +37,10 @@ const userQueryKey = ['authenticated-user'];
 
 // --- Auth hooks ---
 
-function handleAuthResponse(data: { user: AuthUser; tokens: { accessToken: string } }) {
+function handleAuthResponse(data: {
+  user: AuthUser;
+  tokens: { accessToken: string };
+}) {
   setAccessToken(data.tokens.accessToken);
   setLoggedIn(true);
   return data.user;

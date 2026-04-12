@@ -1,4 +1,12 @@
-import { CalendarDays, Pencil, Plane, Timer, TrendingUp, Trash2 } from 'lucide-react';
+import type { Visa } from '@regranted/shared';
+import {
+  CalendarDays,
+  Pencil,
+  Plane,
+  Timer,
+  Trash2,
+  TrendingUp,
+} from 'lucide-react';
 
 import {
   AlertDialog,
@@ -12,9 +20,9 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { formatDate } from '@/utils/date-format';
+import { computeVisaTimeline, formatCreatedAgo } from '@/utils/visa-helpers';
 
-import type { Visa } from '@regranted/shared';
-import { computeVisaTimeline, formatCreatedAgo } from '../utils/visa-helpers';
 import { OrdinalBadge } from './ordinal-badge';
 import { VisaProgressBar } from './visa-progress-bar';
 
@@ -25,19 +33,23 @@ interface VisaCardProps {
   hideActions?: boolean;
 }
 
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('en-AU', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  });
-}
-
-export function VisaCard({ visa, onDelete, onEdit, hideActions = false }: VisaCardProps) {
-  const { isExpired, percent: timelinePercent, label: timelineLabel } = computeVisaTimeline(visa.arrivalDate, visa.expiryDate);
+export function VisaCard({
+  visa,
+  onDelete,
+  onEdit,
+  hideActions = false,
+}: VisaCardProps) {
+  const {
+    isExpired,
+    percent: timelinePercent,
+    label: timelineLabel,
+  } = computeVisaTimeline(visa.arrivalDate, visa.expiryDate);
 
   // Progress calculations
-  const progressPercent = Math.min((visa.eligibleDays / visa.daysRequired) * 100, 100);
+  const progressPercent = Math.min(
+    (visa.eligibleDays / visa.daysRequired) * 100,
+    100,
+  );
   const progressComplete = progressPercent >= 100;
   const progressLabel = `${visa.eligibleDays} / ${visa.daysRequired} days`;
 
@@ -63,7 +75,9 @@ export function VisaCard({ visa, onDelete, onEdit, hideActions = false }: VisaCa
         <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
           <Plane className="w-4 h-4 text-muted-foreground shrink-0" />
           <OrdinalBadge visaType={visa.visaType} />
-          <span className="font-bold text-sm text-foreground flex-1">WHV 417</span>
+          <span className="font-bold text-sm text-foreground flex-1">
+            WHV 417
+          </span>
           {/* Status badge */}
           {isExpired ? (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-danger-light text-danger-dark text-xs font-semibold">
@@ -85,7 +99,9 @@ export function VisaCard({ visa, onDelete, onEdit, hideActions = false }: VisaCa
             <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide w-20 shrink-0">
               Arrival
             </span>
-            <span className="text-sm text-foreground whitespace-nowrap">{formatDate(visa.arrivalDate)}</span>
+            <span className="text-sm text-foreground whitespace-nowrap">
+              {formatDate(visa.arrivalDate)}
+            </span>
           </div>
 
           {/* Departure */}
@@ -94,7 +110,9 @@ export function VisaCard({ visa, onDelete, onEdit, hideActions = false }: VisaCa
             <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide w-20 shrink-0">
               Departure
             </span>
-            <span className="text-sm text-foreground whitespace-nowrap">{formatDate(visa.expiryDate)}</span>
+            <span className="text-sm text-foreground whitespace-nowrap">
+              {formatDate(visa.expiryDate)}
+            </span>
           </div>
 
           {/* Timeline */}
@@ -103,10 +121,16 @@ export function VisaCard({ visa, onDelete, onEdit, hideActions = false }: VisaCa
             <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide w-20 shrink-0">
               Timeline
             </span>
-            <span className={`text-sm whitespace-nowrap ${isExpired ? 'text-destructive' : 'text-foreground'}`}>
+            <span
+              className={`text-sm whitespace-nowrap ${isExpired ? 'text-destructive' : 'text-foreground'}`}
+            >
               {timelineLabel}
             </span>
-            <VisaProgressBar percent={timelinePercent} variant={timelineVariant} className="w-16 md:w-30" />
+            <VisaProgressBar
+              percent={timelinePercent}
+              variant={timelineVariant}
+              className="w-16 md:w-30"
+            />
           </div>
 
           {/* Progress */}
@@ -115,61 +139,70 @@ export function VisaCard({ visa, onDelete, onEdit, hideActions = false }: VisaCa
             <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide w-20 shrink-0">
               Progress
             </span>
-            <span className="text-sm text-foreground whitespace-nowrap">{progressLabel}</span>
-            <VisaProgressBar percent={progressPercent} variant={progressVariant} className="w-16 md:w-30" />
+            <span className="text-sm text-foreground whitespace-nowrap">
+              {progressLabel}
+            </span>
+            <VisaProgressBar
+              percent={progressPercent}
+              variant={progressVariant}
+              className="w-16 md:w-30"
+            />
           </div>
         </div>
 
         {/* Footer */}
-        {!hideActions && <div className="flex items-center justify-between gap-2 px-4 py-2.5 bg-muted/40 border-t border-border">
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <CalendarDays className="w-3.5 h-3.5 shrink-0" />
-            <span>Created {createdAgo}</span>
-          </div>
+        {!hideActions && (
+          <div className="flex items-center justify-between gap-2 px-4 py-2.5 bg-muted/40 border-t border-border">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <CalendarDays className="w-3.5 h-3.5 shrink-0" />
+              <span>Created {createdAgo}</span>
+            </div>
 
-          <div className="flex items-center gap-2">
-            {onEdit && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-1.5"
-                onClick={() => onEdit(visa)}
-              >
-                <Pencil className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">Edit</span>
-              </Button>
-            )}
+            <div className="flex items-center gap-2">
+              {onEdit && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5"
+                  onClick={() => onEdit(visa)}
+                >
+                  <Pencil className="w-3.5 h-3.5" />
+                  <span className="hidden md:inline">Edit</span>
+                </Button>
+              )}
 
-            {onDelete && (
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive" size="sm" className="gap-1.5">
-                    <Trash2 className="w-3.5 h-3.5" />
-                    <span className="hidden md:inline">Delete</span>
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Visa</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Are you sure you want to delete this WHV 417 visa? All associated work entries
-                      will remain, but visa tracking data will be lost. This action cannot be undone.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => onDelete(visa.id)}
-                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                    >
-                      Delete
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            )}
+              {onDelete && (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" size="sm" className="gap-1.5">
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span className="hidden md:inline">Delete</span>
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete Visa</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to delete this WHV 417 visa? All
+                        associated work entries will remain, but visa tracking
+                        data will be lost. This action cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => onDelete(visa.id)}
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      >
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
+            </div>
           </div>
-        </div>}
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import type { Visa, VisaType } from '@regranted/shared';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useMemo } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -9,10 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { cn } from '@/lib/utils';
 import { MONTH_NAMES } from '@/features/hours/utils/calendar-helpers';
+import { cn } from '@/lib/utils';
 
-import type { Visa, VisaType } from '@regranted/shared';
 import { getVisaBarColor } from '../../utils/weekly-helpers';
 
 export type CalendarHeaderProps = {
@@ -38,7 +38,7 @@ export type CalendarHeaderProps = {
 const currentYear = new Date().getFullYear();
 const YEAR_OPTIONS = Array.from(
   { length: currentYear - 2008 + 2 },
-  (_, i) => currentYear + 1 - i
+  (_, i) => currentYear + 1 - i,
 );
 
 /**
@@ -99,29 +99,30 @@ export function CalendarHeader({
   const now = new Date();
   const currentYearNow = now.getFullYear();
   const currentMonthNow = now.getMonth() + 1;
-  const isCurrentMonth = year === currentYearNow && month === currentMonthNow;
-  const isFutureBlocked = year > currentYearNow || (year === currentYearNow && month >= currentMonthNow);
+  const isFutureBlocked =
+    year > currentYearNow ||
+    (year === currentYearNow && month >= currentMonthNow);
 
   return (
-    <div
-      className={cn(
-        'flex items-center gap-2',
-        className
-      )}
-    >
+    <div className={cn('flex items-center gap-2', className)}>
       {/* Month dropdown */}
       <Select
         value={String(month)}
         onValueChange={(value) => onMonthChange(Number(value))}
       >
-        <SelectTrigger className="flex-1 min-w-0 sm:flex-none sm:w-40 bg-card dark:bg-card shadow-sm rounded-lg" aria-label="Select month">
+        <SelectTrigger
+          className="flex-1 min-w-0 sm:flex-none sm:w-40 bg-card dark:bg-card shadow-sm rounded-lg"
+          aria-label="Select month"
+        >
           <SelectValue placeholder="Month" />
         </SelectTrigger>
         <SelectContent>
           {MONTH_NAMES.map((monthName, index) => {
             const m = index + 1;
             const monthVisas = visasByMonth.get(m);
-            const isFuture = year > currentYearNow || (year === currentYearNow && m > currentMonthNow);
+            const isFuture =
+              year > currentYearNow ||
+              (year === currentYearNow && m > currentMonthNow);
             if (isFuture) return null;
             return (
               <SelectItem key={monthName} value={String(m)}>
@@ -132,7 +133,10 @@ export function CalendarHeader({
                       {monthVisas.map((vt) => (
                         <span
                           key={vt}
-                          className={cn('h-1.25 w-1.25 rounded-full', getVisaBarColor(vt))}
+                          className={cn(
+                            'h-1.25 w-1.25 rounded-full',
+                            getVisaBarColor(vt),
+                          )}
                         />
                       ))}
                     </span>
@@ -149,7 +153,10 @@ export function CalendarHeader({
         value={String(year)}
         onValueChange={(value) => onYearChange(Number(value))}
       >
-        <SelectTrigger className="flex-1 min-w-0 sm:flex-none sm:w-32.5 bg-card dark:bg-card shadow-sm rounded-lg" aria-label="Select year">
+        <SelectTrigger
+          className="flex-1 min-w-0 sm:flex-none sm:w-32.5 bg-card dark:bg-card shadow-sm rounded-lg"
+          aria-label="Select year"
+        >
           <SelectValue placeholder="Year" />
         </SelectTrigger>
         <SelectContent className="max-h-60">
@@ -165,7 +172,10 @@ export function CalendarHeader({
                       {yearVisas.map((vt) => (
                         <span
                           key={vt}
-                          className={cn('h-1.25 w-1.25 rounded-full', getVisaBarColor(vt))}
+                          className={cn(
+                            'h-1.25 w-1.25 rounded-full',
+                            getVisaBarColor(vt),
+                          )}
                         />
                       ))}
                     </span>

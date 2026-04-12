@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { ELIGIBLE_COUNTRIES } from '../constants/visa-rules.js';
+import { ELIGIBLE_COUNTRIES } from '../constants/countries';
+import { visaSubclassEnum } from './visa';
 
 // --- Response schemas ---
 
@@ -8,7 +9,7 @@ export const userProfileSchema = z.object({
   email: z.string(),
   firstName: z.string(),
   nationality: z.enum(ELIGIBLE_COUNTRIES),
-  whvType: z.enum(['417', '462']),
+  whvType: visaSubclassEnum,
   ukCitizenExemption: z.boolean(),
   createdAt: z.string(),
   updatedAt: z.string(),

@@ -1,5 +1,5 @@
 import { postcodeEligibilitySchema } from '@regranted/shared';
-import { CATEGORIES, CATEGORY_LABELS, type EligibilityFlags } from './config.js';
+import { CATEGORIES, CATEGORY_LABELS, type EligibilityFlags } from './config';
 
 export interface ValidationResult {
   isValid: boolean;
@@ -50,7 +50,9 @@ export function validateScrapedData(
   // Rule 3: No category drops > 20%
   for (const category of CATEGORIES) {
     const currentCount = currentFromDb.filter((p) => p[category]).length;
-    const scrapedCount = [...scraped.values()].filter((f) => f[category]).length;
+    const scrapedCount = [...scraped.values()].filter(
+      (f) => f[category],
+    ).length;
     if (currentCount > 0) {
       const dropPercent = ((currentCount - scrapedCount) / currentCount) * 100;
       if (dropPercent > 20) {

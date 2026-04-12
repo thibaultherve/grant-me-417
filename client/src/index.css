@@ -21,12 +21,12 @@
   --border: oklch(0.87 0.01 261.81);
   --input: oklch(0.87 0.01 261.81);
   --ring: oklch(0.59 0.2 277.06);
-  --chart-1: #6366F1;
-  --chart-2: #8B5CF6;
-  --chart-3: #EC4899;
-  --chart-4: #F59E0B;
-  --chart-5: #10B981;
-  --chart-6: #3B82F6;
+  --chart-1: #6366f1;
+  --chart-2: #8b5cf6;
+  --chart-3: #ec4899;
+  --chart-4: #f59e0b;
+  --chart-5: #10b981;
+  --chart-6: #3b82f6;
   --sidebar: oklch(0.97 0 0);
   --sidebar-foreground: oklch(0.28 0.04 260.33);
   --sidebar-primary: oklch(0.59 0.2 277.06);
@@ -43,14 +43,14 @@
   --radius: 0.5rem;
 
   /* ── Semantic status colors (from design) ── */
-  --info: #3B82F6;
-  --info-light: #DBEAFE;
-  --success: #10B981;
-  --success-light: #D1FAE5;
-  --warning: #F59E0B;
-  --warning-light: #FEF3C7;
-  --danger: #EF4444;
-  --danger-light: #FEE2E2;
+  --info: #3b82f6;
+  --info-light: #dbeafe;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --warning: #f59e0b;
+  --warning-light: #fef3c7;
+  --danger: #ef4444;
+  --danger-light: #fee2e2;
   /* ── Bar chart tier colors (1-7 days, lightest → darkest) ── */
   --bar-track: #e5e7eb;
   --bar-low: #a5b4fc;
@@ -64,48 +64,48 @@
   --bar-7: #3730a3;
   /* ── Zone / postcode badge colors ── */
   --badge-northern: #166534;
-  --badge-remote: #B45309;
-  --badge-regional: #16A34A;
-  --badge-bushfire: #EA580C;
-  --badge-disaster: #0EA5E9;
-  --badge-anywhere: #6366F1;
+  --badge-remote: #b45309;
+  --badge-regional: #16a34a;
+  --badge-bushfire: #ea580c;
+  --badge-disaster: #0ea5e9;
+  --badge-anywhere: #6366f1;
   /* ── Industry badge colors ── */
-  --industry-hospitality: #D97706;
-  --industry-cultivation: #16A34A;
-  --industry-fishing: #2563EB;
+  --industry-hospitality: #d97706;
+  --industry-cultivation: #16a34a;
+  --industry-fishing: #2563eb;
   --industry-tree-farming: #059669;
-  --industry-mining: #57534E;
-  --industry-construction: #CA8A04;
-  --industry-bushfire: #EA580C;
-  --industry-weather-recovery: #0EA5E9;
-  --industry-covid: #9333EA;
-  --industry-other: #6B7280;
+  --industry-mining: #57534e;
+  --industry-construction: #ca8a04;
+  --industry-bushfire: #ea580c;
+  --industry-weather-recovery: #0ea5e9;
+  --industry-covid: #9333ea;
+  --industry-other: #6b7280;
   /* ── Visa period bar colors ── */
-  --visa-1st-color: #10B981;
-  --visa-2nd-color: #3B82F6;
-  --visa-3rd-color: #F59E0B;
+  --visa-1st-color: #10b981;
+  --visa-2nd-color: #3b82f6;
+  --visa-3rd-color: #f59e0b;
   --visa-1st-light: #f0fdf4;
   --visa-2nd-light: #eff6ff;
   --visa-3rd-light: #fffbeb;
   /* ── Employer card expanded colors ── */
-  --primary-light: #F8F6FF;
+  --primary-light: #f8f6ff;
   --primary-shadow: rgba(108, 71, 255, 0.09);
   /* ── Warning banner text colors ── */
-  --warning-dark: #92400E;
-  --danger-dark: #991B1B;
+  --warning-dark: #92400e;
+  --danger-dark: #991b1b;
   /* ── Australian state badge colors ── */
-  --state-act: #1E40AF;
-  --state-nsw: #87CEEB;
+  --state-act: #1e40af;
+  --state-nsw: #87ceeb;
   --state-nsw-fg: #1e293b;
-  --state-nt: #CC5500;
+  --state-nt: #cc5500;
   --state-qld: #800020;
-  --state-sa: #EF4444;
-  --state-tas: #006A4E;
-  --state-vic: #1E3A5F;
-  --state-wa: #FFD700;
+  --state-sa: #ef4444;
+  --state-tas: #006a4e;
+  --state-vic: #1e3a5f;
+  --state-wa: #ffd700;
   --state-wa-fg: #1e293b;
   /* ── Disabled / neutral state ── */
-  --disabled: #9CA3AF;
+  --disabled: #9ca3af;
   /* ── Sidebar hover ── */
   --sidebar-hover: #ebebeb;
 
@@ -180,26 +180,26 @@
   --bar-7: #e0e7ff;
   /* ── Zone / postcode badge colors (dark mode — same hues, readable on dark cards) ── */
   --badge-northern: #166534;
-  --badge-remote: #B45309;
-  --badge-regional: #16A34A;
-  --badge-bushfire: #EA580C;
-  --badge-disaster: #0EA5E9;
-  --badge-anywhere: #6366F1;
+  --badge-remote: #b45309;
+  --badge-regional: #16a34a;
+  --badge-bushfire: #ea580c;
+  --badge-disaster: #0ea5e9;
+  --badge-anywhere: #6366f1;
   /* ── Industry badge colors (dark mode) ── */
-  --industry-hospitality: #D97706;
-  --industry-cultivation: #16A34A;
-  --industry-fishing: #2563EB;
+  --industry-hospitality: #d97706;
+  --industry-cultivation: #16a34a;
+  --industry-fishing: #2563eb;
   --industry-tree-farming: #059669;
-  --industry-mining: #57534E;
-  --industry-construction: #CA8A04;
-  --industry-bushfire: #EA580C;
-  --industry-weather-recovery: #0EA5E9;
-  --industry-covid: #9333EA;
-  --industry-other: #6B7280;
+  --industry-mining: #57534e;
+  --industry-construction: #ca8a04;
+  --industry-bushfire: #ea580c;
+  --industry-weather-recovery: #0ea5e9;
+  --industry-covid: #9333ea;
+  --industry-other: #6b7280;
   /* ── Visa period bar colors (dark mode) ── */
-  --visa-1st-color: #10B981;
-  --visa-2nd-color: #3B82F6;
-  --visa-3rd-color: #F59E0B;
+  --visa-1st-color: #10b981;
+  --visa-2nd-color: #3b82f6;
+  --visa-3rd-color: #f59e0b;
   --visa-1st-light: #052e1c;
   --visa-2nd-light: #1e3a5f;
   --visa-3rd-light: #3d2900;
@@ -207,21 +207,21 @@
   --primary-light: oklch(0.28 0.06 277);
   --primary-shadow: rgba(130, 100, 255, 0.12);
   /* ── Warning banner text colors (dark mode — lighter for readability) ── */
-  --warning-dark: #FDE68A;
-  --danger-dark: #FCA5A5;
+  --warning-dark: #fde68a;
+  --danger-dark: #fca5a5;
   /* ── Australian state badge colors (dark mode) ── */
-  --state-act: #1E40AF;
-  --state-nsw: #87CEEB;
+  --state-act: #1e40af;
+  --state-nsw: #87ceeb;
   --state-nsw-fg: #1e293b;
-  --state-nt: #CC5500;
+  --state-nt: #cc5500;
   --state-qld: #800020;
-  --state-sa: #EF4444;
-  --state-tas: #006A4E;
-  --state-vic: #1E3A5F;
-  --state-wa: #FFD700;
+  --state-sa: #ef4444;
+  --state-tas: #006a4e;
+  --state-vic: #1e3a5f;
+  --state-wa: #ffd700;
   --state-wa-fg: #1e293b;
   /* ── Disabled / neutral state (dark mode) ── */
-  --disabled: #6B7280;
+  --disabled: #6b7280;
   /* ── Sidebar hover (dark mode) ── */
   --sidebar-hover: #374151;
 

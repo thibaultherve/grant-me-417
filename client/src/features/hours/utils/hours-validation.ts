@@ -115,13 +115,3 @@ export const validateHours = (
     format: 'invalid',
   };
 };
-
-/**
- * Format decimal hours for display
- * Removes unnecessary trailing zeros
- */
-export const formatDecimalHours = (decimal: number): string => {
-  return decimal % 1 === 0
-    ? decimal.toString()
-    : decimal.toFixed(2).replace(/\.?0+$/, '');
-};

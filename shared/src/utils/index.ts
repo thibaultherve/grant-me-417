@@ -1,1 +1,9 @@
-export { getDaysRequired, computeExpiryDate } from './visa-calculations.js';
+export {
+  computeExpiryDate,
+  getDaysRequired,
+  visaHasGoal,
+} from './visa-calculations';
+export {
+  checkIndustryEligibility,
+  type EligibilityFlags,
+} from './visa-eligibility';

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { searchSuburbs, getSuburb } from './suburbs';
+
+import { getSuburb, searchSuburbs } from './suburbs';
 
 export const useSearchSuburbs = (query: string) => {
   return useQuery({

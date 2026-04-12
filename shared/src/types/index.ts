@@ -1,58 +1,64 @@
 // Re-export all types inferred from Zod schemas
 export type {
-  RegisterInput,
-  LoginInput,
   AuthTokens,
   AuthUser,
+  LoginInput,
   LoginResponse,
+  RegisterInput,
   RegisterResponse,
-} from '../schemas/auth.js';
+} from '../schemas/auth';
+
+export type { UpdateProfileInput, UserProfile } from '../schemas/user';
 
 export type {
-  UserProfile,
-  UpdateProfileInput,
-} from '../schemas/user.js';
-
-export type {
-  VisaType,
   CreateVisaInput,
   UpdateVisaInput,
   Visa,
-  VisaResponse,
   VisaPeriod,
+  VisaSubclass,
+  VisaType,
   WeeklyProgress,
-} from '../schemas/visa.js';
+} from '../schemas/visa';
 
 export type {
-  IndustryType,
   CreateEmployerInput,
-  UpdateEmployerInput,
   Employer,
-  EmployerResponse,
-} from '../schemas/employer.js';
+  IndustryType,
+  UpdateEmployerInput,
+} from '../schemas/employer';
 
 export type {
-  WorkEntry,
-  WorkEntryResponse,
-  WorkEntryWithEmployer,
+  DayHoursEntry,
   HoursList,
   HoursResponse,
-  DayHoursEntry,
   MonthHours,
-  MonthHoursResponse,
-  WeeklyEmployer,
-  WeekVisaBreakdown,
   WeekData,
+  WeeklyEmployer,
   WeeklyHoursResponse,
-} from '../schemas/work-entry.js';
+  WeekVisaBreakdown,
+  WorkEntry,
+  WorkEntryWithEmployer,
+} from '../schemas/work-entry';
 
 export type {
+  ChangeDetailParam,
+  ChangeDetailQuery,
+  ChangeDetailResponse,
+  GlobalChangeEntry,
+  GlobalChangesQuery,
+  GlobalChangesResponse,
+  LastUpdateResponse,
+  PaginatedDirectoryItem,
+  PaginatedDirectoryQuery,
+  PaginatedDirectoryResponse,
   Postcode,
   PostcodeBadgeData,
-  PostcodeEligibility,
-  PostcodeDirectoryEntry,
+  PostcodeDetailResponse,
   PostcodeHistoryEntry,
-  PostcodeDirectoryQuery,
-  Suburb,
   SuburbWithPostcode,
-} from '../schemas/postcode.js';
+} from '../schemas/postcode';
+
+export type {
+  FavoritePostcodeResponse,
+  ToggleFavoritePostcodeInput,
+} from '../schemas/favorite';

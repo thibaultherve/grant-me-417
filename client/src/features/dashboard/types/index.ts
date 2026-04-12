@@ -25,7 +25,13 @@ export interface MonthlyTrendChartPoint {
 
 // ─── Goal Date Prediction ────────────────────────────────────────────────────
 
-export type GoalPredictionStatus = 'on-track' | 'tight' | 'at-risk' | 'completed' | 'no-data' | 'no-goal';
+export type GoalPredictionStatus =
+  | 'on-track'
+  | 'tight'
+  | 'at-risk'
+  | 'completed'
+  | 'no-data'
+  | 'no-goal';
 
 export interface GoalDatePrediction {
   status: GoalPredictionStatus;

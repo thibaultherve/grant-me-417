@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { visaTypeSchema } from './visa.js';
+import { visaTypeSchema } from './visa';
 
 // --- Sub-schemas ---
 
@@ -62,8 +62,16 @@ export const visaOverviewResponseSchema = z.object({
 
 export type VisaOverviewVisa = z.infer<typeof visaOverviewVisaSchema>;
 export type VisaOverviewPace = z.infer<typeof visaOverviewPaceSchema>;
-export type VisaOverviewWeeklyProgress = z.infer<typeof visaOverviewWeeklyProgressSchema>;
-export type VisaOverviewWorkDistribution = z.infer<typeof visaOverviewWorkDistributionSchema>;
-export type VisaOverviewEmployerBreakdown = z.infer<typeof visaOverviewEmployerBreakdownSchema>;
-export type VisaOverviewMonthlyTrend = z.infer<typeof visaOverviewMonthlyTrendSchema>;
+export type VisaOverviewWeeklyProgress = z.infer<
+  typeof visaOverviewWeeklyProgressSchema
+>;
+export type VisaOverviewWorkDistribution = z.infer<
+  typeof visaOverviewWorkDistributionSchema
+>;
+export type VisaOverviewEmployerBreakdown = z.infer<
+  typeof visaOverviewEmployerBreakdownSchema
+>;
+export type VisaOverviewMonthlyTrend = z.infer<
+  typeof visaOverviewMonthlyTrendSchema
+>;
 export type VisaOverview = z.infer<typeof visaOverviewResponseSchema>;

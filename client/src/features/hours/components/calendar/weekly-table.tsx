@@ -1,8 +1,9 @@
 import { cn } from '@/lib/utils';
 
-import type { WeekData, VisaPeriod } from '../../types/weekly';
-import { WeekSummaryRow } from './week-summary-row';
+import type { VisaPeriod, WeekData } from '../../types/weekly';
+
 import { EmployerHoursRow } from './employer-hours-row';
+import { WeekSummaryRow } from './week-summary-row';
 
 const DAY_HEADERS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as const;
 
@@ -69,22 +70,24 @@ export function WeeklyTable({
         </thead>
 
         <tbody>
-          {weeks.filter((w) => w.weekStart <= today).map((week, idx, arr) => {
-            const expanded = isExpanded(week.weekStart);
+          {weeks
+            .filter((w) => w.weekStart <= today)
+            .map((week, idx, arr) => {
+              const expanded = isExpanded(week.weekStart);
 
-            return (
-              <WeekGroup
-                key={week.weekStart}
-                week={week}
-                visas={visas}
-                isExpanded={expanded}
-                onToggle={() => toggleWeek(week.weekStart)}
-                year={year}
-                month={month}
-                isLast={idx === arr.length - 1}
-              />
-            );
-          })}
+              return (
+                <WeekGroup
+                  key={week.weekStart}
+                  week={week}
+                  visas={visas}
+                  isExpanded={expanded}
+                  onToggle={() => toggleWeek(week.weekStart)}
+                  year={year}
+                  month={month}
+                  isLast={idx === arr.length - 1}
+                />
+              );
+            })}
         </tbody>
       </table>
     </div>
@@ -141,10 +144,13 @@ function WeekGroup({
       {/* Divider between weeks */}
       {!isLast && (
         <tr className={cn('border-0', isExpanded && 'bg-primary-light')}>
-          <td colSpan={14} className={cn(
-            'p-0 border-l-[3px]',
-            isExpanded ? 'border-l-primary' : 'border-l-transparent',
-          )}>
+          <td
+            colSpan={14}
+            className={cn(
+              'p-0 border-l-[3px]',
+              isExpanded ? 'border-l-primary' : 'border-l-transparent',
+            )}
+          >
             <div className="h-px bg-border" />
           </td>
         </tr>

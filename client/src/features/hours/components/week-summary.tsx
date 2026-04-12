@@ -13,10 +13,7 @@ export function WeekSummary({
 }: WeekSummaryProps) {
   return (
     <div
-      className={cn(
-        'flex items-center justify-between px-1 py-2',
-        className,
-      )}
+      className={cn('flex items-center justify-between px-1 py-2', className)}
     >
       <div className="flex items-center gap-1 text-xs">
         <span className="text-muted-foreground">Week total:</span>

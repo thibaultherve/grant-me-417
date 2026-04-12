@@ -1,22 +1,23 @@
+import { ChevronDown, Pencil } from 'lucide-react';
 import { memo } from 'react';
 import { useNavigate } from 'react-router';
-import { ChevronDown, Pencil } from 'lucide-react';
 
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
-import type { WeekData, VisaPeriod } from '../../types/weekly';
-import { VisaValues } from './week-totals';
-import { EmployerHoursRowMobile } from './employer-hours-row';
+import type { VisaPeriod, WeekData } from '../../types/weekly';
 import {
-  formatWeekLabel,
   buildDayBars,
-  getWeekVisaInfo,
+  formatWeekLabel,
   getVisaBarColor,
+  getWeekVisaInfo,
   isInMonth,
-  VISA_TEXT_COLORS,
   VISA_BADGE_BG,
+  VISA_TEXT_COLORS,
 } from '../../utils/weekly-helpers';
+
+import { EmployerHoursRowMobile } from './employer-hours-row';
+import { VisaValues } from './week-totals';
 
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] as const;
 
@@ -44,6 +45,8 @@ export const WeekCard = memo(function WeekCard({
 
   return (
     <div
+      role={hasData ? 'button' : undefined}
+      tabIndex={hasData ? 0 : undefined}
       className={cn(
         'rounded-lg border shadow-sm overflow-hidden border-l-[3px] transition-colors',
         isExpanded
@@ -54,6 +57,16 @@ export const WeekCard = memo(function WeekCard({
         hasData && 'cursor-pointer',
       )}
       onClick={hasData ? onToggle : undefined}
+      onKeyDown={
+        hasData
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onToggle();
+              }
+            }
+          : undefined
+      }
     >
       {/* Header: week label + visa dots | Total · Eligible · Days | edit */}
       <div className="flex items-center gap-1.5 px-2.5 py-2">
@@ -64,10 +77,12 @@ export const WeekCard = memo(function WeekCard({
             isExpanded ? 'rotate-180 text-primary' : 'text-muted-foreground',
           )}
         />
-        <span className={cn(
-          'text-[13px] text-foreground whitespace-nowrap',
-          isExpanded ? 'font-semibold' : 'font-medium',
-        )}>
+        <span
+          className={cn(
+            'text-[13px] text-foreground whitespace-nowrap',
+            isExpanded ? 'font-semibold' : 'font-medium',
+          )}
+        >
           {formatWeekLabel(week.weekStart, week.weekEnd)}
         </span>
         {visaTypes.length > 0 && (
@@ -75,7 +90,10 @@ export const WeekCard = memo(function WeekCard({
             {visaTypes.map((vt) => (
               <span
                 key={vt}
-                className={cn('h-1.25 w-1.25 rounded-full', getVisaBarColor(vt))}
+                className={cn(
+                  'h-1.25 w-1.25 rounded-full',
+                  getVisaBarColor(vt),
+                )}
               />
             ))}
           </span>
@@ -107,13 +125,18 @@ export const WeekCard = memo(function WeekCard({
               </StatChip>
             </>
           ) : (
-            <span className="text-[11px] text-muted-foreground/40">No hours logged</span>
+            <span className="text-[11px] text-muted-foreground/40">
+              No hours logged
+            </span>
           )}
           <Button
             variant="ghost"
             size="icon"
             className="h-6 w-6 shrink-0"
-            onClick={(e) => { e.stopPropagation(); navigate(`/app/hours/edit?week=${week.weekStart}`); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/app/hours/edit?week=${week.weekStart}`);
+            }}
             aria-label={`Edit week ${week.weekStart}`}
           >
             <Pencil className="h-3 w-3" />
@@ -139,11 +162,17 @@ export const WeekCard = memo(function WeekCard({
                     {DAY_LABELS[i]}
                   </span>
                   <span className="relative inline-flex justify-center">
-                    <span className={cn(
-                      'tabular-nums text-[11px]',
-                      week.dailyTotals[date] ? 'font-semibold text-foreground' : 'text-muted-foreground/40',
-                    )}>
-                      {week.dailyTotals[date] ? String(week.dailyTotals[date]) : '–'}
+                    <span
+                      className={cn(
+                        'tabular-nums text-[11px]',
+                        week.dailyTotals[date]
+                          ? 'font-semibold text-foreground'
+                          : 'text-muted-foreground/40',
+                      )}
+                    >
+                      {week.dailyTotals[date]
+                        ? String(week.dailyTotals[date])
+                        : '–'}
                     </span>
                     {dayBars[i].visaType && dayBars[i].boundary ? (
                       <span
@@ -183,7 +212,6 @@ export const WeekCard = memo(function WeekCard({
           )}
         </>
       )}
-
     </div>
   );
 });
@@ -206,10 +234,14 @@ function StatChip({
         {label}
       </span>
       {value ? (
-        <span className={cn(
-          'tabular-nums text-[12px] leading-tight',
-          bold ? 'font-bold text-foreground' : 'font-semibold text-muted-foreground',
-        )}>
+        <span
+          className={cn(
+            'tabular-nums text-[12px] leading-tight',
+            bold
+              ? 'font-bold text-foreground'
+              : 'font-semibold text-muted-foreground',
+          )}
+        >
           {value}
         </span>
       ) : (

@@ -44,10 +44,11 @@ model User {
   createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt          DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
 
-  visas         UserVisa[]
-  employers     Employer[]
-  workEntries   WorkEntry[]
-  refreshTokens RefreshToken[]
+  visas              UserVisa[]
+  employers          Employer[]
+  workEntries        WorkEntry[]
+  refreshTokens      RefreshToken[]
+  favoritePostcodes  UserFavoritePostcode[]
 
   @@index([nationality], map: "idx_users_nationality")
   @@map("users")
@@ -170,8 +171,24 @@ model Postcode {
   suburbs     Suburb[]
   eligibility PostcodeEligibility[]
   history     PostcodeEligibilityHistory[]
+  favoritedBy UserFavoritePostcode[]
 
   @@map("postcodes")
+}
+
+// ─── User Favorite Postcodes ─────────────────────────────────────────────────
+
+model UserFavoritePostcode {
+  userId    String   @map("user_id") @db.Uuid
+  postcode  String   @db.VarChar(4)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postcodeRef Postcode @relation(fields: [postcode], references: [postcode], onDelete: Cascade)
+
+  @@id([userId, postcode])
+  @@index([userId], map: "idx_user_favorite_postcodes_user_id")
+  @@map("user_favorite_postcodes")
 }
 
 // ─── Eligibility Data: Current State per Visa Type ───────────────────────────

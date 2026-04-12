@@ -48,5 +48,8 @@ server/coverage
 server/generated
 server/prisma/seed-data.json
 
+# Scraper specific
+scraper/generated
+
 # Scraper cache
 .date-cache-*.json

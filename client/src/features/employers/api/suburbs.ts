@@ -1,6 +1,6 @@
-import { api } from '@/lib/api-client';
-
 import type { SuburbWithPostcode } from '@regranted/shared';
+
+import { api } from '@/lib/api-client';
 
 export const searchSuburbs = async (
   query: string,

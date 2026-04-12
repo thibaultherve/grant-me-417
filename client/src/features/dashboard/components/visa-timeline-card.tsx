@@ -1,8 +1,11 @@
-import { Hourglass, PlaneLanding, PlaneTakeoff } from 'lucide-react';
 import type { VisaOverview } from '@regranted/shared';
-import { computeVisaTimeline } from '@/features/visas/utils/visa-helpers';
+import { Hourglass, PlaneLanding, PlaneTakeoff } from 'lucide-react';
+
+import { computeVisaTimeline } from '@/utils/visa-helpers';
+
 import { formatDate } from '../utils/dashboard-calculations';
-import { StatCardWrapper, CardTooltip } from './stat-card-wrapper';
+
+import { CardTooltip, StatCardWrapper } from './stat-card-wrapper';
 
 interface VisaTimelineCardProps {
   visa: VisaOverview['visa'];
@@ -10,7 +13,11 @@ interface VisaTimelineCardProps {
 
 export function VisaTimelineCard({ visa }: VisaTimelineCardProps) {
   const { arrivalDate, expiryDate } = visa;
-  const { daysRemaining: daysLeft, percent: pct, isExpired: expired } = computeVisaTimeline(arrivalDate, expiryDate);
+  const {
+    daysRemaining: daysLeft,
+    percent: pct,
+    isExpired: expired,
+  } = computeVisaTimeline(arrivalDate, expiryDate);
 
   return (
     <StatCardWrapper
@@ -19,7 +26,9 @@ export function VisaTimelineCard({ visa }: VisaTimelineCardProps) {
       title="Visa Timeline"
       tooltip={
         <CardTooltip title="Visa Timeline">
-          Time remaining on your current visa, from your arrival date to expiry (both dates inclusive). Your visa covers exactly 1 year from the day you arrived.
+          Time remaining on your current visa, from your arrival date to expiry
+          (both dates inclusive). Your visa covers exactly 1 year from the day
+          you arrived.
         </CardTooltip>
       }
       badge={expired ? 'Expired' : `${pct}% elapsed`}

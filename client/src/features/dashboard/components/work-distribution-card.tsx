@@ -1,10 +1,15 @@
-import { Layers, HelpCircle } from 'lucide-react';
+import {
+  INDUSTRY_LABELS,
+  type IndustryTypeValue,
+  type VisaOverview,
+} from '@regranted/shared';
+import { HelpCircle, Layers } from 'lucide-react';
+
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { INDUSTRY_LABELS, type VisaOverview, type IndustryTypeValue } from '@regranted/shared';
 import { cn } from '@/lib/utils';
 
 const CHART_COLORS = [
@@ -49,7 +54,8 @@ export function WorkDistributionCard({
             </button>
           </TooltipTrigger>
           <TooltipContent side="top" className="max-w-xs">
-            Distribution of your work hours across different industries during this visa period.
+            Distribution of your work hours across different industries during
+            this visa period.
           </TooltipContent>
         </Tooltip>
       </div>
@@ -106,7 +112,8 @@ export function WorkDistributionCard({
                         style={{ backgroundColor: color }}
                       />
                       <span className="text-sm text-foreground truncate">
-                        {INDUSTRY_LABELS[d.industry as IndustryTypeValue] ?? d.industry}
+                        {INDUSTRY_LABELS[d.industry as IndustryTypeValue] ??
+                          d.industry}
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">

@@ -1,19 +1,19 @@
 import {
+  BookOpen,
   Building2,
   CalendarClock,
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
-
   LayoutDashboard,
   LogOut,
   Plane,
   Settings,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { cn } from '@/lib/utils';
 import { Link, NavLink } from 'react-router';
 import { toast } from 'sonner';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,8 +22,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { paths } from '@/config/paths';
-import { useLogout, useUser } from '@/lib/auth';
 import { useSidebar } from '@/hooks/use-sidebar';
+import { useLogout, useUser } from '@/lib/auth';
+import { cn } from '@/lib/utils';
 
 const navigation = [
   { name: 'Dashboard', href: paths.app.dashboard.path, icon: LayoutDashboard },
@@ -31,6 +32,53 @@ const navigation = [
   { name: 'Employers', href: paths.app.employers.path, icon: Building2 },
   { name: 'Visas', href: paths.app.visas.path, icon: Plane },
 ];
+
+const toolsNavigation = [
+  { name: 'Directory', href: paths.app.tools.directory.path, icon: BookOpen },
+];
+
+function SidebarNavItem({
+  name,
+  href,
+  icon: Icon,
+  isCollapsed,
+  end,
+}: {
+  name: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  isCollapsed: boolean;
+  end?: boolean;
+}) {
+  return (
+    <NavLink
+      to={href}
+      end={end}
+      className={({ isActive }) =>
+        `flex items-center rounded-lg h-11 transition-colors duration-150 ${
+          isCollapsed ? 'justify-center px-0' : 'gap-3 px-3'
+        } ${
+          isActive
+            ? 'bg-sidebar-accent text-sidebar-foreground font-medium'
+            : 'text-sidebar-foreground hover:bg-sidebar-accent/60'
+        }`
+      }
+    >
+      {({ isActive }) => (
+        <>
+          <Icon
+            className={`w-5 h-5 shrink-0 ${isActive ? 'text-sidebar-foreground' : 'text-muted-foreground'}`}
+          />
+          {!isCollapsed && (
+            <span className="text-sm leading-none whitespace-nowrap overflow-hidden transition-all duration-300">
+              {name}
+            </span>
+          )}
+        </>
+      )}
+    </NavLink>
+  );
+}
 
 function getInitials(email?: string): string {
   if (!email) return 'U';
@@ -73,112 +121,116 @@ export function Sidebar() {
     >
       {/* Inner wrapper — clips content during width transition to prevent flash */}
       <div className="flex flex-col flex-1 overflow-hidden">
-      {/* Header */}
-      <div
-        className={`flex h-14 shrink-0 items-center ${isCollapsed ? 'justify-center px-2' : 'px-4'}`}
-      >
-        <Link to="/" className={`flex items-center ${isCollapsed ? '' : 'gap-2'}`}>
-          <img src="/regranted-logo.svg" alt="ReGranted" className="shrink-0 w-8 h-8 rounded-[10px]" />
+        {/* Header */}
+        <div
+          className={`flex h-14 shrink-0 items-center ${isCollapsed ? 'justify-center px-2' : 'px-4'}`}
+        >
+          <Link
+            to="/"
+            className={`flex items-center ${isCollapsed ? '' : 'gap-2'}`}
+          >
+            <img
+              src="/regranted-logo.svg"
+              alt="ReGranted"
+              className="shrink-0 w-8 h-8 rounded-[10px]"
+            />
+            {!isCollapsed && (
+              <span className="text-sm font-semibold text-sidebar-foreground leading-none whitespace-nowrap overflow-hidden transition-all duration-300">
+                ReGranted
+              </span>
+            )}
+          </Link>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 flex flex-col gap-1 px-2 py-3 overflow-hidden">
+          {navigation.map((item) => (
+            <SidebarNavItem
+              key={item.name}
+              name={item.name}
+              href={item.href}
+              icon={item.icon}
+              isCollapsed={isCollapsed}
+              end={item.href === paths.app.dashboard.path}
+            />
+          ))}
+
+          {/* Tools section divider */}
+          <div className="my-2 px-3">
+            <div className="border-t border-sidebar-border" />
+          </div>
           {!isCollapsed && (
-            <span className="text-sm font-semibold text-sidebar-foreground leading-none whitespace-nowrap overflow-hidden transition-all duration-300">
-              ReGranted
+            <span className="px-3 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">
+              Tools
             </span>
           )}
-        </Link>
-      </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 flex flex-col gap-1 px-2 py-3 overflow-hidden">
-        {navigation.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavLink
+          {toolsNavigation.map((item) => (
+            <SidebarNavItem
               key={item.name}
-              to={item.href}
-              end={item.href === paths.app.dashboard.path}
-              className={({ isActive }) =>
-                `flex items-center rounded-lg h-11 transition-colors duration-150 ${
-                  isCollapsed ? 'justify-center px-0' : 'gap-3 px-3'
-                } ${
-                  isActive
-                    ? 'bg-sidebar-accent text-sidebar-foreground font-medium'
-                    : 'text-sidebar-foreground hover:bg-sidebar-accent/60'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <Icon
-                    className={`w-5 h-5 shrink-0 ${isActive ? 'text-sidebar-foreground' : 'text-muted-foreground'}`}
-                  />
-                  {!isCollapsed && (
-                    <span className="text-sm leading-none whitespace-nowrap overflow-hidden transition-all duration-300">
-                      {item.name}
-                    </span>
-                  )}
-                </>
-              )}
-            </NavLink>
-          );
-        })}
-      </nav>
+              name={item.name}
+              href={item.href}
+              icon={item.icon}
+              isCollapsed={isCollapsed}
+            />
+          ))}
+        </nav>
 
-      {/* Footer with profile dropdown */}
-      <div className="shrink-0 p-2">
-        <DropdownMenu open={profileOpen} onOpenChange={setProfileOpen}>
-          <DropdownMenuTrigger asChild>
-            <button
-              className={`w-full flex items-center rounded-lg transition-colors h-12 ${
-                isCollapsed ? 'justify-center px-0' : 'gap-2 px-2'
-              } ${profileOpen ? 'bg-sidebar-accent' : 'bg-sidebar hover:bg-sidebar-hover'}`}
-            >
-              {/* Avatar */}
-              <div className="shrink-0 w-10 h-10 rounded-full bg-sidebar-foreground flex items-center justify-center">
-                <span className="text-sm font-semibold text-white">
-                  {initials}
-                </span>
-              </div>
-              {!isCollapsed && (
-                <>
-                  <div className="flex-1 min-w-0 text-left">
-                    <p className="text-xs text-muted-foreground truncate">
-                      {user?.email}
-                    </p>
-                  </div>
-                  <ChevronsUpDown className="w-4 h-4 text-muted-foreground shrink-0" />
-                </>
+        {/* Footer with profile dropdown */}
+        <div className="shrink-0 p-2">
+          <DropdownMenu open={profileOpen} onOpenChange={setProfileOpen}>
+            <DropdownMenuTrigger asChild>
+              <button
+                className={`w-full flex items-center rounded-lg transition-colors h-12 ${
+                  isCollapsed ? 'justify-center px-0' : 'gap-2 px-2'
+                } ${profileOpen ? 'bg-sidebar-accent' : 'bg-sidebar hover:bg-sidebar-hover'}`}
+              >
+                {/* Avatar */}
+                <div className="shrink-0 w-10 h-10 rounded-full bg-sidebar-foreground flex items-center justify-center">
+                  <span className="text-sm font-semibold text-white">
+                    {initials}
+                  </span>
+                </div>
+                {!isCollapsed && (
+                  <>
+                    <div className="flex-1 min-w-0 text-left">
+                      <p className="text-xs text-muted-foreground truncate">
+                        {user?.email}
+                      </p>
+                    </div>
+                    <ChevronsUpDown className="w-4 h-4 text-muted-foreground shrink-0" />
+                  </>
+                )}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              side={isCollapsed ? 'right' : 'top'}
+              align="center"
+              sideOffset={8}
+              className={cn(
+                'min-w-48 rounded-[10px] border-border bg-popover',
+                isCollapsed
+                  ? 'shadow-[4px_0_12px_-2px_rgba(0,0,0,0.10),2px_0_6px_-1px_rgba(0,0,0,0.06)]'
+                  : 'shadow-[0_-4px_12px_-2px_rgba(0,0,0,0.10),0_-2px_6px_-1px_rgba(0,0,0,0.06)]',
               )}
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            side={isCollapsed ? 'right' : 'top'}
-            align="center"
-            sideOffset={8}
-            className={cn(
-              'min-w-48 rounded-[10px] border-border bg-popover',
-              isCollapsed
-                ? 'shadow-[4px_0_12px_-2px_rgba(0,0,0,0.10),2px_0_6px_-1px_rgba(0,0,0,0.06)]'
-                : 'shadow-[0_-4px_12px_-2px_rgba(0,0,0,0.10),0_-2px_6px_-1px_rgba(0,0,0,0.06)]',
-            )}
-          >
-            <DropdownMenuItem asChild>
-              <Link to={paths.app.profile.path} className="cursor-pointer">
-                <Settings className="mr-2 h-4 w-4" />
-                Settings
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => logoutMutation.mutate()}
-              className="cursor-pointer text-destructive focus:text-destructive"
             >
-              <LogOut className="mr-2 h-4 w-4 text-destructive" />
-              Logout
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
+              <DropdownMenuItem asChild>
+                <Link to={paths.app.profile.path} className="cursor-pointer">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Settings
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => logoutMutation.mutate()}
+                className="cursor-pointer text-destructive focus:text-destructive"
+              >
+                <LogOut className="mr-2 h-4 w-4 text-destructive" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       {/* Collapse toggle — outside overflow wrapper so it's never clipped */}

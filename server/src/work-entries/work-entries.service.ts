@@ -1,3 +1,8 @@
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import type {
   HoursList,
   IndustryType,
@@ -11,20 +16,11 @@ import type {
   WorkEntryWithEmployer,
 } from '@regranted/shared';
 import { MAX_HOURS_PER_DAY } from '@regranted/shared';
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-} from '@nestjs/common';
-import { Prisma } from '../../generated/prisma/client.js';
-import { getWeekRanges } from '../common/utils/date.js';
-import {
-  formatDate,
-  formatTimestamp,
-  toNumber,
-} from '../common/utils/format.js';
-import { PrismaService } from '../prisma/prisma.service.js';
-import { VisaProgressService } from '../visas/visa-progress.service.js';
+import { Prisma } from '../../generated/prisma/client';
+import { getWeekRanges } from '../common/utils/date';
+import { formatDate, formatTimestamp, toNumber } from '../common/utils/format';
+import { PrismaService } from '../prisma/prisma.service';
+import { VisaProgressService } from '../visas/visa-progress.service';
 
 const ENTRY_EMPLOYER_INCLUDE = {
   employer: {
@@ -200,10 +196,7 @@ export class WorkEntriesService {
     ]);
 
     // Index weekly progress by weekStartDate key
-    const progressByWeek = new Map<
-      string,
-      typeof weeklyProgress
-    >();
+    const progressByWeek = new Map<string, typeof weeklyProgress>();
     for (const row of weeklyProgress) {
       const key = formatDate(row.weekStartDate);
       const bucket = progressByWeek.get(key);
@@ -244,7 +237,8 @@ export class WorkEntriesService {
         const hours = toNumber(entry.hours);
 
         // Daily totals
-        dailyTotals[dateKey] = Math.round(((dailyTotals[dateKey] ?? 0) + hours) * 100) / 100;
+        dailyTotals[dateKey] =
+          Math.round(((dailyTotals[dateKey] ?? 0) + hours) * 100) / 100;
         totalHours += hours;
 
         // Employer breakdown
@@ -261,7 +255,8 @@ export class WorkEntriesService {
           };
           employerMap.set(empId, emp);
         }
-        emp.dailyHours[dateKey] = Math.round(((emp.dailyHours[dateKey] ?? 0) + hours) * 100) / 100;
+        emp.dailyHours[dateKey] =
+          Math.round(((emp.dailyHours[dateKey] ?? 0) + hours) * 100) / 100;
         emp.totalHours = Math.round((emp.totalHours + hours) * 100) / 100;
       }
 
@@ -349,7 +344,9 @@ export class WorkEntriesService {
     // Build response with all employers
     const employerEntries: WeekEmployerEntry[] = employers.map((emp) => {
       const hours = entryMap.get(emp.id) ?? {};
-      const total = Math.round(Object.values(hours).reduce((sum, h) => sum + h, 0) * 100) / 100;
+      const total =
+        Math.round(Object.values(hours).reduce((sum, h) => sum + h, 0) * 100) /
+        100;
       return {
         employerId: emp.id,
         employerName: emp.name,

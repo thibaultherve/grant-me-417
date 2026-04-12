@@ -1,8 +1,8 @@
 import 'dotenv/config';
 import { writeFileSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { getPrismaClient, disconnectPrisma } from './prisma.js';
+import { disconnectPrisma, getPrismaClient } from './prisma';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -91,10 +91,15 @@ export async function generateSeedData(): Promise<void> {
     });
 
     // Fetch scrape runs referenced by history
-    const scrapeRunIds = [...new Set(history.map((h) => h.scrapeRunId).filter(Boolean))] as string[];
-    const scrapeRuns = scrapeRunIds.length > 0
-      ? await prisma.scrapeRun.findMany({ where: { id: { in: scrapeRunIds } } })
-      : [];
+    const scrapeRunIds = [
+      ...new Set(history.map((h) => h.scrapeRunId).filter(Boolean)),
+    ] as string[];
+    const scrapeRuns =
+      scrapeRunIds.length > 0
+        ? await prisma.scrapeRun.findMany({
+            where: { id: { in: scrapeRunIds } },
+          })
+        : [];
 
     // Build seed data
     const seedData: SeedData = {
@@ -106,9 +111,12 @@ export async function generateSeedData(): Promise<void> {
           is_northern_australia: elig?.isNorthernAustralia ?? false,
           is_regional_australia: elig?.isRegionalAustralia ?? false,
           is_bushfire_declared: elig?.isBushfireDeclared ?? false,
-          is_natural_disaster_declared: elig?.isNaturalDisasterDeclared ?? false,
-          last_updated: pc.lastUpdated?.toISOString() ?? new Date().toISOString(),
-          last_scraped: elig?.lastScraped?.toISOString() ?? new Date().toISOString(),
+          is_natural_disaster_declared:
+            elig?.isNaturalDisasterDeclared ?? false,
+          last_updated:
+            pc.lastUpdated?.toISOString() ?? new Date().toISOString(),
+          last_scraped:
+            elig?.lastScraped?.toISOString() ?? new Date().toISOString(),
         };
       }),
       suburbs: suburbs.map((sb) => ({
@@ -145,7 +153,14 @@ export async function generateSeedData(): Promise<void> {
       })),
     };
 
-    const outputPath = join(__dirname, '..', '..', 'server', 'prisma', 'seed-data.json');
+    const outputPath = join(
+      __dirname,
+      '..',
+      '..',
+      'server',
+      'prisma',
+      'seed-data.json',
+    );
     writeFileSync(outputPath, JSON.stringify(seedData, null, 2));
 
     console.log(
@@ -157,7 +172,10 @@ export async function generateSeedData(): Promise<void> {
 }
 
 // Allow direct execution
-if (process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\/g, '/'))) {
+if (
+  process.argv[1] &&
+  import.meta.url.endsWith(process.argv[1].replace(/\\/g, '/'))
+) {
   generateSeedData().catch((error) => {
     console.error('Seed generation failed:', error);
     process.exit(1);

@@ -6,18 +6,17 @@
  * Suit le pattern bulletproof-react state-management
  */
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
-
-import { handleError } from '@/lib/error-handler';
-import { queryKeys } from '@/lib/react-query';
-
 import type {
   CheckEligibilityInput,
   CheckEligibilityOutput,
   Employer,
   UpdateEmployerInput,
 } from '@regranted/shared';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+
+import { handleError } from '@/lib/error-handler';
+import { queryKeys } from '@/lib/react-query';
 
 import {
   addEmployer,
@@ -146,7 +145,10 @@ export const useCheckEligibility = (
   return useQuery<CheckEligibilityOutput>({
     queryKey: queryKeys.employers.eligibility(suburbId!, industry!),
     queryFn: () =>
-      checkEmployerEligibility({ suburbId: Number(suburbId!), industry: industry! as CheckEligibilityInput['industry'] }),
+      checkEmployerEligibility({
+        suburbId: Number(suburbId!),
+        industry: industry! as CheckEligibilityInput['industry'],
+      }),
     enabled: !!suburbId && !!industry,
     staleTime: Infinity, // Les règles WHV ne changent pas pendant la session
   });
@@ -183,7 +185,10 @@ export const useUpdateEmployer = () => {
       // Recalcul visa progress si industry ou isEligible a changé
       // (changer l'industry peut modifier l'éligibilité côté serveur,
       // ce qui impacte workDistribution et employerBreakdown)
-      if (variables.input.industry !== undefined || variables.input.isEligible !== undefined) {
+      if (
+        variables.input.industry !== undefined ||
+        variables.input.isEligible !== undefined
+      ) {
         queryClient.invalidateQueries({ queryKey: queryKeys.visas.all });
       }
     },

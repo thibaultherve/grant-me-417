@@ -1,10 +1,11 @@
-import { Building, HelpCircle, Clock } from 'lucide-react';
+import type { VisaOverview } from '@regranted/shared';
+import { Building, Clock, HelpCircle } from 'lucide-react';
+
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import type { VisaOverview } from '@regranted/shared';
 import { cn } from '@/lib/utils';
 
 const ELIGIBLE_COLORS = [
@@ -77,7 +78,8 @@ export function EmployerBreakdownCard({
             </button>
           </TooltipTrigger>
           <TooltipContent side="top" className="max-w-xs">
-            Hours breakdown by employer. Only hours from eligible employers (correct industry + regional location) count toward your visa days.
+            Hours breakdown by employer. Only hours from eligible employers
+            (correct industry + regional location) count toward your visa days.
           </TooltipContent>
         </Tooltip>
       </div>

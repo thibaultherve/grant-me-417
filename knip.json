@@ -1,0 +1,17 @@
+{
+  "workspaces": {
+    "client": {
+      "project": ["src/**/*.{ts,tsx}"],
+      "ignore": ["src/components/ui/**"]
+    },
+    "server": {
+      "project": ["src/**/*.ts"]
+    },
+    "shared": {
+      "project": ["src/**/*.ts"]
+    }
+  },
+  "ignore": ["scraper/**"],
+  "ignoreDependencies": ["tailwindcss", "@prisma/client"],
+  "ignoreExportsUsedInFile": true
+}
